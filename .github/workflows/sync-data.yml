@@ -1,0 +1,53 @@
+name: Sync Data Pipeline
+
+on:
+    repository_dispatch:
+        types: [sync-data]
+    workflow_dispatch: # Allow manual triggering from GitHub UI
+
+jobs:
+    sync-data:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Python with uv
+              uses: astral-sh/setup-uv@v6
+              with:
+                  enable-cache: true
+
+            - name: Install dependencies from lockfile
+              run: uv sync --frozen
+
+            - name: Fetch data from Airtable
+              env:
+                  AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+                  AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+                  AIRTABLE_TABLE_NAME_INCOMING: ${{ secrets.AIRTABLE_TABLE_NAME_INCOMING }}
+                  AIRTABLE_TABLE_NAME_OUTGOING: ${{ secrets.AIRTABLE_TABLE_NAME_OUTGOING }}
+              run: |
+                  python python/01_fetch_airtable.py
+
+            - name: Push data to PostgreSQL
+              env:
+                  AZURE_POSTGRES_HOST: ${{ secrets.AZURE_POSTGRES_HOST }}
+                  AZURE_POSTGRES_PORT: ${{ secrets.AZURE_POSTGRES_PORT }}
+                  AZURE_POSTGRES_DB: ${{ secrets.AZURE_POSTGRES_DB }}
+                  AZURE_POSTGRES_USER: ${{ secrets.AZURE_POSTGRES_USER }}
+                  AZURE_POSTGRES_PASSWORD: ${{ secrets.AZURE_POSTGRES_PASSWORD }}
+              run: |
+                  uv run python python/02_push_to_postgres.py
+
+            - name: Commit and push changes
+              uses: stefanzweifel/git-auto-commit-action@v5
+              with:
+                  commit_message: "chore: refresh data from Airtable [skip ci]"
+                  file_pattern: "public/data/*.json"
+                  commit_user_name: "github-actions[bot]"
+                  commit_user_email: "github-actions[bot]@users.noreply.github.com"
+                  skip_dirty_check: false
+
