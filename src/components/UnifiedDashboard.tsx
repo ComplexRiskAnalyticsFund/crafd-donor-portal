@@ -3,8 +3,10 @@
 import { useEffect } from "react";
 import { AIRTABLE_TABS } from "@/config/airtable";
 import { useTab } from "./TabContext";
+import { useAirtablePrefetch } from "@/lib/useAirtablePrefetch";
 
 export function UnifiedDashboard() {
+  useAirtablePrefetch();
   const { activeTab, activeView } = useTab();
 
   const activeTabData = AIRTABLE_TABS.find((tab) => tab.value === activeTab);
