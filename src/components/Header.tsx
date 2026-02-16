@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Grid, BarChart3, Users, Building2, LayoutGrid, List, LogOut } from "lucide-react";
+import { Grid, BarChart3, Users, Building2, LayoutGrid, List, LogOut, Menu } from "lucide-react";
 
 export function Header() {
   const { activeTab, setActiveTab, getTabLabel, activeView, setActiveView } = useTab();
@@ -36,8 +36,9 @@ export function Header() {
   };
 
   return (
-    <header className="z-40 shrink-0 bg-black px-8 py-0">
-      <div className="flex items-center justify-between gap-6">
+    <header className="z-40 shrink-0 bg-black px-4 py-4 md:px-8 md:py-0">
+      {/* Desktop Layout */}
+      <div className="hidden lg:flex items-center justify-between gap-6">
         {/* Logo and Title */}
         <div className="flex items-center gap-6">
           {/* Logo */}
@@ -124,6 +125,86 @@ export function Header() {
             <LogOut className="w-4 h-4" />
             Logout
           </a>
+        </div>
+      </div>
+
+      {/* Mobile Layout */}
+      <div className="flex flex-col gap-4 lg:hidden">
+        {/* Top Row: Logo and Logout */}
+        <div className="flex items-center justify-between gap-4">
+          <a
+            href="https://crafd.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative h-12 w-auto cursor-pointer transition-opacity hover:opacity-80"
+          >
+            <Image
+              src="/images/crafd-logo-full-white.svg"
+              alt="CRAF'd Logo"
+              width={80}
+              height={53}
+              className="h-full w-auto object-contain"
+            />
+          </a>
+          <a
+            href="/logout"
+            className="flex items-center gap-2 px-3 py-2 text-sm font-semibold rounded transition-all duration-200 text-white bg-rose-700 hover:bg-rose-600"
+          >
+            <LogOut className="w-4 h-4" />
+            <span className="hidden sm:inline">Logout</span>
+          </a>
+        </div>
+        
+        {/* Title */}
+        <div className="flex flex-col gap-1">
+          <h1 className="font-qanelas text-xl sm:text-2xl leading-tight font-extrabold tracking-tight text-white">
+            CRAF'd Transparency Portal
+          </h1>
+          {tabLabel && (
+            <p className="text-sm font-semibold text-crafd-yellow">
+              {tabLabel}
+            </p>
+          )}
+        </div>
+
+        {/* Controls Row: Tab Selector and View Selector */}
+        <div className="flex items-center gap-3">
+          {/* Tab Selector (Mobile) */}
+          <Select value={activeTab} onValueChange={setActiveTab}>
+            <SelectTrigger className="flex-1 bg-black border-crafd-yellow text-white hover:bg-crafd-yellow/10">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {AIRTABLE_TABS.map((tab) => (
+                <SelectItem key={tab.value} value={tab.value}>
+                  <div className="flex items-center gap-2">
+                    {tabIcons[tab.value as keyof typeof tabIcons]}
+                    <span>{tab.label}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* View Selector (Mobile) */}
+          <Select value={activeView} onValueChange={setActiveView} disabled={!hasMultipleViews}>
+            <SelectTrigger className={cn(
+              "w-[140px] bg-black border-crafd-yellow text-white hover:bg-crafd-yellow/10",
+              !hasMultipleViews && "invisible"
+            )}>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {(currentTab as any).views && (currentTab as any).views.map((view: any) => (
+                <SelectItem key={view.value} value={view.value}>
+                  <div className="flex items-center gap-2">
+                    {viewIcons[view.value]}
+                    <span>{view.label}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </header>
