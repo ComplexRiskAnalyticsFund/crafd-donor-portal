@@ -80,23 +80,24 @@ export function Header() {
         {/* Tab Buttons and View Selector on Right */}
         <div className="flex items-center gap-4">
           {/* View Selector for Project Data */}
-          {hasMultipleViews && (
-            <Select value={activeView} onValueChange={setActiveView}>
-              <SelectTrigger className="w-[140px] bg-black border-crafd-yellow text-white hover:bg-crafd-yellow/10">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {(currentTab as any).views.map((view: any) => (
-                  <SelectItem key={view.value} value={view.value}>
-                    <div className="flex items-center gap-2">
-                      {viewIcons[view.value]}
-                      <span>{view.label}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
+          <Select value={activeView} onValueChange={setActiveView} disabled={!hasMultipleViews}>
+            <SelectTrigger className={cn(
+              "w-[140px] bg-black border-crafd-yellow text-white hover:bg-crafd-yellow/10",
+              !hasMultipleViews && "invisible"
+            )}>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {(currentTab as any).views && (currentTab as any).views.map((view: any) => (
+                <SelectItem key={view.value} value={view.value}>
+                  <div className="flex items-center gap-2">
+                    {viewIcons[view.value]}
+                    <span>{view.label}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {/* Tab Buttons */}
           <nav className="flex gap-2">
             {AIRTABLE_TABS.map((tab) => (
