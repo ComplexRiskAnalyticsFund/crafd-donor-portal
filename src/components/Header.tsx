@@ -17,12 +17,6 @@ export function Header() {
   const { activeTab, setActiveTab, getTabLabel, activeView, setActiveView } = useTab();
   const tabLabel = getTabLabel(activeTab);
 
-  // Handle logout
-  const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    window.location.href = "/login";
-  };
-
   // Find current tab data
   const currentTab = AIRTABLE_TABS.find((tab) => tab.value === activeTab);
   const hasMultipleViews = currentTab && "views" in currentTab && (currentTab as any).views;
@@ -106,6 +100,14 @@ export function Header() {
               </button>
             ))}
           </nav>
+          {/* Logout Button */}
+          <a
+            href="/logout"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded transition-all duration-200 text-white bg-rose-700 hover:bg-rose-600"
+          >
+            <LogOut className="w-4 h-4" />
+            Logout
+          </a>
         </div>
       </div>
     </header>
