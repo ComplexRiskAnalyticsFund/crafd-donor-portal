@@ -36,7 +36,7 @@ export function Header() {
   };
 
   return (
-    <header className="z-40 shrink-0 bg-black px-8 py-4">
+    <header className="z-40 shrink-0 bg-black px-8 py-0">
       <div className="flex items-center justify-between gap-6">
         {/* Logo and Title */}
         <div className="flex items-center gap-6">
@@ -66,6 +66,16 @@ export function Header() {
               </p>
             )}
           </div>
+        </div>
+        {/* Middle Image */}
+        <div className="flex-1 flex justify-center px-4">
+          <Image
+            src="/images/wide.png"
+            alt="CRAF'd"
+            width={300}
+            height={60}
+            className="h-auto w-auto object-contain"
+          />
         </div>
         {/* Tab Buttons and View Selector on Right */}
         <div className="flex items-center gap-4">
