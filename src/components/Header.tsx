@@ -4,10 +4,36 @@ import Image from "next/image";
 import { useTab } from "./TabContext";
 import { AIRTABLE_TABS } from "@/config/airtable";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Grid, BarChart3, Users, Building2, LayoutGrid, List } from "lucide-react";
 
 export function Header() {
-  const { activeTab, setActiveTab, getTabLabel } = useTab();
+  const { activeTab, setActiveTab, getTabLabel, activeView, setActiveView } = useTab();
   const tabLabel = getTabLabel(activeTab);
+
+  // Find current tab data
+  const currentTab = AIRTABLE_TABS.find((tab) => tab.value === activeTab);
+  const hasMultipleViews = currentTab && "views" in currentTab && (currentTab as any).views;
+
+  // Map icons to tabs
+  const tabIcons: { [key: string]: React.ReactNode } = {
+    projects: <Grid className="w-4 h-4" />,
+    steerco: <BarChart3 className="w-4 h-4" />,
+    contacts: <Users className="w-4 h-4" />,
+    partners: <Building2 className="w-4 h-4" />,
+  };
+
+  // Map icons to views
+  const viewIcons: { [key: string]: React.ReactNode } = {
+    grid: <LayoutGrid className="w-4 h-4" />,
+    list: <List className="w-4 h-4" />,
+  };
 
   return (
     <header className="z-40 shrink-0 bg-black px-8 py-4">
@@ -36,23 +62,45 @@ export function Header() {
             )}
           </div>
         </div>
-        {/* Tab Buttons on Right */}
-        <nav className="flex gap-2">
-          {AIRTABLE_TABS.map((tab) => (
-            <button
-              key={tab.value}
-              onClick={() => setActiveTab(tab.value)}
-              className={cn(
-                "px-4 py-2 text-sm font-semibold rounded transition-all duration-200",
-                activeTab === tab.value
-                  ? "bg-crafd-yellow text-black"
-                  : "text-white hover:bg-crafd-yellow/20"
-              )}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
+        {/* Tab Buttons and View Selector on Right */}
+        <div className="flex items-center gap-4">
+          {/* View Selector for Project Data */}
+          {hasMultipleViews && (
+            <Select value={activeView} onValueChange={setActiveView}>
+              <SelectTrigger className="w-[140px] bg-black border-crafd-yellow text-white hover:bg-crafd-yellow/10">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {(currentTab as any).views.map((view: any) => (
+                  <SelectItem key={view.value} value={view.value}>
+                    <div className="flex items-center gap-2">
+                      {viewIcons[view.value]}
+                      <span>{view.label}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+          {/* Tab Buttons */}
+          <nav className="flex gap-2">
+            {AIRTABLE_TABS.map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setActiveTab(tab.value)}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded transition-all duration-200",
+                  activeTab === tab.value
+                    ? "bg-crafd-yellow text-black"
+                    : "text-white hover:bg-crafd-yellow/20"
+                )}
+              >
+                {tabIcons[tab.value as keyof typeof tabIcons]}
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
       </div>
     </header>
   );

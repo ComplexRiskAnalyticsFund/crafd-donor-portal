@@ -6,23 +6,35 @@
 
 export const AIRTABLE_TABS = [
   {
-    value: "overview",
-    label: "Overview",
-    iframeUrl: process.env.NEXT_PUBLIC_AIRTABLE_1_URL || "",
+    value: "projects",
+    label: "Project Data",
+    views: [
+      {
+        value: "grid",
+        label: "Grid View",
+        iframeUrl: process.env.NEXT_PUBLIC_AIRTABLE_PROJECTS_GRID_URL || "",
+      },
+      {
+        value: "list",
+        label: "List View",
+        iframeUrl: process.env.NEXT_PUBLIC_AIRTABLE_PROJECTS_LIST_URL || "",
+      },
+    ],
+    defaultView: "grid",
   },
   {
-    value: "incoming",
-    label: "Incoming Funds",
-    iframeUrl: process.env.NEXT_PUBLIC_AIRTABLE_2_URL || "",
+    value: "steerco",
+    label: "SteerCo Decisions",
+    iframeUrl: process.env.NEXT_PUBLIC_AIRTABLE_STEERCO_URL || "",
   },
   {
-    value: "outgoing",
-    label: "Outgoing Funds",
-    iframeUrl: process.env.NEXT_PUBLIC_AIRTABLE_3_URL || "",
+    value: "contacts",
+    label: "Contacts",
+    iframeUrl: process.env.NEXT_PUBLIC_AIRTABLE_CONTACTS_URL || "",
   },
   {
-    value: "liquidity",
-    label: "Net Liquidity",
-    iframeUrl: process.env.NEXT_PUBLIC_AIRTABLE_4_URL || "",
+    value: "partners",
+    label: "Partner Organizations",
+    iframeUrl: process.env.NEXT_PUBLIC_AIRTABLE_PARTNERS_URL || "",
   },
 ];
