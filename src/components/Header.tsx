@@ -12,13 +12,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Grid, BarChart3, Users, Building2, LayoutGrid, List, LogOut } from "lucide-react";
+import { Grid, BarChart3, Users, Building2, LayoutGrid, List, LogOut, Calendar } from "lucide-react";
 
 const NAVIGATION_ITEMS = [
-  { value: "data", label: "Project Data", href: "/data", icon: Grid },
-  { value: "steerco", label: "SteerCo Decisions", href: "/data/steerco", icon: BarChart3 },
-  { value: "contacts", label: "Contacts", href: "/data/contacts", icon: Users },
-  { value: "partners", label: "Partner Organizations", href: "/data/partners", icon: Building2 },
+  { value: "data", label: "Project Data", href: "/data", icon: Grid, exact: true },
+  { value: "steerco-meeting", label: "SteerCo Meeting", href: "/steerco", icon: Calendar, exact: true },
+  { value: "steerco-data", label: "SteerCo Decisions", href: "/data/steerco", icon: BarChart3, exact: false },
+  { value: "contacts", label: "Contacts", href: "/data/contacts", icon: Users, exact: false },
+  { value: "partners", label: "Partner Organizations", href: "/data/partners", icon: Building2, exact: false },
 ];
 
 export function Header() {
@@ -26,20 +27,18 @@ export function Header() {
   const router = useRouter();
   const { activeView, setActiveView } = useTab();
   
-  // Determine current section from pathname
-  const pathParts = pathname.split('/').filter(Boolean);
-  const currentSection = pathParts.length > 1 ? pathParts[1] : 'data';
-  const isDataRoot = pathname === '/data' || pathname === '/data/';
-  
+  // Find current navigation item based on pathname
   const currentNav = NAVIGATION_ITEMS.find(item => {
-    if (isDataRoot) return item.value === 'data';
-    return item.value === currentSection;
+    if (item.exact) {
+      return pathname === item.href || pathname === item.href + '/';
+    }
+    return pathname.startsWith(item.href);
   });
   
   const sectionLabel = currentNav?.label || "";
   
   // Only show view selector on /data route for projects
-  const showViewSelector = isDataRoot;
+  const showViewSelector = pathname === '/data' || pathname === '/data/';
 
   // Map icons to views
   const viewIcons: { [key: string]: React.ReactNode } = {
@@ -127,8 +126,7 @@ export function Header() {
           <nav className="flex gap-2">
             {NAVIGATION_ITEMS.map((nav) => {
               const Icon = nav.icon;
-              const isActive = (isDataRoot && nav.value === 'data') || 
-                             (!isDataRoot && nav.value === currentSection);
+              const isActive = currentNav?.value === nav.value;
               
               return (
                 <Link
@@ -201,7 +199,7 @@ export function Header() {
         <div className="flex items-center gap-3">
           {/* Tab Selector (Mobile) */}
           <Select 
-            value={isDataRoot ? 'data' : currentSection} 
+            value={currentNav?.value || 'data'} 
             onValueChange={handleNavChange}
           >
             <SelectTrigger className="flex-1 bg-black border-crafd-yellow text-white hover:bg-crafd-yellow/10">
