@@ -11,11 +11,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Grid, BarChart3, Users, Building2, LayoutGrid, List } from "lucide-react";
+import { Grid, BarChart3, Users, Building2, LayoutGrid, List, LogOut } from "lucide-react";
 
 export function Header() {
   const { activeTab, setActiveTab, getTabLabel, activeView, setActiveView } = useTab();
   const tabLabel = getTabLabel(activeTab);
+
+  // Handle logout
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    window.location.href = "/login";
+  };
 
   // Find current tab data
   const currentTab = AIRTABLE_TABS.find((tab) => tab.value === activeTab);
