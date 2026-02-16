@@ -15,7 +15,7 @@ export default async function LoginPage({
             {/* Header */}
             <div className="space-y-2">
               <h1 className="text-3xl font-semibold text-slate-900">
-                CRAF'd | Open Gateway
+                CRAF'd Transparency Portal
               </h1>
               <p className="text-slate-600">Please sign in to continue</p>
             </div>

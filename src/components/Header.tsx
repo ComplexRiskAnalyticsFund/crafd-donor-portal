@@ -53,7 +53,7 @@ export function Header() {
           {/* Title and Subtitle */}
           <div className="flex flex-col gap-1">
             <h1 className="font-qanelas text-[2.1rem] leading-none font-extrabold tracking-tight text-white">
-              Open CRAF'd Gateway
+              CRAF'd Transparency Portal
             </h1>
             {tabLabel && (
               <p className="text-sm font-semibold text-crafd-yellow">
