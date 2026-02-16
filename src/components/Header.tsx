@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useTab } from "./TabContext";
-import { AIRTABLE_TABS } from "@/config/airtable";
 import { cn } from "@/lib/utils";
 import {
   Select,
@@ -11,28 +12,51 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Grid, BarChart3, Users, Building2, LayoutGrid, List, LogOut, Menu } from "lucide-react";
+import { Grid, BarChart3, Users, Building2, LayoutGrid, List, LogOut } from "lucide-react";
+
+const NAVIGATION_ITEMS = [
+  { value: "data", label: "Project Data", href: "/data", icon: Grid },
+  { value: "steerco", label: "SteerCo Decisions", href: "/data/steerco", icon: BarChart3 },
+  { value: "contacts", label: "Contacts", href: "/data/contacts", icon: Users },
+  { value: "partners", label: "Partner Organizations", href: "/data/partners", icon: Building2 },
+];
 
 export function Header() {
-  const { activeTab, setActiveTab, getTabLabel, activeView, setActiveView } = useTab();
-  const tabLabel = getTabLabel(activeTab);
-
-  // Find current tab data
-  const currentTab = AIRTABLE_TABS.find((tab) => tab.value === activeTab);
-  const hasMultipleViews = currentTab && "views" in currentTab && (currentTab as any).views;
-
-  // Map icons to tabs
-  const tabIcons: { [key: string]: React.ReactNode } = {
-    projects: <Grid className="w-4 h-4" />,
-    steerco: <BarChart3 className="w-4 h-4" />,
-    contacts: <Users className="w-4 h-4" />,
-    partners: <Building2 className="w-4 h-4" />,
-  };
+  const pathname = usePathname();
+  const router = useRouter();
+  const { activeView, setActiveView } = useTab();
+  
+  // Determine current section from pathname
+  const pathParts = pathname.split('/').filter(Boolean);
+  const currentSection = pathParts.length > 1 ? pathParts[1] : 'data';
+  const isDataRoot = pathname === '/data' || pathname === '/data/';
+  
+  const currentNav = NAVIGATION_ITEMS.find(item => {
+    if (isDataRoot) return item.value === 'data';
+    return item.value === currentSection;
+  });
+  
+  const sectionLabel = currentNav?.label || "";
+  
+  // Only show view selector on /data route for projects
+  const showViewSelector = isDataRoot;
 
   // Map icons to views
   const viewIcons: { [key: string]: React.ReactNode } = {
     grid: <LayoutGrid className="w-4 h-4" />,
     list: <List className="w-4 h-4" />,
+  };
+  
+  const views = [
+    { value: "grid", label: "Grid View" },
+    { value: "list", label: "List View" },
+  ];
+  
+  const handleNavChange = (value: string) => {
+    const navItem = NAVIGATION_ITEMS.find(item => item.value === value);
+    if (navItem) {
+      router.push(navItem.href);
+    }
   };
 
   return (
@@ -61,9 +85,9 @@ export function Header() {
             <h1 className="font-qanelas text-[2.1rem] leading-none font-extrabold tracking-tight text-white">
               CRAF'd Transparency Portal
             </h1>
-            {tabLabel && (
+            {sectionLabel && (
               <p className="text-sm font-semibold text-crafd-yellow">
-                {tabLabel}
+                {sectionLabel}
               </p>
             )}
           </div>
@@ -81,15 +105,15 @@ export function Header() {
         {/* Tab Buttons and View Selector on Right */}
         <div className="flex items-center gap-4">
           {/* View Selector for Project Data */}
-          <Select value={activeView} onValueChange={setActiveView} disabled={!hasMultipleViews}>
+          <Select value={activeView} onValueChange={setActiveView} disabled={!showViewSelector}>
             <SelectTrigger className={cn(
               "w-[140px] bg-black border-crafd-yellow text-white hover:bg-crafd-yellow/10",
-              !hasMultipleViews && "invisible"
+              !showViewSelector && "invisible"
             )}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {(currentTab as any).views && (currentTab as any).views.map((view: any) => (
+              {views.map((view) => (
                 <SelectItem key={view.value} value={view.value}>
                   <div className="flex items-center gap-2">
                     {viewIcons[view.value]}
@@ -101,21 +125,27 @@ export function Header() {
           </Select>
           {/* Tab Buttons */}
           <nav className="flex gap-2">
-            {AIRTABLE_TABS.map((tab) => (
-              <button
-                key={tab.value}
-                onClick={() => setActiveTab(tab.value)}
-                className={cn(
-                  "flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded transition-all duration-200",
-                  activeTab === tab.value
-                    ? "bg-crafd-yellow text-black"
-                    : "text-white hover:bg-crafd-yellow/20"
-                )}
-              >
-                {tabIcons[tab.value as keyof typeof tabIcons]}
-                {tab.label}
-              </button>
-            ))}
+            {NAVIGATION_ITEMS.map((nav) => {
+              const Icon = nav.icon;
+              const isActive = (isDataRoot && nav.value === 'data') || 
+                             (!isDataRoot && nav.value === currentSection);
+              
+              return (
+                <Link
+                  key={nav.value}
+                  href={nav.href}
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded transition-all duration-200",
+                    isActive
+                      ? "bg-crafd-yellow text-black"
+                      : "text-white hover:bg-crafd-yellow/20"
+                  )}
+                >
+                  <Icon className="w-4 h-4" />
+                  {nav.label}
+                </Link>
+              );
+            })}
           </nav>
           {/* Logout Button */}
           <a
@@ -160,9 +190,9 @@ export function Header() {
           <h1 className="font-qanelas text-xl sm:text-2xl leading-tight font-extrabold tracking-tight text-white">
             CRAF'd Transparency Portal
           </h1>
-          {tabLabel && (
+          {sectionLabel && (
             <p className="text-sm font-semibold text-crafd-yellow">
-              {tabLabel}
+              {sectionLabel}
             </p>
           )}
         </div>
@@ -170,32 +200,38 @@ export function Header() {
         {/* Controls Row: Tab Selector and View Selector */}
         <div className="flex items-center gap-3">
           {/* Tab Selector (Mobile) */}
-          <Select value={activeTab} onValueChange={setActiveTab}>
+          <Select 
+            value={isDataRoot ? 'data' : currentSection} 
+            onValueChange={handleNavChange}
+          >
             <SelectTrigger className="flex-1 bg-black border-crafd-yellow text-white hover:bg-crafd-yellow/10">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {AIRTABLE_TABS.map((tab) => (
-                <SelectItem key={tab.value} value={tab.value}>
-                  <div className="flex items-center gap-2">
-                    {tabIcons[tab.value as keyof typeof tabIcons]}
-                    <span>{tab.label}</span>
-                  </div>
-                </SelectItem>
-              ))}
+              {NAVIGATION_ITEMS.map((nav) => {
+                const Icon = nav.icon;
+                return (
+                  <SelectItem key={nav.value} value={nav.value}>
+                    <div className="flex items-center gap-2">
+                      <Icon className="w-4 h-4" />
+                      <span>{nav.label}</span>
+                    </div>
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
 
           {/* View Selector (Mobile) */}
-          <Select value={activeView} onValueChange={setActiveView} disabled={!hasMultipleViews}>
+          <Select value={activeView} onValueChange={setActiveView} disabled={!showViewSelector}>
             <SelectTrigger className={cn(
               "w-[140px] bg-black border-crafd-yellow text-white hover:bg-crafd-yellow/10",
-              !hasMultipleViews && "invisible"
+              !showViewSelector && "invisible"
             )}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {(currentTab as any).views && (currentTab as any).views.map((view: any) => (
+              {views.map((view) => (
                 <SelectItem key={view.value} value={view.value}>
                   <div className="flex items-center gap-2">
                     {viewIcons[view.value]}
