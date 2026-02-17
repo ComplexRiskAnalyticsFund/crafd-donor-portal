@@ -15,11 +15,11 @@ import {
 import { Grid, BarChart3, Users, Building2, LayoutGrid, List, LogOut, Calendar } from "lucide-react";
 
 const NAVIGATION_ITEMS = [
-  { value: "data", label: "Project Data", href: "/data", icon: Grid, exact: true },
-  { value: "steerco-meeting", label: "SteerCo Meeting", href: "/steerco", icon: Calendar, exact: true },
-  { value: "steerco-data", label: "SteerCo Decisions", href: "/data/steerco", icon: BarChart3, exact: false },
-  { value: "contacts", label: "Contacts", href: "/data/contacts", icon: Users, exact: false },
-  { value: "partners", label: "Partner Organizations", href: "/data/partners", icon: Building2, exact: false },
+  { value: "data", label: "Project Data", shortLabel: "Projects", href: "/data", icon: Grid, exact: true },
+  { value: "steerco-meeting", label: "SteerCo Meeting", shortLabel: "Meeting", href: "/steerco", icon: Calendar, exact: true },
+  { value: "steerco-data", label: "SteerCo Decisions", shortLabel: "Decisions", href: "/data/steerco", icon: BarChart3, exact: false },
+  { value: "contacts", label: "Contacts", shortLabel: "Contacts", href: "/data/contacts", icon: Users, exact: false },
+  { value: "partners", label: "Partner Organizations", shortLabel: "Partners", href: "/data/partners", icon: Building2, exact: false },
 ];
 
 export function Header() {
@@ -140,7 +140,7 @@ export function Header() {
                   )}
                 >
                   <Icon className="w-4 h-4" />
-                  {nav.label}
+                  {nav.shortLabel || nav.label}
                 </Link>
               );
             })}
