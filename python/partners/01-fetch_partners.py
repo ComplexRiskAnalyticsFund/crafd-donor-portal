@@ -5,6 +5,7 @@ import requests
 
 from python.api.airtable import fetch_airtable_table
 from python.utils.utils import export_dataframe
+import json
 
 AIRTABLE_BASE_ID = "appIYFN5sAJzK1bPg"
 PARTNER_TABLE_ID = "tbl2FMZOARI7I66fq"
@@ -145,3 +146,10 @@ df_partners["logo_path"] = df_partners.apply(download_logo, axis=1)
 
 output_dir = Path("data") / "processed"
 export_dataframe(df_partners, "df_leads", output_dir)
+
+
+# Export to JSON for website use
+public_dir = Path("public") / "data"
+public_dir.mkdir(parents=True, exist_ok=True)
+
+df_partners.to_json(public_dir / "partners.json", orient="records", indent=2)

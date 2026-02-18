@@ -1,3 +1,10 @@
+// Server Component - optimized for Vercel deployment
+// Data fetching example for when ready to implement viz:
+// import { getPartners, getPartnerStats } from "@/lib/data/partners";
+//
+// const partners = await getPartners(); // Fetches during build/request
+// const stats = getPartnerStats(partners);
+
 export default function PartnersPage() {
   return (
     <iframe
