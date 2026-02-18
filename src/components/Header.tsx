@@ -1,75 +1,108 @@
 "use client";
 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import {
+    BarChart3,
+    Building2,
+    Grid,
+    LayoutGrid,
+    List,
+    LogOut,
+    Users,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTab } from "./TabContext";
-import { cn } from "@/lib/utils";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Grid, BarChart3, Users, Building2, LayoutGrid, List, LogOut, Calendar } from "lucide-react";
 
 const NAVIGATION_ITEMS = [
-  { value: "data", label: "Project Data", shortLabel: "Projects", href: "/data", icon: Grid, exact: true },
-  { value: "steerco-meeting", label: "SteerCo Meeting", shortLabel: "Meeting", href: "/steerco", icon: Calendar, exact: true },
-  { value: "steerco-data", label: "SteerCo Decisions", shortLabel: "Decisions", href: "/data/steerco", icon: BarChart3, exact: false },
-  { value: "contacts", label: "Contacts", shortLabel: "Contacts", href: "/data/contacts", icon: Users, exact: false },
-  { value: "partners", label: "Partner Organizations", shortLabel: "Partners", href: "/data/partners", icon: Building2, exact: false },
+  {
+    value: "data",
+    label: "Project Data",
+    shortLabel: "Projects",
+    href: "/data",
+    icon: Grid,
+    exact: true,
+  },
+  {
+    value: "steerco-data",
+    label: "SteerCo Decisions",
+    shortLabel: "Decisions",
+    href: "/data/steerco",
+    icon: BarChart3,
+    exact: false,
+  },
+  {
+    value: "contacts",
+    label: "Contacts",
+    shortLabel: "Contacts",
+    href: "/data/contacts",
+    icon: Users,
+    exact: false,
+  },
+  {
+    value: "partners",
+    label: "Partner Organizations",
+    shortLabel: "Partners",
+    href: "/data/partners",
+    icon: Building2,
+    exact: false,
+  },
 ];
 
 export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { activeView, setActiveView } = useTab();
-  
+
   // Find current navigation item based on pathname
-  const currentNav = NAVIGATION_ITEMS.find(item => {
+  const currentNav = NAVIGATION_ITEMS.find((item) => {
     if (item.exact) {
-      return pathname === item.href || pathname === item.href + '/';
+      return pathname === item.href || pathname === item.href + "/";
     }
     return pathname.startsWith(item.href);
   });
-  
-  const sectionLabel = currentNav?.label || "";
-  
+
   // Only show view selector on /data route for projects
-  const showViewSelector = pathname === '/data' || pathname === '/data/';
+  const showViewSelector = pathname === "/data" || pathname === "/data/";
 
   // Map icons to views
   const viewIcons: { [key: string]: React.ReactNode } = {
-    grid: <LayoutGrid className="w-4 h-4" />,
-    list: <List className="w-4 h-4" />,
+    grid: <LayoutGrid className="h-4 w-4" />,
+    list: <List className="h-4 w-4" />,
   };
-  
+
   const views = [
     { value: "grid", label: "Grid View" },
     { value: "list", label: "List View" },
   ];
-  
+
   const handleNavChange = (value: string) => {
-    const navItem = NAVIGATION_ITEMS.find(item => item.value === value);
+    const navItem = NAVIGATION_ITEMS.find((item) => item.value === value);
     if (navItem) {
       router.push(navItem.href);
     }
   };
 
   return (
-    <header className="z-40 shrink-0 bg-black px-4 py-4 md:px-8 md:py-0">
+    <header className="z-40 shrink-0 bg-black px-4 py-2 md:px-8 md:py-0">
       {/* Desktop Layout */}
-      <div className="hidden lg:flex items-center justify-between gap-6">
+      <div className="hidden items-center justify-between gap-6 lg:flex lg:h-20">
         {/* Logo and Title */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
           {/* Logo */}
           <a
             href="https://crafd.io"
             target="_blank"
             rel="noopener noreferrer"
-            className="relative h-[calc(2*1.875rem)] w-auto cursor-pointer transition-opacity hover:opacity-80"
+            className="relative h-12 w-auto cursor-pointer transition-opacity hover:opacity-80"
           >
             <Image
               src="/images/crafd-logo-full-white.svg"
@@ -79,36 +112,35 @@ export function Header() {
               className="h-full w-auto object-contain"
             />
           </a>
-          {/* Title and Subtitle */}
-          <div className="flex flex-col gap-1">
-            <h1 className="font-qanelas text-[2.1rem] leading-none font-extrabold tracking-tight text-white">
-              CRAF'd Transparency Portal
-            </h1>
-            {sectionLabel && (
-              <p className="text-sm font-semibold text-crafd-yellow">
-                {sectionLabel}
-              </p>
-            )}
-          </div>
+          {/* Title */}
+          <h1 className="font-qanelas text-3xl leading-none font-extrabold tracking-tight text-white">
+            CRAF'd Transparency Portal
+          </h1>
         </div>
         {/* Middle Image */}
-        <div className="flex-1 flex justify-center px-4">
+        <div className="flex flex-1 items-center justify-center self-stretch overflow-hidden">
           <Image
-            src="/images/wide.png"
+            src="/images/crafd-wide-header.png"
             alt="CRAF'd"
-            width={300}
-            height={60}
-            className="h-auto w-auto object-contain"
+            width={600}
+            height={80}
+            className="h-full w-full object-cover"
           />
         </div>
         {/* Tab Buttons and View Selector on Right */}
         <div className="flex items-center gap-4">
           {/* View Selector for Project Data */}
-          <Select value={activeView} onValueChange={setActiveView} disabled={!showViewSelector}>
-            <SelectTrigger className={cn(
-              "w-[140px] bg-black border-crafd-yellow text-white hover:bg-crafd-yellow/10",
-              !showViewSelector && "invisible"
-            )}>
+          <Select
+            value={activeView}
+            onValueChange={setActiveView}
+            disabled={!showViewSelector}
+          >
+            <SelectTrigger
+              className={cn(
+                "w-35 border-crafd-yellow bg-black text-white hover:bg-crafd-yellow/10",
+                !showViewSelector && "invisible",
+              )}
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -127,19 +159,19 @@ export function Header() {
             {NAVIGATION_ITEMS.map((nav) => {
               const Icon = nav.icon;
               const isActive = currentNav?.value === nav.value;
-              
+
               return (
                 <Link
                   key={nav.value}
                   href={nav.href}
                   className={cn(
-                    "flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded transition-all duration-200",
+                    "flex items-center gap-2 rounded px-3 py-1.5 text-sm font-semibold transition-all duration-200",
                     isActive
                       ? "bg-crafd-yellow text-black"
-                      : "text-white hover:bg-crafd-yellow/20"
+                      : "text-white hover:bg-crafd-yellow/20",
                   )}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="h-4 w-4" />
                   {nav.shortLabel || nav.label}
                 </Link>
               );
@@ -148,9 +180,9 @@ export function Header() {
           {/* Logout Button */}
           <a
             href="/logout"
-            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded transition-all duration-200 text-white bg-rose-700 hover:bg-rose-600"
+            className="flex items-center gap-2 rounded bg-rose-700 px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-rose-600"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="h-4 w-4" />
             Logout
           </a>
         </div>
@@ -176,33 +208,26 @@ export function Header() {
           </a>
           <a
             href="/logout"
-            className="flex items-center gap-2 px-3 py-2 text-sm font-semibold rounded transition-all duration-200 text-white bg-rose-700 hover:bg-rose-600"
+            className="flex items-center gap-2 rounded bg-rose-700 px-3 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-rose-600"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="h-4 w-4" />
             <span className="hidden sm:inline">Logout</span>
           </a>
         </div>
-        
+
         {/* Title */}
-        <div className="flex flex-col gap-1">
-          <h1 className="font-qanelas text-xl sm:text-2xl leading-tight font-extrabold tracking-tight text-white">
-            CRAF'd Transparency Portal
-          </h1>
-          {sectionLabel && (
-            <p className="text-sm font-semibold text-crafd-yellow">
-              {sectionLabel}
-            </p>
-          )}
-        </div>
+        <h1 className="font-qanelas text-xl leading-tight font-extrabold tracking-tight text-white sm:text-2xl">
+          CRAF'd Transparency Portal
+        </h1>
 
         {/* Controls Row: Tab Selector and View Selector */}
         <div className="flex items-center gap-3">
           {/* Tab Selector (Mobile) */}
-          <Select 
-            value={currentNav?.value || 'data'} 
+          <Select
+            value={currentNav?.value || "data"}
             onValueChange={handleNavChange}
           >
-            <SelectTrigger className="flex-1 bg-black border-crafd-yellow text-white hover:bg-crafd-yellow/10">
+            <SelectTrigger className="flex-1 border-crafd-yellow bg-black text-white hover:bg-crafd-yellow/10">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -211,7 +236,7 @@ export function Header() {
                 return (
                   <SelectItem key={nav.value} value={nav.value}>
                     <div className="flex items-center gap-2">
-                      <Icon className="w-4 h-4" />
+                      <Icon className="h-4 w-4" />
                       <span>{nav.label}</span>
                     </div>
                   </SelectItem>
@@ -221,11 +246,17 @@ export function Header() {
           </Select>
 
           {/* View Selector (Mobile) */}
-          <Select value={activeView} onValueChange={setActiveView} disabled={!showViewSelector}>
-            <SelectTrigger className={cn(
-              "w-[140px] bg-black border-crafd-yellow text-white hover:bg-crafd-yellow/10",
-              !showViewSelector && "invisible"
-            )}>
+          <Select
+            value={activeView}
+            onValueChange={setActiveView}
+            disabled={!showViewSelector}
+          >
+            <SelectTrigger
+              className={cn(
+                "w-35 border-crafd-yellow bg-black text-white hover:bg-crafd-yellow/10",
+                !showViewSelector && "invisible",
+              )}
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

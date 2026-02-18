@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Header } from "@/components/Header";
 import { ClientOnly } from "@/components/ClientWrapper";
 import { TabProvider } from "@/components/TabContext";
+import { IframeLayer } from "@/components/IframeLayer";
 
 // Force dynamic rendering to check auth on every request
 export const dynamic = "force-dynamic";
@@ -27,8 +28,13 @@ export default async function DashboardLayout({
         <ClientOnly>
           <Header />
         </ClientOnly>
-        {/* Main content */}
-        {children}
+        {/* Main content — iframe layer fills this area; children are placeholder routes */}
+        <div className="relative min-h-0 flex-1">
+          <ClientOnly>
+            <IframeLayer />
+          </ClientOnly>
+          {children}
+        </div>
       </div>
     </TabProvider>
   );

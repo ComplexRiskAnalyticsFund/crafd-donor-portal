@@ -2,7 +2,13 @@
 
 import { ClientOnly } from "@/components/ClientWrapper";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CalendarDays, Clock, Users, FileText, CheckCircle2 } from "lucide-react";
+import {
+  CalendarDays,
+  Clock,
+  Users,
+  FileText,
+  CheckCircle2,
+} from "lucide-react";
 
 // Placeholder data for meeting
 const MEETING_INFO = {
@@ -74,7 +80,7 @@ export default function SteerCoMeetingPage() {
   return (
     <main className="min-h-0 flex-1 overflow-auto bg-gray-50">
       <ClientOnly>
-        <div className="mx-auto max-w-7xl p-6 space-y-6">
+        <div className="mx-auto max-w-7xl space-y-6 p-6">
           {/* Header Section */}
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight text-black">
@@ -94,7 +100,9 @@ export default function SteerCoMeetingPage() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Date</p>
-                  <p className="font-semibold text-black">{MEETING_INFO.date}</p>
+                  <p className="font-semibold text-black">
+                    {MEETING_INFO.date}
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -106,7 +114,9 @@ export default function SteerCoMeetingPage() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Time</p>
-                  <p className="font-semibold text-black">{MEETING_INFO.time}</p>
+                  <p className="font-semibold text-black">
+                    {MEETING_INFO.time}
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -118,7 +128,9 @@ export default function SteerCoMeetingPage() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Attendees</p>
-                  <p className="font-semibold text-black">{MEETING_INFO.attendees} Expected</p>
+                  <p className="font-semibold text-black">
+                    {MEETING_INFO.attendees} Expected
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -130,7 +142,9 @@ export default function SteerCoMeetingPage() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Documents</p>
-                  <p className="font-semibold text-black">{DOCUMENTS.length} Attached</p>
+                  <p className="font-semibold text-black">
+                    {DOCUMENTS.length} Attached
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -155,9 +169,9 @@ export default function SteerCoMeetingPage() {
                     >
                       {/* Timeline Line */}
                       {index !== AGENDA_ITEMS.length - 1 && (
-                        <div className="absolute left-[15px] top-8 h-full w-0.5 bg-gray-200" />
+                        <div className="absolute top-8 left-3.75 h-full w-0.5 bg-gray-200" />
                       )}
-                      
+
                       {/* Timeline Dot */}
                       <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-crafd-yellow bg-white">
                         <div className="h-2 w-2 rounded-full bg-crafd-yellow" />
@@ -167,12 +181,14 @@ export default function SteerCoMeetingPage() {
                       <div className="flex-1 space-y-1 pt-0.5">
                         <div className="flex items-start justify-between gap-4">
                           <div>
-                            <p className="font-semibold text-black">{item.title}</p>
+                            <p className="font-semibold text-black">
+                              {item.title}
+                            </p>
                             <p className="text-sm text-gray-600">
                               {item.presenter} • {item.duration}
                             </p>
                           </div>
-                          <span className="text-sm font-medium text-crafd-yellow whitespace-nowrap">
+                          <span className="text-sm font-medium whitespace-nowrap text-crafd-yellow">
                             {item.time}
                           </span>
                         </div>
@@ -228,15 +244,21 @@ export default function SteerCoMeetingPage() {
                   <div className="space-y-2">
                     <div className="flex items-start gap-2">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 text-green-600" />
-                      <span className="text-sm text-gray-700">Review Q1 Report</span>
+                      <span className="text-sm text-gray-700">
+                        Review Q1 Report
+                      </span>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 text-green-600" />
-                      <span className="text-sm text-gray-700">Submit feedback on proposals</span>
+                      <span className="text-sm text-gray-700">
+                        Submit feedback on proposals
+                      </span>
                     </div>
                     <div className="flex items-start gap-2">
                       <div className="mt-0.5 h-4 w-4 rounded-full border-2 border-gray-300" />
-                      <span className="text-sm text-gray-700">Prepare questions for discussion</span>
+                      <span className="text-sm text-gray-700">
+                        Prepare questions for discussion
+                      </span>
                     </div>
                   </div>
                 </CardContent>
