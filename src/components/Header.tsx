@@ -1,21 +1,19 @@
 "use client";
 
+import { Select, SelectItem, SelectValue } from "@/components/ui/select";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+  HeaderSelectTrigger,
+  HeaderSelectContent,
+} from "@/components/HeaderSelect";
 import { cn } from "@/lib/utils";
 import {
-    BarChart3,
-    Building2,
-    Grid,
-    LayoutGrid,
-    List,
-    LogOut,
-    Users,
+  BarChart3,
+  Building2,
+  Grid,
+  LayoutGrid,
+  List,
+  LogOut,
+  Users,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -102,7 +100,7 @@ export function Header() {
             href="https://crafd.io"
             target="_blank"
             rel="noopener noreferrer"
-            className="relative h-12 w-auto cursor-pointer transition-opacity hover:opacity-80"
+            className="relative h-12 w-auto cursor-pointer outline-none hover:opacity-80 focus-visible:outline-none"
           >
             <Image
               src="/images/crafd-logo-full-white.svg"
@@ -135,15 +133,12 @@ export function Header() {
             onValueChange={setActiveView}
             disabled={!showViewSelector}
           >
-            <SelectTrigger
-              className={cn(
-                "w-35 border-crafd-yellow bg-black text-white hover:bg-crafd-yellow/10",
-                !showViewSelector && "invisible",
-              )}
+            <HeaderSelectTrigger
+              className={cn("w-35", !showViewSelector && "invisible")}
             >
               <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
+            </HeaderSelectTrigger>
+            <HeaderSelectContent>
               {views.map((view) => (
                 <SelectItem key={view.value} value={view.value}>
                   <div className="flex items-center gap-2">
@@ -152,7 +147,7 @@ export function Header() {
                   </div>
                 </SelectItem>
               ))}
-            </SelectContent>
+            </HeaderSelectContent>
           </Select>
           {/* Tab Buttons */}
           <nav className="flex gap-2">
@@ -165,10 +160,10 @@ export function Header() {
                   key={nav.value}
                   href={nav.href}
                   className={cn(
-                    "flex items-center gap-2 rounded px-3 py-1.5 text-sm font-semibold transition-all duration-200",
+                    "flex h-9 items-center gap-2 rounded border px-3 py-1.5 text-sm font-semibold outline-none focus-visible:outline-none",
                     isActive
-                      ? "bg-crafd-yellow text-black"
-                      : "text-white hover:bg-crafd-yellow/20",
+                      ? "border-crafd-yellow bg-crafd-yellow text-black"
+                      : "border-crafd-yellow text-white hover:bg-crafd-yellow/20",
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -180,10 +175,9 @@ export function Header() {
           {/* Logout Button */}
           <a
             href="/logout"
-            className="flex items-center gap-2 rounded bg-rose-700 px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-rose-600"
+            className="flex h-9 items-center gap-2 rounded px-3 py-1.5 text-sm font-semibold text-white outline-none hover:bg-crafd-yellow/20 focus-visible:outline-none"
           >
             <LogOut className="h-4 w-4" />
-            Logout
           </a>
         </div>
       </div>
@@ -196,7 +190,7 @@ export function Header() {
             href="https://crafd.io"
             target="_blank"
             rel="noopener noreferrer"
-            className="relative h-12 w-auto cursor-pointer transition-opacity hover:opacity-80"
+            className="relative h-12 w-auto cursor-pointer outline-none hover:opacity-80 focus-visible:outline-none"
           >
             <Image
               src="/images/crafd-logo-full-white.svg"
@@ -208,7 +202,7 @@ export function Header() {
           </a>
           <a
             href="/logout"
-            className="flex items-center gap-2 rounded bg-rose-700 px-3 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-rose-600"
+            className="flex h-9 items-center gap-2 rounded px-3 py-1.5 text-sm font-semibold text-white outline-none hover:bg-crafd-yellow/20 focus-visible:outline-none"
           >
             <LogOut className="h-4 w-4" />
             <span className="hidden sm:inline">Logout</span>
@@ -227,10 +221,10 @@ export function Header() {
             value={currentNav?.value || "data"}
             onValueChange={handleNavChange}
           >
-            <SelectTrigger className="flex-1 border-crafd-yellow bg-black text-white hover:bg-crafd-yellow/10">
+            <HeaderSelectTrigger className="flex-1">
               <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
+            </HeaderSelectTrigger>
+            <HeaderSelectContent>
               {NAVIGATION_ITEMS.map((nav) => {
                 const Icon = nav.icon;
                 return (
@@ -242,7 +236,7 @@ export function Header() {
                   </SelectItem>
                 );
               })}
-            </SelectContent>
+            </HeaderSelectContent>
           </Select>
 
           {/* View Selector (Mobile) */}
@@ -251,15 +245,12 @@ export function Header() {
             onValueChange={setActiveView}
             disabled={!showViewSelector}
           >
-            <SelectTrigger
-              className={cn(
-                "w-35 border-crafd-yellow bg-black text-white hover:bg-crafd-yellow/10",
-                !showViewSelector && "invisible",
-              )}
+            <HeaderSelectTrigger
+              className={cn("w-35", !showViewSelector && "invisible")}
             >
               <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
+            </HeaderSelectTrigger>
+            <HeaderSelectContent>
               {views.map((view) => (
                 <SelectItem key={view.value} value={view.value}>
                   <div className="flex items-center gap-2">
@@ -268,7 +259,7 @@ export function Header() {
                   </div>
                 </SelectItem>
               ))}
-            </SelectContent>
+            </HeaderSelectContent>
           </Select>
         </div>
       </div>
