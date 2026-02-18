@@ -104,3 +104,9 @@ You are a senior Next.js (v16) developer working at the United Nations with exte
 
 - https://tailwindcss.com/docs/
 - https://ui.shadcn.com/docs/components
+
+
+# Python
+
+- use `uv add`
+- use `uv run python`

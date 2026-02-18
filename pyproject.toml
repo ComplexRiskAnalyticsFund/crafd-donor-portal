@@ -1,11 +1,15 @@
 [project]
-name = "crafd-financial-dashboard-web"
+name = "crafd-donor-portal"
 version = "0.1.0"
-description = "CRAF’d | Transparency Portal"
+description = "CRAF’d ØTransparency Portal"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "ipykernel>=7.1.0",
-    "pandas>=2.3.3",    "psycopg2-binary>=2.9.10",    "pyairtable>=3.3.0",
+    "fastparquet>=2025.12.0",
+    "ipykernel>=7.2.0",
+    "pandas>=3.0.1",
+    "pyairtable>=3.3.0",
+    "pyarrow>=23.0.1",
     "python-dotenv>=1.2.1",
+    "requests>=2.32.5",
 ]
