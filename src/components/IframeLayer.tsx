@@ -74,7 +74,9 @@ export function IframeLayer() {
               src={iframe.src}
               title={iframe.title}
               className="h-full w-full border-none"
-              allow="accelerometer; camera; microphone; gyroscope"
+              allow="accelerometer; gyroscope"
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error fetchPriority is a valid HTML attribute but missing from React's iframe typings
               fetchPriority={active ? "high" : "low"}
             />
           </div>
