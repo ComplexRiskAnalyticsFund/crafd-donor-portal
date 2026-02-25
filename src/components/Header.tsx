@@ -117,34 +117,34 @@ export function Header() {
         <div className="flex items-center gap-2 lg:gap-3 xl:gap-4">
           {/* View Toggle for Project Data */}
           {showViewSelector && (
-            <div className="flex h-9 items-stretch gap-1 rounded border border-crafd-yellow p-0.5">
+            <div className="flex h-8 items-stretch gap-0.5 rounded border border-crafd-yellow p-0.5">
               <button
                 onClick={() => setActiveView("grid")}
                 className={cn(
-                  "flex items-center justify-center gap-1.5 rounded px-3 transition-all duration-200",
+                  "flex items-center justify-center gap-1 rounded px-2 transition-all duration-200",
                   activeView === "grid"
                     ? "bg-crafd-yellow text-black shadow-sm"
                     : "text-white hover:bg-crafd-yellow/20",
                 )}
                 aria-label="Grid view"
               >
-                <LayoutGrid className="h-4 w-4" />
-                <span className="hidden text-sm font-semibold lg:inline">
+                <LayoutGrid className="h-3.5 w-3.5" />
+                <span className="hidden text-xs font-semibold lg:inline">
                   Grid
                 </span>
               </button>
               <button
                 onClick={() => setActiveView("list")}
                 className={cn(
-                  "flex items-center justify-center gap-1.5 rounded px-3 transition-all duration-200",
+                  "flex items-center justify-center gap-1 rounded px-2 transition-all duration-200",
                   activeView === "list"
                     ? "bg-crafd-yellow text-black shadow-sm"
                     : "text-white hover:bg-crafd-yellow/20",
                 )}
                 aria-label="List view"
               >
-                <List className="h-4 w-4" />
-                <span className="hidden text-sm font-semibold lg:inline">
+                <List className="h-3.5 w-3.5" />
+                <span className="hidden text-xs font-semibold lg:inline">
                   List
                 </span>
               </button>
@@ -245,30 +245,30 @@ export function Header() {
 
           {/* View Toggle (Mobile) - Icon Buttons */}
           {showViewSelector && (
-            <div className="flex h-9 items-stretch gap-1 rounded border border-crafd-yellow p-0.5">
+            <div className="flex h-8 items-stretch gap-0.5 rounded border border-crafd-yellow p-0.5">
               <button
                 onClick={() => setActiveView("grid")}
                 className={cn(
-                  "flex items-center justify-center rounded px-2.5 transition-all duration-200",
+                  "flex items-center justify-center rounded px-2 transition-all duration-200",
                   activeView === "grid"
                     ? "bg-crafd-yellow text-black"
                     : "text-white hover:bg-crafd-yellow/20",
                 )}
                 aria-label="Grid view"
               >
-                <LayoutGrid className="h-4 w-4" />
+                <LayoutGrid className="h-3.5 w-3.5" />
               </button>
               <button
                 onClick={() => setActiveView("list")}
                 className={cn(
-                  "flex items-center justify-center rounded px-2.5 transition-all duration-200",
+                  "flex items-center justify-center rounded px-2 transition-all duration-200",
                   activeView === "list"
                     ? "bg-crafd-yellow text-black"
                     : "text-white hover:bg-crafd-yellow/20",
                 )}
                 aria-label="List view"
               >
-                <List className="h-4 w-4" />
+                <List className="h-3.5 w-3.5" />
               </button>
             </div>
           )}
