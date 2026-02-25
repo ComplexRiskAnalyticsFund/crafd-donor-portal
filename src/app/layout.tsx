@@ -11,11 +11,11 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "CRAF'd Transparency Portal",
-  description: "A modern web application for the United Nations.",
+  title: "CRAF'd Donor Portal",
+  description: "Transparency Portal for Donors of CRAF'd, a United Nations initiative.",
   openGraph: {
-    title: "CRAF'd Transparency Portal",
-    description: "A modern web application for the United Nations.",
+    title: "CRAF'd Donor Portal",
+    description: "Transparency Portal for Donors of CRAF'd, a United Nations initiative.",
     type: "website",
     locale: "en_US",
   },

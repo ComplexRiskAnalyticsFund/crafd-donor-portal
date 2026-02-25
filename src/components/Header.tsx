@@ -28,6 +28,13 @@ const NAVIGATION_ITEMS = [
     icon: Grid,
     exact: true,
   },
+    {
+    value: "partners",
+    label: "Partners",
+    href: "/data/partners",
+    icon: Building2,
+    exact: false,
+  },
   {
     value: "steerco-data",
     label: "Decisions",
@@ -40,13 +47,6 @@ const NAVIGATION_ITEMS = [
     label: "Contacts",
     href: "/data/contacts",
     icon: Users,
-    exact: false,
-  },
-  {
-    value: "partners",
-    label: "Partners",
-    href: "/data/partners",
-    icon: Building2,
     exact: false,
   },
 ];
@@ -109,7 +109,7 @@ export function Header() {
           </a>
           {/* Title */}
           <h1 className="font-qanelas text-base leading-none font-extrabold tracking-tight whitespace-nowrap text-white transition-all duration-200 sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">
-            CRAF'd Transparency Portal
+            CRAF'd Donor Portal
           </h1>
         </div>
 
@@ -207,7 +207,7 @@ export function Header() {
             </a>
             {/* Title inline with logo on mobile */}
             <h1 className="font-qanelas min-w-0 flex-1 overflow-hidden text-sm leading-tight font-extrabold tracking-tight text-ellipsis whitespace-nowrap text-white transition-all duration-200 sm:text-base md:text-lg">
-              CRAF'd Transparency Portal
+              CRAF'd Donor Portal
             </h1>
           </div>
           <a
