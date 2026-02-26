@@ -77,7 +77,7 @@ export function Header() {
   return (
     <header className="relative z-40 shrink-0 overflow-hidden bg-black px-3 py-3 transition-all duration-200 sm:px-2 sm:py-0 md:px-3 lg:px-4">
       {/* Background Image */}
-      <div className="pointer-events-none absolute inset-0 opacity-10 sm:opacity-20 md:opacity-30">
+      <div className="pointer-events-none absolute inset-0 opacity-10 sm:opacity-20 md:opacity-50">
         <Image
           src="/images/crafd-wide-header.png"
           alt="CRAF'd Background"
@@ -109,7 +109,7 @@ export function Header() {
           </a>
           {/* Title */}
           <h1 className="font-qanelas text-base leading-none font-extrabold tracking-tight whitespace-nowrap text-white transition-all duration-200 sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">
-            CRAF'd Donor Portal
+            Donor Portal
           </h1>
         </div>
 
@@ -118,21 +118,7 @@ export function Header() {
           {/* View Toggle for Project Data */}
           {showViewSelector && (
             <div className="flex h-8 items-stretch gap-0.5 rounded border border-crafd-yellow p-0.5">
-              <button
-                onClick={() => setActiveView("grid")}
-                className={cn(
-                  "flex items-center justify-center gap-1 rounded px-2 transition-all duration-200",
-                  activeView === "grid"
-                    ? "bg-crafd-yellow text-black shadow-sm"
-                    : "text-white hover:bg-crafd-yellow/20",
-                )}
-                aria-label="Grid view"
-              >
-                <LayoutGrid className="h-3.5 w-3.5" />
-                <span className="hidden text-xs font-semibold lg:inline">
-                  Grid
-                </span>
-              </button>
+             
               <button
                 onClick={() => setActiveView("list")}
                 className={cn(
@@ -146,6 +132,22 @@ export function Header() {
                 <List className="h-3.5 w-3.5" />
                 <span className="hidden text-xs font-semibold lg:inline">
                   List
+                </span>
+              </button>
+
+               <button
+                onClick={() => setActiveView("grid")}
+                className={cn(
+                  "flex items-center justify-center gap-1 rounded px-2 transition-all duration-200",
+                  activeView === "grid"
+                    ? "bg-crafd-yellow text-black shadow-sm"
+                    : "text-white hover:bg-crafd-yellow/20",
+                )}
+                aria-label="Grid view"
+              >
+                <LayoutGrid className="h-3.5 w-3.5" />
+                <span className="hidden text-xs font-semibold lg:inline">
+                  Grid
                 </span>
               </button>
             </div>
@@ -207,7 +209,7 @@ export function Header() {
             </a>
             {/* Title inline with logo on mobile */}
             <h1 className="font-qanelas min-w-0 flex-1 overflow-hidden text-sm leading-tight font-extrabold tracking-tight text-ellipsis whitespace-nowrap text-white transition-all duration-200 sm:text-base md:text-lg">
-              CRAF'd Donor Portal
+              Donor Portal
             </h1>
           </div>
           <a
