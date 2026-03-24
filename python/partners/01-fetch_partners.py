@@ -5,7 +5,6 @@ import requests
 
 from python.api.airtable import fetch_airtable_table
 from python.utils.utils import export_dataframe
-import json
 
 AIRTABLE_BASE_ID = "appIYFN5sAJzK1bPg"
 PARTNER_TABLE_ID = "tbl2FMZOARI7I66fq"
@@ -13,10 +12,29 @@ PARTNER_TABLE_ID = "tbl2FMZOARI7I66fq"
 df_partners = fetch_airtable_table(table_id=PARTNER_TABLE_ID, base_id=AIRTABLE_BASE_ID)
 
 
+df_partners.columns
+
+
+# Index(['Organization name', 'CRAF'd partner type', 'Short name',
+#        'Is CRAFd Project', 'Organization Type', 'UN-Organization', 'Website',
+#        'Source', 'Ecosystem Stakeholder Type', 'Total Project Grant Size',
+#        'Support for CRAF'd projects', 'Operating Country',
+#        '[?] Type of organization', 'Signed MoU Or Framework Agreement?',
+#        'Contacts', 'Comments/Notes', 'Women-Led/Feminist', 'Global South?',
+#        'Year MoU/ Agreement Signed', 'MOU/ HACT signing date',
+#        'Organization – Department', 'HACT Assessment Date', 'Exact Grant Size',
+#        'Job Posting Website', 'Projects (Lead)', 'Projects', 'Outgoing 3',
+#        'Signed PSEA assessment', 'Matched Compass Orgs',
+#        'org_key (from Matched Compass Orgs)',
+#        'Org Type (from Matched Compass Orgs)', 'Received Grants ',
+#        'Outgoing 2', 'Organization Logo White', 'org_id'],
+#       dtype='str')
+
+
 # Rename columns to snake_case naming convention
 rename_mapping = {
-    "Organization – Full Name": "org_full_name",
-    "Organization – Short Name": "org_short_name",
+    "Organization name": "org_full_name",
+    "Short Name": "org_short_name",
     "CRAFd Connection": "crafd_connection",
     "Is CRAFd Project": "is_crafd_project",
     "Organization Type": "organization_type",
