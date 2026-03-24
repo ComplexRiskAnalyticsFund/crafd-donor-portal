@@ -13,6 +13,9 @@ type SimNode = HexNode & {
   fy?: number;
 };
 
+const SQRT3 = Math.sqrt(3);
+const HEX_SIZE = 75;
+
 function hexPathFlat(cx: number, cy: number, r: number) {
   const pts = Array.from({ length: 6 }, (_, i) => {
     const a = (Math.PI / 3) * i; // flat-top
@@ -23,15 +26,14 @@ function hexPathFlat(cx: number, cy: number, r: number) {
 
 function fillFor(n: HexNode) {
   if (n.kind === "center") return "white";
-  if (n.kind === "label") return "#FFD89C";
+  if (n.kind === "label") return "#C97A00";
   if (n.kind === "outline") return "none";
-  return "black";
+  return "#1C1C1C"; // partner
 }
 
-function strokeFor(n: HexNode) {
-  if (n.kind === "outline") return "white";
-  if (n.kind === "partner") return "white";
-  return "rgba(0,0,0,0.25)";
+function strokeWidthFor(n: HexNode) {
+  if (n.kind === "center") return 0;
+  return 2;
 }
 
 export default function PartnersVizClient({
@@ -59,35 +61,19 @@ export default function PartnersVizClient({
   const MAX_SCALE = 4;
 
   const simNodes = useMemo<SimNode[]>(() => {
-    // 1) Build a lookup: group label -> label node position
-    const labelPos = new Map<string, { x: number; y: number }>();
-    for (const n of initialNodes) {
-      if (n.kind === "label" && n.label) {
-        labelPos.set(n.label, { x: n.x, y: n.y });
-      }
-    }
-
     return initialNodes.map((n) => {
       const fixed = n.kind !== "partner";
 
-      // 2) For partners: start at their label's position (fold-out origin)
-      const start =
-        n.kind === "partner" && n.label ? labelPos.get(n.label) : undefined;
-
-      const startX = start ? start.x : n.x;
-      const startY = start ? start.y : n.y;
+      // Partners start from center (0,0) — not from label hex positions
+      const startX = n.kind === "partner" ? 0 : n.x;
+      const startY = n.kind === "partner" ? 0 : n.y;
 
       return {
         ...n,
-        // final target (where you *want* it to end up)
         x0: n.x,
         y0: n.y,
-
-        // starting position (where it *begins* the animation)
         x: startX,
         y: startY,
-
-        // fixed obstacles stay fixed
         fx: fixed ? n.x : undefined,
         fy: fixed ? n.y : undefined,
       };
@@ -110,10 +96,10 @@ export default function PartnersVizClient({
     });
 
     tl.to(partners, {
-      duration: 5,
+      duration: 3.33,
       x: (i: number, t: any) => t.x0,
       y: (i: number, t: any) => t.y0,
-      stagger: { each: 0.006, from: "start" },
+      stagger: { each: 0.004, from: "start" },
     });
 
     return () => {
@@ -181,6 +167,21 @@ export default function PartnersVizClient({
     return [...renderNodes].sort((a, b) => z(a.kind) - z(b.kind));
   }, [renderNodes]);
 
+  // Background hex grid covering the full viewport
+  const bgHexes = useMemo(() => {
+    const cells: { x: number; y: number; key: string }[] = [];
+    for (let q = -14; q <= 14; q++) {
+      for (let r = -14; r <= 14; r++) {
+        const x = HEX_SIZE * 1.5 * q;
+        const y = HEX_SIZE * SQRT3 * (r + q / 2);
+        if (x > -1050 && x < 1050 && y > -650 && y < 650) {
+          cells.push({ x, y, key: `bg-${q}-${r}` });
+        }
+      }
+    }
+    return cells;
+  }, []);
+
   return (
     <svg
       ref={svgRef}
@@ -194,112 +195,125 @@ export default function PartnersVizClient({
       onDoubleClick={handleDoubleClick}
     >
       <g transform={`translate(${pan.x},${pan.y}) scale(${scale})`}>
-      {ordered.map((n) => {
-        const isSameGroup =
-          hoveredLabel !== null &&
-          (n.kind === "label" || n.kind === "partner") &&
-          n.label === hoveredLabel;
+        {/* Background hex grid */}
+        {bgHexes.map(({ x, y, key }) => (
+          <path
+            key={key}
+            d={hexPathFlat(x, y, HEX_SIZE)}
+            fill="none"
+            stroke="rgba(255,255,255,0.28)"
+            strokeWidth={1.5}
+          />
+        ))}
 
-        const nodeOpacity =
-          hoveredLabel === null
-            ? n.kind === "partner"
-              ? 0.95
-              : 1
-            : n.kind === "outline" || n.kind === "center"
-              ? 1
-              : isSameGroup
-                ? n.kind === "partner"
-                  ? 0.95
-                  : 1
-                : 0.2;
+        {ordered.map((n) => {
+          const isSameGroup =
+            hoveredLabel !== null &&
+            (n.kind === "label" || n.kind === "partner") &&
+            n.label === hoveredLabel;
 
-        return (
-          <g
-            key={n.id}
-            data-node="true"
-            onMouseEnter={
-              n.kind === "label"
-                ? () => { if (!isPanning.current) setHoveredLabel(n.label ?? null); }
-                : undefined
-            }
-            onMouseLeave={
-              n.kind === "label"
-                ? () => { if (!isPanning.current) setHoveredLabel(null); }
-                : undefined
-            }
-            style={{ cursor: n.kind === "label" ? "pointer" : "default" }}
-          >
-            <path
-              d={hexPathFlat(n.x, n.y, n.r)}
-              fill={fillFor(n)}
-              opacity={nodeOpacity}
-              stroke={strokeFor(n)}
-              strokeWidth={n.kind === "outline" || n.kind === "partner" ? 2 : 0}
-            />
+          const nodeOpacity =
+            hoveredLabel === null
+              ? n.kind === "partner"
+                ? 0.95
+                : 1
+              : n.kind === "outline" || n.kind === "center"
+                ? 1
+                : isSameGroup
+                  ? n.kind === "partner"
+                    ? 0.95
+                    : 1
+                  : 0.2;
 
-            {n.kind === "center" && n.name && (
-              <>
-                {n.name.split("\n").map((line, idx) => (
+          return (
+            <g
+              key={n.id}
+              data-node="true"
+              onMouseEnter={
+                n.kind === "label"
+                  ? () => { if (!isPanning.current) setHoveredLabel(n.label ?? null); }
+                  : undefined
+              }
+              onMouseLeave={
+                n.kind === "label"
+                  ? () => { if (!isPanning.current) setHoveredLabel(null); }
+                  : undefined
+              }
+              style={{
+                opacity: nodeOpacity,
+                transition: "opacity 0.45s ease",
+                cursor: n.kind === "label" ? "pointer" : "default",
+              }}
+            >
+              <path
+                d={hexPathFlat(n.x, n.y, n.r)}
+                fill={fillFor(n)}
+                stroke="white"
+                strokeWidth={strokeWidthFor(n)}
+              />
+
+              {n.kind === "center" && n.name && (
+                <>
+                  {n.name.split("\n").map((line, idx) => (
+                    <text
+                      key={idx}
+                      x={n.x}
+                      y={n.y - 22 + idx * 16}
+                      textAnchor="middle"
+                      fontSize={16}
+                      fill="black"
+                      fontWeight={800}
+                    >
+                      {line}
+                    </text>
+                  ))}
+                </>
+              )}
+
+              {n.kind === "label" && (
+                <>
                   <text
-                    key={idx}
                     x={n.x}
-                    y={n.y - 22 + idx * 16}
+                    y={n.y - 8}
                     textAnchor="middle"
-                    fontSize={16}
-                    fill="black"
-                    fontWeight={800}
+                    fontSize="30"
+                    fill="white"
+                    fontWeight={900}
+                    fontFamily="inherit"
                   >
-                    {line}
+                    {n.count}
                   </text>
-                ))}
-              </>
-            )}
+                  {n.name?.split("\n").map((line, idx) => (
+                    <text
+                      key={idx}
+                      x={n.x}
+                      y={n.y + 20 + idx * 13}
+                      textAnchor="middle"
+                      fontSize="9"
+                      fill="white"
+                      fontWeight={700}
+                      letterSpacing="0.1em"
+                    >
+                      {line}
+                    </text>
+                  ))}
+                </>
+              )}
 
-            {n.kind === "label" && (
-              <>
+              {n.kind === "partner" && n.name && (
                 <text
                   x={n.x}
-                  y={n.y - 6}
+                  y={n.y + 4}
                   textAnchor="middle"
-                  fontSize="18"
-                  fill="black"
-                  fontWeight={800}
-                  opacity={nodeOpacity}
+                  fontSize={12}
+                  fill="white"
                 >
-                  {n.count}
+                  {n.name}
                 </text>
-                {n.name?.split("\n").map((line, idx) => (
-                  <text
-                    key={idx}
-                    x={n.x}
-                    y={n.y + 14 + idx * 12}
-                    textAnchor="middle"
-                    fontSize="10"
-                    fill="black"
-                    fontWeight={800}
-                    opacity={nodeOpacity}
-                  >
-                    {line}
-                  </text>
-                ))}
-              </>
-            )}
-
-            {n.kind === "partner" && n.name && (
-              <text
-                x={n.x}
-                y={n.y + 4}
-                textAnchor="middle"
-                fontSize={12}
-                fill="white"
-                opacity={nodeOpacity}
-              >
-                {n.name}
-              </text>
-            )}
-          </g>
-        );
-      })}
+              )}
+            </g>
+          );
+        })}
       </g>
     </svg>
   );
