@@ -58,7 +58,7 @@ export function IframeLayer() {
   // Animate progress bar while loading
   useEffect(() => {
     const currentKey = IFRAMES.find((iframe) =>
-      iframe.isActive(pathname, activeView)
+      iframe.isActive(pathname, activeView),
     )?.key;
 
     if (!currentKey || loadedIframes.has(currentKey)) return;
@@ -110,7 +110,7 @@ export function IframeLayer() {
           >
             {/* Progress bar — show while iframe is loading */}
             {active && !isLoaded && (
-              <div className="absolute inset-x-0 top-0 pointer-events-auto">
+              <div className="pointer-events-auto absolute inset-x-0 top-0">
                 <div className="h-1 w-full bg-gray-200">
                   <div
                     className="h-full bg-crafd-yellow transition-all duration-300 ease-out"

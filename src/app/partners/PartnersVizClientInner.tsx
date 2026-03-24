@@ -2,12 +2,16 @@
 
 import { useEffect, useMemo, useState } from "react";
 // Import GSAP normally to avoid dynamic import hangs in Turbopack
-import gsap from "gsap"; 
+import gsap from "gsap";
 import type { HexNode } from "@/lib/partners/label";
 
 type SimNode = HexNode & { x0: number; y0: number };
 
-export default function PartnersVizClientInner({ initialNodes }: { initialNodes: HexNode[] }) {
+export default function PartnersVizClientInner({
+  initialNodes,
+}: {
+  initialNodes: HexNode[];
+}) {
   if (typeof window !== "undefined") {
     debugger; // This will force your browser to pause if JS is running
     console.log("CLIENT REACHED");
@@ -19,19 +23,26 @@ export default function PartnersVizClientInner({ initialNodes }: { initialNodes:
   useEffect(() => {
     setHasHydrated(true);
     // If you don't see this popup, the Client JS isn't running at all
-    window.alert("CLIENT JS IS RUNNING"); 
+    window.alert("CLIENT JS IS RUNNING");
     console.log("CLIENT HYDRATED");
   }, []);
 
   const simNodesBase = useMemo<SimNode[]>(() => {
     const labelPos = new Map<string, { x: number; y: number }>();
-    initialNodes.forEach(n => n.kind === "label" && n.label && labelPos.set(n.label, { x: n.x, y: n.y }));
+    initialNodes.forEach(
+      (n) =>
+        n.kind === "label" &&
+        n.label &&
+        labelPos.set(n.label, { x: n.x, y: n.y }),
+    );
 
     return initialNodes.map((n) => {
-      const start = n.kind === "partner" && n.label ? labelPos.get(n.label) : undefined;
+      const start =
+        n.kind === "partner" && n.label ? labelPos.get(n.label) : undefined;
       return {
         ...n,
-        x0: n.x, y0: n.y,
+        x0: n.x,
+        y0: n.y,
         x: start ? start.x : n.x,
         y: start ? start.y : n.y,
       };
@@ -42,12 +53,12 @@ export default function PartnersVizClientInner({ initialNodes }: { initialNodes:
     if (!hasHydrated) return;
 
     // Use a fresh copy for the animation to avoid mutating the memo
-    const workingNodes = simNodesBase.map(n => ({ ...n }));
+    const workingNodes = simNodesBase.map((n) => ({ ...n }));
     setRenderNodes(workingNodes);
 
     const ctx = gsap.context(() => {
-      const partners = workingNodes.filter(n => n.kind === "partner");
-      
+      const partners = workingNodes.filter((n) => n.kind === "partner");
+
       gsap.to(partners, {
         x: (i, t) => t.x0,
         y: (i, t) => t.y0,
@@ -56,8 +67,8 @@ export default function PartnersVizClientInner({ initialNodes }: { initialNodes:
         ease: "power4.out",
         onUpdate: () => {
           // Trigger re-render by passing a new array reference
-          setRenderNodes([...workingNodes.map(obj => ({ ...obj }))]);
-        }
+          setRenderNodes([...workingNodes.map((obj) => ({ ...obj }))]);
+        },
       });
     });
 
@@ -72,7 +83,12 @@ export default function PartnersVizClientInner({ initialNodes }: { initialNodes:
       <svg viewBox="-900 -500 1800 1000" className="h-full w-full">
         {renderNodes.map((n) => (
           <g key={n.id}>
-            <circle cx={n.x} cy={n.y} r={n.r} fill={n.kind === 'partner' ? 'black' : 'white'} />
+            <circle
+              cx={n.x}
+              cy={n.y}
+              r={n.r}
+              fill={n.kind === "partner" ? "black" : "white"}
+            />
             {/* Re-add your full hexPath logic here once this circles test works */}
           </g>
         ))}
@@ -80,8 +96,6 @@ export default function PartnersVizClientInner({ initialNodes }: { initialNodes:
     </div>
   );
 }
-
-
 
 // // src/app/partners/PartnersVizClient.tsx
 // "use client";
@@ -127,7 +141,7 @@ export default function PartnersVizClientInner({ initialNodes }: { initialNodes:
 //   const [renderNodes, setRenderNodes] = useState<HexNode[]>(initialNodes);
 
 //   const simNodes = useMemo<SimNode[]>(() => {
-   
+
 //     // 1) Build a lookup: group label -> label node position
 //     const labelPos = new Map<string, { x: number; y: number }>();
 //     for (const n of initialNodes) {
@@ -135,34 +149,33 @@ export default function PartnersVizClientInner({ initialNodes }: { initialNodes:
 //         labelPos.set(n.label, { x: n.x, y: n.y });
 //       }
 //     }
-  
+
 //     return initialNodes.map((n) => {
 //       const fixed = n.kind !== "partner";
-  
+
 //       // 2) For partners: start at their label's position (fold-out origin)
 //       const start =
 //         n.kind === "partner" && n.label ? labelPos.get(n.label) : undefined;
-  
+
 //       const startX = start ? start.x : n.x;
 //       const startY = start ? start.y : n.y;
-      
+
 //       return {
 //         ...n,
 //         // final target (where you *want* it to end up)
 //         x0: n.x,
 //         y0: n.y,
-  
+
 //         // starting position (where it *begins* the animation)
 //         x: startX,
 //         y: startY,
-  
+
 //         // fixed obstacles stay fixed
 //         fx: fixed ? n.x : undefined,
 //         fy: fixed ? n.y : undefined,
 //       };
 //     });
 //   }, [initialNodes]);
-
 
 //   const rafRef = useRef<number | null>(null);
 
@@ -172,19 +185,19 @@ export default function PartnersVizClientInner({ initialNodes }: { initialNodes:
 //     (async () => {
 //       // import only on client, after mount
 //       const gsap = (await import("gsap")).default;
-  
+
 //       document.title = "EFFECT RAN";
-  
+
 //       const partners = simNodes.filter((n) => n.kind === "partner");
 //       setRenderNodes(simNodes.map((d) => ({ ...d, x: d.x ?? d.x0, y: d.y ?? d.y0 })));
-  
+
 //       tl = gsap.timeline({
 //         defaults: { ease: "power2.out" },
 //         onUpdate: () => {
 //           setRenderNodes(simNodes.map((d) => ({ ...d, x: d.x ?? d.x0, y: d.y ?? d.y0 })));
 //         },
 //       });
-  
+
 //       tl.to(partners, {
 //         duration: 5,
 //         x: (i: number, t: any) => t.x0,
@@ -192,11 +205,11 @@ export default function PartnersVizClientInner({ initialNodes }: { initialNodes:
 //         stagger: { each: 0.006, from: "start" },
 //       });
 //     })();
-  
+
 //     return () => {
 //       if (tl) tl.kill();
 //     };
-//   }, []); 
+//   }, []);
 //   const ordered = useMemo(() => {
 //     const z = (k: HexNode["kind"]) =>
 //       k === "outline" ? 0 : k === "partner" ? 1 : k === "label" ? 2 : 3;
@@ -205,7 +218,7 @@ export default function PartnersVizClientInner({ initialNodes }: { initialNodes:
 
 //   return (
 //     <svg viewBox="-900 -500 1800 1000" className="h-full w-full">
-    
+
 //       {ordered.map((n) => (
 //         <g key={n.id}>
 //           <path

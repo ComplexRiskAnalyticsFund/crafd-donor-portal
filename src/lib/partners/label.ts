@@ -1,4 +1,3 @@
-
 // src/lib/partners/label.ts
 import type { Partner } from "@/types";
 
@@ -41,7 +40,6 @@ export type HexNode = {
 const SQRT3 = Math.sqrt(3);
 
 function axialToPixel(q: number, r: number, size: number) {
- 
   return {
     x: size * 1.5 * q,
     y: size * SQRT3 * (r + q / 2),
@@ -153,7 +151,10 @@ function labelDisplay(label: PartnerLabel) {
   }
 }
 
-export function buildPartnerHexNodes(partners: Partner[], size = 80): HexNode[] {
+export function buildPartnerHexNodes(
+  partners: Partner[],
+  size = 80,
+): HexNode[] {
   // 1) group partners
   const groups = new Map<PartnerLabel, Partner[]>();
   for (const p of partners) {
@@ -198,7 +199,7 @@ export function buildPartnerHexNodes(partners: Partner[], size = 80): HexNode[] 
     name: "CRISIS\nRISK\nANALYTICS\nFUND",
     x: 0,
     y: 0,
-    r: size * 2.0, 
+    r: size * 2.0,
   });
 
   // ------------------------------------------------------------
@@ -213,13 +214,12 @@ export function buildPartnerHexNodes(partners: Partner[], size = 80): HexNode[] 
   // ------------------------------------------------------------
   const labelAnchorAxial: Record<PartnerLabel, { q: number; r: number }> = {
     collaborating: { q: -2, r: 0 }, // touches outline at (-1,0)
-    project: { q: 0, r: 2 },        // touches outline at (0,1)
-    un: { q: 2, r: 0 },      // touches outline at (1,0)
-    other:    { q: 2, r: -2 },          // touches outline at (1,-1)   
+    project: { q: 0, r: 2 }, // touches outline at (0,1)
+    un: { q: 2, r: 0 }, // touches outline at (1,0)
+    other: { q: 2, r: -2 }, // touches outline at (1,-1)
   };
 
-  
-   // ------------------------------------------------------------
+  // ------------------------------------------------------------
   // REQUIREMENT 4: partners grow in a wedge from label, avoiding blocked cells
   // ------------------------------------------------------------
 
@@ -237,7 +237,7 @@ export function buildPartnerHexNodes(partners: Partner[], size = 80): HexNode[] 
   ];
   hubAbs.forEach((a) => blockedAbs.add(keyAx(a)));
   const wedgeByLabel: Record<PartnerLabel, number[]> = {
-    collaborating:  [1, 2, 3, 4, 5],
+    collaborating: [1, 2, 3, 4, 5],
     project: [5, 0, 1],
     un: [0, 1, 2],
     other: [1, 0, 5],
@@ -284,7 +284,7 @@ export function buildPartnerHexNodes(partners: Partner[], size = 80): HexNode[] 
       const pxy = axialToPixel(abs.q, abs.r, size);
 
       nodes.push({
-        id: `partner-${label}-${i}-${(partner.org_short_name ?? "Unknown")}`.replace(
+        id: `partner-${label}-${i}-${partner.org_short_name ?? "Unknown"}`.replace(
           /\s+/g,
           "-",
         ),
@@ -300,13 +300,11 @@ export function buildPartnerHexNodes(partners: Partner[], size = 80): HexNode[] 
   }
 
   return nodes;
-
- 
 }
-  // [DONE] 1. all of them need to be connected to my big white hex: craf'd
-  // 2. there needs to be a mechanism for them not overlapping
-  // [DONE] 3. where is project partners? I don't see it at all. 
-  // 4. Should I put in the logos already--it will  help identify? 
-  // 5. hover responses for each hex. 
-  // 6. my current data also doesn't show me the actual connection between these across the different partners. will need data joining here?
-  // 7. the whole thing should be on a canvas, not svg,  so that nothing gets cut off and its explorable. 
+// [DONE] 1. all of them need to be connected to my big white hex: craf'd
+// 2. there needs to be a mechanism for them not overlapping
+// [DONE] 3. where is project partners? I don't see it at all.
+// 4. Should I put in the logos already--it will  help identify?
+// 5. hover responses for each hex.
+// 6. my current data also doesn't show me the actual connection between these across the different partners. will need data joining here?
+// 7. the whole thing should be on a canvas, not svg,  so that nothing gets cut off and its explorable.

@@ -28,7 +28,7 @@ const NAVIGATION_ITEMS = [
     icon: Grid,
     exact: true,
   },
-    {
+  {
     value: "partners",
     label: "Partners",
     href: "/data/partners",
@@ -118,7 +118,6 @@ export function Header() {
           {/* View Toggle for Project Data */}
           {showViewSelector && (
             <div className="flex h-8 items-stretch gap-0.5 rounded border border-crafd-yellow p-0.5">
-             
               <button
                 onClick={() => setActiveView("list")}
                 className={cn(
@@ -135,7 +134,7 @@ export function Header() {
                 </span>
               </button>
 
-               <button
+              <button
                 onClick={() => setActiveView("grid")}
                 className={cn(
                   "flex items-center justify-center gap-1 rounded px-2 transition-all duration-200",

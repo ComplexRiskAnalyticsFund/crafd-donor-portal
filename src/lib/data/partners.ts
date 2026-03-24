@@ -122,4 +122,3 @@ export function getUniqueConnectionTypes(partners: Partner[]): string[] {
   });
   return Array.from(types).sort();
 }
-
