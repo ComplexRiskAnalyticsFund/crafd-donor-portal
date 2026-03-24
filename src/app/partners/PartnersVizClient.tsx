@@ -2,10 +2,7 @@
 
 // src/app/partners/PartnersVizClient.tsx
 import { useEffect, useMemo, useRef, useState } from "react";
-// import { forceCollide, forceSimulation, forceX, forceY } from "d3-force";
-// import gsap from "gsap";
 import type { HexNode } from "@/lib/partners/label";
-console.log("PartnersVizClient rendered");
 type SimNode = HexNode & {
   x0: number;
   y0: number;
@@ -44,6 +41,19 @@ export default function PartnersVizClient({
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
   const [renderNodes, setRenderNodes] = useState<HexNode[]>(initialNodes);
 
+  // Pan + zoom state
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [scale, setScale] = useState(1);
+  const panRef = useRef({ x: 0, y: 0 });
+  const scaleRef = useRef(1);
+  useEffect(() => { panRef.current = pan; }, [pan]);
+  useEffect(() => { scaleRef.current = scale; }, [scale]);
+  const isPanning = useRef(false);
+  const panStart = useRef({ clientX: 0, clientY: 0, panX: 0, panY: 0 });
+  const MIN_SCALE = 0.4;
+  const MAX_SCALE = 4;
+
   const simNodes = useMemo<SimNode[]>(() => {
     // 1) Build a lookup: group label -> label node position
     const labelPos = new Map<string, { x: number; y: number }>();
@@ -80,16 +90,12 @@ export default function PartnersVizClient({
     });
   }, [initialNodes]);
 
-  const rafRef = useRef<number | null>(null);
-
   useEffect(() => {
     let tl: any;
 
     (async () => {
       // import only on client, after mount
       const gsap = (await import("gsap")).default;
-
-      document.title = "EFFECT RAN";
 
       const partners = simNodes.filter((n) => n.kind === "partner");
       setRenderNodes(
@@ -117,6 +123,61 @@ export default function PartnersVizClient({
       if (tl) tl.kill();
     };
   }, []);
+
+  // Wheel zoom (non-passive so we can preventDefault)
+  useEffect(() => {
+    const el = svgRef.current!;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const rect = el.getBoundingClientRect();
+      const cursorSvgX = ((e.clientX - rect.left) / rect.width) * 1800 - 900;
+      const cursorSvgY = ((e.clientY - rect.top) / rect.height) * 1000 - 500;
+      const cx = (cursorSvgX - panRef.current.x) / scaleRef.current;
+      const cy = (cursorSvgY - panRef.current.y) / scaleRef.current;
+      const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+      const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scaleRef.current * factor));
+      setPan({ x: cursorSvgX - cx * newScale, y: cursorSvgY - cy * newScale });
+      setScale(newScale);
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
+  function handlePointerDown(e: React.PointerEvent<SVGSVGElement>) {
+    if (e.button !== 0) return;
+    if ((e.target as Element).closest("[data-node]")) return;
+    isPanning.current = true;
+    panStart.current = {
+      clientX: e.clientX,
+      clientY: e.clientY,
+      panX: panRef.current.x,
+      panY: panRef.current.y,
+    };
+    e.currentTarget.setPointerCapture(e.pointerId);
+    document.body.style.cursor = "grabbing";
+    setHoveredLabel(null);
+  }
+
+  function handlePointerMove(e: React.PointerEvent<SVGSVGElement>) {
+    if (!isPanning.current) return;
+    const { width } = svgRef.current!.getBoundingClientRect();
+    const pixelToUnit = (1800 / width) / scaleRef.current;
+    const dx = (e.clientX - panStart.current.clientX) * pixelToUnit;
+    const dy = (e.clientY - panStart.current.clientY) * pixelToUnit;
+    setPan({ x: panStart.current.panX + dx, y: panStart.current.panY + dy });
+  }
+
+  function handlePointerUp() {
+    if (!isPanning.current) return;
+    isPanning.current = false;
+    document.body.style.cursor = "";
+  }
+
+  function handleDoubleClick() {
+    setPan({ x: 0, y: 0 });
+    setScale(1);
+  }
+
   const ordered = useMemo(() => {
     const z = (k: HexNode["kind"]) =>
       k === "outline" ? 0 : k === "partner" ? 1 : k === "label" ? 2 : 3;
@@ -124,21 +185,24 @@ export default function PartnersVizClient({
   }, [renderNodes]);
 
   return (
-    <svg viewBox="-900 -500 1800 1000" className="h-full w-full">
+    <svg
+      ref={svgRef}
+      viewBox="-900 -500 1800 1000"
+      className="h-full w-full"
+      style={{ cursor: "grab" }}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerLeave={handlePointerUp}
+      onDoubleClick={handleDoubleClick}
+    >
+      <g transform={`translate(${pan.x},${pan.y}) scale(${scale})`}>
       {ordered.map((n) => {
-        const dim =
-          hoveredLabel !== null && n.kind !== "outline" && n.kind !== "center";
         const isSameGroup =
           hoveredLabel !== null &&
           (n.kind === "label" || n.kind === "partner") &&
           n.label === hoveredLabel;
 
-        // Opacity rules:
-        // - when hovering a label:
-        //    - keep that label + its partner nodes at normal opacity
-        //    - dim all other labels + partners to 0.4
-        // - keep outline/center as-is
-        console.log("right before opacity");
         const nodeOpacity =
           hoveredLabel === null
             ? n.kind === "partner"
@@ -155,13 +219,16 @@ export default function PartnersVizClient({
         return (
           <g
             key={n.id}
+            data-node="true"
             onMouseEnter={
               n.kind === "label"
-                ? () => setHoveredLabel(n.label ?? null)
+                ? () => { if (!isPanning.current) setHoveredLabel(n.label ?? null); }
                 : undefined
             }
             onMouseLeave={
-              n.kind === "label" ? () => setHoveredLabel(null) : undefined
+              n.kind === "label"
+                ? () => { if (!isPanning.current) setHoveredLabel(null); }
+                : undefined
             }
             style={{ cursor: n.kind === "label" ? "pointer" : "default" }}
           >
@@ -236,6 +303,7 @@ export default function PartnersVizClient({
           </g>
         );
       })}
+      </g>
     </svg>
   );
 }

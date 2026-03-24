@@ -8,7 +8,7 @@ export default async function LoginPage({
   const hasError = params?.error === "1";
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#F1B434]/60 via-[#ffe8be] to-[#F1B434] p-4">
+    <main className="flex min-h-screen items-center justify-center bg-linear-to-br from-[#F1B434]/60 via-[#ffe8be] to-[#F1B434] p-4">
       <div className="w-full max-w-md">
         <div className="rounded-xl border border-[#d9b206]/20 bg-white/90 p-8 backdrop-blur-sm">
           <div className="space-y-6">
