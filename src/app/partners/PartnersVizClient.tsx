@@ -39,7 +39,10 @@ export default function PartnersVizClient({
   initialNodes: HexNode[];
 }) {
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
-  const [renderNodes, setRenderNodes] = useState<HexNode[]>(initialNodes);
+  // Start with empty nodes on server to avoid SSR/client floating-point mismatch
+  // in trig functions (Math.cos/sin differ between Node.js and browser engines).
+  // The GSAP effect populates nodes immediately on mount anyway.
+  const [renderNodes, setRenderNodes] = useState<HexNode[]>([]);
 
   // Pan + zoom state
   const svgRef = useRef<SVGSVGElement>(null);

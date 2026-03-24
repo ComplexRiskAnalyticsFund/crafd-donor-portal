@@ -276,10 +276,12 @@ export function buildPartnerHexNodes(
       needed: group.length,
     });
 
-    // create partner nodes
+    // create partner nodes and block their cells for subsequent groups
     group.forEach((partner, i) => {
       const abs = partnerAbsPositions[i];
       if (!abs) return;
+
+      blockedAbs.add(keyAx(abs));
 
       const pxy = axialToPixel(abs.q, abs.r, size);
 
