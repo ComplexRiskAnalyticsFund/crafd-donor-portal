@@ -2,6 +2,7 @@
 
 // src/app/partners/PartnersVizClient.tsx
 import { useEffect, useMemo, useRef, useState } from "react";
+import gsap from "gsap";
 import type { HexNode } from "@/lib/partners/label";
 type SimNode = HexNode & {
   x0: number;
@@ -94,36 +95,29 @@ export default function PartnersVizClient({
   }, [initialNodes]);
 
   useEffect(() => {
-    let tl: any;
+    const partners = simNodes.filter((n) => n.kind === "partner");
+    setRenderNodes(
+      simNodes.map((d) => ({ ...d, x: d.x ?? d.x0, y: d.y ?? d.y0 })),
+    );
 
-    (async () => {
-      // import only on client, after mount
-      const gsap = (await import("gsap")).default;
+    const tl = gsap.timeline({
+      defaults: { ease: "power2.out" },
+      onUpdate: () => {
+        setRenderNodes(
+          simNodes.map((d) => ({ ...d, x: d.x ?? d.x0, y: d.y ?? d.y0 })),
+        );
+      },
+    });
 
-      const partners = simNodes.filter((n) => n.kind === "partner");
-      setRenderNodes(
-        simNodes.map((d) => ({ ...d, x: d.x ?? d.x0, y: d.y ?? d.y0 })),
-      );
-
-      tl = gsap.timeline({
-        defaults: { ease: "power2.out" },
-        onUpdate: () => {
-          setRenderNodes(
-            simNodes.map((d) => ({ ...d, x: d.x ?? d.x0, y: d.y ?? d.y0 })),
-          );
-        },
-      });
-
-      tl.to(partners, {
-        duration: 5,
-        x: (i: number, t: any) => t.x0,
-        y: (i: number, t: any) => t.y0,
-        stagger: { each: 0.006, from: "start" },
-      });
-    })();
+    tl.to(partners, {
+      duration: 5,
+      x: (i: number, t: any) => t.x0,
+      y: (i: number, t: any) => t.y0,
+      stagger: { each: 0.006, from: "start" },
+    });
 
     return () => {
-      if (tl) tl.kill();
+      tl.kill();
     };
   }, []);
 
