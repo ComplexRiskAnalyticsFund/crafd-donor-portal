@@ -213,10 +213,10 @@ export function buildPartnerHexNodes(
   // - other: right-lower-ish (small cluster)
   // ------------------------------------------------------------
   const labelAnchorAxial: Record<PartnerLabel, { q: number; r: number }> = {
-    collaborating: { q: -2, r: 0 }, // touches outline at (-1,0)
-    project: { q: 0, r: 2 }, // touches outline at (0,1)
-    un: { q: 2, r: 0 }, // touches outline at (1,0)
-    other: { q: 2, r: -2 }, // touches outline at (1,-1)
+    collaborating: { q: -2, r: 1 }, 
+    project:       { q: -1,  r: 2 }, 
+    un:            { q: 2,  r: -1 }, 
+    other:         { q: 1,  r: -2 }, 
   };
 
   // ------------------------------------------------------------
@@ -236,11 +236,14 @@ export function buildPartnerHexNodes(
     { q: 0, r: 1 },
   ];
   hubAbs.forEach((a) => blockedAbs.add(keyAx(a)));
+  // Pre-block ALL label anchors so no partner from any group can land on a label hex
+  Object.values(labelAnchorAxial).forEach((a) => blockedAbs.add(keyAx(a)));
+
   const wedgeByLabel: Record<PartnerLabel, number[]> = {
-    collaborating: [1, 2, 3, 4, 5],
-    project: [5, 0, 1],
-    un: [0, 1, 2],
-    other: [1, 0, 5],
+    collaborating: [1, 2, 3, 4, 5], 
+    project:       [5, 0, 1], 
+    un:            [0, 1, 2], 
+    other:         [2, 1, 3], 
   };
 
   for (const [label, group] of groups.entries()) {

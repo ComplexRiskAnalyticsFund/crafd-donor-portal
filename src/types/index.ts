@@ -4,6 +4,7 @@ export interface Partner {
   crafd_connection: string;
   org_logo_white: string | null;
   logo_path: string | null;
+  relational_feature?: string;
 }
 
 export type PartnerConnectionType =

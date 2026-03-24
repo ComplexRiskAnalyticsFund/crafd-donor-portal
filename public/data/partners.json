@@ -25,14 +25,16 @@
     "org_full_name": "The Netherlands Red Cross\u2018 data and digital unit 510",
     "crafd_connection": "Implementing Partner",
     "org_logo_white": null,
-    "logo_path": null
+    "logo_path": null,
+    "relational_feature": "510"
   },
   {
     "org_short_name": "AAI",
     "org_full_name": "ActionAid International [FHN Secretariat]",
     "crafd_connection": "Administrative Partner",
     "org_logo_white": null,
-    "logo_path": null
+    "logo_path": null,
+    "relational_feature": "510"
   },
   {
     "org_short_name": "ACAPS",
