@@ -39,6 +39,8 @@ export default function RootLayout({
       <body>
         {children}
         <GoogleAnalytics gaId="G-XYZ" />
+        {/* eslint-disable-next-line @next/next/no-sync-scripts
+        <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script> */}
       </body>
     </html>
   );
