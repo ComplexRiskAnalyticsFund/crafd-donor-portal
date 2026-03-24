@@ -1,0 +1,28 @@
+org_full_name,org_short_name,compass_org_type,org_key,partner_registry_org_type,partner_un_status
+UNICEF: United Nations Children's Fund,UNICEF,United Nations,unicef,Intergovernmental Organization,YES
+WFP: United Nations World Food Programme,WFP,United Nations,wfp,Intergovernmental Organization,YES
+OHCHR: United Nations High Commissioner for Human Rights,OHCHR,United Nations,ohchr,Intergovernmental Organization,YES
+UNFPA: United Nations Population Fund,UNFPA,United Nations,unfpa,Intergovernmental Organization,YES
+FHN: Feminist Humanitarian Network ,FHN,Network,fhn,Other,NO
+UN Women,UN Women,United Nations,un-women,Intergovernmental Organization,YES
+UNDP: United Nations Development Programme,UNDP,United Nations,undp,Intergovernmental Organization,YES
+Uppsala University,Uppsala University,Academia,uppsala-university,Academic Institution,NO
+OCHA: United Nations Office for the Coordination of Humanitarian Affairs,OCHA,United Nations,ocha,Intergovernmental Organization,YES
+PRIO: Peace Research Institute Oslo,PRIO,Research,prio,Academic Institution,NO
+"Josef Korbel School, University of Denver",Korbel,Academia,korbel,Academic Institution,NO
+ACLED: Armed Conflict Location & Event Data,ACLED,NGO,acled,Non-Governmental Organization,NO
+WorldPop,WorldPop,Research,worldpop,Non-Governmental Organization,NO
+"UNESCO: United Nations Educational, Scientific and Cultural Organization",UNESCO,United Nations,unesco,Intergovernmental Organization,YES
+ICG: International Crisis Group,ICG,NGO,icg,Non-Governmental Organization,NO
+IFRC: International Federation of the Red Cross and Red Crescent,IFRC,Red Cross,ifrc,Non-Governmental Organization,NO
+UNDRR: United Nations Office for Disaster Risk Reduction,UNDRR,United Nations,undrr,Intergovernmental Organization,YES
+UNHCR: United Nations High Commissioner for Refugees,UNHCR,United Nations,unhcr,Intergovernmental Organization,YES
+ICPAC: IGAD Climate Prediction and Applications Centre,ICPAC IGAD,IO,icpac,Intergovernmental Organization,NO
+FAO: Food and Agriculture Organization of the United Nations ,FAO,United Nations,fao,Intergovernmental Organization,YES
+University of California Irvine,UC Irvine,Academia,uc-irvine,Academic Institution,NO
+IDMC: Internal Displacement Monitoring Centre,IDMC,NGO,idmc,Non-Governmental Organization,NO
+ACAPS,ACAPS,NGO,acaps,Non-Governmental Organization,NO
+IOM: International Organization for Migration,IOM,United Nations,iom,Intergovernmental Organization,YES
+WHO: World Health Organization ,WHO,United Nations,who,Intergovernmental Organization,YES
+RCCC: Red Cross Red Crescent Climate Centre,RCCC,Red Cross,rccc,Non-Governmental Organization,NO
+Insecurity Insight,Insecurity Insight,NGO,insecurity-insight,Non-Governmental Organization,NO

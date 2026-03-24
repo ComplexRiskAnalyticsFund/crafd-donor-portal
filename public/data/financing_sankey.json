@@ -1,0 +1,147 @@
+{
+    "nodes": [
+        {
+            "name": "Infrastructure"
+        },
+        {
+            "name": "Other"
+        },
+        {
+            "name": "Academic Institution"
+        },
+        {
+            "name": "Crisis Analytics"
+        },
+        {
+            "name": "Intergovernmental Organization"
+        },
+        {
+            "name": "Non-Governmental Organization"
+        },
+        {
+            "name": " Exchange"
+        },
+        {
+            "name": "Data Sets"
+        },
+        {
+            "name": "Germany"
+        },
+        {
+            "name": "United States of America"
+        },
+        {
+            "name": "United Kingdom"
+        },
+        {
+            "name": "Netherlands"
+        },
+        {
+            "name": "European Union"
+        },
+        {
+            "name": "Luxembourg"
+        },
+        {
+            "name": "Canada"
+        },
+        {
+            "name": "Finland"
+        },
+        {
+            "name": "Total Investment"
+        },
+        {
+            "name": "Total Allocated"
+        }
+    ],
+    "links": [
+        {
+            "source": "Non-Governmental Organization",
+            "target": " Exchange",
+            "value": 500000
+        },
+        {
+            "source": "Academic Institution",
+            "target": "Crisis Analytics",
+            "value": 700000
+        },
+        {
+            "source": "Intergovernmental Organization",
+            "target": "Crisis Analytics",
+            "value": 2400136
+        },
+        {
+            "source": "Non-Governmental Organization",
+            "target": "Crisis Analytics",
+            "value": 700000
+        },
+        {
+            "source": "Academic Institution",
+            "target": "Data Sets",
+            "value": 1200000
+        },
+        {
+            "source": "Intergovernmental Organization",
+            "target": "Data Sets",
+            "value": 1999968
+        },
+        {
+            "source": "Non-Governmental Organization",
+            "target": "Data Sets",
+            "value": 32108690
+        },
+        {
+            "source": "Other",
+            "target": "Data Sets",
+            "value": 299749
+        },
+        {
+            "source": "Intergovernmental Organization",
+            "target": "Infrastructure",
+            "value": 500000
+        },
+        {
+            "source": "Germany",
+            "target": "Total Investment",
+            "value": 17016138.06
+        },
+        {
+            "source": "United States of America",
+            "target": "Total Investment",
+            "value": 12520000.0
+        },
+        {
+            "source": "United Kingdom",
+            "target": "Total Investment",
+            "value": 8376037.17
+        },
+        {
+            "source": "Netherlands",
+            "target": "Total Investment",
+            "value": 6176868.83
+        },
+        {
+            "source": "European Union",
+            "target": "Total Investment",
+            "value": 2256200.0
+        },
+        {
+            "source": "Luxembourg",
+            "target": "Total Investment",
+            "value": 233129.8
+        },
+        {
+            "source": "Canada",
+            "target": "Total Investment",
+            "value": 173793.96
+        },
+        {
+            "source": "Finland",
+            "target": "Total Investment",
+            "value": 113404.7
+        },
+        {
+            "source": "Total Investment",
+            "target": "Total Allocated",
+            "value": 

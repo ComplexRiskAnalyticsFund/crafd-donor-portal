@@ -1,3 +1,5 @@
+// src/lib/data/partners.ts
+
 import type { Partner, PartnerStats } from "@/types";
 import { readFile } from "fs/promises";
 import path from "path";
@@ -120,3 +122,4 @@ export function getUniqueConnectionTypes(partners: Partner[]): string[] {
   });
   return Array.from(types).sort();
 }
+

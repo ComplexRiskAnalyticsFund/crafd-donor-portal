@@ -1,0 +1,178 @@
+[
+  {
+    "project_title":"Hazard Modeling",
+    "project_short_title":"ICPAC: Hazard Modeling",
+    "investment_type":"Crisis Analytics",
+    "grant_amt":"$500,065",
+    "org_full_name":"Intergovernmental Authority on Development - IGAD Climate Prediction and Applications Centre (ICPAC)",
+    "org_short_name":"ICPAC"
+  },
+  {
+    "project_title":"GEOGUARD",
+    "project_short_title":"DPPA: GEOGUARD",
+    "investment_type":"Crisis Analytics",
+    "grant_amt":"$700,000",
+    "org_full_name":"United Nations Department of Political and Peacebuilding Affairs (UNDPPA)",
+    "org_short_name":"DPPA"
+  },
+  {
+    "project_title":"Maintaining ACLED",
+    "project_short_title":"ACLED: Maintaining ACLED",
+    "investment_type":"Data Sets",
+    "grant_amt":"$14,800,000",
+    "org_full_name":"Armed Conflict Location & Event Data Project (ACLED)",
+    "org_short_name":"ACLED"
+  },
+  {
+    "project_title":"Kente Threads",
+    "project_short_title":"FHN [AAI]: Kente Threads",
+    "investment_type":"Data Sets",
+    "grant_amt":"$299,749",
+    "org_full_name":"Feminist Humanitarian Network (FHN), ActionAid International [FHN Secretariat]",
+    "org_short_name":"FHN, AAI"
+  },
+  {
+    "project_title":"Women's Mobilization Within Armed Groups",
+    "project_short_title":"Korbel: Women's Mobilization Within Armed Groups",
+    "investment_type":"Data Sets",
+    "grant_amt":"$400,000",
+    "org_full_name":"\"Josef Korbel School, University of Denver (Korbel)\"",
+    "org_short_name":"Korbel"
+  },
+  {
+    "project_title":"Internal Displacement Data",
+    "project_short_title":"IDMC: Internal Displacement Data",
+    "investment_type":"Data Sets",
+    "grant_amt":"$1,500,000",
+    "org_full_name":"Internal Displacement Monitoring Centre (IDMC)",
+    "org_short_name":"IDMC"
+  },
+  {
+    "project_title":"Transformative Outcomes",
+    "project_short_title":"UN Women: Transformative Outcomes",
+    "investment_type":"Data Sets",
+    "grant_amt":"$1,000,000",
+    "org_full_name":"United Nations Entity for Gender Equality and the Empowerment of Women (UN WOMEN)",
+    "org_short_name":"UN-WOMEN"
+  },
+  {
+    "project_title":"INFORM Warning",
+    "project_short_title":"UNDP: INFORM",
+    "investment_type":"Crisis Analytics",
+    "grant_amt":"$700,000",
+    "org_full_name":"United Nations Development Programme (UNDP)",
+    "org_short_name":"UNDP"
+  },
+  {
+    "project_title":"Conflict Climate Displacement",
+    "project_short_title":"RCCC: Conflict Climate Displacement",
+    "investment_type":"Data Sets",
+    "grant_amt":"$499,986",
+    "org_full_name":"Red Cross Red Crescent Climate Centre (RCCC)",
+    "org_short_name":"RCCC"
+  },
+  {
+    "project_title":"PRIMARI",
+    "project_short_title":"IOM: PRIMARI",
+    "investment_type":"Data Sets",
+    "grant_amt":"$500,000",
+    "org_full_name":"International Organization for Migration (IOM)",
+    "org_short_name":"IOM"
+  },
+  {
+    "project_title":"GUARD",
+    "project_short_title":"IFRC: GUARD",
+    "investment_type":"Data Sets",
+    "grant_amt":"$599,735",
+    "org_full_name":"International Federation of Red Cross and Red Crescent Societies (IFRC)",
+    "org_short_name":"IFRC"
+  },
+  {
+    "project_title":null,
+    "project_short_title":null,
+    "investment_type":null,
+    "grant_amt":null,
+    "org_full_name":null,
+    "org_short_name":null
+  },
+  {
+    "project_title":"CRAF'd Sec.Direct Cost 2022",
+    "project_short_title":"CRAF'd Sec.Direct Cost 2022(2)",
+    "investment_type":"Direct costs",
+    "grant_amt":"$1,428,022",
+    "org_full_name":"Complex Risk Analytics Fund",
+    "org_short_name":"CRAF'd"
+  },
+  {
+    "project_title":"Strengthening CRAF'd Ecosystem",
+    "project_short_title":"NORCAP: Strengthening CRAF'd Ecosystem",
+    "investment_type":" Exchange",
+    "grant_amt":"$500,000",
+    "org_full_name":"Norwegian Refugee Council (NRC)  ",
+    "org_short_name":"NRC"
+  },
+  {
+    "project_title":"VIEWS-PIN",
+    "project_short_title":"PRIO: VIEWS",
+    "investment_type":"Crisis Analytics",
+    "grant_amt":"$700,000",
+    "org_full_name":"Peace Research Institute Oslo (PRIO)",
+    "org_short_name":"PRIO"
+  },
+  {
+    "project_title":"Rapid Assessment Data",
+    "project_short_title":"OHCHR: Rapid Assessment Data",
+    "investment_type":"Data Sets",
+    "grant_amt":"$499,968",
+    "org_full_name":"Office of the United Nations High Commissioner for Human Rights (OHCHR)",
+    "org_short_name":"OHCHR"
+  },
+  {
+    "project_title":"eEARTH",
+    "project_short_title":"ICG: EEARTH",
+    "investment_type":"Crisis Analytics",
+    "grant_amt":"$700,000",
+    "org_full_name":"International Crisis Group (ICG)",
+    "org_short_name":"ICG"
+  },
+  {
+    "project_title":"ACLED Data",
+    "project_short_title":"ACLED: ACLED Data",
+    "investment_type":"Data Sets",
+    "grant_amt":"$14,708,969",
+    "org_full_name":"Armed Conflict Location & Event Data Project (ACLED)",
+    "org_short_name":"ACLED"
+  },
+  {
+    "project_title":"Risk DataHub",
+    "project_short_title":"UNDP: DataHub",
+    "investment_type":"Infrastructure",
+    "grant_amt":"$500,000",
+    "org_full_name":"United Nations Development Programme (UNDP)",
+    "org_short_name":"UNDP"
+  },
+  {
+    "project_title":"EMPOW",
+    "project_short_title":"PRIO: EMPOW",
+    "investment_type":"Data Sets",
+    "grant_amt":"$800,000",
+    "org_full_name":"Peace Research Institute Oslo (PRIO)",
+    "org_short_name":"PRIO"
+  },
+  {
+    "project_title":"CLIFDEW-GRID",
+    "project_short_title":"UNHCR: CLIFDEW-GRID",
+    "investment_type":"Crisis Analytics",
+    "grant_amt":"$500,071",
+    "org_full_name":"United Nations High Commissioner for Refugees (UNHCR)",
+    "org_short_name":"UNHCR"
+  },
+  {
+    "project_title":"CRAF'd Direct Costs",
+    "project_short_title":"CRAF'd Direct Costs",
+    "investment_type":"Direct costs",
+    "grant_amt":"$8,560",
+    "org_full_name":"Complex Risk Analytics Fund",
+    "org_short_name":"CRAF'd"
+  }
+]
