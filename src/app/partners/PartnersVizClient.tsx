@@ -4,14 +4,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import type { HexNode } from "@/lib/partners/label";
-type SimNode = HexNode & {
-  x0: number;
-  y0: number;
-  vx?: number;
-  vy?: number;
-  fx?: number;
-  fy?: number;
-};
 
 const SQRT3 = Math.sqrt(3);
 const HEX_SIZE = 75;
@@ -20,8 +12,8 @@ const HEX_SPACING = SQRT3 * HEX_SIZE; // ≈ 129.9 — distance between adjacent
 // ─── HOVER MODE ───────────────────────────────────────────────────────────────
 // To switch hover style, uncomment ONE line and comment the others:
 // const HOVER_MODE: "wave" | "relational" | "constellation" = "wave";
-// const HOVER_MODE: "wave" | "relational" | "constellation" = "relational";
-const HOVER_MODE: "wave" | "relational" | "constellation" = "constellation";
+const HOVER_MODE: "wave" | "relational" | "constellation" = "relational";
+// const HOVER_MODE: "wave" | "relational" | "constellation" = "constellation";
 // ─────────────────────────────────────────────────────────────────────────────
 
 function hexPathFlat(cx: number, cy: number, r: number) {
@@ -69,63 +61,39 @@ export default function PartnersVizClient({
   const MIN_SCALE = 0.4;
   const MAX_SCALE = 2;
 
-const simNodes = useMemo<SimNode[]>(() => {
-  // label -> position lookup
-  const labelPos = new Map<string, { x: number; y: number }>();
-  for (const n of initialNodes) {
-    if (n.kind === "label" && n.label) {
-      labelPos.set(n.label, { x: n.x, y: n.y });
-    }
-  }
-
-  return initialNodes.map((n) => {
-    const fixed = n.kind !== "partner";
-
-    // Partners start from their label hex position
-    const start =
-      n.kind === "partner" && n.label ? labelPos.get(n.label) : undefined;
-
-    const startX = n.kind === "partner" ? (start?.x ?? n.x) : n.x;
-    const startY = n.kind === "partner" ? (start?.y ?? n.y) : n.y;
-
-    return {
-      ...n,
-      x0: n.x,
-      y0: n.y,
-      x: startX,
-      y: startY,
-      fx: fixed ? n.x : undefined,
-      fy: fixed ? n.y : undefined,
-    };
-  });
-}, [initialNodes]);
-
+  // Populate nodes immediately at their final positions (no fly-in needed)
   useEffect(() => {
-    const partners = simNodes.filter((n) => n.kind === "partner");
-    setRenderNodes(
-      simNodes.map((d) => ({ ...d, x: d.x ?? d.x0, y: d.y ?? d.y0 })),
-    );
+    setRenderNodes(initialNodes);
+  }, [initialNodes]);
 
-    const tl = gsap.timeline({
-      defaults: { ease: "power2.out" },
-      onUpdate: () => {
-        setRenderNodes(
-          simNodes.map((d) => ({ ...d, x: d.x ?? d.x0, y: d.y ?? d.y0 })),
-        );
-      },
-    });
-
-    tl.to(partners, {
-      duration: 3.5,
-      x: (i: number, t: any) => t.x0,
-      y: (i: number, t: any) => t.y0,
-      stagger: { each: 0.004, from: "start" },
-    });
-
+  // Pop-in animation: each partner grows from 0 to full size with a bounce
+  useEffect(() => {
+    if (renderNodes.length === 0) return;
+    const svgEl = svgRef.current;
+    if (!svgEl) return;
+    // Double-RAF ensures React has committed the nodes to the DOM
+    const id = requestAnimationFrame(() => requestAnimationFrame(() => {
+      const partnerGs = Array.from(
+        svgEl.querySelectorAll<SVGGElement>('[data-kind="partner"]'),
+      );
+      if (partnerGs.length === 0) return;
+      gsap.set(partnerGs, {
+        opacity: 0, scale: 0,
+        transformBox: "fill-box", transformOrigin: "50% 50%",
+      });
+      gsap.to(partnerGs, {
+        opacity: 1, scale: 1,
+        duration: 0.5,
+        stagger: 0.04,
+        ease: "back.out(1.7)",
+      });
+    }));
     return () => {
-      tl.kill();
+      cancelAnimationFrame(id);
+      gsap.killTweensOf('[data-kind="partner"]');
     };
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [renderNodes.length]);
 
   // Pan: two-finger trackpad swipe (wheel without ctrlKey)
   // Zoom: pinch or Ctrl+scroll (wheel with ctrlKey)
@@ -176,16 +144,19 @@ const simNodes = useMemo<SimNode[]>(() => {
     setScale(1);
   }
 
-  // Background hex grid covering the full viewport
+  // Background hex grid — extended coverage with edge fade
   const bgHexes = useMemo(() => {
-    const cells: { x: number; y: number; key: string }[] = [];
-    for (let q = -14; q <= 14; q++) {
-      for (let r = -14; r <= 14; r++) {
+    const FADE_START = 600;
+    const FADE_END = 2400;
+    const cells: { x: number; y: number; key: string; opacity: number }[] = [];
+    for (let q = -28; q <= 28; q++) {
+      for (let r = -28; r <= 28; r++) {
         const x = HEX_SIZE * 1.5 * q;
         const y = HEX_SIZE * SQRT3 * (r + q / 2);
-        if (x > -1050 && x < 1050 && y > -650 && y < 650) {
-          cells.push({ x, y, key: `bg-${q}-${r}` });
-        }
+        const dist = Math.sqrt(x * x + y * y);
+        if (dist > FADE_END) continue;
+        const t = Math.max(0, (dist - FADE_START) / (FADE_END - FADE_START));
+        cells.push({ x, y, key: `bg-${q}-${r}`, opacity: 0.28 * (1 - t) });
       }
     }
     return cells;
@@ -234,14 +205,15 @@ const simNodes = useMemo<SimNode[]>(() => {
       onDoubleClick={handleDoubleClick}
     >
       <g transform={`translate(${pan.x},${pan.y}) scale(${scale})`}>
-        {/* Background hex grid */}
-        {bgHexes.map(({ x, y, key }) => (
+        {/* Background hex grid — fades toward edges */}
+        {bgHexes.map(({ x, y, key, opacity }) => (
           <path
             key={key}
             d={hexPathFlat(x, y, HEX_SIZE)}
             fill="none"
-            stroke="rgba(255,255,255,0.28)"
+            stroke="white"
             strokeWidth={1.5}
+            strokeOpacity={opacity}
           />
         ))}
 
@@ -331,6 +303,7 @@ const simNodes = useMemo<SimNode[]>(() => {
             <g
               key={n.id}
               data-node="true"
+              data-kind={n.kind}
               onMouseEnter={() => {
                 if (n.kind === "partner") setHoveredPartner(n.id);
                 else if (n.kind === "label") setHoveredLabel(n.label ?? null);
