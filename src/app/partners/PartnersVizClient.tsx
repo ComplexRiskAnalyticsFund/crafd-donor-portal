@@ -2,6 +2,7 @@
 
 // src/app/partners/PartnersVizClient.tsx
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import gsap from "gsap";
 import type { HexNode } from "@/lib/partners/label";
 
@@ -111,8 +112,14 @@ export default function PartnersVizClient({
   const [hoveredPartner, setHoveredPartner] = useState<string | null>(null);
   const [renderNodes, setRenderNodes] = useState<HexNode[]>([]);
   const [lockedGroup, setLockedGroup] = useState<Set<string> | null>(null);
+  // relational_feature string for the currently locked group (needed for URL sync)
+  const [lockedFeature, setLockedFeature] = useState<string | null>(null);
   // click state 2 — individual partner detail
   const [clickedNode, setClickedNode] = useState<HexNode | null>(null);
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const svgRef = useRef<SVGSVGElement>(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -125,6 +132,27 @@ export default function PartnersVizClient({
   const MAX_SCALE = 2;
 
   useEffect(() => { setRenderNodes(initialNodes); }, [initialNodes]);
+
+  // Restore modal state from URL on mount (enables shareable links)
+  useEffect(() => {
+    const groupParam = searchParams.get("group");
+    const partnerParam = searchParams.get("partner");
+    if (groupParam) {
+      const peers = new Set(
+        initialNodes
+          .filter((n) => n.kind === "partner" && n.partner?.relational_feature === groupParam)
+          .map((n) => n.id),
+      );
+      if (peers.size > 0) { setLockedGroup(peers); setLockedFeature(groupParam); }
+    }
+    if (partnerParam) {
+      const node = initialNodes.find(
+        (n) => n.kind === "partner" && (n.partner?.org_short_name ?? n.name) === partnerParam,
+      );
+      if (node) setClickedNode(node);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Pop-in animation
   useEffect(() => {
@@ -179,8 +207,13 @@ export default function PartnersVizClient({
     const PAN_STEP = 50;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        if (clickedNode) { setClickedNode(null); return; }
-        setLockedGroup(null); return;
+        if (clickedNode) {
+          setClickedNode(null);
+          if (lockedFeature) router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature)}`);
+          else router.replace(pathname);
+          return;
+        }
+        setLockedGroup(null); setLockedFeature(null); router.replace(pathname); return;
       }
       if (e.key === "ArrowLeft")       setPan((p) => clampPan(p.x + PAN_STEP, p.y, scaleRef.current));
       else if (e.key === "ArrowRight") setPan((p) => clampPan(p.x - PAN_STEP, p.y, scaleRef.current));
@@ -192,7 +225,7 @@ export default function PartnersVizClient({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [clickedNode]);
+  }, [clickedNode, lockedFeature, router, pathname]);
 
   function handleDoubleClick() { setPan({ x: 0, y: 0 }); setScale(1); }
 
@@ -209,6 +242,8 @@ export default function PartnersVizClient({
     setHoveredPartner(null);
     setHoveredLabel(null);
     setLockedGroup(new Set([n.id, ...peers]));
+    setLockedFeature(rf);
+    router.replace(`${pathname}?group=${encodeURIComponent(rf)}`);
   }
 
   const bgHexes = useMemo(() => {
@@ -282,7 +317,7 @@ export default function PartnersVizClient({
             x="-900" y="-500" width="1800" height="1000"
             fill="transparent"
             style={{ cursor: "default" }}
-            onClick={() => { setLockedGroup(null); setClickedNode(null); }}
+            onClick={() => { setLockedGroup(null); setLockedFeature(null); setClickedNode(null); router.replace(pathname); }}
           />
         )}
 
@@ -443,17 +478,25 @@ export default function PartnersVizClient({
                 }}
                 onClick={(e) => {
                   e.stopPropagation(); // prevent SVG backdrop rect from firing
+                  const slug = encodeURIComponent(n.partner?.org_short_name ?? n.name ?? "");
                   if (lockedGroup !== null) {
-                    if (isLocked) setClickedNode(n); // click state 2
+                    if (isLocked) {
+                      setClickedNode(n);
+                      const qs = lockedFeature
+                        ? `?group=${encodeURIComponent(lockedFeature)}&partner=${slug}`
+                        : `?partner=${slug}`;
+                      router.replace(`${pathname}${qs}`);
+                    }
                   } else {
                     const rf = n.partner?.relational_feature;
                     const hasPeers = rf && renderNodes.some(
                       node => node.kind === "partner" && node.id !== n.id && node.partner?.relational_feature === rf,
                     );
                     if (hasPeers) {
-                      enterClickState1(n);
+                      enterClickState1(n); // enterClickState1 handles URL
                     } else {
-                      setClickedNode(n); // no relational group → jump to click state 2
+                      setClickedNode(n);
+                      router.replace(`${pathname}?partner=${slug}`);
                     }
                   }
                 }}
@@ -480,9 +523,19 @@ export default function PartnersVizClient({
                       strokeWidth={strokeWidthFor(n)}
                     />
                     {n.label === "donor" ? (
-                      <image href={`/logos/countries/${slug}.svg`} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" />
+                      <>
+                        <image href={`/logos/countries/${slug}.svg`} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" />
+                        {hoveredPartner === n.id && n.name && (
+                          <text x={0} y={boxH / 2 + 14} textAnchor="middle" fontSize={9} fill="#1C1C1C" fontWeight={700}>{n.name}</text>
+                        )}
+                      </>
                     ) : slugSet.has(slug) ? (
-                      <image href={`/white_logos/${slug}.png`} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" />
+                      <>
+                        <image href={`/white_logos/${slug}.png`} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" />
+                        {hoveredPartner === n.id && n.name && (
+                          <text x={0} y={boxH / 2 + 14} textAnchor="middle" fontSize={9} fill="white" fontWeight={700}>{n.name}</text>
+                        )}
+                      </>
                     ) : n.name ? (
                       <text x={0} y={4} textAnchor="middle" fontSize={12} fill="white">{n.name}</text>
                     ) : null}
@@ -518,7 +571,7 @@ export default function PartnersVizClient({
             }}
           >
             <button
-              onClick={() => setLockedGroup(null)}
+              onClick={() => { setLockedGroup(null); setLockedFeature(null); setClickedNode(null); router.replace(pathname); }}
               style={{
                 alignSelf: "flex-end", background: "none",
                 border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%",
@@ -564,7 +617,11 @@ export default function PartnersVizClient({
               background: "rgba(0,0,0,0.72)",
               padding: "1.5rem",
             }}
-            onClick={() => setClickedNode(null)} // click backdrop to close
+            onClick={() => {
+              setClickedNode(null);
+              if (lockedFeature) router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature)}`);
+              else router.replace(pathname);
+            }} // click backdrop to close
           >
             <div
               style={{
@@ -584,7 +641,11 @@ export default function PartnersVizClient({
             >
               {/* Close */}
               <button
-                onClick={() => setClickedNode(null)}
+                onClick={() => {
+                  setClickedNode(null);
+                  if (lockedFeature) router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature)}`);
+                  else router.replace(pathname);
+                }}
                 style={{
                   position: "absolute", top: 20, right: 20,
                   background: "none", border: "1px solid rgba(255,255,255,0.2)",

@@ -1,6 +1,7 @@
 // src/app/partners/page.tsx
 export const dynamic = "force-dynamic";
 
+import { Suspense } from "react";
 import fs from "fs/promises";
 import path from "path";
 import { getPartners, getDonors } from "@/lib/data/partners";
@@ -24,7 +25,9 @@ export default async function PartnersPage() {
 
   return (
     <div className="h-screen w-screen bg-[#FDB53C]">
-      <PartnersVizClient initialNodes={nodes} availableSlugs={availableSlugs} />
+      <Suspense fallback={null}>
+        <PartnersVizClient initialNodes={nodes} availableSlugs={availableSlugs} />
+      </Suspense>
     </div>
   );
 }
