@@ -1,11 +1,12 @@
 // src/lib/partners/label.ts
 import type { Partner } from "@/types";
 
-export type PartnerLabel = "collaborating" | "project" | "un" | "other";
+export type PartnerLabel = "collaborating" | "project" | "un" | "other" | "donor";
 
 export function labelPartner(p: Partner): PartnerLabel {
   const conn = (p.crafd_connection ?? "").toLowerCase();
 
+  if (conn.includes("donor partner")) return "donor";
   if (conn.includes("lead project")) return "project";
   if (conn.includes("mou")) return "un";
   if (conn.includes("collaborating") || conn.includes("implementing"))
@@ -148,6 +149,8 @@ function labelDisplay(label: PartnerLabel) {
       return "UN\nPARTNERS";
     case "other":
       return "OTHER";
+    case "donor":
+      return "DONOR\nPARTNERS";
   }
 }
 
@@ -213,10 +216,11 @@ export function buildPartnerHexNodes(
   // - other: right-lower-ish (small cluster)
   // ------------------------------------------------------------
   const labelAnchorAxial: Record<PartnerLabel, { q: number; r: number }> = {
-    collaborating: { q: -2, r: 1 }, 
-    project:       { q: -1,  r: 2 }, 
-    un:            { q: 2,  r: -1 }, 
-    other:         { q: 1,  r: -2 }, 
+    collaborating: { q: -2, r: 1 },
+    project:       { q: -1,  r: 2 },
+    un:            { q: 2,  r: -1 },
+    other:         { q: 1,  r: -2 },
+    donor:         { q: 1,  r: 1 },
   };
 
   // ------------------------------------------------------------
@@ -240,10 +244,11 @@ export function buildPartnerHexNodes(
   Object.values(labelAnchorAxial).forEach((a) => blockedAbs.add(keyAx(a)));
 
   const wedgeByLabel: Record<PartnerLabel, number[]> = {
-    collaborating: [1, 2, 3, 4, 5], 
-    project:       [5, 0, 1], 
-    un:            [0, 1, 2], 
-    other:         [2, 1, 3], 
+    collaborating: [1, 2, 3, 4, 5],
+    project:       [5, 0, 1],
+    un:            [0, 1, 2],
+    other:         [2, 1, 3],
+    donor:         [0, 5, 4],
   };
 
   for (const [label, group] of groups.entries()) {
@@ -253,30 +258,28 @@ export function buildPartnerHexNodes(
     // block label cell so partners can't take it
     blockedAbs.add(keyAx(anchor));
 
-    // label hex
-    nodes.push({
-      id: `label-${label}`,
-      kind: "label",
-      label,
-      count: group.length,
-      name: labelDisplay(label),
-      x: anchorPx.x,
-      y: anchorPx.y,
-      r: size,
-    });
-
-    // candidate offsets in a wedge (generate more than needed)
+    // compute actual positions BEFORE pushing the label so count is honest
     const candidateOffsets = generateWedgeOffsets(
       group.length * 8 + 50,
       wedgeByLabel[label],
     );
-
-    // choose absolute axial cells, excluding blocked
     const partnerAbsPositions = pickPositionsWithBlockFilter({
       anchorAbs: anchor,
       offsets: candidateOffsets,
       blockedAbs,
       needed: group.length,
+    });
+
+    // label hex — count = partners actually placed, not total in group
+    nodes.push({
+      id: `label-${label}`,
+      kind: "label",
+      label,
+      count: partnerAbsPositions.length,
+      name: labelDisplay(label),
+      x: anchorPx.x,
+      y: anchorPx.y,
+      r: size,
     });
 
     // create partner nodes and block their cells for subsequent groups
@@ -307,9 +310,9 @@ export function buildPartnerHexNodes(
   return nodes;
 }
 // [DONE] 1. all of them need to be connected to my big white hex: craf'd
-// 2. there needs to be a mechanism for them not overlapping
+// [DONE]2. there needs to be a mechanism for them not overlapping
 // [DONE] 3. where is project partners? I don't see it at all.
-// 4. Should I put in the logos already--it will  help identify?
-// 5. hover responses for each hex.
-// 6. my current data also doesn't show me the actual connection between these across the different partners. will need data joining here?
-// 7. the whole thing should be on a canvas, not svg,  so that nothing gets cut off and its explorable.
+//  4. Should I put in the logos already--it will  help identify?
+// [DONE] 5. hover responses for each hex.
+//  6. my current data also doesn't show me the actual connection between these across the different partners. will need data joining here?
+// [DONE] 7. the whole thing should be on a canvas, not svg,  so that nothing gets cut off and its explorable.

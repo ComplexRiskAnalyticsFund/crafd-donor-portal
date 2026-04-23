@@ -258,3 +258,7 @@ __marimo__/
 
 # next-agents-md
 # .next-docs/
+
+# downloaded images(logos)
+/logos/
+/white_logos/

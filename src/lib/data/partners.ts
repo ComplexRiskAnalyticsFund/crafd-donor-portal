@@ -15,6 +15,15 @@ export async function getPartners(): Promise<Partner[]> {
 }
 
 /**
+ * Fetches the 8 donor-country partners from the static JSON file
+ */
+export async function getDonors(): Promise<Partner[]> {
+  const filePath = path.join(process.cwd(), "public/data/donors.json");
+  const fileContents = await readFile(filePath, "utf8");
+  return JSON.parse(fileContents);
+}
+
+/**
  * Filters partners by connection type
  */
 export function filterPartnersByConnection(

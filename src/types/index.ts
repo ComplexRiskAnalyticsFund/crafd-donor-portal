@@ -14,6 +14,7 @@ export type PartnerConnectionType =
   | "Administrative Partner"
   | "MoU Signatory/UN Partner"
   | "Complementary Donor"
+  | "Donor Partner"
   | "CRAF'd";
 
 // Utility types for data visualization
