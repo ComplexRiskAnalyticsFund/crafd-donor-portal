@@ -24,6 +24,14 @@ export async function getDonors(): Promise<Partner[]> {
 }
 
 /**
+ * Fetches visualization metadata (as-of date, anonymous partner count)
+ */
+export async function getVizMeta(): Promise<{ anon_partner_count: string; as_of: string }> {
+  const filePath = path.join(process.cwd(), "public/data/viz-meta.json");
+  return JSON.parse(await readFile(filePath, "utf8"));
+}
+
+/**
  * Filters partners by connection type
  */
 export function filterPartnersByConnection(

@@ -104,18 +104,21 @@ function StatCard({
 export default function PartnersVizClient({
   initialNodes,
   availableSlugs,
+  asOf,
 }: {
   initialNodes: HexNode[];
   availableSlugs: string[];
+  asOf: string;
 }) {
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
   const [hoveredPartner, setHoveredPartner] = useState<string | null>(null);
   const [renderNodes, setRenderNodes] = useState<HexNode[]>([]);
   const [lockedGroup, setLockedGroup] = useState<Set<string> | null>(null);
-  // relational_feature string for the currently locked group (needed for URL sync)
   const [lockedFeature, setLockedFeature] = useState<string | null>(null);
-  // click state 2 — individual partner detail
   const [clickedNode, setClickedNode] = useState<HexNode | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchLocked, setSearchLocked] = useState(false);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -126,6 +129,7 @@ export default function PartnersVizClient({
   const [scale, setScale] = useState(1);
   const panRef = useRef({ x: 0, y: 0 });
   const scaleRef = useRef(1);
+  const animTlRef = useRef<gsap.core.Timeline | null>(null);
   useEffect(() => { panRef.current = pan; }, [pan]);
   useEffect(() => { scaleRef.current = scale; }, [scale]);
   const MIN_SCALE = 0.4;
@@ -154,25 +158,50 @@ export default function PartnersVizClient({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Pop-in animation
+  // Pop-in animation — radial within group waves: Donor → UN/Project → Collab
   useEffect(() => {
     if (renderNodes.length === 0) return;
     const svgEl = svgRef.current;
     if (!svgEl) return;
     const id = requestAnimationFrame(() => requestAnimationFrame(() => {
-      const partnerGs = Array.from(svgEl.querySelectorAll<SVGGElement>('[data-kind="partner"]'));
+      const partnerGs = Array.from(svgEl.querySelectorAll<SVGGElement>('[data-kind="partner"],[data-kind="more"]'));
       if (partnerGs.length === 0) return;
       partnerGs.forEach((el) => {
         const cx = el.getAttribute("data-cx") ?? "0";
         const cy = el.getAttribute("data-cy") ?? "0";
         gsap.set(el, { opacity: 0, scale: 0, svgOrigin: `${cx} ${cy}` });
       });
-      gsap.to(partnerGs, {
-        opacity: 1, scale: 1, duration: 0.5, stagger: 0.04, ease: "back.out(1.7)",
+
+      const GROUP_WAVE = 0.5;   // seconds between group onsets
+      const RADIAL_SPREAD = 0.6; // radial window within each group
+      const GROUP_ORDER: Record<string, number> = {
+        donor: 0, un: 1, project: 1, collaborating: 2, other: 2,
+      };
+      const maxDist = partnerGs.reduce((m, el) => {
+        const cx = parseFloat(el.getAttribute("data-cx") ?? "0");
+        const cy = parseFloat(el.getAttribute("data-cy") ?? "0");
+        return Math.max(m, Math.sqrt(cx * cx + cy * cy));
+      }, 1);
+
+      const tl = gsap.timeline({
         onComplete: () => { gsap.set(partnerGs, { clearProps: "transform,transformOrigin" }); },
       });
+      animTlRef.current = tl;
+
+      partnerGs.forEach((el) => {
+        const label = el.getAttribute("data-label") ?? "other";
+        const cx = parseFloat(el.getAttribute("data-cx") ?? "0");
+        const cy = parseFloat(el.getAttribute("data-cy") ?? "0");
+        const dist = Math.sqrt(cx * cx + cy * cy);
+        const t = (GROUP_ORDER[label] ?? 2) * GROUP_WAVE + (dist / maxDist) * RADIAL_SPREAD;
+        tl.to(el, { opacity: 1, scale: 1, duration: 0.28, ease: "back.out(1.7)" }, t);
+      });
     }));
-    return () => { cancelAnimationFrame(id); gsap.killTweensOf('[data-kind="partner"]'); };
+    return () => {
+      cancelAnimationFrame(id);
+      animTlRef.current?.kill();
+      animTlRef.current = null;
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [renderNodes.length]);
 
@@ -287,7 +316,7 @@ export default function PartnersVizClient({
         if (n.id === hoveredPartnerNode.id) return 100;
         if (relationalPeers.has(n.id)) return 50;
       }
-      const base: Record<HexNode["kind"], number> = { outline: 0, partner: 1, label: 2, center: 3 };
+      const base: Record<HexNode["kind"], number> = { outline: 0, partner: 1, more: 1, label: 2, center: 3 };
       return base[n.kind];
     }
     return [...renderNodes].sort((a, b) => priority(a) - priority(b));
@@ -357,7 +386,7 @@ export default function PartnersVizClient({
           )}
 
           {ordered.map((n) => {
-            let nodeOpacity = n.kind === "partner" ? 0.95 : 1;
+            let nodeOpacity = (n.kind === "partner" || n.kind === "more") ? 0.95 : 1;
             let nodeScale = 1;
             let highlight: "primary" | "secondary" | null = null;
 
@@ -391,8 +420,15 @@ export default function PartnersVizClient({
                   nodeOpacity = 0.35;
                 }
               }
+            } else if (searchQuery.trim()) {
+              if (n.kind === "partner" || n.kind === "more") {
+                const q = searchQuery.toLowerCase();
+                const hit = (n.name ?? "").toLowerCase().includes(q)
+                          || (n.partner?.org_full_name ?? "").toLowerCase().includes(q);
+                nodeOpacity = hit ? 1 : 0.12;
+              }
             } else if (hoveredLabel !== null) {
-              const isSameGroup = (n.kind === "label" || n.kind === "partner") && n.label === hoveredLabel;
+              const isSameGroup = (n.kind === "label" || n.kind === "partner" || n.kind === "more") && n.label === hoveredLabel;
               if (n.kind === "outline" || n.kind === "center") {
                 nodeOpacity = 1;
               } else if (isSameGroup) {
@@ -400,6 +436,45 @@ export default function PartnersVizClient({
               } else {
                 nodeOpacity = 0.2;
               }
+            }
+
+            // ── "& Many More" node ────────────────────────────────────────────
+            if (n.kind === "more") {
+              const isHovered = hoveredPartner === n.id;
+              return (
+                <g
+                  key={n.id}
+                  data-node="true"
+                  data-kind="more"
+                  data-label={n.label}
+                  data-cx={n.x}
+                  data-cy={n.y}
+                  onMouseEnter={() => { if (!lockedGroup) setHoveredPartner(n.id); }}
+                  onMouseLeave={() => { if (!lockedGroup) setHoveredPartner(null); }}
+                  onClick={(e) => { e.stopPropagation(); setClickedNode(n); }}
+                  style={{ opacity: nodeOpacity, transition: "opacity 0.45s ease", cursor: "pointer" }}
+                >
+                  <g transform={`translate(${n.x},${n.y})`}>
+                    <g style={{ transformOrigin: "0 0", transform: nodeScale !== 1 ? `scale(${nodeScale})` : undefined, transition: "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)" }}>
+                      <path d={hexPathFlat(0, 0, n.r)} fill="#1C1C1C" stroke="white" strokeWidth={2} />
+                      {n.name?.split("\n").map((line, i, arr) => {
+                        const lineH = 15;
+                        const totalSpan = (arr.length - 1) * lineH;
+                        return (
+                          <text key={i} x={0} y={-totalSpan / 2 + i * lineH + 5} textAnchor="middle" fontSize={13} fill="white" fontWeight={800} letterSpacing="0.05em">
+                            {line}
+                          </text>
+                        );
+                      })}
+                      {isHovered && n.anonCount && (
+                        <text x={0} y={38} textAnchor="middle" fontSize={9} fill="rgba(255,255,255,0.55)">
+                          {n.anonCount} anonymous
+                        </text>
+                      )}
+                    </g>
+                  </g>
+                </g>
+              );
             }
 
             // ── Non-partner nodes ──────────────────────────────────────────────
@@ -466,6 +541,7 @@ export default function PartnersVizClient({
                 key={n.id}
                 data-node="true"
                 data-kind="partner"
+                data-label={n.label}
                 data-cx={n.x}
                 data-cy={n.y}
                 onMouseEnter={() => {
@@ -537,7 +613,27 @@ export default function PartnersVizClient({
                         )}
                       </>
                     ) : n.name ? (
-                      <text x={0} y={4} textAnchor="middle" fontSize={12} fill="white">{n.name}</text>
+                      (() => {
+                        const words = n.name.split(" ");
+                        const lines: string[] = [];
+                        let cur = "";
+                        for (const w of words) {
+                          if (cur && (cur + " " + w).length > 11) { lines.push(cur); cur = w; }
+                          else cur = cur ? cur + " " + w : w;
+                        }
+                        if (cur) lines.push(cur);
+                        const lineH = 13;
+                        const totalSpan = (lines.length - 1) * lineH;
+                        return (
+                          <>
+                            {lines.map((line, i) => (
+                              <text key={i} x={0} y={-totalSpan / 2 + i * lineH + 4} textAnchor="middle" fontSize={11} fill="white" fontWeight={700} letterSpacing="0.02em">
+                                {line}
+                              </text>
+                            ))}
+                          </>
+                        );
+                      })()
                     ) : null}
                   </g>
                 </g>
@@ -600,8 +696,58 @@ export default function PartnersVizClient({
         </div>
       )}
 
+      {/* ── "& Many More" modal ─────────────────────────────────────────────── */}
+      {clickedNode?.kind === "more" && (
+        <div
+          style={{
+            position: "fixed", inset: 0, zIndex: 60,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            background: "rgba(0,0,0,0.72)",
+            padding: "1.5rem",
+          }}
+          onClick={() => { setClickedNode(null); router.replace(pathname); }}
+        >
+          <div
+            style={{
+              background: "#141414",
+              borderRadius: 18,
+              maxWidth: 480,
+              width: "100%",
+              position: "relative",
+              padding: "2.5rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: "1.25rem",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => { setClickedNode(null); router.replace(pathname); }}
+              style={{
+                position: "absolute", top: 20, right: 20,
+                background: "none", border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "50%", color: "white", width: 36, height: 36,
+                fontSize: "1.2rem", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+            >×</button>
+            <p style={{ fontSize: "0.7rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#F1B434", margin: 0 }}>
+              CRAF&apos;d Ecosystem
+            </p>
+            <h2 style={{ fontSize: "3.5rem", fontWeight: 800, color: "white", margin: 0, lineHeight: 1 }}>
+              {clickedNode.anonCount}
+            </h2>
+            <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1rem", lineHeight: 1.75, margin: 0, maxWidth: 360 }}>
+              anonymous partners contribute to the CRAF&apos;d ecosystem, supporting crisis risk analytics and humanitarian response across the globe.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* ── Click state 2 — partner detail modal ──────────────────────────────── */}
-      {clickedNode && (() => {
+      {clickedNode && clickedNode.kind !== "more" && (() => {
         const p = clickedNode.partner;
         const name = p?.org_short_name?.trim() ?? clickedNode.name ?? "Partner";
         const fullName = p?.org_full_name?.trim() ?? "";
@@ -751,6 +897,84 @@ export default function PartnersVizClient({
           </div>
         );
       })()}
+
+      {/* ── Search UI ─────────────────────────────────────────────────────────── */}
+      <div
+        style={{ position: "fixed", top: 20, right: 20, zIndex: 40, display: "flex", alignItems: "center", gap: 8 }}
+        onMouseEnter={() => setSearchOpen(true)}
+        onMouseLeave={() => { if (!searchQuery && !searchLocked) setSearchOpen(false); }}
+      >
+        <div style={{ overflow: "hidden", width: searchOpen ? 240 : 0, transition: "width 0.3s ease", display: "flex", alignItems: "center" }}>
+          <div style={{ position: "relative", width: 240, display: "flex", alignItems: "center" }}>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search partners…"
+              style={{
+                width: "100%",
+                padding: "0.5rem 2rem 0.5rem 0.85rem",
+                background: "rgba(0,0,0,0.65)",
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+                border: "1px solid rgba(255,255,255,0.18)",
+                borderRadius: 20,
+                color: "white",
+                fontSize: "0.82rem",
+                outline: "none",
+                boxSizing: "border-box",
+              }}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                style={{
+                  position: "absolute", right: 9,
+                  background: "none", border: "none",
+                  color: "rgba(255,255,255,0.5)", cursor: "pointer",
+                  fontSize: "1rem", lineHeight: 1, padding: 0,
+                }}
+              >×</button>
+            )}
+          </div>
+        </div>
+        <button
+          onClick={() => {
+            if (searchLocked) {
+              setSearchLocked(false);
+              setSearchOpen(false);
+              setSearchQuery("");
+            } else {
+              setSearchLocked(true);
+              setSearchOpen(true);
+            }
+          }}
+          style={{
+            width: 36, height: 36, flexShrink: 0,
+            borderRadius: "50%",
+            background: "#000",
+            border: "1px solid rgba(255,255,255,0.22)",
+            color: "white", cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}
+          aria-label="Search partners"
+        >
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+            <circle cx="6.5" cy="6.5" r="5" stroke="white" strokeWidth="1.5" />
+            <line x1="10.5" y1="10.5" x2="14" y2="14" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      {/* ── Footnote ──────────────────────────────────────────────────────────── */}
+      <p style={{
+        position: "fixed", bottom: 16, right: 20, zIndex: 30,
+        fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase",
+        color: "white", opacity: 0.65, margin: 0, pointerEvents: "none",
+        fontFamily: "inherit", textShadow: "0 1px 4px rgba(0,0,0,0.6)",
+      }}>
+        As of {asOf}
+      </p>
     </div>
   );
 }

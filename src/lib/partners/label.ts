@@ -14,7 +14,7 @@ export function labelPartner(p: Partner): PartnerLabel {
   return "other";
 }
 
-export type HexNodeKind = "partner" | "label" | "center" | "outline";
+export type HexNodeKind = "partner" | "label" | "center" | "outline" | "more";
 
 export type HexNode = {
   id: string;
@@ -28,6 +28,9 @@ export type HexNode = {
 
   // label hex extra
   count?: number;
+
+  // "& Many More" hex: anonymous partner count string (e.g. "xx" or "42")
+  anonCount?: string;
 
   // geometry in pixels
   x: number;
@@ -157,14 +160,25 @@ function labelDisplay(label: PartnerLabel) {
 export function buildPartnerHexNodes(
   partners: Partner[],
   size = 80,
+  anonCount?: string,
 ): HexNode[] {
   // 1) group partners
   const groups = new Map<PartnerLabel, Partner[]>();
   for (const p of partners) {
-    const lab = labelPartner(p);
-    const arr = groups.get(lab) ?? [];
+    // Skip internal/administrative entries that should not appear in the viz
+    const rawConn = (p.crafd_connection ?? "").replace(/[‘’]/g, "’");
+    if (rawConn.toLowerCase().includes("craf’d")) continue;
+    if (/mptfo/i.test(p.org_short_name ?? "") || /mptfo/i.test(p.org_full_name ?? "")) continue;
+
+    // Action Aid International is an exception: always placed in the
+    // collaborating cluster regardless of its connection type.
+    const isActionAid = /action\s*aid/i.test(p.org_short_name ?? "") ||
+                        /action\s*aid/i.test(p.org_full_name ?? "");
+    const posLabel: PartnerLabel = isActionAid ? "collaborating" : labelPartner(p);
+
+    const arr = groups.get(posLabel) ?? [];
     arr.push(p);
-    groups.set(lab, arr);
+    groups.set(posLabel, arr);
   }
 
   const nodes: HexNode[] = [];
@@ -219,8 +233,8 @@ export function buildPartnerHexNodes(
     collaborating: { q: -2, r: 1 },
     project:       { q: -1,  r: 2 },
     un:            { q: 2,  r: -1 },
-    other:         { q: 1,  r: -2 },
-    donor:         { q: 1,  r: 1 },
+    other:         { q: 1,  r: 1 },   // swapped with donor
+    donor:         { q: 1,  r: -2 },  // swapped with other, adjacent to hub edge
   };
 
   // ------------------------------------------------------------
@@ -247,8 +261,9 @@ export function buildPartnerHexNodes(
     collaborating: [1, 2, 3, 4, 5],
     project:       [5, 0, 1],
     un:            [0, 1, 2],
-    other:         [2, 1, 3],
-    donor:         [0, 5, 4],
+    other:         [0, 5, 4],           // kept from former donor position
+    // donor at (1,-2): dirs 0-3 reach the 4 non-hub neighbours, filling sides first
+    donor:         [0, 1, 2, 3],
   };
 
   for (const [label, group] of groups.entries()) {
@@ -297,7 +312,9 @@ export function buildPartnerHexNodes(
           "-",
         ),
         kind: "partner",
-        label,
+        // Use the partner's actual connection label (not the position-override label)
+        // so styling, hover, and label-hex highlights remain data-accurate.
+        label: labelPartner(partner),
         name: partner.org_short_name ?? "Unknown",
         x: pxy.x,
         y: pxy.y,
@@ -305,6 +322,31 @@ export function buildPartnerHexNodes(
         partner,
       });
     });
+
+    // After all collaborating partners are placed, append the "& Many More" node
+    // at the very next available position in the same wedge.
+    if (label === "collaborating" && anonCount) {
+      const morePos = pickPositionsWithBlockFilter({
+        anchorAbs: anchor,
+        offsets: candidateOffsets,
+        blockedAbs,
+        needed: 1,
+      });
+      if (morePos[0]) {
+        blockedAbs.add(keyAx(morePos[0]));
+        const mpx = axialToPixel(morePos[0].q, morePos[0].r, size);
+        nodes.push({
+          id: "more-collab",
+          kind: "more",
+          label: "collaborating",
+          name: "&\nMANY\nMORE",
+          anonCount,
+          x: mpx.x,
+          y: mpx.y,
+          r: size,
+        });
+      }
+    }
   }
 
   return nodes;

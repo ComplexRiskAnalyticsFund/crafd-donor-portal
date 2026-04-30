@@ -4,13 +4,14 @@ export const dynamic = "force-dynamic";
 import { Suspense } from "react";
 import fs from "fs/promises";
 import path from "path";
-import { getPartners, getDonors } from "@/lib/data/partners";
+import { getPartners, getDonors, getVizMeta } from "@/lib/data/partners";
 import { buildPartnerHexNodes } from "@/lib/partners/label";
 import PartnersVizClient from "./PartnersVizClient";
 
 export default async function PartnersPage() {
-  const [partners, donors] = await Promise.all([getPartners(), getDonors()]);
-  const nodes = buildPartnerHexNodes([...partners, ...donors], 75);
+  const [partners, donors, meta] = await Promise.all([getPartners(), getDonors(), getVizMeta()]);
+  // donors first so their group is processed before UN spreads into adjacent cells
+  const nodes = buildPartnerHexNodes([...donors, ...partners], 75, meta.anon_partner_count);
 
   // Build the set of logo slugs that actually exist in public/white_logos/
   // so the client can fall back to text for any missing logo.
@@ -26,7 +27,7 @@ export default async function PartnersPage() {
   return (
     <div className="h-screen w-screen bg-[#FDB53C]">
       <Suspense fallback={null}>
-        <PartnersVizClient initialNodes={nodes} availableSlugs={availableSlugs} />
+        <PartnersVizClient initialNodes={nodes} availableSlugs={availableSlugs} asOf={meta.as_of} />
       </Suspense>
     </div>
   );
