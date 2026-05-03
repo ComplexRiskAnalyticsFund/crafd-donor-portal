@@ -438,7 +438,7 @@ export default function PartnersVizClient({
               }
             }
 
-            // ── "& Many More" node ────────────────────────────────────────────
+            // ── "& Many More" node ───────────────────────────────────────────
             if (n.kind === "more") {
               const isHovered = hoveredPartner === n.id;
               return (
@@ -506,11 +506,11 @@ export default function PartnersVizClient({
                   />
                   {n.kind === "center" && (
                     <image
-                      href="/logos/craf'd.png"
-                      x={n.x - n.r * 0.55}
-                      y={n.y - n.r * 0.32}
-                      width={n.r * 1.1}
-                      height={n.r * 0.64}
+                      href="/logos/crafd-full.svg"
+                      x={n.x - n.r * 0.54}
+                      y={n.y - n.r * 0.37}
+                      width={n.r * 1.08}
+                      height={n.r * 0.735}
                       preserveAspectRatio="xMidYMid meet"
                     />
                   )}
