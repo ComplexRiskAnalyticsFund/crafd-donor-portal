@@ -855,6 +855,9 @@ export default function PartnersVizClient({
 
                   {projects.map((proj, idx) => {
                     const pd = projectsByTitle[proj];
+                    const projPartners = lockedNodes
+                      .filter(n => parseProjects(n.partner?.relational_project).has(proj))
+                      .sort((a, b) => (a.partner?.org_short_name ?? a.name ?? "").localeCompare(b.partner?.org_short_name ?? b.name ?? ""));
                     return (
                       <div
                         key={proj}
@@ -867,6 +870,32 @@ export default function PartnersVizClient({
                         {pd?.project_blurb && (
                           <p style={{ fontSize: "0.88rem", lineHeight: 1.75, opacity: 0.78, margin: 0 }}>
                             {pd.project_blurb}
+                          </p>
+                        )}
+                        {projPartners.length > 0 && (
+                          <p style={{ fontSize: "0.78rem", lineHeight: 1.9, margin: 0 }}>
+                            {projPartners.map((pn, pi) => (
+                              <span key={pn.id}>
+                                {pi > 0 && <span style={{ color: "rgba(255,255,255,0.25)", margin: "0 0.25rem" }}>·</span>}
+                                <button
+                                  onClick={() => {
+                                    setClickedNode(pn);
+                                    const slug = encodeURIComponent(pn.partner?.org_short_name ?? pn.name ?? "");
+                                    router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature ?? "")}&partner=${slug}`);
+                                  }}
+                                  style={{
+                                    background: "none", border: "none", padding: 0,
+                                    color: "rgba(255,255,255,0.65)", cursor: "pointer",
+                                    font: "inherit", fontSize: "0.78rem",
+                                    textDecoration: "none",
+                                  }}
+                                  onMouseEnter={e => (e.currentTarget.style.color = "white")}
+                                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.65)")}
+                                >
+                                  {pn.partner?.org_short_name ?? pn.name}
+                                </button>
+                              </span>
+                            ))}
                           </p>
                         )}
                         {idx < projects.length - 1 && (
@@ -1049,6 +1078,24 @@ export default function PartnersVizClient({
                   <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.72rem", letterSpacing: "0.06em", margin: 0, textAlign: "center" }}>
                     {name}
                   </p>
+                  {p?.org_url && (
+                    <a
+                      href={p.org_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        background: "transparent", color: "white", fontWeight: 700,
+                        fontSize: "0.72rem", letterSpacing: "0.07em",
+                        textTransform: "uppercase",
+                        border: "1px solid rgba(255,255,255,0.3)",
+                        borderRadius: 6, padding: "0.5rem 0.9rem",
+                        textDecoration: "none", display: "inline-block",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      Partner Website
+                    </a>
+                  )}
                 </div>
 
                 {/* Title block */}
@@ -1065,11 +1112,6 @@ export default function PartnersVizClient({
               </div>
 
               {/* Per-project sections — accordion for >1 project, flat for exactly 1 */}
-              {partnerProjects.length > 1 && (
-                <p style={{ fontSize: "0.65rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)", margin: 0 }}>
-                  Projects
-                </p>
-              )}
               {partnerProjects.map((pp) => {
                 const pd = pp.data;
                 const title = pd?.full_title ?? pd?.project_label ?? pp.key;
@@ -1159,26 +1201,6 @@ export default function PartnersVizClient({
                 );
               })}
 
-              {/* Partner website — outside accordions, at bottom */}
-              {p?.org_url && (
-                <div style={{ paddingTop: "0.5rem", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-                  <a
-                    href={p.org_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      background: "transparent", color: "white", fontWeight: 700,
-                      fontSize: "0.78rem", letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      border: "1px solid rgba(255,255,255,0.3)",
-                      borderRadius: 6, padding: "0.75rem 1.4rem",
-                      textDecoration: "none", display: "inline-block",
-                    }}
-                  >
-                    Partner Website ↗
-                  </a>
-                </div>
-              )}
             </div>
           </div>
         );
