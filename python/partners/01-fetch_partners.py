@@ -21,7 +21,7 @@ rename_mapping = {
     "Support for CRAF'd projects": "relational_project",
     "Organization logo (BW)":    "org_logo_white",
     "Organization logo (color)": "org_logo_color",
-    "Organization URL":          "org_url",
+    "Website":                   "org_url",
 }
 
 df_partners = df_partners.rename(columns=rename_mapping)
@@ -134,7 +134,8 @@ selected_columns = [
     "org_url",
 ]
 
-df_out = df_partners[selected_columns].copy()
+available_partner_cols = [c for c in selected_columns if c in df_partners.columns]
+df_out = df_partners[available_partner_cols].copy()
 
 # -- Export -------------------------------------------------------------------
 output_dir = Path("data") / "processed"

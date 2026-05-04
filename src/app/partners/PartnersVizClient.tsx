@@ -118,6 +118,7 @@ function StatCard({
         flexDirection: "column",
         gap: "0.5rem",
         background: "rgba(255,255,255,0.03)",
+        minHeight: 120,
       }}
     >
       <p
@@ -134,7 +135,7 @@ function StatCard({
       {accent && (
         <div style={{ width: 36, height: 3, background: "#cc3333", borderRadius: 2 }} />
       )}
-      <div style={{ color: "white" }}>{children}</div>
+      <div style={{ color: "white", flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>{children}</div>
     </div>
   );
 }
@@ -250,6 +251,8 @@ export default function PartnersVizClient({
   // Attached to window so it works even when click-state-1 modal overlay is present.
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
+      // Let the modal scroll naturally when the cursor is inside it
+      if ((e.target as Element)?.closest?.("[data-modal]")) return;
       const el = svgRef.current;
       if (!el) return;
       e.preventDefault();
@@ -439,6 +442,8 @@ export default function PartnersVizClient({
         details > summary { list-style: none; }
         details[open] > summary .summary-arrow::after { content: "▾"; }
         details:not([open]) > summary .summary-arrow::after { content: "▸"; }
+        [data-modal] { scrollbar-width: none; -ms-overflow-style: none; }
+        [data-modal]::-webkit-scrollbar { display: none; }
       `}</style>
       <svg
         ref={svgRef}
@@ -802,6 +807,7 @@ export default function PartnersVizClient({
               gap: "1.25rem",
               overflowY: "auto",
             }}
+            data-modal="true"
           >
             <button
               onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setClickedNode(null); router.replace(pathname); }}
@@ -816,7 +822,8 @@ export default function PartnersVizClient({
             {(() => {
               const projects = [...parseProjects(lockedFeature)];
               const partnerName =
-                lockedSourceNode?.partner?.org_short_name
+                lockedSourceNode?.partner?.org_full_name?.trim()
+                ?? lockedSourceNode?.partner?.org_short_name
                 ?? lockedSourceNode?.name
                 ?? "Partner";
               return (
@@ -833,8 +840,9 @@ export default function PartnersVizClient({
                           onClick={() => document.getElementById(`cs1-proj-${idx}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
                           style={{
                             background: "none", border: "none", padding: 0,
-                            color: "#F1B434", textDecoration: "underline",
-                            cursor: "pointer", font: "inherit", fontSize: "0.8rem",
+                            color: "#F1B434", textDecoration: projects.length > 1 ? "underline" : "none",
+                            cursor: projects.length > 1 ? "pointer" : "default",
+                            font: "inherit", fontSize: "0.8rem",
                           }}
                         >
                           {proj}
@@ -961,9 +969,11 @@ export default function PartnersVizClient({
                 display: "flex",
                 flexDirection: "column",
                 gap: "1.75rem",
-                maxHeight: "90vh",
+                minHeight: "55vh",
+                maxHeight: "88vh",
                 overflowY: "auto",
               }}
+              data-modal="true"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close */}
@@ -1051,25 +1061,90 @@ export default function PartnersVizClient({
                   }}>
                     {name}{fullName ? `: ${fullName}` : ""}
                   </h1>
-                  {connection && (
-                    <p style={{ fontSize: "0.72rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#F1B434", margin: "0.3rem 0 0.4rem" }}>
-                      {connection}
-                    </p>
-                  )}
-                  {partnerProjects.length > 0 && (
-                    <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.5)", margin: 0, lineHeight: 1.7 }}>
-                      {partnerProjects.map(pp => pp.data?.project_label ?? pp.key).join(" · ")}
-                    </p>
-                  )}
                 </div>
               </div>
 
-              {/* Per-project accordions */}
-              {partnerProjects.map((pp, idx) => {
+              {/* Per-project sections — accordion for >1 project, flat for exactly 1 */}
+              {partnerProjects.length > 1 && (
+                <p style={{ fontSize: "0.65rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)", margin: 0 }}>
+                  Projects
+                </p>
+              )}
+              {partnerProjects.map((pp) => {
                 const pd = pp.data;
                 const title = pd?.full_title ?? pd?.project_label ?? pp.key;
+                const isSingle = partnerProjects.length === 1;
+
+                const body = (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", marginTop: isSingle ? 0 : undefined }}>
+                    {pd?.project_blurb && pd.project_blurb.trim() !== "N/A" && (
+                      <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "0.9rem", lineHeight: 1.75, margin: 0 }}>
+                        {pd.project_blurb}
+                      </p>
+                    )}
+
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr 1fr 1fr", gap: "0.9rem" }}>
+                      <StatCard label="Role" accent>
+                        <p style={{ fontWeight: 800, fontSize: "0.85rem", margin: 0, textTransform: "uppercase", lineHeight: 1.4, textAlign: "center" }}>
+                          {connection || "Partner"}
+                        </p>
+                      </StatCard>
+
+                      <StatCard label="Coverage">
+                        {pd?.project_coverage
+                          ? <CoverageMap coverage={pd.project_coverage} />
+                          : <p style={{ fontWeight: 700, fontSize: "0.9rem", margin: 0 }}>—</p>
+                        }
+                      </StatCard>
+
+                      <StatCard label="Grant Size">
+                        <p style={{ fontWeight: 800, fontSize: "2.6rem", margin: 0, lineHeight: 1, textAlign: "center", width: "100%" }}>
+                          {formatGrantSize(pd?.grant_size)}
+                        </p>
+                      </StatCard>
+
+                      <StatCard label="Duration">
+                        <p style={{ fontWeight: 800, fontSize: "2.6rem", margin: 0, lineHeight: 1, textAlign: "center", width: "100%" }}>
+                          {pd?.duration_months ?? "—"}
+                        </p>
+                        {pd?.duration_months && (
+                          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", margin: 0, textAlign: "center", width: "100%" }}>MONTHS</p>
+                        )}
+                      </StatCard>
+                    </div>
+
+                    {pd?.project_url && (
+                      <div>
+                        <a
+                          href={pd.project_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            background: "#F1B434", color: "#000", fontWeight: 800,
+                            fontSize: "0.78rem", letterSpacing: "0.08em",
+                            textTransform: "uppercase", border: "none", borderRadius: 6,
+                            padding: "0.75rem 1.4rem", cursor: "pointer",
+                            textDecoration: "none", display: "inline-block",
+                          }}
+                        >
+                          CRAF&apos;d Project Page
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                );
+
+                if (isSingle) {
+                  return (
+                    <div key={pp.key} style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+                      <h3 style={{ fontWeight: 800, fontSize: "1.05rem", color: "white", margin: 0 }}>{title}</h3>
+                      {body}
+                    </div>
+                  );
+                }
+
                 return (
-                  <details key={pp.key} open={idx === 0}
+                  <details key={pp.key}
                     style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem" }}>
                     <summary style={{
                       cursor: "pointer",
@@ -1077,65 +1152,9 @@ export default function PartnersVizClient({
                       fontWeight: 800, fontSize: "1.05rem", color: "white", marginBottom: "1rem",
                     }}>
                       <span>{title}</span>
-                      <span className="summary-arrow" style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.4)", fontWeight: 400, marginLeft: "1rem" }} />
+                      <span className="summary-arrow" style={{ fontSize: "1.5rem", color: "white", fontWeight: 400, marginLeft: "1rem" }} />
                     </summary>
-
-                    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                      {pd?.project_blurb && pd.project_blurb.trim() !== "N/A" && (
-                        <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "0.9rem", lineHeight: 1.75, margin: 0 }}>
-                          {pd.project_blurb}
-                        </p>
-                      )}
-
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr 1fr 1fr", gap: "0.9rem" }}>
-                        <StatCard label="Role" accent>
-                          <p style={{ fontWeight: 800, fontSize: "0.85rem", margin: 0, textTransform: "uppercase", lineHeight: 1.4 }}>
-                            {connection || "Partner"}
-                          </p>
-                        </StatCard>
-
-                        <StatCard label="Coverage">
-                          {pd?.project_coverage
-                            ? <CoverageMap coverage={pd.project_coverage} />
-                            : <p style={{ fontWeight: 700, fontSize: "0.9rem", margin: 0 }}>—</p>
-                          }
-                        </StatCard>
-
-                        <StatCard label="Grant Size">
-                          <p style={{ fontWeight: 800, fontSize: "2.6rem", margin: 0, lineHeight: 1, textAlign: "center", width: "100%" }}>
-                            {formatGrantSize(pd?.grant_size)}
-                          </p>
-                        </StatCard>
-
-                        <StatCard label="Duration">
-                          <p style={{ fontWeight: 800, fontSize: "2.6rem", margin: 0, lineHeight: 1, textAlign: "center", width: "100%" }}>
-                            {pd?.duration_months ?? "—"}
-                          </p>
-                          {pd?.duration_months && (
-                            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", margin: 0, textAlign: "center", width: "100%" }}>MONTHS</p>
-                          )}
-                        </StatCard>
-                      </div>
-
-                      {pd?.project_url && (
-                        <div>
-                          <a
-                            href={pd.project_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                              background: "#F1B434", color: "#000", fontWeight: 800,
-                              fontSize: "0.78rem", letterSpacing: "0.08em",
-                              textTransform: "uppercase", border: "none", borderRadius: 6,
-                              padding: "0.75rem 1.4rem", cursor: "pointer",
-                              textDecoration: "none", display: "inline-block",
-                            }}
-                          >
-                            CRAF&apos;d Project Page
-                          </a>
-                        </div>
-                      )}
-                    </div>
+                    {body}
                   </details>
                 );
               })}
