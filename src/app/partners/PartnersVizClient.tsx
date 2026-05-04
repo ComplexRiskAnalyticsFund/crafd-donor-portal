@@ -851,7 +851,7 @@ export default function PartnersVizClient({
                     ))}
                   </p>
 
-                  <div style={{ width: 40, height: 2, background: "#F1B434", borderRadius: 1 }} />
+                  <div style={{ display: "block", width: "100%", height: 4, minHeight: 4, flexShrink: 0, background: "#F1B434", borderRadius: 2 }} />
 
                   {projects.map((proj, idx) => {
                     const pd = projectsByTitle[proj];
@@ -1021,95 +1021,57 @@ export default function PartnersVizClient({
                 }}
               >×</button>
 
-              {/* Header row: logo + title block */}
+              {/* Header: logo column (logo + name + website btn) + title column */}
               <div style={{ display: "flex", gap: "1.75rem", alignItems: "flex-start", paddingRight: "3rem" }}>
-                {/* Logo box — clickable if org_url available */}
-                <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+                {/* Logo column */}
+                <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", width: 90 }}>
                   {p?.org_url ? (
                     <a href={p.org_url} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none" }}>
-                      <div
-                        style={{
-                          width: 80, height: 80,
-                          border: "1px solid rgba(255,255,255,0.3)",
-                          borderRadius: 10,
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          background: "rgba(255,255,255,0.05)",
-                          overflow: "hidden",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {hasLogo ? (
-                          <img
-                            src={`/white_logos/${logoSlug}.png`}
-                            alt={name}
-                            style={{ width: "72%", height: "72%", objectFit: "contain" }}
-                          />
-                        ) : (
-                          <span style={{ color: "white", fontWeight: 800, fontSize: "0.8rem", textAlign: "center", padding: "0.25rem" }}>
-                            {name}
-                          </span>
-                        )}
+                      <div style={{ width: 80, height: 80, border: "1px solid rgba(255,255,255,0.3)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.05)", overflow: "hidden", cursor: "pointer" }}>
+                        {hasLogo
+                          ? <img src={`/white_logos/${logoSlug}.png`} alt={name} style={{ width: "72%", height: "72%", objectFit: "contain" }} />
+                          : <span style={{ color: "white", fontWeight: 800, fontSize: "0.75rem", textAlign: "center", padding: "0.25rem" }}>{name}</span>
+                        }
                       </div>
                     </a>
                   ) : (
-                    <div
-                      style={{
-                        width: 80, height: 80,
-                        border: "1px solid rgba(255,255,255,0.15)",
-                        borderRadius: 10,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        background: "rgba(255,255,255,0.05)",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {hasLogo ? (
-                        <img
-                          src={`/white_logos/${logoSlug}.png`}
-                          alt={name}
-                          style={{ width: "72%", height: "72%", objectFit: "contain" }}
-                        />
-                      ) : (
-                        <span style={{ color: "white", fontWeight: 800, fontSize: "0.8rem", textAlign: "center", padding: "0.25rem" }}>
-                          {name}
-                        </span>
-                      )}
+                    <div style={{ width: 80, height: 80, border: "1px solid rgba(255,255,255,0.15)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
+                      {hasLogo
+                        ? <img src={`/white_logos/${logoSlug}.png`} alt={name} style={{ width: "72%", height: "72%", objectFit: "contain" }} />
+                        : <span style={{ color: "white", fontWeight: 800, fontSize: "0.75rem", textAlign: "center", padding: "0.25rem" }}>{name}</span>
+                      }
                     </div>
                   )}
-                  <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.72rem", letterSpacing: "0.06em", margin: 0, textAlign: "center" }}>
+                  <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.68rem", letterSpacing: "0.06em", margin: 0, textAlign: "center" }}>
                     {name}
                   </p>
                   {p?.org_url && (
-                    <a
-                      href={p.org_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        background: "transparent", color: "white", fontWeight: 700,
-                        fontSize: "0.72rem", letterSpacing: "0.07em",
-                        textTransform: "uppercase",
-                        border: "1px solid rgba(255,255,255,0.3)",
-                        borderRadius: 6, padding: "0.5rem 0.9rem",
-                        textDecoration: "none", display: "inline-block",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
+                    <a href={p.org_url} target="_blank" rel="noopener noreferrer"
+                      style={{ background: "transparent", color: "white", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.07em", textTransform: "uppercase", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 6, padding: "0.45rem 0.7rem", textDecoration: "none", display: "block", width: "100%", textAlign: "center", boxSizing: "border-box" }}>
                       Partner Website
                     </a>
                   )}
                 </div>
 
-                {/* Title block */}
+                {/* Title column */}
                 <div style={{ flex: 1 }}>
-                  <h1 style={{
-                    color: "white", fontWeight: 800,
-                    fontSize: "clamp(1.2rem, 2.5vw, 1.75rem)",
-                    lineHeight: 1.15, margin: 0,
-                    textTransform: "uppercase", letterSpacing: "0.02em",
-                  }}>
+                  <h1 style={{ color: "white", fontWeight: 800, fontSize: "clamp(1.2rem, 2.5vw, 1.75rem)", lineHeight: 1.15, margin: 0, textTransform: "uppercase", letterSpacing: "0.02em" }}>
                     {name}{fullName ? `: ${fullName}` : ""}
                   </h1>
                 </div>
               </div>
+
+              {/* Donor funding stat — only for donor partners */}
+              {clickedNode.label === "donor" && p?.total_grant_size && (
+                <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem", display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                  <p style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", margin: 0 }}>
+                    Total Contribution to CRAF&apos;d
+                  </p>
+                  <p style={{ fontWeight: 800, fontSize: "2.8rem", color: "white", margin: 0, lineHeight: 1 }}>
+                    {formatGrantSize(p.total_grant_size)}
+                  </p>
+                </div>
+              )}
 
               {/* Per-project sections — accordion for >1 project, flat for exactly 1 */}
               {partnerProjects.map((pp) => {

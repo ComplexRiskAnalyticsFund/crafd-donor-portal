@@ -64,7 +64,7 @@ export default function CoverageMap({ coverage }: { coverage: string | null }) {
           .join("path")
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .attr("d", (d) => pathGen(d as any) ?? "")
-          .attr("fill", "#151515"); // barely-visible continental texture
+          .attr("fill", "#3a3a3a");
 
         if (highlightIds.size > 0) {
           // Merge highlighted countries → dissolves internal political borders

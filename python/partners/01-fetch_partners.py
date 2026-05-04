@@ -22,6 +22,7 @@ rename_mapping = {
     "Organization logo (BW)":    "org_logo_white",
     "Organization logo (color)": "org_logo_color",
     "Website":                   "org_url",
+    "Total project grant size":  "total_grant_size",
 }
 
 df_partners = df_partners.rename(columns=rename_mapping)
@@ -132,6 +133,7 @@ selected_columns = [
     "org_logo_white",
     "logo_path",
     "org_url",
+    "total_grant_size",
 ]
 
 available_partner_cols = [c for c in selected_columns if c in df_partners.columns]
