@@ -17,6 +17,7 @@ export interface Partner {
   org_logo_white: string | null;
   logo_path: string | null;
   relational_project?: string;
+  org_url?: string | null;
 }
 
 export type PartnerConnectionType =

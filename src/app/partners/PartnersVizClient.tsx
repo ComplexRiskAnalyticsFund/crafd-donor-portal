@@ -4,12 +4,27 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import gsap from "gsap";
+import dynamic from "next/dynamic";
 import type { HexNode } from "@/lib/partners/label";
 import type { CrafdProject } from "@/types";
+
+const CoverageMap = dynamic(() => import("./CoverageMap"), { ssr: false, loading: () => null });
 
 const SQRT3 = Math.sqrt(3);
 const HEX_SIZE = 75;
 const GRID_LIMIT = 2400;
+
+// Per-project line colors: brown/amber shades cycling through projects
+const PROJECT_LINE_COLORS = [
+  "rgba(210, 155, 75, 0.82)",
+  "rgba(155, 95,  40, 0.85)",
+  "rgba(230, 185, 100, 0.78)",
+  "rgba(120, 65,  20, 0.88)",
+  "rgba(190, 130, 55, 0.82)",
+  "rgba(240, 200, 120, 0.74)",
+  "rgba(135, 75,  25, 0.85)",
+  "rgba(170, 110, 45, 0.80)",
+];
 
 function clampPan(x: number, y: number, s: number) {
   const maxX = Math.max(0, GRID_LIMIT * s - 900);
@@ -73,14 +88,14 @@ function projectsOverlap(a: string | undefined | null, b: string | undefined | n
   return false;
 }
 
-function resolveProject(
-  rpString: string | null | undefined,
-  map: Record<string, CrafdProject>
-): CrafdProject | null {
-  for (const name of parseProjects(rpString)) {
-    if (map[name]) return map[name];
-  }
-  return null;
+function formatGrantSize(raw: string | null | undefined): string {
+  if (!raw) return "—";
+  const num = parseFloat(raw.replace(/[^0-9.]/g, ""));
+  if (isNaN(num)) return raw;
+  const prefix = raw.includes("$") ? "$" : "";
+  if (num >= 1_000_000) return `${prefix}${(num / 1_000_000).toFixed(1)}M`;
+  if (num >= 1_000)     return `${prefix}${(num / 1_000).toFixed(0)}K`;
+  return raw;
 }
 
 // ── Stat card used in click state 2 ───────────────────────────────────────────
@@ -140,6 +155,7 @@ export default function PartnersVizClient({
   const [renderNodes, setRenderNodes] = useState<HexNode[]>([]);
   const [lockedGroup, setLockedGroup] = useState<Set<string> | null>(null);
   const [lockedFeature, setLockedFeature] = useState<string | null>(null);
+  const [lockedSourceNode, setLockedSourceNode] = useState<HexNode | null>(null);
   const [clickedNode, setClickedNode] = useState<HexNode | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -267,7 +283,7 @@ export default function PartnersVizClient({
           else router.replace(pathname);
           return;
         }
-        setLockedGroup(null); setLockedFeature(null); router.replace(pathname); return;
+        setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); router.replace(pathname); return;
       }
       if (e.key === "ArrowLeft")       setPan((p) => clampPan(p.x + PAN_STEP, p.y, scaleRef.current));
       else if (e.key === "ArrowRight") setPan((p) => clampPan(p.x - PAN_STEP, p.y, scaleRef.current));
@@ -297,6 +313,7 @@ export default function PartnersVizClient({
     setHoveredLabel(null);
     setLockedGroup(new Set([n.id, ...peers]));
     setLockedFeature(rf);
+    setLockedSourceNode(n);
     router.replace(`${pathname}?group=${encodeURIComponent(rf)}`);
   }
 
@@ -335,8 +352,25 @@ export default function PartnersVizClient({
   }, [hoveredPartnerNode, renderNodes]);
 
   const ordered = useMemo(() => {
+    // Compute hub IDs inline so hubs always render on top in CS1
+    const hubIds = new Set<string>();
+    if (lockedGroup && lockedFeature) {
+      const _lockedNodes = renderNodes.filter(n => n.kind === "partner" && lockedGroup.has(n.id));
+      for (const proj of parseProjects(lockedFeature)) {
+        const projNodes = _lockedNodes.filter(n => parseProjects(n.partner?.relational_project).has(proj));
+        const hub =
+          projNodes.find(n => n.partner?.crafd_connection?.includes("Project lead partner"))
+          ?? (lockedSourceNode && projNodes.some(n => n.id === lockedSourceNode.id) ? lockedSourceNode : null)
+          ?? projNodes[0];
+        if (hub) hubIds.add(hub.id);
+      }
+    }
+
     function priority(n: HexNode): number {
-      if (lockedGroup !== null && n.kind === "partner" && lockedGroup.has(n.id)) return 100;
+      if (lockedGroup !== null && n.kind === "partner") {
+        if (hubIds.has(n.id)) return 200;
+        if (lockedGroup.has(n.id)) return 100;
+      }
       if (hoveredPartnerNode && n.kind === "partner") {
         if (n.id === hoveredPartnerNode.id) return 100;
         if (relationalPeers.has(n.id)) return 50;
@@ -345,15 +379,67 @@ export default function PartnersVizClient({
       return base[n.kind];
     }
     return [...renderNodes].sort((a, b) => priority(a) - priority(b));
-  }, [renderNodes, hoveredPartnerNode, relationalPeers, lockedGroup]);
+  }, [renderNodes, hoveredPartnerNode, relationalPeers, lockedGroup, lockedFeature, lockedSourceNode]);
 
   const lockedNodes = useMemo(
     () => lockedGroup ? renderNodes.filter(n => n.kind === "partner" && lockedGroup.has(n.id)) : [],
     [lockedGroup, renderNodes],
   );
 
+  // Per-project hub-spoke line data for click state 1
+  const projectLineData = useMemo(() => {
+    if (!lockedGroup || !lockedNodes.length || !lockedFeature) return [];
+    const projects = [...parseProjects(lockedFeature)];
+    const isSingle = projects.length === 1;
+    return projects.flatMap((proj, idx) => {
+      const projNodes = lockedNodes.filter(n => parseProjects(n.partner?.relational_project).has(proj));
+      if (projNodes.length < 2) return [];
+      // Hub: project lead in this group, then the clicked node if it's here, then first node
+      const hub =
+        projNodes.find(n => n.partner?.crafd_connection?.includes("Project lead partner"))
+        ?? (lockedSourceNode && projNodes.some(n => n.id === lockedSourceNode.id) ? lockedSourceNode : null)
+        ?? projNodes[0];
+      const color = isSingle
+        ? "rgba(255,255,255,0.70)"
+        : PROJECT_LINE_COLORS[idx % PROJECT_LINE_COLORS.length];
+      return projNodes
+        .filter(n => n.id !== hub.id)
+        .map(spoke => ({
+          hub,
+          spoke,
+          color,
+          isSourceLine: spoke.id === lockedSourceNode?.id || hub.id === lockedSourceNode?.id,
+        }));
+    });
+  }, [lockedGroup, lockedNodes, lockedFeature, lockedSourceNode]);
+
+  // nodeId → first project color (used for hub glow ring)
+  const hubColors = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const { hub, color } of projectLineData) {
+      if (!map.has(hub.id)) map.set(hub.id, color);
+    }
+    return map;
+  }, [projectLineData]);
+
   return (
     <div className="relative h-full w-full">
+      <style>{`
+        .hub-ring {
+          fill-opacity: 0.38;
+          stroke-opacity: 0.90;
+          transform-origin: 0 0;
+          animation: hub-ring-burst 2.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+        }
+        @keyframes hub-ring-burst {
+          0%   { fill-opacity: 0.38; stroke-opacity: 0.90; transform: scale(1.02); }
+          100% { fill-opacity: 0;    stroke-opacity: 0;    transform: scale(1.62); }
+        }
+        details summary::-webkit-details-marker { display: none; }
+        details > summary { list-style: none; }
+        details[open] > summary .summary-arrow::after { content: "▾"; }
+        details:not([open]) > summary .summary-arrow::after { content: "▸"; }
+      `}</style>
       <svg
         ref={svgRef}
         viewBox="-900 -500 1800 1000"
@@ -371,7 +457,7 @@ export default function PartnersVizClient({
             x="-900" y="-500" width="1800" height="1000"
             fill="transparent"
             style={{ cursor: "default" }}
-            onClick={() => { setLockedGroup(null); setLockedFeature(null); setClickedNode(null); router.replace(pathname); }}
+            onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setClickedNode(null); router.replace(pathname); }}
           />
         )}
 
@@ -388,27 +474,30 @@ export default function PartnersVizClient({
             />
           ))}
 
-          {/* Connecting lines — black, drawn under hexes, edge-to-edge */}
-          {lockedGroup !== null && lockedNodes.map((a, i) =>
-            lockedNodes.slice(i + 1).map((b) => {
-              const dx = b.x - a.x;
-              const dy = b.y - a.y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              if (dist === 0) return null;
-              const ux = dx / dist;
-              const uy = dy / dist;
-              return (
-                <line
-                  key={`conn-${a.id}-${b.id}`}
-                  x1={a.x + ux * a.r} y1={a.y + uy * a.r}
-                  x2={b.x - ux * b.r} y2={b.y - uy * b.r}
-                  stroke="black"
-                  strokeWidth={3}
+          {/* Connecting lines — per-project hub-spoke, drawn under hexes */}
+          {projectLineData.map(({ hub, spoke, color, isSourceLine }, i) => {
+            const dx = spoke.x - hub.x;
+            const dy = spoke.y - hub.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist === 0) return null;
+            const ux = dx / dist, uy = dy / dist;
+            const x1 = hub.x + ux * hub.r, y1 = hub.y + uy * hub.r;
+            const x2 = spoke.x - ux * spoke.r, y2 = spoke.y - uy * spoke.r;
+            return (
+              <g key={`conn-${i}-${hub.id}-${spoke.id}`}>
+                {isSourceLine && (
+                  <line x1={x1} y1={y1} x2={x2} y2={y2}
+                    stroke={color} strokeWidth={18} strokeOpacity={0.22} strokeLinecap="round" />
+                )}
+                <line x1={x1} y1={y1} x2={x2} y2={y2}
+                  stroke={color}
+                  strokeWidth={isSourceLine ? 7 : 2}
+                  strokeOpacity={isSourceLine ? 1 : undefined}
                   strokeLinecap="round"
                 />
-              );
-            })
-          )}
+              </g>
+            );
+          })}
 
           {ordered.map((n) => {
             let nodeOpacity = (n.kind === "partner" || n.kind === "more") ? 0.95 : 1;
@@ -609,6 +698,29 @@ export default function PartnersVizClient({
               >
                 {/* SVG translate: positions origin at hex center */}
                 <g transform={`translate(${n.x},${n.y})`}>
+                  {/* Hub glow — static inner halo + 3 expanding burst rings */}
+                  {hubColors.has(n.id) && (
+                    <>
+                      <path
+                        d={hexPathFlat(0, 0, n.r * 1.22)}
+                        fill={hubColors.get(n.id)!}
+                        stroke={hubColors.get(n.id)!}
+                        strokeWidth={4}
+                        style={{ fillOpacity: 0.28, strokeOpacity: 0.70 }}
+                      />
+                      {([0, 0.8, 1.6] as const).map((delay) => (
+                        <path
+                          key={delay}
+                          d={hexPathFlat(0, 0, n.r * 1.05)}
+                          fill={hubColors.get(n.id)!}
+                          stroke={hubColors.get(n.id)!}
+                          strokeWidth={2.5}
+                          className="hub-ring"
+                          style={{ animationDelay: `${delay}s`, transformOrigin: "0 0" }}
+                        />
+                      ))}
+                    </>
+                  )}
                   {/* CSS scale: origin (0,0) = hex center → always anchored correctly */}
                   <g
                     style={{
@@ -692,7 +804,7 @@ export default function PartnersVizClient({
             }}
           >
             <button
-              onClick={() => { setLockedGroup(null); setLockedFeature(null); setClickedNode(null); router.replace(pathname); }}
+              onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setClickedNode(null); router.replace(pathname); }}
               style={{
                 alignSelf: "flex-end", background: "none",
                 border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%",
@@ -702,34 +814,62 @@ export default function PartnersVizClient({
             >×</button>
 
             {(() => {
-              const cs1Project = resolveProject(lockedFeature, projectsByTitle);
-              const cs1ShortTitles = [...parseProjects(lockedFeature)].join(", ");
+              const projects = [...parseProjects(lockedFeature)];
+              const partnerName =
+                lockedSourceNode?.partner?.org_short_name
+                ?? lockedSourceNode?.name
+                ?? "Partner";
               return (
                 <>
                   <p style={{ fontSize: "0.7rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#F1B434", margin: 0 }}>
-                    Relational Ecosystem{cs1ShortTitles ? `: ${cs1ShortTitles}` : ""}
+                    Ecosystem of {partnerName}
                   </p>
-                  <h2 style={{ fontSize: "1.6rem", fontWeight: 800, lineHeight: 1.2, margin: 0 }}>
-                    {cs1Project?.full_title ?? cs1Project?.project_label ?? `${lockedGroup.size} Connected Partners`}
-                  </h2>
+
+                  <p style={{ fontSize: "0.8rem", margin: 0, lineHeight: 2 }}>
+                    {projects.map((proj, idx) => (
+                      <span key={proj}>
+                        {idx > 0 && <span style={{ color: "rgba(255,255,255,0.35)" }}> · </span>}
+                        <button
+                          onClick={() => document.getElementById(`cs1-proj-${idx}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                          style={{
+                            background: "none", border: "none", padding: 0,
+                            color: "#F1B434", textDecoration: "underline",
+                            cursor: "pointer", font: "inherit", fontSize: "0.8rem",
+                          }}
+                        >
+                          {proj}
+                        </button>
+                      </span>
+                    ))}
+                  </p>
+
                   <div style={{ width: 40, height: 2, background: "#F1B434", borderRadius: 1 }} />
-                  {cs1Project?.project_blurb ? (
-                    <p style={{ fontSize: "0.92rem", lineHeight: 1.75, opacity: 0.8, margin: 0 }}>
-                      {cs1Project.project_blurb}
-                    </p>
-                  ) : (
-                    <>
-                      <p style={{ fontSize: "0.92rem", lineHeight: 1.75, opacity: 0.8, margin: 0 }}>
-                        {lockedGroup.size} partners connected through this relational ecosystem.
-                      </p>
-                    </>
-                  )}
+
+                  {projects.map((proj, idx) => {
+                    const pd = projectsByTitle[proj];
+                    return (
+                      <div
+                        key={proj}
+                        id={`cs1-proj-${idx}`}
+                        style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}
+                      >
+                        <h3 style={{ fontSize: "1.15rem", fontWeight: 800, lineHeight: 1.25, margin: 0 }}>
+                          {pd?.full_title ?? pd?.project_label ?? proj}
+                        </h3>
+                        {pd?.project_blurb && (
+                          <p style={{ fontSize: "0.88rem", lineHeight: 1.75, opacity: 0.78, margin: 0 }}>
+                            {pd.project_blurb}
+                          </p>
+                        )}
+                        {idx < projects.length - 1 && (
+                          <div style={{ width: "100%", height: 1, background: "rgba(255,255,255,0.08)", marginTop: "0.5rem" }} />
+                        )}
+                      </div>
+                    );
+                  })}
                 </>
               );
             })()}
-            <p style={{ fontSize: "0.78rem", opacity: 0.4, margin: 0, lineHeight: 1.6 }}>
-              Click a highlighted partner to explore its details.
-            </p>
           </div>
         </div>
       )}
@@ -792,10 +932,9 @@ export default function PartnersVizClient({
         const connection = p?.crafd_connection ?? "";
         const logoSlug = toLogoSlug(name);
         const hasLogo = slugSet.has(logoSlug);
-        const project = resolveProject(
-          lockedFeature ?? p?.relational_project,
-          projectsByTitle
-        );
+
+        const partnerProjects = [...parseProjects(lockedFeature ?? p?.relational_project)]
+          .map(proj => ({ key: proj, data: projectsByTitle[proj] ?? null }));
 
         return (
           <div
@@ -809,7 +948,7 @@ export default function PartnersVizClient({
               setClickedNode(null);
               if (lockedFeature) router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature)}`);
               else router.replace(pathname);
-            }} // click backdrop to close
+            }}
           >
             <div
               style={{
@@ -825,7 +964,7 @@ export default function PartnersVizClient({
                 maxHeight: "90vh",
                 overflowY: "auto",
               }}
-              onClick={(e) => e.stopPropagation()} // don't close when clicking card
+              onClick={(e) => e.stopPropagation()}
             >
               {/* Close */}
               <button
@@ -843,102 +982,184 @@ export default function PartnersVizClient({
                 }}
               >×</button>
 
-              {/* Header row: logo + title */}
+              {/* Header row: logo + title block */}
               <div style={{ display: "flex", gap: "1.75rem", alignItems: "flex-start", paddingRight: "3rem" }}>
-                {/* Logo box */}
+                {/* Logo box — clickable if org_url available */}
                 <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
-                  <div
-                    style={{
-                      width: 80, height: 80,
-                      border: "1px solid rgba(255,255,255,0.15)",
-                      borderRadius: 10,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      background: "rgba(255,255,255,0.05)",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {hasLogo ? (
-                      <img
-                        src={`/white_logos/${logoSlug}.png`}
-                        alt={name}
-                        style={{ width: "72%", height: "72%", objectFit: "contain" }}
-                      />
-                    ) : (
-                      <span style={{ color: "white", fontWeight: 800, fontSize: "0.8rem", textAlign: "center", padding: "0.25rem" }}>
-                        {name}
-                      </span>
-                    )}
-                  </div>
+                  {p?.org_url ? (
+                    <a href={p.org_url} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none" }}>
+                      <div
+                        style={{
+                          width: 80, height: 80,
+                          border: "1px solid rgba(255,255,255,0.3)",
+                          borderRadius: 10,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          background: "rgba(255,255,255,0.05)",
+                          overflow: "hidden",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {hasLogo ? (
+                          <img
+                            src={`/white_logos/${logoSlug}.png`}
+                            alt={name}
+                            style={{ width: "72%", height: "72%", objectFit: "contain" }}
+                          />
+                        ) : (
+                          <span style={{ color: "white", fontWeight: 800, fontSize: "0.8rem", textAlign: "center", padding: "0.25rem" }}>
+                            {name}
+                          </span>
+                        )}
+                      </div>
+                    </a>
+                  ) : (
+                    <div
+                      style={{
+                        width: 80, height: 80,
+                        border: "1px solid rgba(255,255,255,0.15)",
+                        borderRadius: 10,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        background: "rgba(255,255,255,0.05)",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {hasLogo ? (
+                        <img
+                          src={`/white_logos/${logoSlug}.png`}
+                          alt={name}
+                          style={{ width: "72%", height: "72%", objectFit: "contain" }}
+                        />
+                      ) : (
+                        <span style={{ color: "white", fontWeight: 800, fontSize: "0.8rem", textAlign: "center", padding: "0.25rem" }}>
+                          {name}
+                        </span>
+                      )}
+                    </div>
+                  )}
                   <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.72rem", letterSpacing: "0.06em", margin: 0, textAlign: "center" }}>
                     {name}
                   </p>
                 </div>
 
-                {/* Title + description */}
+                {/* Title block */}
                 <div style={{ flex: 1 }}>
                   <h1 style={{
                     color: "white", fontWeight: 800,
                     fontSize: "clamp(1.2rem, 2.5vw, 1.75rem)",
-                    lineHeight: 1.15, margin: "0 0 1rem",
+                    lineHeight: 1.15, margin: 0,
                     textTransform: "uppercase", letterSpacing: "0.02em",
                   }}>
                     {name}{fullName ? `: ${fullName}` : ""}
                   </h1>
-                  <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "0.9rem", lineHeight: 1.75, margin: 0 }}>
-                    {project?.project_blurb ?? "No project description available."}
-                  </p>
+                  {connection && (
+                    <p style={{ fontSize: "0.72rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "#F1B434", margin: "0.3rem 0 0.4rem" }}>
+                      {connection}
+                    </p>
+                  )}
+                  {partnerProjects.length > 0 && (
+                    <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.5)", margin: 0, lineHeight: 1.7 }}>
+                      {partnerProjects.map(pp => pp.data?.project_label ?? pp.key).join(" · ")}
+                    </p>
+                  )}
                 </div>
               </div>
 
-              {/* Stat cards */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr 1fr 1fr", gap: "0.9rem" }}>
-                <StatCard label="Status" accent>
-                  <p style={{ fontWeight: 800, fontSize: "0.9rem", margin: 0, textTransform: "uppercase", lineHeight: 1.3 }}>
-                    {project?.project_status ?? connection ?? "Active"}
-                  </p>
-                </StatCard>
+              {/* Per-project accordions */}
+              {partnerProjects.map((pp, idx) => {
+                const pd = pp.data;
+                const title = pd?.full_title ?? pd?.project_label ?? pp.key;
+                return (
+                  <details key={pp.key} open={idx === 0}
+                    style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem" }}>
+                    <summary style={{
+                      cursor: "pointer",
+                      display: "flex", justifyContent: "space-between", alignItems: "center",
+                      fontWeight: 800, fontSize: "1.05rem", color: "white", marginBottom: "1rem",
+                    }}>
+                      <span>{title}</span>
+                      <span className="summary-arrow" style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.4)", fontWeight: 400, marginLeft: "1rem" }} />
+                    </summary>
 
-                <StatCard label="Coverage">
-                  <p style={{ fontWeight: 700, fontSize: "0.9rem", margin: 0, lineHeight: 1.5 }}>
-                    {project?.project_coverage ?? "—"}
-                  </p>
-                </StatCard>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+                      {pd?.project_blurb && pd.project_blurb.trim() !== "N/A" && (
+                        <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "0.9rem", lineHeight: 1.75, margin: 0 }}>
+                          {pd.project_blurb}
+                        </p>
+                      )}
 
-                <StatCard label="Grant Size">
-                  <p style={{ fontWeight: 800, fontSize: "1.4rem", margin: 0, lineHeight: 1 }}>
-                    {project?.grant_size ?? "—"}
-                  </p>
-                </StatCard>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr 1fr 1fr", gap: "0.9rem" }}>
+                        <StatCard label="Role" accent>
+                          <p style={{ fontWeight: 800, fontSize: "0.85rem", margin: 0, textTransform: "uppercase", lineHeight: 1.4 }}>
+                            {connection || "Partner"}
+                          </p>
+                        </StatCard>
 
-                <StatCard label="Project Duration">
-                  <p style={{ fontWeight: 800, fontSize: "1.8rem", margin: 0, lineHeight: 1 }}>
-                    {project?.duration_months ?? "—"}
-                  </p>
-                  {project?.duration_months && (
-                    <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", margin: 0 }}>MONTHS</p>
-                  )}
-                </StatCard>
-              </div>
+                        <StatCard label="Coverage">
+                          {pd?.project_coverage
+                            ? <CoverageMap coverage={pd.project_coverage} />
+                            : <p style={{ fontWeight: 700, fontSize: "0.9rem", margin: 0 }}>—</p>
+                          }
+                        </StatCard>
 
-              {/* CTA buttons */}
-              <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-                {project?.project_url && (
+                        <StatCard label="Grant Size">
+                          <p style={{ fontWeight: 800, fontSize: "2.6rem", margin: 0, lineHeight: 1, textAlign: "center", width: "100%" }}>
+                            {formatGrantSize(pd?.grant_size)}
+                          </p>
+                        </StatCard>
+
+                        <StatCard label="Duration">
+                          <p style={{ fontWeight: 800, fontSize: "2.6rem", margin: 0, lineHeight: 1, textAlign: "center", width: "100%" }}>
+                            {pd?.duration_months ?? "—"}
+                          </p>
+                          {pd?.duration_months && (
+                            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", margin: 0, textAlign: "center", width: "100%" }}>MONTHS</p>
+                          )}
+                        </StatCard>
+                      </div>
+
+                      {pd?.project_url && (
+                        <div>
+                          <a
+                            href={pd.project_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              background: "#F1B434", color: "#000", fontWeight: 800,
+                              fontSize: "0.78rem", letterSpacing: "0.08em",
+                              textTransform: "uppercase", border: "none", borderRadius: 6,
+                              padding: "0.75rem 1.4rem", cursor: "pointer",
+                              textDecoration: "none", display: "inline-block",
+                            }}
+                          >
+                            CRAF&apos;d Project Page
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  </details>
+                );
+              })}
+
+              {/* Partner website — outside accordions, at bottom */}
+              {p?.org_url && (
+                <div style={{ paddingTop: "0.5rem", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
                   <a
-                    href={project.project_url}
+                    href={p.org_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
-                      background: "#F1B434", color: "#000", fontWeight: 800,
+                      background: "transparent", color: "white", fontWeight: 700,
                       fontSize: "0.78rem", letterSpacing: "0.08em",
-                      textTransform: "uppercase", border: "none", borderRadius: 6,
-                      padding: "0.75rem 1.4rem", cursor: "pointer",
+                      textTransform: "uppercase",
+                      border: "1px solid rgba(255,255,255,0.3)",
+                      borderRadius: 6, padding: "0.75rem 1.4rem",
                       textDecoration: "none", display: "inline-block",
                     }}
                   >
-                    CRAF&apos;d Project Page
+                    Partner Website ↗
                   </a>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         );

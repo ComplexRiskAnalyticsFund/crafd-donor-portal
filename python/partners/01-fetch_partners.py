@@ -21,6 +21,7 @@ rename_mapping = {
     "Support for CRAF'd projects": "relational_project",
     "Organization logo (BW)":    "org_logo_white",
     "Organization logo (color)": "org_logo_color",
+    "Organization URL":          "org_url",
 }
 
 df_partners = df_partners.rename(columns=rename_mapping)
@@ -130,6 +131,7 @@ selected_columns = [
     "relational_project",
     "org_logo_white",
     "logo_path",
+    "org_url",
 ]
 
 df_out = df_partners[selected_columns].copy()
