@@ -1,0 +1,233 @@
+[
+  {
+    "project_short_title":"Hazard Modeling",
+    "project_label":"ICPAC: Hazard Modeling",
+    "full_title":"Hazard modeling, impact estimation, climate storylines for event catalogue on drought and flood disasters in the Eastern Africa",
+    "project_blurb":"A new composite-risk initiative that is transforming drought and\nflood modelling across Eastern Africa. It pairs ensemble forecasts with concise climate storylines to reveal how climate, conflict, and displacement pressures overlap. The resulting hazard-impact datasets give governments and humanitarian partners a sharper basis for impact-based forecasting, anticipatory action, and loss-and-damage assessment. Led by ICPAC, the project will feed these insights into early-warning triggers and response planning across East Africa. ",
+    "project_url":"https:\/\/crafd.io\/projects\/igad",
+    "grant_size":"$500,065",
+    "project_status":"Ongoing",
+    "duration_months":"24",
+    "project_coverage":"East Africa"
+  },
+  {
+    "project_short_title":"GEOGUARD",
+    "project_label":"DPPA: GEOGUARD",
+    "full_title":"Geoguard - Geospatial Dashboards for Climate Assessment and Early Warning",
+    "project_blurb":"Geoguard is a geospatial crisis-forecasting platform that brings\ntogether environmental, conflict, and social data to surface patterns linked to emerging climate-security risks. Piloted across Central Africa, West Africa, and the Middle East, its methodology has been applied in 29 countries. With CRAF\u2019d support, the platform is strengthening its data infrastructure and expanding collaboration on transboundary risks. Developed by the Innovation Cell of the United Nations Department of Political and Peacebuilding Affairs (DPPA), Geoguard supports preventive efforts through geospatial analysis.",
+    "project_url":"https:\/\/crafd.io\/projects\/geoguard",
+    "grant_size":"$700,000",
+    "project_status":"Operationally closed",
+    "duration_months":"24",
+    "project_coverage":"Middle East, Central & West Africa"
+  },
+  {
+    "project_short_title":"Maintaining ACLED",
+    "project_label":"ACLED: Maintaining ACLED",
+    "full_title":"Maintaining & Improving ACLED's Core Operations, Accessibility, and Interoperability",
+    "project_blurb":"With a new two-year CRAF\u2019d grant (2024-2026), ACLED is expanding its reach, sharpening its tools, and delivering conflict\ninsights when they matter most. ACLED is the world\u2019s leading\nsource of high-quality, real-time data and analysis on political violence and protest, powering earlier, faster, and more targeted crisis action. Its trusted, evidence-based insights serve policymakers, humanitarian practitioners, journalists, academics, and the\nwider public. With global coverage, ACLED has documented more\nthan 1.9 million conflict events from sources in over 100 languages, grounded in more than 60 partnerships and long standing\nrelationships with local actors across the crisis data ecosystem.\nThe CRAF\u2019d-ACLED partnership has already delivered tangible\nresults, reinforcing ACLED\u2019s role as a cornerstone of the crisis\ndata ecosystem. Between 2022 and 2024, ACLED nearly doubled\nits registered users to over 67,000, expanded its network to more\nthan 60 partners, and introduced or refined 5 analytical tools now\nembedded in decision-making processes and program planning to\nbetter anticipate, prevent, and respond to crises.",
+    "project_url":"https:\/\/crafd.io\/projects\/acled",
+    "grant_size":"$14,800,000",
+    "project_status":"Ongoing",
+    "duration_months":"24",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"Kente Threads",
+    "project_label":"FHN: Kente Threads",
+    "full_title":"Kente Threads: Weaving leadership from displacement data",
+    "project_blurb":"A participatory data initiative rooted in local leadership,\nincluding HERDATA, is set to strengthen crisis response\nand resilience by elevating displaced women\u2019s leadership. Led by the Feminist Humanitarian Network\nwith local partners, the project will reach over 100,000\nwomen in displacement settings.",
+    "project_url":null,
+    "grant_size":"$299,749",
+    "project_status":"Ongoing",
+    "duration_months":"12",
+    "project_coverage":"Kenya"
+  },
+  {
+    "project_short_title":"Women's Mobilization Within Armed Groups",
+    "project_label":"Korbel: Women's Mobilization Within Armed Groups",
+    "full_title":"Women\u2019s Mobilization Within Armed Groups During and After War",
+    "project_blurb":"A first-of-its-kind global dataset on women\u2019s roles\nin non-state armed groups is set to enhance peacebuilding across 500 women\u2019s wings of non-state\narmed groups. Led by the University of Denver in\ncollaboration with research partners, the project will\ninform programming in conflict-affected settings. ",
+    "project_url":null,
+    "grant_size":"$400,000",
+    "project_status":"Ongoing",
+    "duration_months":"24",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"Internal Displacement Data",
+    "project_label":"IDMC: Internal Displacement Data",
+    "full_title":"Global harmonized data on internal displacement to inform prevention, response and solutions",
+    "project_blurb":"The IDMC is reshaping how displacement data drives crisis action. By applying AI, automated pipelines, and a worldwide monitoring network, it harmonizes the leading datasets on internal displacement, now affecting more than 83 million people, to deliver timely, disaggregated insights. IDMC equips humanitarian and development actors with the evidence needed for faster, more targeted, and dignified support. ",
+    "project_url":"https:\/\/crafd.io\/projects\/idmc",
+    "grant_size":"$1,500,000",
+    "project_status":"Ongoing",
+    "duration_months":"24",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"Transformative Outcomes",
+    "project_label":"UN Women: Transformative Outcomes",
+    "full_title":"Transformative Outcomes: Leveraging Crisis Data in conflict",
+    "project_blurb":"Disaggregated data made accessible through an interactive platform and standardized analysis will support\nmore informed, real-time assistance for at least 20\nmillion people in crisis settings. The project is led by\nUN Women and backed by a broad coalition of six\nnational NGO partners.",
+    "project_url":null,
+    "grant_size":"$1,000,000",
+    "project_status":"Ongoing",
+    "duration_months":"24",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"INFORM Warning",
+    "project_label":"INFORM Consortium: INFORM Warning",
+    "full_title":"INFORM WARNING - An open system to aggregate and present quantified, multi-hazard information to support crisis preparedness and anticipatory action",
+    "project_blurb":"INFORM Warning is setting a new benchmark for global risk anticipation. Developed by a global consortium of over 35 partners, INFORM Warning will be a state-of-the-art global risk monitoring tool for anticipating complex risks up to a year in advance. As part of the INFORM product family, it complements existing tools by linking baseline risk metrics to actionable foresight. INFORM Warning beyond traditional methods by integrating new multi-hazard information from diverse sources. The tool\u2019s distinctive approach will provide valuable insights into forecasts, scenarios, and potential crisis-triggering events. Hosted by United Nations Development Programme (UNDP) Crisis Bureau, the platform is being scaled globally with support from CRAF\u2019d.",
+    "project_url":"https:\/\/crafd.io\/projects\/inform-warning",
+    "grant_size":"$700,000",
+    "project_status":"Operationally closed",
+    "duration_months":"24",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"Conflict Climate Displacement",
+    "project_label":"RCCC: Conflict Climate Displacement",
+    "full_title":"Conflict-climate-displacement & vulnerability data in Africa and MENA",
+    "project_blurb":"A new generation risk data initiative is shining a light on where\nclimate, conflict, and displacement risks collide across sub-Saharan Africa, North Africa, and the Middle East (MENA). By integrating these drivers into one analytical stream, it delivers actionable insights tailored to conflict-affected and climate-vulnerable populations, filling critical gaps and enabling anticipatory action. Led by the Red Cross Red Crescent Climate Centre, together with the Netherlands Red Cross\u2019 510 Initiative and the International Committee of the Red Cross (ICRC), the risk data supports more informed and anticipatory decision-making across the humanitarian system. ",
+    "project_url":"https:\/\/crafd.io\/projects\/rccc",
+    "grant_size":"$499,986",
+    "project_status":"Ongoing",
+    "duration_months":"24",
+    "project_coverage":"East Africa & MENA"
+  },
+  {
+    "project_short_title":"PRIMARI",
+    "project_label":"IOM: PRIMARI",
+    "full_title":"Progressive Representation of Internal Migration and Risk Intelligence (PRIMARI)",
+    "project_blurb":"PRIMARI sets a new benchmark for displacement insight. Delivered through IOM\u2019s public Displacement Tracking Matrix (DTM) API, the open, sub-national dataset merges mobility-tracking and flow-monitoring data from up to 90 countries. Its harmonized feeds let responders track movements in near-real time, map emerging risks, and direct assistance faster. Backed by CRAF\u2019d, IOM\u2019s Global Data Institute is positioning PRIMARI as the humanitarian sector\u2019s core data backbone. ",
+    "project_url":"https:\/\/crafd.io\/projects\/iom",
+    "grant_size":"$500,000",
+    "project_status":"Operationally closed",
+    "duration_months":"18",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"GUARD",
+    "project_label":"IFRC: GUARD",
+    "full_title":"Gender Understanding and Analysis for Response to Disasters",
+    "project_blurb":"Innovative real-time data and tools will identify at-risk\npopulations within 48 hours of disasters, enabling\nfaster and more equitable response. Led by IFRC with\na broad coalition of eight partners, the project could\nimprove assistance for up to 100 million people. ",
+    "project_url":null,
+    "grant_size":"$599,735",
+    "project_status":"Ongoing",
+    "duration_months":"24",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"CRAF'd Sec.Direct Cost 2022",
+    "project_label":"CRAF'd Sec.Direct Cost 2022(2)",
+    "full_title":"CRAF'd Sec.Direct Cost 2022(2)",
+    "project_blurb":"N\/A",
+    "project_url":null,
+    "grant_size":"$1,428,022",
+    "project_status":"Ongoing",
+    "duration_months":"12",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"Strengthening CRAF'd Ecosystem",
+    "project_label":"NORCAP: Strengthening CRAF'd Ecosystem",
+    "full_title":"Strengthening the CRAF\u2019d Data Ecosystem for More Effective Crisis Action",
+    "project_blurb":"With this project, CRAF\u2019d and its partners help better connect\nstakeholders across the crisis data ecosystem. Conferences,\nresearch and other initiatives supported by this project are designed to bring data providers, practitioners, and policy experts together. NORCAP acts as the manager for the project and collaborates closely with CRAF\u2019d and its partners to enable ecosystem activities.",
+    "project_url":"https:\/\/crafd.io\/data-financing\/norcap",
+    "grant_size":"$1,000,000",
+    "project_status":"Ongoing",
+    "duration_months":"51",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"VIEWS-PIN",
+    "project_label":"PRIO: VIEWS",
+    "full_title":"VIEWS-PIN: People in Need",
+    "project_blurb":"VIEWS-PIN is breaking new ground in forecasting conflict-driven\nhumanitarian needs. It blends curated, high-resolution conflict and climate data with advanced machine learning to deliver sub-national forecasts up to 36 months in advance. Available via an open dashboard, these forecasts inform planning for food insecurity, displacement, and political violence in fragile settings. Developed by the PRIO and Uppsala University, VIEWS-PIN brings over 60 years of conflict research into the next generation of early warning systems. ",
+    "project_url":"https:\/\/crafd.io\/data-financing\/norcap",
+    "grant_size":"$700,000",
+    "project_status":"Ongoing",
+    "duration_months":"24",
+    "project_coverage":"All low-and middle-income countries"
+  },
+  {
+    "project_short_title":"Rapid Assessment Data",
+    "project_label":"OHCHR: Rapid Assessment Data",
+    "full_title":"Rapid Assessment Data: Preventing conflict-related sexual violence",
+    "project_blurb":"Cutting-edge AI-powered data on conflict-related sexual\nviolence will expand coverage, accelerate reporting,\nand inform more than $15 million in protection efforts.\nPiloted in six conflict-affected countries, the project is\nled by Office of the United Nations High Commissioner\nfor Human Rights with a view to broader scale-up",
+    "project_url":null,
+    "grant_size":"$499,968",
+    "project_status":"Ongoing",
+    "duration_months":"24",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"eEARTH",
+    "project_label":"ICG: EEARTH",
+    "full_title":"Environmental Early Action and Risk Tracking Hub (EEARTH)",
+    "project_blurb":"The Environmental Early Action and Risk Tracking Hub (eEARTH)\nis breaking new ground in how we anticipate climate-driven conflict. Piloted in Somalia and South Sudan, it equips decision-makers with tailored intelligence to prevent crises before they escalate. Developed by the International Crisis Group, the leading conflict prevention organization grounded in field research, eEARTH transforms data into timely, anticipatory action. ",
+    "project_url":"https:\/\/crafd.io\/projects\/eearth",
+    "grant_size":"$700,000",
+    "project_status":"Operationally closed",
+    "duration_months":"18",
+    "project_coverage":"Somalia, South Sudan"
+  },
+  {
+    "project_short_title":"ACLED Data",
+    "project_label":"ACLED: ACLED Data",
+    "full_title":"Armed Conflict Location & Event Data Project (ACLED)",
+    "project_blurb":"N\/A",
+    "project_url":"https:\/\/crafd.io\/projects\/acled-grant-2021",
+    "grant_size":"$14,708,969",
+    "project_status":"Fully closed",
+    "duration_months":"24",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"Risk DataHub",
+    "project_label":"UNDP: DataHub",
+    "full_title":"Risk Anticipation Data Hub",
+    "project_blurb":"A next-generation platform brings more than 15,000 crisis indicators into one open, AI-enabled space, making risk data faster, smarter, and easier to act on. Drawing from over 20 public sources, it pairs real-time analytics with a conversational AI assistant so users can query risks in plain language, track emerging threats, and pull insights directly into their own systems through an open API, supporting over 7,500 practitioners across the humanitarian, development, and peace fields. The Data Hub is being developed by United Nations Development Programme (UNDP) Crisis Bureau to help partners to better crisis anticipation, prevention, and response. ",
+    "project_url":"https:\/\/crafd.io\/projects\/undp",
+    "grant_size":"$500,000",
+    "project_status":"Operationally closed",
+    "duration_months":"24",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"EMPOW",
+    "project_label":"PRIO: EMPOW",
+    "full_title":"Women\u2019s Empowerment in Peace Processes",
+    "project_blurb":"A new multi-decade dataset tracking women\u2019s roles\nin peace processes is set to improve inclusive peacebuilding worldwide. Led by Peace Research Institute\nOslo (PRIO) with academic partners, the project will\nshare open data and insights that could benefit 20\nmillion people.",
+    "project_url":null,
+    "grant_size":"$800,000",
+    "project_status":"Ongoing",
+    "duration_months":"24",
+    "project_coverage":"Global"
+  },
+  {
+    "project_short_title":"CLIFDEW-GRID",
+    "project_label":"UNHCR: CLIFDEW-GRID",
+    "full_title":"CLIFDEW-GRID: Early Warning Grid-Based Risk Modelling of Climate Induced Forced Displacement",
+    "project_blurb":"CLIFDEW-GRID is redefining how we understand climate-induced displacement. By shifting from national averages to a granular, grid-level view, this pioneering model captures where and how displacement risks are rising across West and East Africa. Drawing on cutting-edge analytics, the initiative offers a powerful tool to anticipate future hotspots and enable faster, more targeted crisis action. Developed by UNHCR and the University of California, Irvine, CLIFDEW-GRID helps turn data into early action. ",
+    "project_url":"https:\/\/crafd.io\/projects\/clifdewgrid",
+    "grant_size":"$500,071",
+    "project_status":"Operationally closed",
+    "duration_months":"24",
+    "project_coverage":"West and East Africa"
+  },
+  {
+    "project_short_title":"CRAF'd Direct Costs",
+    "project_label":"CRAF'd Direct Costs",
+    "full_title":null,
+    "project_blurb":"With CRAF\u2019d funding, ACLED continues providing real-time, geo-coded and disaggregated conflict data worldwide and enables its 40,000 users to generate insights that feed directly into evidence-based policymaking and decision-making, strategic planning, and effective programming around the world.  ",
+    "project_url":null,
+    "grant_size":"$8,560",
+    "project_status":"Fully closed",
+    "duration_months":"12",
+    "project_coverage":"Global"
+  }
+]

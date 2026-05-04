@@ -6,11 +6,14 @@ export type PartnerLabel = "collaborating" | "project" | "un" | "other" | "donor
 export function labelPartner(p: Partner): PartnerLabel {
   const conn = (p.crafd_connection ?? "").toLowerCase();
 
+  // "donor partner" comes from donors.json; keep the check for safety
   if (conn.includes("donor partner")) return "donor";
-  if (conn.includes("lead project")) return "project";
+  // "project lead partner" (new format) or "lead project partner" (old format)
+  if (conn.includes("project lead") || conn.includes("lead project")) return "project";
+  // "mou signatory" (new) or "mou signatory/un partner" (old)
   if (conn.includes("mou")) return "un";
-  if (conn.includes("collaborating") || conn.includes("implementing"))
-    return "collaborating";
+  // "collaborating partner", "implementing partner", "complementary donor, collaborating partner"
+  if (conn.includes("collaborating") || conn.includes("implementing")) return "collaborating";
   return "other";
 }
 
@@ -169,6 +172,7 @@ export function buildPartnerHexNodes(
     const rawConn = (p.crafd_connection ?? "").replace(/[‘’]/g, "’");
     if (rawConn.toLowerCase().includes("craf’d")) continue;
     if (/mptfo/i.test(p.org_short_name ?? "") || /mptfo/i.test(p.org_full_name ?? "")) continue;
+    if (rawConn.toLowerCase().includes("administrative agent")) continue;
 
     // Action Aid International is an exception: always placed in the
     // collaborating cluster regardless of its connection type.

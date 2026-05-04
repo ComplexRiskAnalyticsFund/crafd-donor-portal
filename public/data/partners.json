@@ -1,1222 +1,1338 @@
 [
   {
-    "org_short_name": " AAN",
-    "org_full_name": "Afghanistan Analysts Network ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":" AAN",
+    "org_full_name":"Afghanistan Analysts Network ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":" AWLN",
+    "org_full_name":"African Women Leaders Network",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":"AWLN-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/TC_s1KexTQlcHU2EcW-nhw\/BJ0w4KRE5RNwos8Ef0je_4b8o9_-VliDd-ILeg_jSQvmh9ilXdd94LwqTBTPkMNkdqrafjJDRi9TFb9SgRVp0bVvoyE2-hYR69slm484gne4kQNdM2GHL13IyZlVsTxUWyReMwywB7urFMg7k0ANIk01BAHSkByml_z0FsxLO4g\/lfEwVnr7JYF4rTkSTFHQRQtBxaZDHBiXMnsoB-t-khg)",
+    "logo_path":"\/white_logos\/awln.png"
+  },
+  {
+    "org_short_name":" SRMO",
+    "org_full_name":"Safety and Risk Mitigation Organization ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":"3iS",
+    "org_full_name":"3iS",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Internal Displacement Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":"510",
+    "org_full_name":"The Netherlands Red Cross\u2018 data and digital unit 510",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Conflict Climate Displacement",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":"AAI",
+    "org_full_name":"ActionAid International (FHN Secretariat)",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Kente Threads",
+    "org_logo_white":"Action Aid-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/GXOiXjpsfUSSQ2ntBG6i2Q\/brAMcC5lzSKsAmaWihdQRWxTTNj4OMKF_QyzwKnfM16ttKB1yS7egybKt4xRNsw77tNOVMBxp6bCpTZFs5OuPOtl8fay6NxB3a2wkt3vNyc-_TwDcIPPWd6xgx4FhNW2gM8tH-k_k6pHbqdY9UHOejSMkLA3obCkxb97TSbcTYs\/wVAfzjqU0MzwrQDopM-eVxYaTS48wRyvrpd0yOVZIE4)",
+    "logo_path":"\/white_logos\/aai.png"
+  },
+  {
+    "org_short_name":"ACAPS",
+    "org_full_name":"ACAPS",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"INFORM Warning, Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":"ACHR",
+    "org_full_name":"Access Center for Human Rights (ACHR)",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":"ACLED",
+    "org_full_name":"Armed Conflict Location & Event Data Project (ACLED)",
+    "crafd_connection":"Project lead partner, Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data, Risk DataHub, CLIFDEW-GRID, Conflict Climate Displacement, eEARTH",
+    "org_logo_white":"ACLED Vert- Logo (White).png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/zH2BKmqu7e196UrTTmwSJQ\/Lwj6YeLusjMLYElvRxfMqsKFx66TmW0iJEeQ0SYuW6FWP72JwDSXT3Fux3cd4dnKmDHHNNq2T7IavdHsHLovgIvIeCQHoVSMwKwKGHCA8M8Q8-z4UR-diO7jFagc04HBPCq6SB7FIvGl32sqNy-xILbUHOaEBNgEQ-LUiFDE9i4\/R9b-S7t6CJsTrS8Iw-Z4otMMukuORIT7Xi5m5lM3-FQ)",
+    "logo_path":"\/white_logos\/acled.png"
+  },
+  {
+    "org_short_name":"ACMS",
+    "org_full_name":"Xenowatch \/ African Centre for Migration & Society ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":"ACTED",
+    "org_full_name":"Agency for Technical Cooperation and Development",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":"ADHRB",
+    "org_full_name":"Americans for Democracy & Human Rights in Bahrain  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":"AFJC",
+    "org_full_name":"Association des Femmes Juristes de Centrafrique ",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":"Property 1=OFCA-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/fT0oJYS8ODxpReUfUFXo1w\/I3QbmQf26y4pSia1ETJ31jeR_ioUwBxSquipvXewgmU5pW1S6OmxY1XQ51FpoyGT3yLqZi1DEGeSCOGJVX9T0w5PDAaTkrYNfVhqELK3-L4tAGIB3NgbeFFr2OtiD-sSKo0mmYKmvctQx9emyJPEgaV-4yQn30o7kL8yJ_HBt9g\/V4cdYzRhhXW39M9t_D_5nfltKxa4hrWH756uQC0uVQo), Property 1=AFJC-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/RdBeccdxDBTCqd3-AJAZTg\/USqj9GQFJcpn8ncfivqIUvPTSquSdEL_un-UaLsmKvGOZTup06Adqrn1seYkAGuEOZFHyOhEj---r9Psu4yJjSwU1bR62JVZwrlTho6ZnTUWa4dB8eJZj-vp_0UuJeynQUDcdhGTSgrRJd9KXAQfIZnJlyCWOJGwxcVVj6jFEWU\/i3aDqK-YnKAGiG9fJJT-8fwdqIwBfQ0jPKeH-OsS8vs)",
+    "logo_path":"\/white_logos\/afjc.png"
   },
   {
-    "org_short_name": " AWLN",
-    "org_full_name": "African Women Leaders Network",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"AFPA",
+    "org_full_name":"L'Alliance des femmes en Haiti",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": " SRMO",
-    "org_full_name": "Safety and Risk Mitigation Organization ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"AISHA",
+    "org_full_name":"Association for Women and Child Protection ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":"Property 1=AISHA-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/_FbSMW50hMcXYHJR2Jj-Jg\/YL8DSHbM1ehHKHYu_XpIvWjN6O10p5UOcTAIEuz4cOdapSlUavIsVB2uyJCI40w8iQsnUx6vMWbn9nuxcuL59P4EaynZYFVgeHHgONRAWjv8M0A7mT7llHlOnAmRKx62C7pSrO4m7YNvDsFmgyBeO8nBdYONMTR492xmSWS1NsU\/k113v_UjZ_0zSzXdPD1_MZnV_B8_ZoHmUE2CIflgw9U)",
+    "logo_path":"\/white_logos\/aisha.png"
   },
   {
-    "org_short_name": "510",
-    "org_full_name": "The Netherlands Red Cross\u2018 data and digital unit 510",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null,
-    "relational_feature": "510"
+    "org_short_name":"APW",
+    "org_full_name":"Afghan Peace Watch",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "AAI",
-    "org_full_name": "ActionAid International [FHN Secretariat]",
-    "crafd_connection": "Administrative Partner",
-    "org_logo_white": null,
-    "logo_path": null,
-    "relational_feature": "510"
+    "org_short_name":"ASSN",
+    "org_full_name":"African Security Sector Network ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ACAPS",
-    "org_full_name": "ACAPS",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"AWAFY ",
+    "org_full_name":"Awafy Sudanese Organization  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ACHR",
-    "org_full_name": "Access Center for Human Rights (ACHR)",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"AWSD",
+    "org_full_name":"Aid Worker Security Database  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ACLED",
-    "org_full_name": "Armed Conflict Location & Event Data Project (ACLED)",
-    "crafd_connection": "Lead Project Partner, Collaborating Partner",
-    "org_logo_white": "ACLED Vert- Logo (White).png (https:\/\/v5.airtableusercontent.com\/v3\/u\/50\/50\/1771444800000\/T-bd6x6_0ERhsYHBxzByKg\/89n9wqm1aLwUI849N9shTjM7yAMFqA9k0oHhW5r9REpPzTuqM_LZ0LSjs-_Dx7XTFVVE6yOjf65iNPboma06kEjv8vPOeYwVSQYATXMPMIqW78eqDc64YiTNPZsahVdF6oOkAUn3ASJv5ll6MoYQQJ7IRRwclyvshJKdfS__AE0\/p__wA5xSZ9Jv-Jcz5kbtm16FuImIe328wiMYoM-YqmM)",
-    "logo_path": "\/logos\/acled.png"
+    "org_short_name":"Armillary Services",
+    "org_full_name":"Armillary Services",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"GEOGUARD",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ACMS",
-    "org_full_name": "Xenowatch \/ African Centre for Migration & Society ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"BDRCS",
+    "org_full_name":"Bangladesh Red Crescent Society",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"GUARD",
+    "org_logo_white":"Property 1=Bdrcs-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/erETOrD_Y6IuPOCeAUR2cg\/hIJAf1S0e_H17dIWY8v2ePvjULcn9OhJYPBaR3JpmPFNEk_os3xcpJjpzQI_Q1xONsMX-6MAH4vyQdiuOWwMpjy4lQNvRhuLcMvHmUAHjUP3CEvfNLAq0J7UFufbm8-w70QGUijMN4ejSgibvfLU7mUfFGAgCPt42XCPAeVqw5s\/z97sINT1neU3v42cQ1T7YH7qVvaj9IMojg0bpacAAlg)",
+    "logo_path":"\/white_logos\/bdrcs.png"
   },
   {
-    "org_short_name": "ACTED",
-    "org_full_name": "Agency for Technical Cooperation and Development",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"CARDH",
+    "org_full_name":"Centre d\u2019analyse et de recherche en droits de l\u2019homme",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ADHRB",
-    "org_full_name": "Americans for Democracy & Human Rights in Bahrain  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"CDD",
+    "org_full_name":"Centre for Democracy and Development",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "AFJC",
-    "org_full_name": "Association des Femmes Juristes de Centrafrique ",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"CEWARN",
+    "org_full_name":"Conflict Early Warning and Response Mechanism  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "AFPA",
-    "org_full_name": "L'Alliance des femmes en Haiti",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"CHC",
+    "org_full_name":"Climate Hazards Center UC Santa Barbara",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"eEARTH",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "AISHA",
-    "org_full_name": "Association for Women and Child Protection ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"CIEPD",
+    "org_full_name":"Community Initiative for Enhanced Peace and Development \/ Conflict Watch Center  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "APW",
-    "org_full_name": "Afghan Peace Watch",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"CIESIN",
+    "org_full_name":"The Center for Integrated Earth System Information ",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"GUARD",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ASSN",
-    "org_full_name": "African Security Sector Network ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"CIVIC",
+    "org_full_name":"Center for Civilians in Conflict ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "AWAFY ",
-    "org_full_name": "Awafy Sudanese Organization  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"COCAP",
+    "org_full_name":"Collective Campaign for Peace   ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "AWSD",
-    "org_full_name": "Aid Worker Security Database  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"COES",
+    "org_full_name":"Centre for Social Conflict and Cohesion Studies",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Airwars  ",
-    "org_full_name": "Airwars  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"CONRED",
+    "org_full_name":"Coordinadora Nacional para la Reducci\u00f3n de Desastres",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Internal Displacement Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Armillary Services",
-    "org_full_name": "Armillary Services",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"CRAF'd",
+    "org_full_name":"Complex Risk Analytics Fund",
+    "crafd_connection":"CRAF'd",
+    "relational_project":"CRAF'd Direct Costs, CRAF'd Sec.Direct Cost 2022",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Avviso Pubblico",
-    "org_full_name": "Local Municipalities and Regions Against Mafia and Corruption",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"CSC",
+    "org_full_name":"Center for Social Change ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "BDRCS",
-    "org_full_name": "Bangladesh Red Crescent Society",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Cambridge Zero",
+    "org_full_name":"Cambridge Zero",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"GEOGUARD",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "CARDH",
-    "org_full_name": "Centre d\u2019analyse et de recherche en droits de l\u2019homme",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"CeSSRA",
+    "org_full_name":"Centre for Social Sciences Research and Action  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "CARR",
-    "org_full_name": "Centre for Analysis of the Radical Right",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"DA",
+    "org_full_name":"Dalberg Associates",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Strengthening CRAF'd Ecosystem",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "CDD",
-    "org_full_name": "Centre for Democracy and Development",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"DCO",
+    "org_full_name":"United Nations Development Coordination Office  (UNDCO)",
+    "crafd_connection":"MoU signatory",
+    "relational_project":null,
+    "org_logo_white":"UNSDG-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/lRMwf1G_yIBe2QTkle_S7Q\/Nk49VwvG15liRB_8pMDFvsuL8GGSgzQ2R-5-ZvX8toTMOgOP0pyCaK5KE1IYu1UI3VQp5hr_4SDJbK_45Qj2L1VAh4mZsN9Mk951kGJgWdAPj9Irl3ktXqFNDlwrvgsxZbWDq71IWfZpNUUqdcOwptny73mCbEinRTcR5CGLfdY\/6eq9s5-vD7E6WyJSF7y7LglXbjuAaGTPC-0izWUZKEI)",
+    "logo_path":"\/white_logos\/dco.png"
   },
   {
-    "org_short_name": "CEWARN",
-    "org_full_name": "Conflict Early Warning and Response Mechanism  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"DFS",
+    "org_full_name":"Data Friendly Space",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"INFORM Warning, GUARD",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "CIAO",
-    "org_full_name": "Columbia International Affairs Online",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"DPO",
+    "org_full_name":"Department of Peace Operations (DPO)",
+    "crafd_connection":"MoU signatory",
+    "relational_project":null,
+    "org_logo_white":"UNDPO-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/UmqdgpolVVgV6FQyUMw09g\/N8Q5CecF2IRkhvF39VLYxq_hFKxCCucrCfg8yWjEfIFHij8BIbCmRPIx_M8YGpfGrjMIsmlh2FgG1fsIJTRhq_Xus3VtFKHbhgyxYSYBR3TEfbz_-kXcSsAN_rlj02mqUKI6bWge3KoWetsLxagun-qtDTsDAicvKQLHTrDJ0VY\/4PI7fZUCQescLQisokjl-AqbTa02nvIZmnCyCjaIh24)",
+    "logo_path":"\/white_logos\/dpo.png"
   },
   {
-    "org_short_name": "CIEPD",
-    "org_full_name": "Community Initiative for Enhanced Peace and Development \/ Conflict Watch Center  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"DPPA",
+    "org_full_name":"United Nations Department of Political and Peacebuilding Affairs (UNDPPA)",
+    "crafd_connection":"MoU signatory, Project lead partner",
+    "relational_project":"GEOGUARD",
+    "org_logo_white":"DPPA-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/7lrOHfRsDeH22Jd5WVZA4A\/hSzm7lnmB1RKmzeqikafUcOQSofB8Il-q8LRjXEoTKDvrSO4PmN3P8rni9b-OkFg1P0vZUK0oiZOT6AU3wmqIiwA0YROP4ybmZRAHeSn1aBH2qlLb6pzXYjUiOT_a7IynipK5MUgFMNei8a_f0lBAtwRI1QdfA7HBuO_IQLj8k8\/rQ3EIXvtHWOFd3Sjbt_DjIPpUhZin4cz7DJ6eWmhsTM)",
+    "logo_path":"\/white_logos\/dppa.png"
   },
   {
-    "org_short_name": "CIESIN",
-    "org_full_name": "The Center for Integrated Earth System Information ",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"DSW",
+    "org_full_name":"Deep South Watch  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "CIVIC",
-    "org_full_name": "Center for Civilians in Conflict ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"DevTransform",
+    "org_full_name":"Development Transformations",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Kente Threads",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "COCAP",
-    "org_full_name": "Collective Campaign for Peace   ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Dialogos  ",
+    "org_full_name":"Dialogos  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "COES",
-    "org_full_name": "Center for Social Conflict and Cohesion Studies  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"EAI",
+    "org_full_name":"Equal Access International (EAI) | Ivory Coast ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "COES",
-    "org_full_name": "Centre for Social Conflict and Cohesion Studies (COES) | Chile ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"EAI",
+    "org_full_name":"Equal Access International  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "CRAF'd",
-    "org_full_name": "Complex Risk Analytics Fund",
-    "crafd_connection": "CRAF'd",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"EGRISS",
+    "org_full_name":"Expert Group on Refugee, IDP and Statelessness Statistics",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Internal Displacement Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "CSC",
-    "org_full_name": "Center for Social Change ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"EYE on ISIS",
+    "org_full_name":"Eye on ISIS",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"ACLED Data, Maintaining ACLED",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "CVG",
-    "org_full_name": "Cure Violence Global",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Element 84",
+    "org_full_name":"Element 84",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"GEOGUARD",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Cambridge Zero",
-    "org_full_name": "Cambridge Zero",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Every Town for Gun Safety  ",
+    "org_full_name":"Every Town for Gun Safety  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "CeSSRA",
-    "org_full_name": "Center for Social Sciences Research and Action  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"FAO",
+    "org_full_name":"Food and Agriculture Organization of the United Nations (FAO)",
+    "crafd_connection":"MoU signatory, Collaborating partner",
+    "relational_project":"VIEWS-PIN",
+    "org_logo_white":"FAO-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/F0Cmb-vVTdv9001k8zatoQ\/aiWs7MOO5Q5mGPf7GyDtoQytKZmi9HCzYwnmij4uSmiJ0E1jIF3CDpW2GJmJDLVBbT18wCzD58KThG1XiOY-Evm-DMesQCe1gYQzalcThPARNvOFXYugrCFOgKp6lg_2Dpo-IW77xYYrZrNP2CDBU6sPp2wc-Ofngyac-WiqoT0\/rt2lFpat8CXe36w7IWZ1_kbZ-fgGZrHonUc4s-jFx1Y)",
+    "logo_path":"\/white_logos\/fao.png"
   },
   {
-    "org_short_name": "Clingendael",
-    "org_full_name": "Clingendael",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"FEWS NET",
+    "org_full_name":"Famine Early Warning Systems Network",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"PRIMARI",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "DA",
-    "org_full_name": "Dalberg Associates",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"FHN",
+    "org_full_name":"Feminist Humanitarian Network (FHN)",
+    "crafd_connection":"Project lead partner",
+    "relational_project":"Kente Threads",
+    "org_logo_white":"FHN-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/zTGlIa04x5T42132zlI1BQ\/F64XtSQSAz5JbSmyCe2OYWb90navckEo9ty0XTNbm6SJVRu0TVWIVV3EP-h4WDFQW6y3h_R4wgpeIJcognEP1C7NIq6VJTDu1F9upfrs1ZO7Smxt5GJcwMvRrBoy3P6vYxcxgqmPKzyXNDTV621q4DqFGllRanIAE7EZXuEdua8\/my0wRtKelZGo9_AnwYbIpCerVPcZOlKohgcgtReRY5I)",
+    "logo_path":"\/white_logos\/fhn.png"
   },
   {
-    "org_short_name": "DCO",
-    "org_full_name": "United Nations Development Coordination Office  (UNDCO)",
-    "crafd_connection": "MoU Signatory\/UN Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"FLD",
+    "org_full_name":"Front Line Defenders  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "DFS",
-    "org_full_name": "Data Friendly Space",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"FMA",
+    "org_full_name":"Foundation for Media Alternatives  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "DPO",
-    "org_full_name": "Department of Peace Operations (DPO)",
-    "crafd_connection": "MoU Signatory\/UN Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"FORUM-ASIA",
+    "org_full_name":"Asian Forum for Human Rights and Development   ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "DPPA",
-    "org_full_name": "United Nations Department of Political and Peacebuilding Affairs (UNDPPA)",
-    "crafd_connection": "MoU Signatory\/UN Partner, Lead Project Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"FPB",
+    "org_full_name":"Forum de Paix de Beni  ",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "DSW",
-    "org_full_name": "Deep South Watch  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"FPB",
+    "org_full_name":"Forum de Paix de B\u00e9ni (FPB) | Democratic Republic of the Congo (DRC) ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Dallaire Institute",
-    "org_full_name": "Dallaire Institute",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"FWM",
+    "org_full_name":"Insights \u2013 Framework Mechanism (FWM \u2013 formerly Data for Change)  ",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Data42",
-    "org_full_name": "Data42",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Fogo Cruzado  ",
+    "org_full_name":"Fogo Cruzado  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "DevTransform",
-    "org_full_name": "Development Transformations",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Fundaredes  ",
+    "org_full_name":"Fundaredes  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Dialogos  ",
-    "org_full_name": "Dialogos  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"GI-TOC",
+    "org_full_name":"Global Initiative Against Transnational Organized Crime",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "EAI",
-    "org_full_name": "Equal Access International (EAI) | Ivory Coast ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"GiE",
+    "org_full_name":"Gender in Emergencies Group",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"GUARD",
+    "org_logo_white":"GIE-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/AXq8jzoq6Agr2Ohtwc01Zg\/6Pf8Ew3QpIKpZB-bGXmOXDp1JRSG-SzpKGSmB3TJYm8RYHygx1Y6SPQPOrcuT1MohiS1ylW9LddAUqT3ikrtOk6kVqMnCE4v2An2LCavAEmkMJMW-LYc1R0y9dc-4MLh4PAVgcqmsA8iHoMi4jZgHsxjeSSHDiJt7r0_QLKGYj4\/STTpiupcBXj4wdZG_CW0CQa3q6T5MIp9MHiVoTezKTc)",
+    "logo_path":"\/white_logos\/gie.png"
   },
   {
-    "org_short_name": "EAI",
-    "org_full_name": "Equal Access International  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Global Witness  ",
+    "org_full_name":"Global Witness  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "EOD",
-    "org_full_name": "Eyzidi Organization for Documentation",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"HDX",
+    "org_full_name":"Humanitarian Data Exchange",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"VIEWS-PIN",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ERI",
-    "org_full_name": "Emergent Risk International",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"HORN Institute",
+    "org_full_name":"HORN International Institute for Strategic Studies  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Element 84",
-    "org_full_name": "Element 84",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"HRC-UNTL",
+    "org_full_name":"Global Campus of Human Rights \u2013 Human Rights Centre of the National University of Timor-Leste  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Every Town for Gun Safety  ",
-    "org_full_name": "Every Town for Gun Safety  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"HRNK",
+    "org_full_name":"Committee for Human Rights in North Korea  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "FAO",
-    "org_full_name": "Food and Agriculture Organization of the United Nations (FAO)",
-    "crafd_connection": "MoU Signatory\/UN Partner, Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"IB",
+    "org_full_name":"Idea Bureau",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"GEOGUARD",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "FHN_AAI",
-    "org_full_name": "Feminist Humanitarian Network (FHN)_AAI",
-    "crafd_connection": "Lead Project Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"ICG",
+    "org_full_name":"International Crisis Group (ICG)",
+    "crafd_connection":"Project lead partner, Collaborating partner",
+    "relational_project":"eEARTH, CLIFDEW-GRID",
+    "org_logo_white":"ICG-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/bNEdIRlVboc7EpLxlbG_mA\/LjK3USaPwz-xN8zQoNiMt4OofC458wTQskC2VdzIVQD6qmviDRZA5ej4u5XsJMQmh-LzcqztkTym3kGHinbLSt_3rvAo28tFtXCM19ZkvJ5nOG3nn3l1tfYkSSFrZ5OYF6gCGt7dIz5i3ZYs5BHRb9Wx85j1kNBVV3K6HYABIcA\/rP_8dJX1bhRH-g-4W884t7yBaZjnhdOC8DcZhFDUnb4)",
+    "logo_path":"\/white_logos\/icg.png"
   },
   {
-    "org_short_name": "FLD",
-    "org_full_name": "Front Line Defenders  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"ICPAC",
+    "org_full_name":"Intergovernmental Authority on Development - IGAD Climate Prediction and Applications Centre (ICPAC)",
+    "crafd_connection":"Project lead partner, Collaborating partner",
+    "relational_project":"Hazard Modeling, eEARTH, CLIFDEW-GRID",
+    "org_logo_white":"ICPAC-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/ncFEZZe9jg9Nwvv71sTbmg\/jAEp3vcoueyhPMm90qlpue2GWRl1uECOqKBLhb_UO2eaAo1gOOVqLdjEPdNfm07m93vB2GoF2TgESaxXH-qq2UXO8uWnj7C4cB3SVx4YpqtuWEdIjqRpHJoSgdHap698QFeCPm9P19HI71vNl5l_GdCwFFUgEeLmcI5qdTM4pBw\/vpeZ8mjPwSPtf274hlJ6QiA2WULr3R9PArk4U_BUnTg)",
+    "logo_path":"\/white_logos\/icpac.png"
   },
   {
-    "org_short_name": "FMA",
-    "org_full_name": "Foundation for Media Alternatives  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"ICRC",
+    "org_full_name":"International Committee of the Red Cross (ICRC)",
+    "crafd_connection":"Complementary donor, Collaborating partner",
+    "relational_project":"Conflict Climate Displacement",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "FORUM-ASIA",
-    "org_full_name": "Asian Forum for Human Rights and Development   ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"IDMC",
+    "org_full_name":"Internal Displacement Monitoring Centre (IDMC)",
+    "crafd_connection":"Project lead partner, Collaborating partner",
+    "relational_project":"Internal Displacement Data, eEARTH, CLIFDEW-GRID",
+    "org_logo_white":"IDMC-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/vLy591yDwwRQbsM-20yGAQ\/bscE70wfTHPLmixsxfrpJEfOZvJHV3dX6QcJmQaHTfw18Mqt1xc4cqcXmRp4eqalKnBBdySjU5JURNvpiCOjFR1B2GPbIIgBy80jRrDtmgL5wh9sE6yRU4Rx7A6z1UK_4sM9-T2cdDcReVRxIrGIPcoKPa-qLge-LoPA3F6rmlE\/XFlKuuw-gNJ6CpjbzRd2oSF1ZJAGa3pQn3MYj_9TIJY)",
+    "logo_path":"\/white_logos\/idmc.png"
   },
   {
-    "org_short_name": "FPB",
-    "org_full_name": "Forum de Paix de Beni  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"IFRC",
+    "org_full_name":"International Federation of Red Cross and Red Crescent Societies (IFRC)",
+    "crafd_connection":"Project lead partner, Collaborating partner",
+    "relational_project":"GUARD",
+    "org_logo_white":"IFRC-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/_pTYDIKRBCNxBszXP6uJ3w\/ZPFnJzbd-Aw04syZUKsB0zC8E7Mdhq2iKQJb20Az6v-IydlPZ1yHE_wWBTe_8bNGDl98Ur6BGxKtFFKwxuxxPRoPA-oOp4WXzRCBYiqBRq0st6Yi4CxqGX4-yNnG4UHeIy4w5yEOf-gTq01SbGMfmeNnivZGA3mUQ7_cprEjgS0\/m6hzfmze-HgdTEgLvcybKuwRBGzdj_KyBdo3UROBzwA), Logo-Horizontal-withSafeSpace-Grayscale.svg (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/jiKHCmOTyd_3uh80LLeBRQ\/SXhzKX-c4ZpBrJ9zz7ri9hG1ialRz6qWy3OF1XICM2Q4SCH0BMan_zoz7WFglQljjABm9ptOsO6GU677aqGBUWwGNv9oN1srsS2dv8gO37h1Sx1oHVr-0sr0XEE4IDEqUuai72JAbLnLlqRD7TZwzpFXKO1ykmyy0DLzMqWe8RJNAIEitGRj2FBDg_rtUL_Z4Ja_yvVh8nQStGv2sSaqQA\/gTt6r2gNWKqKpM_FKQkKN8hI3B4ymKk08wtCARSnd0E), Logo-Square-withSafeSpace-Grayscale.svg (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/-O5QxRLyveBtUWvkQKNc_A\/wFJkWy3M8tmjuc5Z8ziCwit09d-_9hnJRmeLrDfbXDpPtgX-WKgjlFkB-17c0DvYiRVTa4XxGJ8hkR9hLEOAOoToY4ze5-nkWbFUiEq4OMXfFfzRH1PrmBROhuPbmraN7tkLOs5G28NxlEEosC4-34mfvqN_hGXt01llW7zrak52fi75RgFlHhx4TvxCrhnO\/vaPb-5DlooBDxS7AF_b-U-9HLOAT56UtqUt9i-FuVDA)",
+    "logo_path":"\/white_logos\/ifrc.svg"
   },
   {
-    "org_short_name": "FPB",
-    "org_full_name": "Forum de Paix de B\u00e9ni (FPB) | Democratic Republic of the Congo (DRC) ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"INDEPAZ",
+    "org_full_name":"Instituto de Estudios para el Desarrollo y la Paz ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "FWM",
-    "org_full_name": "Insights \u2013 Framework Mechanism (FWM \u2013 formerly Data for Change)  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"INFORM",
+    "org_full_name":"INFORM Consortium",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"INFORM Warning",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Fogo Cruzado  ",
-    "org_full_name": "Fogo Cruzado  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"IOM",
+    "org_full_name":"International Organization for Migration (IOM)",
+    "crafd_connection":"MoU signatory, Project lead partner, Collaborating partner",
+    "relational_project":"Conflict Climate Displacement, Internal Displacement Data, Maintaining ACLED",
+    "org_logo_white":"IOM-logo-1.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/gyGkdXzqmqlCV1eSq60v5A\/UpDSxGUx8MGkIxsaJymYESSv3v6qEY8LhGGeLPJNnjSntuE0qVspz14KT3LXL9gQsLwiGE6Q8ROhA24J6AZT6DQrBJd4HbyMteuLLNzSVFMNxbtfMea9G9CuM11-kxYnVfiY2rbT8yl_n2lBvybpTAPh97R7W_SXtFDlvX8mVls\/izt0sM4uIRVM4gRk-OOf-CUWlt2mYL2Lxq0JBuKXSAU), IOM-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/o2xwHQ_U_m2ecv7gXpXeJg\/VfhtMGmYwpgnNWlE0uzA5E9gPomE0X4NuheFxJJyja9NvJENUQy0B9f76NkljFyCJ0RYmoM2l_5ekA88-WH9_y4_1EN6Oc5PvkpVX4ufEw1hX7mPSI-g-B4hhtLI6RXSK67eLPVJ3xKTcfMmT9f40FWXJgkEDYzrjQ5suxemrgg\/SXlFy25T8K3AKs2V2P7R5snl4x9BSYn-TB9zOTJla1U)",
+    "logo_path":"\/white_logos\/iom.png"
   },
   {
-    "org_short_name": "Fundaredes  ",
-    "org_full_name": "Fundaredes  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"IStories",
+    "org_full_name":"IStories Media",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "GI-TOC",
-    "org_full_name": "Global Initiative Against Transnational Organized Crime",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"ITU",
+    "org_full_name":"International Telecommunication Union (ITU)",
+    "crafd_connection":"MoU signatory",
+    "relational_project":null,
+    "org_logo_white":"ITU-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/y6DI0rM0uqS77I_60J7bIw\/9gu3SiomV1g_tieZUQwGvQmycPkg2MrU5DPqwOgNStwqsiAR_ox2lpuPEZfvNoEcy77p1eC9TBIT4YxMKtnSpBHXgYWRiAIzhLKIYGrZF5dQfbJNu8VQ33nLhELK6WSyZfZImv1jkoJqYkhGfp502_iJn6tWNeo17ZmefabUTMU\/IrBaR0HsLEEfOPvcQnnN0xOfTZWblfznI1PEpZMXkdA)",
+    "logo_path":"\/white_logos\/itu.png"
   },
   {
-    "org_short_name": "Genocide Watch",
-    "org_full_name": "Genocide Watch",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"InSight Crime",
+    "org_full_name":"InSight Crime",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "GiE",
-    "org_full_name": "Gender in Emergencies Group",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Insecurity Insight  ",
+    "org_full_name":"Insecurity Insight  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data, Rapid Assessment Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Global Witness  ",
-    "org_full_name": "Global Witness  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Irdeto  ",
+    "org_full_name":"Irdeto  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "HORN Institute",
-    "org_full_name": "HORN International Institute for Strategic Studies  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"JRC",
+    "org_full_name":"European Commission Joint Research Centre (JRC)",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"INFORM Warning",
+    "org_logo_white":"EU-logo-vertical.svg (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/oef25nwkC9OiYJ0gUbVmkg\/Ud2apfffk_k3OeKIVkgaB-QjexYqHx9HhuU8yJ4vsT11XHWW5cocQUY5HkO0_vrAGC6Y0lZPsqFfO2QytbjZKkIukHM0OOZNa_8-Drv73JQ4xw9c4qovunQ8-IECL93WMLFc6VKntQ6jOb7kTeJL5duOcvuHuEr9tQOOmGm6N9Y\/B5rzomHXdQHNWGD57hJfyxZXA9kpXzpQjPiDq6HZBy0), EU-logo.svg (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/0akUJlkCnb2zENJsDnkQ6Q\/a15LfV1ffTB0NUIUyMFFZqkzfCWDZIrgIXq4rKqHlvG9dYogoe6at2ApaGtqsOLZbIyxydqn4OCdBlyBwIcszn9XJIAX-YNOSpgYfTMMDQukJXk8O-DGowQX84PdIhnO2SpLjPUYBsWujkHG7Deo5Mf1U85XP3JHKLHA1iDKdq8\/MmrrgtRp8nqzKHk8Wy6mlEeHFHoIcuKvI7zkjzSsCLs), EU-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/D73eTYZBVee34efFzEyyig\/5rE82SWeLGu2hiGZw00Po8cBDbo7SCjbWRN4J_DEeYzvkDgoecgWUHHorjhz4mg05jEdcPB27wTPXO3TglkDcCZc9VbqhAPgE9c8LR9eWYfNKMubhYWCL1gDjkIw221Ruu05uEV1ZtyP8kN2gA9KWANpVH2myGSvqmQVMCyzcOE\/il9uGeuB22Jx1aI6_DA_LyMZF5hr01ysy_ZB9s2eEZ4)",
+    "logo_path":"\/white_logos\/jrc.png"
   },
   {
-    "org_short_name": "HRC-UNTL",
-    "org_full_name": "Global Campus of Human Rights \u2013 Human Rights Centre of the National University of Timor-Leste  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"KoboToolbox",
+    "org_full_name":"KoboToolbox",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":"KoboToolbox-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/vAjz6EVl4cSnPpwR2L8f2Q\/wyDhRTp3SL5MizKOhf5rS3zHBFuOz3IOBc5mjUmS20KrvG8yGO0Y2jbxq4lqp0E8H8mqyUJ7Qg0q6-nkKR7Tm30sKalCZpNRyvc10dkRFfX3mnD9V6Yxm3PrnEibPsY09ouqwE0o7HG0vP9NFxU3hBt5OBrkK8ln8_lggmkg_tE\/QFf1BdRoyoa2epB4FjCktAZfI4NX5XJcKCbYh5xsk7E)",
+    "logo_path":"\/white_logos\/kobotoolbox.png"
   },
   {
-    "org_short_name": "HRNK",
-    "org_full_name": "Committee for Human Rights in North Korea  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Korbel",
+    "org_full_name":"Josef Korbel School, University of Denver (Korbel)",
+    "crafd_connection":"Project lead partner, Implementing partner",
+    "relational_project":"Women's Mobilization Within Armed Groups, EMPOW",
+    "org_logo_white":"du-korbel-global-public-affairs-logo-stacked-white.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/wbwWkGlZdIbQCzH_XJfimg\/rRb1bEfRn6lvGP9uVANgLhiBapdKzPcEiD8mb6b1RXm45wfs5pA1fHr_m6RPzW19oSqd3rGzTDSAmcYaelV5uAolDn4RWcuFRbjjxaIabKA8h184s6buiuRgUSKI9RwIkHhR7Afvbl93bxGeGMkq48b5hatbUkneqDLPo15iypUI8V06i_lvkSB7cWfHCel7FSfpA1FkA753kuJzR1Bqng\/9kh-buo0GDXNAERzZUPsSyH68iTO0lk034ZxfjL-mkQ), du-korbel-global-public-affairs-logo-white.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/E2vdRl_m79OG6NY4mj2e7A\/V-UzWeHlD5WuZNu7HAF9msRvH9yR6mdXFVml6BcLtGELFbESSL-gGExQzAyyr_t4bMBURQmgQI73roAT8R3AqVZEs1UxjQXNqHPL-WdLbik6yx3R-ir-xIUYwpicE_bwQp9QC3A6KZdnG4yV4cy94dRQ7dHu_PtJqboNUdZQSX9OsYtKYR4v5x7gTsFWJDq_3QuDMPc429A2vHGTYRLA3g\/sVVAGhdcfsRiceBg1Vgwa--FINiLWy9CAa0mgIJ_C8E)",
+    "logo_path":"\/white_logos\/korbel.png"
   },
   {
-    "org_short_name": "IB",
-    "org_full_name": "Idea Bureau",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"LSM",
+    "org_full_name":"The Libya Security Monitor (LSM)  ",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ICG",
-    "org_full_name": "International Crisis Group (ICG)",
-    "crafd_connection": "Lead Project Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Liveuamap  ",
+    "org_full_name":"Live Universal Awareness Map",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ICPAC_IGAD",
-    "org_full_name": "Intergovernmental Authority on Development - IGAD Climate Prediction and Applications Centre (ICPAC)",
-    "crafd_connection": "Lead Project Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"MPM",
+    "org_full_name":"Myanmar Peace Monitor ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "IDMC",
-    "org_full_name": "Internal Displacement Monitoring Centre (IDMC)",
-    "crafd_connection": "Lead Project Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"MPTFO",
+    "org_full_name":"Multi-Partner Trust Fund Office (MPTFO)",
+    "crafd_connection":"Administrative agent",
+    "relational_project":"CRAF'd Direct Costs, CRAF'd Sec.Direct Cost 2022",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "IEP",
-    "org_full_name": "Institute for Economics and Peace",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Mi Convive ",
+    "org_full_name":"Caracas Mi Convive & Monitor de V\u00edctimas  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "IFRC",
-    "org_full_name": "International Federation of Red Cross and Red Crescent Societies (IFRC)",
-    "crafd_connection": "Lead Project Partner, Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"MilitiaWatch  ",
+    "org_full_name":"MilitiaWatch  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "IISS",
-    "org_full_name": "International Institute for Strategic Studies",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"NCRI",
+    "org_full_name":"Network Contagion Research Institute",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "INDEPAZ",
-    "org_full_name": "Instituto de Estudios para el Desarrollo y la Paz ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"NDMA-SL",
+    "org_full_name":"National Disaster Management Agency Sierra Leone",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Internal Displacement Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "IOM",
-    "org_full_name": "International Organization for Migration (IOM)",
-    "crafd_connection": "MoU Signatory\/UN Partner, Lead Project Partner, Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"NRC",
+    "org_full_name":"Norwegian Refugee Council (NRC)  ",
+    "crafd_connection":"Project lead partner, Implementing partner",
+    "relational_project":"Internal Displacement Data, Strengthening CRAF'd Ecosystem, GUARD, Conflict Climate Displacement",
+    "org_logo_white":"Norcap-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/UikfL-YdY02pGoGIAMpv9A\/kRITLnCtwfHRj4Py3Po1E8XYoO-DC3uTXLUpjyaH-hAbWF2j-8lblo1lbbLv-zxLB6PdUH0xuTKKgnotUJGkcfs7jEKLqgGK9nHDUMUgx8v7gdnvhGRc_Jkxj8o-Vj6nw8wW_uj9FuGEZ-fJL2meTW3bTFPRSi2o6UjCv-Y52nA\/v2zRBwELPuqU9-PuxPaRzmjU1SXKWjBM5692MvtdiRM)",
+    "logo_path":"\/white_logos\/nrc.png"
   },
   {
-    "org_short_name": "IRC",
-    "org_full_name": "International Rescue Committee",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"NRCS",
+    "org_full_name":"Nepal Red Cross Society",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"GUARD",
+    "org_logo_white":"Property 1=nepal-red-cross-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/zmNW6XYjZUyIwLoEWJnOAw\/4vnjLumkIjJjOlL9n9xDkKQOwLborB69FB334eWuijh3N-9eeVDHaQbsfj0zy_BR68Wtc2qXE_75yqro9GSxg51sEU02nY2a8njpQj_yv2xg6GsBeB3mKlgTHvYFRIVa4La9ZjVRtHFe0TYTl3nuJi8OODdJNwrbff-xYVYYxTJDIwpjmVBFFcYdyFmWZQX7\/JF3KMRPFOVoPIYiTIybbg4_6U7aL3JL9lDOl3Z_uswA)",
+    "logo_path":"\/white_logos\/nrcs.png"
   },
   {
-    "org_short_name": "ISS",
-    "org_full_name": "Institute for Security Studies",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"NU",
+    "org_full_name":"Northwestern University",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"GEOGUARD",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ITU",
-    "org_full_name": "International Telecommunication Union (ITU)",
-    "crafd_connection": "MoU Signatory\/UN Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"NWC",
+    "org_full_name":"New Women Connectors",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Kente Threads",
+    "org_logo_white":"Property 1=newwomenconnectors.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/0FsDQV_ph-jo0RcTK_34BQ\/I8-YCgJwIm3HzHBuZPTHTFcGqv27I6JDj0-JuIaqA9T-rldAsgfy2ve0DXUZP_TGUglv8bubgUP6em3D6rjJpoCD4MC5YSMj_NLwzxPh1OVv6XOI_ho5CFp93U5793x0gqlpY1XyYxouiqMJCBIYIXr63hzOnunuIFAy4bm5ZxEjzoLKCjUlKenjqkD2dBMb\/B8HYahqZZsdsUzyR2mOa0n8BwE1xTS_cWSMsjDtsjWg), Property 1=newwomenconnectors-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/7vSz8hyY147w7OQfE9PhMQ\/4MqZyLPPp45AijuV3QIeAdDAni-3PiC5NSOqc70AsAprIre2k7wX1Gv1hSMZ8xm7XX8XfKS08hnaPYQ0SMgP-BBpJ9wyTa7UrM9LGNFsJZ7GiP-U16SPl5et_WycTNdcuJmb3WG3rocQ04zfjOh0xYP6JVP34nth_6aetpaFh4zx7GmIA0LBC0I_-YutwJKy\/8bHBu4c_MAUyz6NuaRxc3qAvVJmMY3Bky89quwkWWNs)",
+    "logo_path":"\/white_logos\/nwc.png"
   },
   {
-    "org_short_name": "InSight Crime",
-    "org_full_name": "InSight Crime",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"OCHA",
+    "org_full_name":"United Nations Office for the Coordination of Humanitarian Affairs (OCHA)",
+    "crafd_connection":"MoU signatory, Collaborating partner",
+    "relational_project":"PRIMARI",
+    "org_logo_white":"OCHA-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/zHTGLME3tQk9DOOOS1vq1A\/Mx_wZF-IkSKGPw5rFJ1ZEVaBREa6oh8Xi7MIIMNx_Rv8EsaLeC9Pg836Yx_Afn-HHf0MPd-lZGhoYeQ1aeuEtGdOdT5EDBEGsseRUH1dy7CcqzILkrPpiJTKOqzMo_DoWcdPpagBZX4RxB-qFB6yDYdUE2XCAQgdiomljZCdp6U\/vwIXumNps4qGJRwVzMpzyRV_AKCGWFU5WMYstvKzpgs)",
+    "logo_path":"\/white_logos\/ocha.png"
   },
   {
-    "org_short_name": "Insecurity Insight  ",
-    "org_full_name": "Insecurity Insight  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"OCHA (Colombia)",
+    "org_full_name":"UN Office for the Coordination of Humanitarian Affairs (OCHA) \/ Colombia  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Irdeto  ",
-    "org_full_name": "Irdeto  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"OECD",
+    "org_full_name":"Organisation for Economic Co-operation and Development",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Strengthening CRAF'd Ecosystem",
+    "org_logo_white":"OECD-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/DhMMFV-vx7RmwwdqjmT7tQ\/T5T6Jgoc6sbdoeQtInmMGPm5rfguMT-mv0mxoMjsb6jR9RifwzKkPk5HX3tvf2deqlv06SUxQWXWoaZ9fUTg9Lenc6UIyXJuenGQzZJh8BzkqyvryH_5oknY_WvD2wMybzZfplJwNznwe6eKO8s6_tDPJII9Kh_Oz6y3F5h9s2s\/43bpzNQDLLIgAgCcYD7cA3f24vI_v63WSCCOS_f9aEo)",
+    "logo_path":"\/white_logos\/oecd.png"
   },
   {
-    "org_short_name": "KHRN",
-    "org_full_name": "Kurdistan Human Rights Network ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"OFCA",
+    "org_full_name":"Organisation des Femmes Centrafricaine",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "KoboToolbox",
-    "org_full_name": "KoboToolbox",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"OHCHR",
+    "org_full_name":"Office of the United Nations High Commissioner for Human Rights (OHCHR)",
+    "crafd_connection":"MoU signatory, Project lead partner",
+    "relational_project":"Rapid Assessment Data",
+    "org_logo_white":"OHCHR-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/JYveC5DYG83fIjcSGqZeHA\/CN7nL8xRu18GKTfwtI0leCWydHDttuaUuxviyOBaCDCRqBPsQlQAFtwUn2r7g1cL6Wq-cfgcky8FDG1SRdKk8m5824xvVMclx7vTLqqmJ7gJ7SKKHkUHQ5Bi868zkl0gTd-COp27as1LMOIzfjBd3MThGAv0-WRuy9iG1EdKfWg\/FztkerHB1-n-92i6tJYsmVEKWQbMOcMW1dm2k_yXqQ8)",
+    "logo_path":"\/white_logos\/ohchr.png"
   },
   {
-    "org_short_name": "Korbel",
-    "org_full_name": "Josef Korbel School, University of Denver (Korbel)",
-    "crafd_connection": "Lead Project Partner, Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"ORDEDH",
+    "org_full_name":"Ordres des D\u00e9fenseurs des Droits Humains ",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "LSM",
-    "org_full_name": "The Libya Security Monitor (LSM)  ",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"ORF",
+    "org_full_name":"Omega Research Foundation",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Liveuamap  ",
-    "org_full_name": "Liveuamap  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"OSCAA",
+    "org_full_name":"Oxus Society for Central Asian Affairs ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "MPM",
-    "org_full_name": "Myanmar Peace Monitor ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"OVPE",
+    "org_full_name":"Observatory of Political and Electoral Violence",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "MPTFO",
-    "org_full_name": "Multi-Partner Trust Fund Office (MPTFO)",
-    "crafd_connection": "Administrative Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"PAHO",
+    "org_full_name":"Pan American Health Organization (PAHO)",
+    "crafd_connection":"MoU signatory",
+    "relational_project":null,
+    "org_logo_white":"PAHO-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/DSuNdviJ_v7eWjElUygPGg\/lRXuZl4H-uFI8SbhwZwBZ7-5l_haSxaYuyyzSKK3aKOST00Ug3bzGp2c6oPbp6qQhboBiZT6BuTrGPS4EM2qm2jO6WwDPof_V-6YWT8bNUVRs8wc-d-t5jaEu1iFASr8Qm3quTuSlNRJznl91k5deFKaxAgz9TD-wa_0np9Fdfc\/gaLaqoGB2JRA9kqrTmpJgweESsaOlnqo2oKjuwrc5EQ)",
+    "logo_path":"\/white_logos\/paho.png"
   },
   {
-    "org_short_name": "MVRP",
-    "org_full_name": "Mexico Violence Resource Project   ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"PICSS",
+    "org_full_name":"Pakistan Institute for Conflict and Security Studies ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Mapbox",
-    "org_full_name": "Mapbox",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"PJS ",
+    "org_full_name":"Palestinian Journalists Syndicate ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Mediacoop",
-    "org_full_name": "Mediacoop (Formerly MediaFax)",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"PRA",
+    "org_full_name":"Political Research Associates PRA ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Menastream",
-    "org_full_name": "Menastream",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"PRIO",
+    "org_full_name":"Peace Research Institute Oslo (PRIO)",
+    "crafd_connection":"Project lead partner, Collaborating partner",
+    "relational_project":"EMPOW, VIEWS-PIN, Women's Mobilization Within Armed Groups",
+    "org_logo_white":"PRIO-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/pMwx3KkVHCz2dNALRfuqPw\/NFmJ89TVeyg81_icStJcKFWk0qNPzzXxsw1fya3BwC1SlpbKSEjJl6LrsyAHOFYe012BfiOc6AkNjGvt3TDP6jHDuD7FCvTpQY018NH5HXoEh3ocTxxWBy3vvfYCMDa_shQaeYJrUPbR6_AejztRFRzMUAqSQXewyUO3LuF5UKQ\/vGGEENIh8Nv2OPauPTNd-Kbt-Pyo34e3hhNj6Rygl4o)",
+    "logo_path":"\/white_logos\/prio.png"
   },
   {
-    "org_short_name": "Mercy Corps",
-    "org_full_name": "Mercy Corps",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"PSCCW",
+    "org_full_name":"Psychosocial Counselling Center for Women",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":"Property 1=Psccw-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/_RiXSw8E-uhLHptW0lNU2w\/uFtxnvn_jCclhTEH_zRKBA9FtR_iOVt6dTA9PVw1TmQy7a8XM6n6Gvwsm3mpc-P_X9doX_28obxQz1foQpwfYgYJIyjc6mJ27vm2lT9g-X5Em0Xya3I84P-elEf5QWZps7l1HVnNVV-UbUdflsoWnqDeVXX6-nGgc_hR3M-Ufjc\/u8Im49ykgC7GmBM75KEyNtniY66m-lpDSTZY8sScPFA)",
+    "logo_path":"\/white_logos\/psccw.png"
   },
   {
-    "org_short_name": "Mi Convive ",
-    "org_full_name": "Caracas Mi Convive & Monitor de V\u00edctimas  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Protect Defenders",
+    "org_full_name":"ProtectDefenders.eu  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "MilitiaWatch  ",
-    "org_full_name": "MilitiaWatch  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"RCCC",
+    "org_full_name":"Red Cross Red Crescent Climate Centre (RCCC)",
+    "crafd_connection":"Project lead partner, Collaborating partner",
+    "relational_project":"Conflict Climate Displacement, CLIFDEW-GRID",
+    "org_logo_white":"RCCC-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/p8NcJ_rKxDVTwThwxqFWCg\/Jwewa5ci3S1y3swt1vtZtOaOInRIejoolSNSAQt2Ukf7a0f5PtTJGgOD1Q-TzGSknKycq7PocyNOVRwirnFwr5DhxMRLM9O3g9CZZIWnxRhhzqDSq2wmYKDjHEMTUyzCte_2IUXmIg85LmUZjefWzF9udGBEnOKadafW0mnaXM0\/UDH8K7xZf3mt3vV-hD7J7LPJIkbjRk0HF0wI-5pJSCA)",
+    "logo_path":"\/white_logos\/rccc.png"
   },
   {
-    "org_short_name": "NCRI",
-    "org_full_name": "Network Contagion Research Institute",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"REACH",
+    "org_full_name":"REACH",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "NRC",
-    "org_full_name": "Norwegian Refugee Council (NRC)  ",
-    "crafd_connection": "Lead Project Partner, Implementing Partner, Administrative Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"REGAH",
+    "org_full_name":"R\u00e9seau pour l'\u00c9galit\u00e9 du Genres dans l'Action Humanitaire en Ha\u00efti (REGAH)",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "NRCS",
-    "org_full_name": "Nepal Red Cross Society",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"ROC",
+    "org_full_name":"Reach Out Cameroon  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "NU",
-    "org_full_name": "Northwestern University",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"SAR",
+    "org_full_name":"Scholars At Risk SAR",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "NWC",
-    "org_full_name": "New Women Connectors",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"SNHR",
+    "org_full_name":"Syrian Network for Human Rights (SNHR)  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "OCHA",
-    "org_full_name": "United Nations Office for the Coordination of Humanitarian Affairs (OCHA)",
-    "crafd_connection": "MoU Signatory\/UN Partner, Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Sana\u2019a Center",
+    "org_full_name":"San\u00e1a Center for Strategic Studies  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "OCHA (Colombia)",
-    "org_full_name": "UN Office for the Coordination of Humanitarian Affairs (OCHA) \/ Colombia  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Shahit.biz",
+    "org_full_name":"Xinjiang Victims Database ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "OFCA",
-    "org_full_name": "Organisation des Femmes Centrafricaine",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Sismolog\u00eda Social",
+    "org_full_name":"Sismolog\u00eda Social Nicaragua  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "OHCHR",
-    "org_full_name": "Office of the United Nations High Commissioner for Human Rights (OHCHR)",
-    "crafd_connection": "MoU Signatory\/UN Partner, Lead Project Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"TCHRD",
+    "org_full_name":"Tibetan Centre for Human Rights and Democracy  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ORDEDH",
-    "org_full_name": "Ordres des D\u00e9fenseurs des Droits Humains ",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"The Carter Center  ",
+    "org_full_name":"The Carter Center  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ORF",
-    "org_full_name": "Omega Research Foundation",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Togglecorp",
+    "org_full_name":"Togglecorp",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"GUARD",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "OSCAA",
-    "org_full_name": "Oxus Society for Central Asian Affairs ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UARIV ",
+    "org_full_name":"Unidad para la Atenci\u00f3n y Reparaci\u00f3n Integral a las V\u00edctimas",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Internal Displacement Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "OSF",
-    "org_full_name": "Open Society Foundations",
-    "crafd_connection": "Complementary Donor",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UC IRVINE",
+    "org_full_name":"University of California - Irvine",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"CLIFDEW-GRID",
+    "org_logo_white":"UCI-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/DPYBkCTqloKeHJBxIXtibA\/r07yP48xJaJ-JF7biHynZygXbgZDR1WT2ibCJQ1KQ3Ozj8gEO2m_SX-rhkJPRX_81--nUpDI5mVb6S5XhvMcJIR_LqhaDPg62iQdqnw90y0PDnYBXMrXNj1DH6V7csAoXi8sMYhT1oHLdeqq82uSCfLIRVFGGlODoiGQP1uDyk0\/zrvQGqBtwGI_ynZJS45510z1mTm1m40dpx4i3VUYDKs)",
+    "logo_path":"\/white_logos\/uc-irvine.png"
   },
   {
-    "org_short_name": "OVPE",
-    "org_full_name": "Observatory of Political and Electoral Violence",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UN HABITAT",
+    "org_full_name":"United Nations Human Settlements Programme (UN-Habitat)  ",
+    "crafd_connection":"MoU signatory",
+    "relational_project":null,
+    "org_logo_white":"UNHABITAT-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/vtmv9ALij8N-ytXJlN36fA\/Z6vbTJFFyVVEpE22x6xWPE78iuncLyyN21nSQOZLj6zKNgWs6M8t19ppURpV9G_ELrMCCYA-f61Nek98pp0s-ZEXYLfnZMn_WBSFBsF_jXJQOOW996cuwSvWJda_dFXO9XIO0V_VUTOmlw_Ap1hdmVYKern_dGXsjUMEw9Cj9UA\/V04-SGedDCKpB6wziHLrzKxQpsHSo2woEFXl4fgZuo8)",
+    "logo_path":"\/white_logos\/un-habitat.png"
   },
   {
-    "org_short_name": "PAHO",
-    "org_full_name": "Pan American Health Organization (PAHO)",
-    "crafd_connection": "MoU Signatory\/UN Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UN-WOMEN",
+    "org_full_name":"United Nations Entity for Gender Equality and the Empowerment of Women (UN WOMEN)",
+    "crafd_connection":"MoU signatory, Project lead partner",
+    "relational_project":"Transformative Outcomes, VIEWS-PIN",
+    "org_logo_white":"UNWomen-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/UxiMT_Dwzpc7sU7ETzlOeA\/SZvTBGdBbSbdhG2B7DRW6DSPeicIPFOEy6RTcQO0gZ_ngx7C0L3AeEDB1R5GTXJ2xESgMD37_sAy0q2kb3ycNsnbOC8ciuqfyTWBJhYsBUu80G2wwR-NXfL8Cltk6bVtZGmvw1l5zYvP6oJZDEK1IaRdp_CHPm5fBtgw7U__WDs\/FzJjBk1ovlMAzTbnSKKSHe4-QoaEUmDOdMxy-H4Ht6E)",
+    "logo_path":"\/white_logos\/un-women.png"
   },
   {
-    "org_short_name": "PDC",
-    "org_full_name": "Pacific Disaster Centre",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNDP",
+    "org_full_name":"United Nations Development Programme (UNDP)",
+    "crafd_connection":"MoU signatory, Project lead partner",
+    "relational_project":"INFORM Warning, Risk DataHub, CRAF'd Sec.Direct Cost 2022, CLIFDEW-GRID, Conflict Climate Displacement, Internal Displacement Data, eEARTH",
+    "org_logo_white":"UNDP-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/eiEmsRsoZZ92eEHriTrTYw\/OPvuR0wbkS0wdSjV2Ozo4sSyHlRf4_JnfvYu_hCzsXaGN8STrMBA1_boJsFq_WVWLep6MD2g1suMos6xxcKwbVsiC1Wp66YYFB3Y7hsOlxEOURuHe8_WpPn972XlXHImCMehr36Mf02Sy1vr7_doeLzbODj_DryItRZ_Auc7sYE\/G1fbs4qTrcSCm9l0olEIjjIfjzGLHzlub-fkHqqfnUo)",
+    "logo_path":"\/white_logos\/undp.png"
   },
   {
-    "org_short_name": "PICSS",
-    "org_full_name": "Pakistan Institute for Conflict and Security Studies ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNDRR",
+    "org_full_name":"United Nations Office for Disaster Risk Reduction (UNDRR)",
+    "crafd_connection":"MoU signatory",
+    "relational_project":null,
+    "org_logo_white":"UNDRR-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/CQWznOPcWDGjdT_ri6vMdg\/i_pPUHcR_WMgK0IHR8WY4QT80i28gVJe0dK4R1b3RpfZsSOzkGrg4BMRRZcYU6rVBpmemTjol3SuZCPajc8OdH3G_jnKQdzOgruKma1MnoEtr5qlx8p5oRVw-EfaIymHt_r4BUdSj0JT4_fKV9Ecm8tEpl5ANCyQfu5XHv4SUp4\/jVq-iuRYv8smzN-D2oQsdSdFWWppsFwfPuydKDY_c_A)",
+    "logo_path":"\/white_logos\/undrr.png"
   },
   {
-    "org_short_name": "PJS ",
-    "org_full_name": "Palestinian Journalists Syndicate ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNDSS",
+    "org_full_name":"United Nations Department for Safety and Security (UNDSS)",
+    "crafd_connection":"MoU signatory",
+    "relational_project":null,
+    "org_logo_white":"UNDSS-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/GtpGoeIISqMyrbYOuuraIw\/zu3ZwKCaO59GzbFQa2JpNQpKq0i9qfZh323sFG0DLpp7-IaGZDJg5mqbcKBzvz8SWYtrfwoodmVetdye9i5tp1p9UOhGY1fD8stpSlq2qUevHQPV2OF5iqq1FipsccBa2K4LKU3W6_WSy7DpJniyefzjMz3xdWPLW9vhBMU0qaA\/v8R3lnd2ih7v8QW-NHTy-YJCGy-UdbT1i9mlokfnpcI)",
+    "logo_path":"\/white_logos\/undss.png"
   },
   {
-    "org_short_name": "PRA",
-    "org_full_name": "Political Research Associates PRA ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNESCO",
+    "org_full_name":"United Nations Educational, Scientific and Cultural Organization (UNESCO)",
+    "crafd_connection":"MoU signatory",
+    "relational_project":null,
+    "org_logo_white":"UNESCO-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/DnD_b7xMou7Ey2o74080Lg\/ShikJQGOT_l6gKcVlWQo1zU8v6f7r7-Qr8A57d_Jc05aKrIJ6hc272hJl5a0oRvds8uGwiScsVmsqFpe1mxu7StaRFoISGudiNUFsgshLzpBTitV54kTqi2qVyhtN7teyEvO7kbr1kT9b0z1eiw95XUbPlWoWbuoCddiQVH75fo\/RlE2hvx5Eyb56i9lhUKqsZfajhV90LfBOOm0JicRWPk)",
+    "logo_path":"\/white_logos\/unesco.png"
   },
   {
-    "org_short_name": "PRIO",
-    "org_full_name": "Peace Research Institute Oslo (PRIO)",
-    "crafd_connection": "Lead Project Partner, Administrative Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNFPA",
+    "org_full_name":"United Nations Population Fund (UNFPA)",
+    "crafd_connection":"MoU signatory",
+    "relational_project":"PRIMARI",
+    "org_logo_white":"UNFPA-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/mZYDe21X-5G9KJrNYv85wQ\/n6maDtseH30LXUMFuovLTNy9ja8ESYARwQ3NYFkXVkzQ0NY6WGUaSeFR9A2z0neD8gCzSGVqzSfccBmSiT6EMYkbpo4M4uFMrOkdvXaeFIufnx7VslYg1xgH3eBTRUzq76BnFv9ojMbxhJthv5AYa9Lgs_NNMoRF_r4wVCoqYP0\/WJg2cjmGKn0-KoF7BfowlW3QoAsNryz-YOWkRoMTkgA)",
+    "logo_path":"\/white_logos\/unfpa.png"
   },
   {
-    "org_short_name": "PSCCW",
-    "org_full_name": "Psychosocial Counselling Center for Women",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNHCR",
+    "org_full_name":"United Nations High Commissioner for Refugees (UNHCR)",
+    "crafd_connection":"MoU signatory, Project lead partner, Collaborating partner",
+    "relational_project":"CLIFDEW-GRID, Internal Displacement Data, PRIMARI",
+    "org_logo_white":"UNHCR-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/DLx7GmeNT-poze-w4FbUrA\/-pMheE_slbaFvpOcILKVXkUGFNML9ai7D-xz5OWxkMJUGufOClQlyzsICKSw849s1o75LCEGM7L6zYwxB6CzsBb_aznzFF16edn1KP4kRW8VMeDPEY5LAwtlTIx4AAjRIuN1n6nDJBUNVlTKPKFcY3PiZW7iFe96TZEvuhFySqw\/HVwRMRIDBHJPBpxIWeUTc7VT-XeD8Vx6k3sx7ECAmO4)",
+    "logo_path":"\/white_logos\/unhcr.png"
   },
   {
-    "org_short_name": "Protect Defenders",
-    "org_full_name": "ProtectDefenders.eu  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNICC",
+    "org_full_name":"United Nations International Computing Centre (UNICC)",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Risk DataHub",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "RCCC",
-    "org_full_name": "Red Cross Red Crescent Climate Centre (RCCC)",
-    "crafd_connection": "Lead Project Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNICEF",
+    "org_full_name":"United Nations Children's Fund (UNICEF)",
+    "crafd_connection":"MoU signatory, Collaborating partner",
+    "relational_project":"Conflict Climate Displacement, Internal Displacement Data",
+    "org_logo_white":"UNICEF-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/onMQZawE4I5tBu0di2cadQ\/3yGNJT1p07KlQAWChHXldSqSmx3M-0zr04QZaSNyYUIJADsU-m0EBBC_it3w5Fn68aiWSy30_An16q-dpaOWeaxy91LgYqo0jEvVv2vUsqh-iJ6c_5c6jn-rMyl5tuv7z_w5E9j2NA9gdStGlI2jfykm6bovWH4U2-NDh5o5GNk\/-EhF9GRbl8immZj-t-BFenzwylmNUiCZklxgd2uypug)",
+    "logo_path":"\/white_logos\/unicef.png"
   },
   {
-    "org_short_name": "REGAH",
-    "org_full_name": "R\u00e9seau pour l'\u00c9galit\u00e9 du Genres dans l'Action Humanitaire en Ha\u00efti (REGAH)",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNIDIR",
+    "org_full_name":"United Nations Institute for Disarmament Research",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Rapid Assessment Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "ROC",
-    "org_full_name": "Reach Out Cameroon  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNMA",
+    "org_full_name":"Uganda National Meteorological Authority",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Hazard Modeling",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "RiskPal",
-    "org_full_name": "RiskPal",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNOCC",
+    "org_full_name":"United Nations Operations and Crisis Centre",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"CLIFDEW-GRID",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "SAALT",
-    "org_full_name": "South Asian American Leading Together  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNODC",
+    "org_full_name":"United Nations Office on Drugs and Crime (UNODC)",
+    "crafd_connection":"MoU signatory",
+    "relational_project":null,
+    "org_logo_white":"UNODC-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/t4P06VRVaN87kcw9LdHMCA\/YncAYuJbvuBRQJGjPs9AF95PvLN8pJZwQOSpj73zSdl1KArXKWNxZbge6o-9Q1oRMDM66nuWFYOCcxnSJrLVmrL3ueN-q6W5Ws1EQXMU6J5XItGRSXgspe7IzGXVG2JGUkYc_QT7N9yG4iHdZMTBeSzaRP2pcmvHtOnGC1CT9MY\/Sz-PW4i10tQoObdSFdbbyB1Mx5i2yhuKchmhz2jnW1I)",
+    "logo_path":"\/white_logos\/unodc.png"
   },
   {
-    "org_short_name": "SAR",
-    "org_full_name": "Scholars At Risk SAR",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNOPS",
+    "org_full_name":"United Nations Office for Project Services  (UNOPS)",
+    "crafd_connection":"MoU signatory",
+    "relational_project":null,
+    "org_logo_white":"UNOPS-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/ixX-n-Yc51DONd_WT47ndQ\/OuMM7OuJp7lAdDY4I_jYOcSp6W-eb04xWnTDTsi--vjtBGzg9RXV6moWqdpa_ubE12gJnQ9C_amploOfUlwvk92bnqsZS_gF3dT8YVdh4WbtrbTSf4mr6OF8C2yAUW9li148W48_52Ob8LtIiN-ds5BEbPusJI4FL6jn1NdJh7U\/YbteqcyIDZBb-Ft0fawHmJl7dsn6LtMCMHIColAmUlY)",
+    "logo_path":"\/white_logos\/unops.png"
   },
   {
-    "org_short_name": "SFCG",
-    "org_full_name": "Search for Common Ground",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNRISD",
+    "org_full_name":"United Nations Research Institute for Social Development (UNRISD)",
+    "crafd_connection":"MoU signatory",
+    "relational_project":null,
+    "org_logo_white":"unrisd-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/zlIFUx_MFKR0mOiE4iTkaA\/S2i-i45kjGpwqX2eFfmw4GtPSLly5gAhos26qGgWbpR3d2uY_JSENzBbxGosaXfG6giouTpwqRdXPd2FnwrN4syp1yNcwZGFHOGOwNcdANXF8GkPzElXcG2EibxS1Jn8gRDyT28GxriStyoA8PHzLuyRwOcak9El2snZWub8VBM\/cWJwDYJNrSH9aOrHfdLxts1p4HcXmuL4YJmo4-zKHRU)",
+    "logo_path":"\/white_logos\/unrisd.png"
   },
   {
-    "org_short_name": "SNHR",
-    "org_full_name": "Syrian Network for Human Rights (SNHR)  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UNU",
+    "org_full_name":"United Nations University (UNU)",
+    "crafd_connection":"MoU signatory",
+    "relational_project":null,
+    "org_logo_white":"UNU-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/xlr_OTlkU9A5Oy39vznBsg\/CKnHSxASB3QvhJFt5tM6wi2fASB0Yd2RJyxQgp00sC3OY5DSFTJjBk2QSc7ZH9bHYb_JPxwKYE0QpF2O6-c-dFy4f3BwrQ5RVk3Nr6wUpRovLFGlFgFxi6fYAlnXg0SnIEIkNj315du5SxodsAT_RDDcg8IQs4mkB9fL8iyARUU\/ecM8MUlXwDq_B7djy-TilsiOK7nqU4ONIWYRbmCA7lk)",
+    "logo_path":"\/white_logos\/unu.png"
   },
   {
-    "org_short_name": "Sana\u2019a Center",
-    "org_full_name": "San\u00e1a Center for Strategic Studies  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"UPPSALA UNIVERSITY",
+    "org_full_name":"Uppsala University",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"EMPOW, VIEWS-PIN, Strengthening CRAF'd Ecosystem",
+    "org_logo_white":"uppsala-universitet-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/l52ekDLQYUZ1qG6EwDd3cg\/fbfgqgkW9mA2lW66ql3dxqLqOlELfyK-4mPqOa4Tmld723K_WVb8-8vCFDBdOR7exzYLzaIZwPkmt_f0khz-JucUiyi4sO_HwxH7DJhQeI4cCnpESaE0See2kZjxy8m2B6EDeMSPCBQt-MltU-G1NlIOLk3Teo2Nvz_fjhZS7EnHCMegL40VOYJ0zaBkFejd\/EAJtCfEIyCxIFNzmeAyNraXj3MVGepJrHLgBPT8EjBg)",
+    "logo_path":"\/white_logos\/uppsala-university.png"
   },
   {
-    "org_short_name": "Save the Children",
-    "org_full_name": "Save the Children",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"VIA",
+    "org_full_name":"VALERIAN IT AB (IT consultant)",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"VIEWS-PIN",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Shahit.biz",
-    "org_full_name": "Xinjiang Victims Database ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"WANEP-SL",
+    "org_full_name":"West Africa Network for Peacebuilding Sierra Leone   ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Sismolog\u00eda Social",
-    "org_full_name": "Sismolog\u00eda Social Nicaragua  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"WCLAC",
+    "org_full_name":"Women\u2019s Centre for Legal Aid and Counselling",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":"Property 1=WCLAC-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/lwkoF5bxoCAdTBr65t7Cqw\/3u2M3oh_Orr0_eMLYOddMYO6W3U3xLN8HKtzC1OUCjZq5Hx3uzJOFktXeXCyloTnoC4CRbgH3MGZG_2kl96ha44WRvLPXc3tUdeuW_czjeYQRoH_bhQ0H99dR2THH84q4VdlAIAK7uCMX29BTdnQG0rAL5Rr4L38jKIb4zJKTic\/PXAqEF3lAOxf_Nmv1B6ycTX60jVB4JI5X_jl8dkFwJk)",
+    "logo_path":"\/white_logos\/wclac.png"
   },
   {
-    "org_short_name": "TCHRD",
-    "org_full_name": "Tibetan Centre for Human Rights and Democracy  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"WFP",
+    "org_full_name":"World Food Programme (WFP)",
+    "crafd_connection":"MoU signatory, Collaborating partner",
+    "relational_project":"Hazard Modeling, Internal Displacement Data, VIEWS-PIN, CLIFDEW-GRID",
+    "org_logo_white":"WFP-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/Ts_MaMKJopA6TVwT07-BKA\/qJ5VTeKN3My7XNs1GtzDCIanQ69FXgw7YbI9LXorICWw9ySzQvmZN5j0R_HLSWq87Yugvlb9QnI0I1s4lfQ9RtI1ZzTHyaXJcigj_NPRQIZSSEbPxNB1ADpXNno3oBaWMQQti9WAWN3riHAU7anS3IejoOHBSwJIOw-mVKfyK5g\/-QomESCgIb_5aaZbvMMJXjqRM1YKR7inhaMgtFauC48)",
+    "logo_path":"\/white_logos\/wfp.png"
   },
   {
-    "org_short_name": "Tableau Foundation",
-    "org_full_name": "Tableau Foundation",
-    "crafd_connection": "Complementary Donor",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"WHO",
+    "org_full_name":"World Health Organization",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"INFORM Warning, Rapid Assessment Data, PRIMARI",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "The Carter Center  ",
-    "org_full_name": "The Carter Center  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"WorldPop",
+    "org_full_name":"WorldPop",
+    "crafd_connection":"Implementing partner, Collaborating partner",
+    "relational_project":"GUARD",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "The Sentinel Project  ",
-    "org_full_name": "The Sentinel Project  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Yikono",
+    "org_full_name":"Yikono",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Women's Mobilization Within Armed Groups",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "Togglecorp",
-    "org_full_name": "Togglecorp",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"ZPP",
+    "org_full_name":"Zimbabwe Peace Project  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "UC IRVINE",
-    "org_full_name": "University of California - Irvine",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"Zitamar News  ",
+    "org_full_name":"Zitamar News  ",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
   },
   {
-    "org_short_name": "UN HABITAT",
-    "org_full_name": "United Nations Human Settlements Programme (UN-Habitat)  ",
-    "crafd_connection": "Collaborating Partner, Need to follow up for MOU signing",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":"iMMAP Inc.",
+    "org_full_name":"Information Management and Mine Action Programs (iMAPP)",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":"iMMAP-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/WwlSKazPGvEJfBnJOkgXsA\/6XSyA_KHS7hhWgRX1VErcIKJ3xpzlMSncmCyrQRcsoFj7X0sL7gXaPTm2bnvNBzg_n-TIFu5A2NVZhKiKTroIhicUnKk3e99iepbSHy4d2ynqMdJc9W-jwH66s71-Y-PJFr_Ptnt9iEz4zZ_FHVhMnbMqQoiAELiySozMiXpr4A\/4UJj7N25d5WYCvx3VyrPmvA-5BwoGwozK7zQSNLk2Aw)",
+    "logo_path":"\/white_logos\/immap-inc..png"
   },
   {
-    "org_short_name": "UN WOMEN",
-    "org_full_name": "United Nations Entity for Gender Equality and the Empowerment of Women (UN WOMEN)",
-    "crafd_connection": "MoU Signatory\/UN Partner, Lead Project Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNDP",
-    "org_full_name": "United Nations Development Programme (UNDP)",
-    "crafd_connection": "MoU Signatory\/UN Partner, Lead Project Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNDRR",
-    "org_full_name": "United Nations Office for Disaster Risk Reduction (UNDRR)",
-    "crafd_connection": "MoU Signatory\/UN Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNDSS",
-    "org_full_name": "United Nations Department for Safety and Security (UNDSS)",
-    "crafd_connection": "Need to follow up for MOU signing",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNESCO",
-    "org_full_name": "United Nations Educational, Scientific and Cultural Organization (UNESCO)",
-    "crafd_connection": "MoU Signatory\/UN Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNFPA",
-    "org_full_name": "United Nations Population Fund (UNFPA)",
-    "crafd_connection": "MoU Signatory\/UN Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNHCR",
-    "org_full_name": "United Nations High Commissioner for Refugees (UNHCR)",
-    "crafd_connection": "MoU Signatory\/UN Partner, Lead Project Partner, Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNIANDES",
-    "org_full_name": "Universidad de los Andes (UNIANDES) \u2013 CEDE Data Center  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNICC",
-    "org_full_name": "United Nations International Computing Centre",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNICEF",
-    "org_full_name": "United Nations Children's Fund (UNICEF)",
-    "crafd_connection": "MoU Signatory\/UN Partner, Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNODC",
-    "org_full_name": "United Nations Office on Drugs and Crime (UNODC)",
-    "crafd_connection": "MoU Signatory\/UN Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNOPS",
-    "org_full_name": "United Nations Office for Project Services  (UNOPS)",
-    "crafd_connection": "MoU Signatory\/UN Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNRISD",
-    "org_full_name": "United Nations Research Institute for Social Development (UNRISD)",
-    "crafd_connection": "MoU Signatory\/UN Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UNU",
-    "org_full_name": "United Nations University (UNU)",
-    "crafd_connection": "MoU Signatory\/UN Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "UPPSALA UNIVERSITY",
-    "org_full_name": "Uppsala University",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "VIA",
-    "org_full_name": "VALERIAN IT AB (IT consultant)",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "W.M. Consulting  ",
-    "org_full_name": "W.M. Consulting  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "WANEP-CI",
-    "org_full_name": "West Africa Network for Peacebuilding C\u00f4te d\u2019Ivoire ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "WANEP-SL",
-    "org_full_name": "West Africa Network for Peacebuilding Sierra Leone   ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "WCLAC",
-    "org_full_name": "Women\u2019s Centre for Legal Aid and Counselling",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "WFP",
-    "org_full_name": "World Food Programme (WFP)",
-    "crafd_connection": "MoU Signatory\/UN Partner, Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "WHO",
-    "org_full_name": "World Health Organization",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "WorldPop",
-    "org_full_name": "WorldPop",
-    "crafd_connection": "Implementing Partner, Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "YDP",
-    "org_full_name": "Yemen Data Project",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "ZPP",
-    "org_full_name": "Zimbabwe Peace Project  ",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "Zitamar News  ",
-    "org_full_name": "Zitamar News  ",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": "iMMAP Inc.",
-    "org_full_name": "Information Management and Mine Action Programs (iMAPP)",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": null,
-    "org_full_name": "Ridgeway Information Ltd.,",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": null,
-    "org_full_name": "Timor-Leste Red Cross Society",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": null,
-    "org_full_name": "Anonymous Partner 1 - Africa",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": null,
-    "org_full_name": "Anonymous Partner\u202f2 - Europe",
-    "crafd_connection": "Collaborating Partner",
-    "org_logo_white": null,
-    "logo_path": null
-  },
-  {
-    "org_short_name": null,
-    "org_full_name": "Various suppliers",
-    "crafd_connection": "Implementing Partner",
-    "org_logo_white": null,
-    "logo_path": null
+    "org_short_name":null,
+    "org_full_name":"Ground Truth Solutions",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":null,
+    "org_full_name":"Ridgeway Information Ltd.,",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"GEOGUARD",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":null,
+    "org_full_name":"Timor-Leste Red Cross Society",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"GUARD",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":null,
+    "org_full_name":"HCT Women's Advisory Group",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Transformative Outcomes",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":null,
+    "org_full_name":"Centre for humdata",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"Strengthening CRAF'd Ecosystem",
+    "org_logo_white":"centre-logo.png (https:\/\/v5.airtableusercontent.com\/v3\/u\/52\/52\/1777917600000\/KNJQd1KCcX1MdJxDNxq98A\/anm5v1_Ei0yIzMtvUc856zMC0_yVGrp8qPQl9YrMQJeEIhBXLWCwchK8hT4hLJvbKz-1GmFm68aiTVQ4Sjo__Z6MRCCqZV-Djnr41n7dQZD5Z93kOui4GfBClIIfC-3Vbj8fQie44jsTbBPcPjivnIF879wD-kQyvqz4lmGUuBc\/3GbqbHn4gX5t6MR0elxRk9qTWqz-4cQxYJk0YpD1yqk)",
+    "logo_path":null
+  },
+  {
+    "org_short_name":null,
+    "org_full_name":"Anonymous Partner 1 - Africa",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":null,
+    "org_full_name":"Microsoft Corporation",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Rapid Assessment Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":null,
+    "org_full_name":"Burmese Women\u2019s Union",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Women's Mobilization Within Armed Groups",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":null,
+    "org_full_name":"Local information networks (stringer networks)",
+    "crafd_connection":"Implementing partner",
+    "relational_project":"ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":null,
+    "org_full_name":"Airwars  ",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":null,
+    "org_full_name":"Anonymous Partner\u202f2 - Europe",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Maintaining ACLED, ACLED Data",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":null,
+    "org_full_name":"Karenni National Women\u2019s Organisation",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Women's Mobilization Within Armed Groups",
+    "org_logo_white":null,
+    "logo_path":null
+  },
+  {
+    "org_short_name":null,
+    "org_full_name":"Yellow Movement",
+    "crafd_connection":"Collaborating partner",
+    "relational_project":"Women's Mobilization Within Armed Groups",
+    "org_logo_white":null,
+    "logo_path":null
   }
 ]

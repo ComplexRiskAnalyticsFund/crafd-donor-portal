@@ -8,166 +8,192 @@ from python.utils.utils import export_dataframe
 
 AIRTABLE_BASE_ID = "appIYFN5sAJzK1bPg"
 PARTNER_TABLE_ID = "tbl2FMZOARI7I66fq"
-
+PROJECT_TABLE_ID = "tblgfDfV8s3mXHbUh"
 df_partners = fetch_airtable_table(table_id=PARTNER_TABLE_ID, base_id=AIRTABLE_BASE_ID)
 
+print("Airtable columns:", list(df_partners.columns))
+print(f"Total rows fetched: {len(df_partners)}")
 
-df_partners.columns
-
-
-# Index(['Organization name', 'CRAF'd partner type', 'Short name',
-#        'Is CRAFd Project', 'Organization Type', 'UN-Organization', 'Website',
-#        'Source', 'Ecosystem Stakeholder Type', 'Total Project Grant Size',
-#        'Support for CRAF'd projects', 'Operating Country',
-#        '[?] Type of organization', 'Signed MoU Or Framework Agreement?',
-#        'Contacts', 'Comments/Notes', 'Women-Led/Feminist', 'Global South?',
-#        'Year MoU/ Agreement Signed', 'MOU/ HACT signing date',
-#        'Organization – Department', 'HACT Assessment Date', 'Exact Grant Size',
-#        'Job Posting Website', 'Projects (Lead)', 'Projects', 'Outgoing 3',
-#        'Signed PSEA assessment', 'Matched Compass Orgs',
-#        'org_key (from Matched Compass Orgs)',
-#        'Org Type (from Matched Compass Orgs)', 'Received Grants ',
-#        'Outgoing 2', 'Organization Logo White', 'org_id'],
-#       dtype='str')
-
-
-# Rename columns to snake_case naming convention
 rename_mapping = {
-    "Organization name": "org_full_name",
-    "Short Name": "org_short_name",
-    "CRAFd Connection": "crafd_connection",
-    "Is CRAFd Project": "is_crafd_project",
-    "Organization Type": "organization_type",
-    "UN-Organization": "un_organization",
-    "Website": "website",
-    "Source": "source",
-    "Ecosystem Stakeholder Type": "ecosystem_stakeholder_type",
-    "Total Project Grant Size": "total_project_grant_size",
-    "Projects (Support)": "projects_support",
-    "Operating Country": "operating_country",
-    "Type of organization": "type_of_organization",
-    "Contacts": "contacts",
-    "Comments/Notes": "comments_notes",
-    "Women-Led/Feminist": "women_led_feminist",
-    "Global South?": "global_south",
-    "Year MoU/ Agreement Signed": "year_mou_agreement_signed",
-    "MOU/ FA signing date": "mou_fa_signing_date",
-    "Organization – Department": "organization_department",
-    "HACT Assessment Date": "hact_assessment_date",
-    "Exact Grant Size": "exact_grant_size",
-    "Job Posting Website": "job_posting_website",
-    "Projects (Lead)": "projects_lead",
-    "Projects": "projects",
-    "Received Grants": "received_grants",
-    "Organization Logo White": "org_logo_white",
-    "Organization Logo Color": "org_logo_color",
+    "Organization name":         "org_full_name",
+    "Short name":                "org_short_name",
+    "CRAF'd partner type":       "crafd_connection",
+    "Support for CRAF'd projects": "relational_project",
+    "Organization logo (BW)":    "org_logo_white",
+    "Organization logo (color)": "org_logo_color",
 }
 
 df_partners = df_partners.rename(columns=rename_mapping)
-
 df_partners = df_partners.sort_values("org_short_name").reset_index(drop=True)
 
 
+def parse_airtable_attachment(logo_data):
+    """
+    Parse Airtable attachment string.
+    Formats seen:
+      "filename.ext (https://url)"   <- most common
+      "https://url"                  <- bare URL
+    Returns (url, extension) or (None, None).
+    """
+    if not logo_data or not isinstance(logo_data, str):
+        return None, None
+
+    logo_url = None
+    ext = None
+
+    if "(" in logo_data and ")" in logo_data:
+        start = logo_data.rfind("(")
+        end = logo_data.rfind(")")
+        logo_url = logo_data[start + 1:end].strip()
+        filename_part = logo_data[:start].strip()
+        ext = Path(filename_part).suffix
+    else:
+        logo_url = logo_data.strip()
+
+    if not ext:
+        parsed = urlparse(logo_url or "")
+        ext = Path(parsed.path).suffix
+
+    if not ext:
+        ext = ".png"
+
+    return logo_url, ext.lower()
+
+
+def to_slug(name):
+    return (
+        name.strip()
+        .lower()
+        .replace(" ", "-")
+        .replace("/", "-")
+        .replace("_", "-")
+        .replace("&", "")
+        .replace("(", "")
+        .replace(")", "")
+        .replace(",", "")
+    )
+
+
+def download_logo(logo_data, org_name, dest_dir):
+    """Download a logo and return its web path, or None on failure."""
+    if not isinstance(org_name, str) or not org_name.strip():
+        return None
+    if not logo_data or not isinstance(logo_data, str):
+        return None
+
+    logo_url, ext = parse_airtable_attachment(logo_data)
+    if not logo_url:
+        return None
+
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    filename = f"{to_slug(org_name)}{ext}"
+    filepath = dest_dir / filename
+
+    try:
+        response = requests.get(logo_url, timeout=30)
+        response.raise_for_status()
+        with open(filepath, "wb") as f:
+            f.write(response.content)
+        print(f"  + {org_name}")
+        rel = str(dest_dir.relative_to(Path("public"))).replace("\\", "/")
+        return f"/{rel}/{filename}"
+    except Exception as e:
+        print(f"  x {org_name}: {e}")
+        return None
+
+
+# -- Download white (BW) logos -> public/white_logos/ -------------------------
+print("\nDownloading white logos -> public/white_logos/")
+white_dir = Path("public") / "white_logos"
+df_partners["logo_path"] = df_partners.apply(
+    lambda row: download_logo(
+        row.get("org_logo_white"), row.get("org_short_name", ""), white_dir
+    ),
+    axis=1,
+)
+
+# -- Download color logos -> public/logos/color/ ------------------------------
+print("\nDownloading color logos -> public/logos/color/")
+color_dir = Path("public") / "logos" / "color"
+df_partners["color_logo_path"] = df_partners.apply(
+    lambda row: download_logo(
+        row.get("org_logo_color"), row.get("org_short_name", ""), color_dir
+    ),
+    axis=1,
+)
+
+# -- Select output columns ----------------------------------------------------
 selected_columns = [
     "org_short_name",
     "org_full_name",
     "crafd_connection",
+    "relational_project",
     "org_logo_white",
+    "logo_path",
 ]
 
-df_partners = df_partners[selected_columns]
+df_out = df_partners[selected_columns].copy()
 
-
-# Download logos
-def download_logo(row):
-    """Download logo from Airtable URL and save to public/logos/"""
-    logo_data = row["org_logo_white"]
-    org_name = row["org_short_name"]
-
-    # Skip if no logo URL or org name
-    if not logo_data or not org_name:
-        return None
-
-    try:
-        # Handle Airtable attachment format - it's a string with filename and URL
-        # Format: "filename.ext (https://url)"
-        logo_url = None
-        ext = None
-
-        if isinstance(logo_data, str):
-            # Extract URL from format "filename (url)"
-            if "(" in logo_data and ")" in logo_data:
-                start = logo_data.rfind("(")
-                end = logo_data.rfind(")")
-                logo_url = logo_data[start + 1 : end]
-
-                # Extract extension from filename part
-                filename_part = logo_data[:start].strip()
-                ext = Path(filename_part).suffix
-            else:
-                # Assume it's just a URL
-                logo_url = logo_data
-
-        if not logo_url:
-            return None
-
-        # Get file extension from URL if not found in filename
-        if not ext:
-            parsed_url = urlparse(logo_url)
-            path = parsed_url.path
-            ext = Path(path).suffix
-
-        # If still no extension found, default to .png
-        if not ext:
-            ext = ".png"
-
-        # Create logos directory
-        logos_dir = Path("public") / "logos"
-        logos_dir.mkdir(parents=True, exist_ok=True)
-
-        # Create web-friendly filename (lowercase, hyphens, no special chars)
-        safe_name = (
-            org_name.lower()
-            .replace(" ", "-")
-            .replace("/", "-")
-            .replace("_", "-")
-            .replace("&", "")
-            .replace("(", "")
-            .replace(")", "")
-            .replace(",", "")
-        )
-        # Ensure extension is lowercase too
-        ext = ext.lower()
-        filename = f"{safe_name}{ext}"
-        filepath = logos_dir / filename
-
-        # Download and save
-        response = requests.get(logo_url, timeout=30)
-        response.raise_for_status()
-
-        with open(filepath, "wb") as f:
-            f.write(response.content)
-
-        print(f"✓ Downloaded logo for {org_name}")
-
-        # Return relative path for use in web app
-        return f"/logos/{filename}"
-
-    except Exception as e:
-        print(f"✗ Error downloading logo for {org_name}: {e}")
-        return None
-
-
-# Apply download function to each row
-df_partners["logo_path"] = df_partners.apply(download_logo, axis=1)
-
-
+# -- Export -------------------------------------------------------------------
 output_dir = Path("data") / "processed"
-export_dataframe(df_partners, "df_leads", output_dir)
+export_dataframe(df_out, "df_partners", output_dir)
 
-
-# Export to JSON for website use
 public_dir = Path("public") / "data"
 public_dir.mkdir(parents=True, exist_ok=True)
+df_out.to_json(public_dir / "partners.json", orient="records", indent=2)
+print(f"\n+ Exported public/data/partners.json ({len(df_out)} records)")
 
-df_partners.to_json(public_dir / "partners.json", orient="records", indent=2)
+# -- Verification -------------------------------------------------------------
+print("\n-- Verification --")
+rp = df_out["relational_project"].dropna()
+rp = rp[rp.str.strip() != ""]
+print(f"relational_project populated: {len(rp)} of {len(df_out)}")
+print("Unique values:")
+for v in sorted(rp.unique()):
+    count = (df_out["relational_project"] == v).sum()
+    print(f"  {v!r}  ({count} partners)")
+
+white_downloaded = df_out["logo_path"].notna().sum()
+print(f"\nWhite logos downloaded: {white_downloaded} of {len(df_out)}")
+
+color_downloaded = df_partners["color_logo_path"].notna().sum()
+print(f"Color logos downloaded: {color_downloaded} of {len(df_partners)}")
+
+# -- Fetch projects -> public/data/projects.json ------------------------------
+print("\nFetching projects table...")
+df_projects = fetch_airtable_table(table_id=PROJECT_TABLE_ID, base_id=AIRTABLE_BASE_ID)
+print(f"Projects fetched: {len(df_projects)}")
+
+projects_rename = {
+    "Project title":           "project_short_title",  # join key — matches relational_project values
+    "Project short title":     "project_label",        # "Org: ProjectName" concise display
+    "Full title":              "full_title",            # long descriptive title
+    "Project blurbs":          "project_blurb",
+    "CRAF'd project URL":      "project_url",
+    "Exact grant size":        "grant_size",
+    "Project status":          "project_status",
+    "Project duration (mos.)": "duration_months",
+    "Project coverage":        "project_coverage",
+}
+df_projects = df_projects.rename(columns=projects_rename)
+
+selected_project_columns = [
+    "project_short_title", "project_label", "full_title", "project_blurb",
+    "project_url", "grant_size", "project_status",
+    "duration_months", "project_coverage",
+]
+# Only keep columns that exist (safe if Airtable renames a field)
+available = [c for c in selected_project_columns if c in df_projects.columns]
+df_projects_out = df_projects[available].copy()
+
+# Drop rows with no join key
+df_projects_out = df_projects_out[
+    df_projects_out["project_short_title"].notna() &
+    (df_projects_out["project_short_title"].str.strip() != "")
+].reset_index(drop=True)
+
+df_projects_out.to_json(public_dir / "projects.json", orient="records", indent=2)
+print(f"+ Exported public/data/projects.json ({len(df_projects_out)} projects)")
+print("Projects exported:")
+for t in df_projects_out["project_short_title"]:
+    print(f"  {t}")

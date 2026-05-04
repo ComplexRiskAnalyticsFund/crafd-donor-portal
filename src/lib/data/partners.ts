@@ -1,6 +1,6 @@
 // src/lib/data/partners.ts
 
-import type { Partner, PartnerStats } from "@/types";
+import type { Partner, PartnerStats, CrafdProject } from "@/types";
 import { readFile } from "fs/promises";
 import path from "path";
 
@@ -28,6 +28,11 @@ export async function getDonors(): Promise<Partner[]> {
  */
 export async function getVizMeta(): Promise<{ anon_partner_count: string; as_of: string }> {
   const filePath = path.join(process.cwd(), "public/data/viz-meta.json");
+  return JSON.parse(await readFile(filePath, "utf8"));
+}
+
+export async function getProjects(): Promise<CrafdProject[]> {
+  const filePath = path.join(process.cwd(), "public/data/projects.json");
   return JSON.parse(await readFile(filePath, "utf8"));
 }
 

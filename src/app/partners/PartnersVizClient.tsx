@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import gsap from "gsap";
 import type { HexNode } from "@/lib/partners/label";
+import type { CrafdProject } from "@/types";
 
 const SQRT3 = Math.sqrt(3);
 const HEX_SIZE = 75;
@@ -60,6 +61,28 @@ function strokeWidthFor(n: HexNode) {
   return 2;
 }
 
+function parseProjects(rp: string | undefined | null): Set<string> {
+  if (!rp) return new Set();
+  return new Set(rp.split(",").map((s) => s.trim()).filter(Boolean));
+}
+
+function projectsOverlap(a: string | undefined | null, b: string | undefined | null): boolean {
+  const pa = parseProjects(a);
+  if (pa.size === 0) return false;
+  for (const p of parseProjects(b)) { if (pa.has(p)) return true; }
+  return false;
+}
+
+function resolveProject(
+  rpString: string | null | undefined,
+  map: Record<string, CrafdProject>
+): CrafdProject | null {
+  for (const name of parseProjects(rpString)) {
+    if (map[name]) return map[name];
+  }
+  return null;
+}
+
 // ── Stat card used in click state 2 ───────────────────────────────────────────
 function StatCard({
   label,
@@ -105,10 +128,12 @@ export default function PartnersVizClient({
   initialNodes,
   availableSlugs,
   asOf,
+  projectsByTitle,
 }: {
   initialNodes: HexNode[];
   availableSlugs: string[];
   asOf: string;
+  projectsByTitle: Record<string, CrafdProject>;
 }) {
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
   const [hoveredPartner, setHoveredPartner] = useState<string | null>(null);
@@ -144,7 +169,7 @@ export default function PartnersVizClient({
     if (groupParam) {
       const peers = new Set(
         initialNodes
-          .filter((n) => n.kind === "partner" && n.partner?.relational_feature === groupParam)
+          .filter((n) => n.kind === "partner" && projectsOverlap(n.partner?.relational_project, groupParam))
           .map((n) => n.id),
       );
       if (peers.size > 0) { setLockedGroup(peers); setLockedFeature(groupParam); }
@@ -260,11 +285,11 @@ export default function PartnersVizClient({
 
   // Enter click state 1: lock the relational group of this partner
   function enterClickState1(n: HexNode) {
-    const rf = n.partner?.relational_feature;
+    const rf = n.partner?.relational_project;
     if (!rf) return;
     const peers = new Set(
       renderNodes
-        .filter(node => node.kind === "partner" && node.id !== n.id && node.partner?.relational_feature === rf)
+        .filter(node => node.kind === "partner" && node.id !== n.id && projectsOverlap(node.partner?.relational_project, rf))
         .map(node => node.id),
     );
     if (peers.size === 0) return;
@@ -300,11 +325,11 @@ export default function PartnersVizClient({
   );
 
   const relationalPeers = useMemo(() => {
-    const rf = hoveredPartnerNode?.partner?.relational_feature;
+    const rf = hoveredPartnerNode?.partner?.relational_project;
     if (!rf) return new Set<string>();
     return new Set(
       renderNodes
-        .filter((n) => n.kind === "partner" && n.id !== hoveredPartnerNode!.id && n.partner?.relational_feature === rf)
+        .filter((n) => n.kind === "partner" && n.id !== hoveredPartnerNode!.id && projectsOverlap(n.partner?.relational_project, rf))
         .map((n) => n.id),
     );
   }, [hoveredPartnerNode, renderNodes]);
@@ -411,10 +436,10 @@ export default function PartnersVizClient({
               } else if (n.kind === "label") {
                 nodeOpacity = 0.4;
               } else {
-                const rf = hoveredPartnerNode.partner?.relational_feature;
+                const rf = hoveredPartnerNode.partner?.relational_project;
                 if (n.id === hoveredPartnerNode.id) {
                   nodeScale = 1.5; nodeOpacity = 1; highlight = "primary";
-                } else if (rf && n.partner?.relational_feature === rf) {
+                } else if (rf && projectsOverlap(n.partner?.relational_project, rf)) {
                   nodeOpacity = 1; highlight = "secondary";
                 } else {
                   nodeOpacity = 0.35;
@@ -564,9 +589,9 @@ export default function PartnersVizClient({
                       router.replace(`${pathname}${qs}`);
                     }
                   } else {
-                    const rf = n.partner?.relational_feature;
+                    const rf = n.partner?.relational_project;
                     const hasPeers = rf && renderNodes.some(
-                      node => node.kind === "partner" && node.id !== n.id && node.partner?.relational_feature === rf,
+                      node => node.kind === "partner" && node.id !== n.id && projectsOverlap(node.partner?.relational_project, rf),
                     );
                     if (hasPeers) {
                       enterClickState1(n); // enterClickState1 handles URL
@@ -676,19 +701,32 @@ export default function PartnersVizClient({
               }}
             >×</button>
 
-            <p style={{ fontSize: "0.7rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#F1B434", margin: 0 }}>
-              Relational Ecosystem
-            </p>
-            <h2 style={{ fontSize: "1.6rem", fontWeight: 800, lineHeight: 1.2, margin: 0 }}>
-              {lockedGroup.size} Connected Partners
-            </h2>
-            <div style={{ width: 40, height: 2, background: "#F1B434", borderRadius: 1 }} />
-            <p style={{ fontSize: "0.92rem", lineHeight: 1.75, opacity: 0.8, margin: 0 }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </p>
-            <p style={{ fontSize: "0.92rem", lineHeight: 1.75, opacity: 0.55, margin: 0 }}>
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
+            {(() => {
+              const cs1Project = resolveProject(lockedFeature, projectsByTitle);
+              const cs1ShortTitles = [...parseProjects(lockedFeature)].join(", ");
+              return (
+                <>
+                  <p style={{ fontSize: "0.7rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#F1B434", margin: 0 }}>
+                    Relational Ecosystem{cs1ShortTitles ? `: ${cs1ShortTitles}` : ""}
+                  </p>
+                  <h2 style={{ fontSize: "1.6rem", fontWeight: 800, lineHeight: 1.2, margin: 0 }}>
+                    {cs1Project?.full_title ?? cs1Project?.project_label ?? `${lockedGroup.size} Connected Partners`}
+                  </h2>
+                  <div style={{ width: 40, height: 2, background: "#F1B434", borderRadius: 1 }} />
+                  {cs1Project?.project_blurb ? (
+                    <p style={{ fontSize: "0.92rem", lineHeight: 1.75, opacity: 0.8, margin: 0 }}>
+                      {cs1Project.project_blurb}
+                    </p>
+                  ) : (
+                    <>
+                      <p style={{ fontSize: "0.92rem", lineHeight: 1.75, opacity: 0.8, margin: 0 }}>
+                        {lockedGroup.size} partners connected through this relational ecosystem.
+                      </p>
+                    </>
+                  )}
+                </>
+              );
+            })()}
             <p style={{ fontSize: "0.78rem", opacity: 0.4, margin: 0, lineHeight: 1.6 }}>
               Click a highlighted partner to explore its details.
             </p>
@@ -754,6 +792,10 @@ export default function PartnersVizClient({
         const connection = p?.crafd_connection ?? "";
         const logoSlug = toLogoSlug(name);
         const hasLogo = slugSet.has(logoSlug);
+        const project = resolveProject(
+          lockedFeature ?? p?.relational_project,
+          projectsByTitle
+        );
 
         return (
           <div
@@ -843,7 +885,7 @@ export default function PartnersVizClient({
                     {name}{fullName ? `: ${fullName}` : ""}
                   </h1>
                   <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "0.9rem", lineHeight: 1.75, margin: 0 }}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. CRAF&apos;d partners reaffirmed their commitment to this organisation, enabling growth in reach, partnerships, and impact across crisis-affected communities worldwide.
+                    {project?.project_blurb ?? "No project description available."}
                   </p>
                 </div>
               </div>
@@ -852,46 +894,50 @@ export default function PartnersVizClient({
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr 1fr 1fr", gap: "0.9rem" }}>
                 <StatCard label="Status" accent>
                   <p style={{ fontWeight: 800, fontSize: "0.9rem", margin: 0, textTransform: "uppercase", lineHeight: 1.3 }}>
-                    {connection || "Active"}
+                    {project?.project_status ?? connection ?? "Active"}
                   </p>
                 </StatCard>
 
                 <StatCard label="Coverage">
-                  <div
-                    style={{
-                      height: 80, background: "#0a0a0a", borderRadius: 6,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                    }}
-                  >
-                    <p style={{ color: "rgba(255,255,255,0.2)", fontSize: "0.7rem", margin: 0 }}>Map placeholder</p>
-                  </div>
+                  <p style={{ fontWeight: 700, fontSize: "0.9rem", margin: 0, lineHeight: 1.5 }}>
+                    {project?.project_coverage ?? "—"}
+                  </p>
                 </StatCard>
 
-                <StatCard label="Grant Size:">
-                  <p style={{ fontWeight: 800, fontSize: "1.8rem", margin: 0, lineHeight: 1 }}>TBD</p>
+                <StatCard label="Grant Size">
+                  <p style={{ fontWeight: 800, fontSize: "1.4rem", margin: 0, lineHeight: 1 }}>
+                    {project?.grant_size ?? "—"}
+                  </p>
                 </StatCard>
 
-                <StatCard label="Project Duration:">
-                  <p style={{ fontWeight: 800, fontSize: "1.8rem", margin: 0, lineHeight: 1 }}>TBD</p>
-                  <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", margin: 0 }}>MONTHS</p>
+                <StatCard label="Project Duration">
+                  <p style={{ fontWeight: 800, fontSize: "1.8rem", margin: 0, lineHeight: 1 }}>
+                    {project?.duration_months ?? "—"}
+                  </p>
+                  {project?.duration_months && (
+                    <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", margin: 0 }}>MONTHS</p>
+                  )}
                 </StatCard>
               </div>
 
               {/* CTA buttons */}
               <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-                {["Project Overview", "Project Impact", "MPTFO Page"].map((label) => (
-                  <button
-                    key={label}
+                {project?.project_url && (
+                  <a
+                    href={project.project_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
                       background: "#F1B434", color: "#000", fontWeight: 800,
                       fontSize: "0.78rem", letterSpacing: "0.08em",
                       textTransform: "uppercase", border: "none", borderRadius: 6,
                       padding: "0.75rem 1.4rem", cursor: "pointer",
+                      textDecoration: "none", display: "inline-block",
                     }}
                   >
-                    {label}
-                  </button>
-                ))}
+                    CRAF&apos;d Project Page
+                  </a>
+                )}
               </div>
             </div>
           </div>
