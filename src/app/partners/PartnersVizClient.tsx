@@ -162,6 +162,7 @@ export default function PartnersVizClient({
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchLocked, setSearchLocked] = useState(false);
+  const [openProjects, setOpenProjects] = useState<Set<string>>(() => new Set());
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -884,17 +885,64 @@ export default function PartnersVizClient({
                       const projPartners = lockedNodes
                         .filter(n => parseProjects(n.partner?.relational_project).has(proj))
                         .sort((a, b) => (a.partner?.org_short_name ?? a.name ?? "").localeCompare(b.partner?.org_short_name ?? b.name ?? ""));
+                      const isProjOpen = !openProjects.has(proj);
+                      const toggleProj = () => setOpenProjects(prev => {
+                        const next = new Set(prev);
+                        if (next.has(proj)) next.delete(proj); else next.add(proj);
+                        return next;
+                      });
                       return (
                         <div
                           key={proj}
                           id={`cs1-proj-${idx}`}
-                          style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}
+                          style={{ display: "flex", flexDirection: "column" }}
                         >
-                          <h3 style={{ fontSize: "1.15rem", fontWeight: 800, lineHeight: 1.25, margin: 0 }}>
-                            {pd?.full_title ?? pd?.project_label ?? proj}
-                          </h3>
-                          {(pd?.grant_size || pd?.duration_months) && (
+                          <button
+                            onClick={toggleProj}
+                            style={{
+                              background: "none", border: "none", padding: 0,
+                              cursor: "pointer", color: "white",
+                              display: "flex", justifyContent: "space-between", alignItems: "flex-start",
+                              gap: "0.75rem", paddingBottom: "0.6rem",
+                              width: "100%", textAlign: "left",
+                            }}
+                          >
+                            <h3 style={{ fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.3, margin: 0, flex: 1 }}>
+                              {pd?.full_title ?? pd?.project_label ?? proj}
+                            </h3>
+                            <motion.svg
+                              width="16" height="16" viewBox="0 0 16 16" fill="none"
+                              animate={{ rotate: isProjOpen ? 180 : 0 }}
+                              transition={{ type: "spring", stiffness: 300, damping: 28 }}
+                              style={{ marginTop: 3, opacity: 0.6, flexShrink: 0 }}
+                            >
+                              <path d="M4 6l4 4 4-4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                            </motion.svg>
+                          </button>
+                          <AnimatePresence initial={false}>
+                          {isProjOpen && (
+                          <motion.div
+                            key="body"
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ height: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.18 } }}
+                            style={{ overflow: "hidden" }}
+                          >
+                          <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", paddingBottom: "0.25rem" }}>
+                          {(pd?.grant_size || pd?.duration_months || lockedSourceNode?.partner?.crafd_connection) && (
                             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                              {lockedSourceNode?.partner?.crafd_connection && (
+                                <span style={{
+                                  display: "inline-flex", alignItems: "center",
+                                  background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.22)",
+                                  borderRadius: 6, padding: "0.2rem 0.55rem",
+                                  fontSize: "0.72rem", fontWeight: 600, color: "white", letterSpacing: "0.04em",
+                                  textTransform: "uppercase",
+                                }}>
+                                  {lockedSourceNode.partner.crafd_connection}
+                                </span>
+                              )}
                               {pd?.grant_size && (
                                 <span style={{
                                   display: "inline-flex", alignItems: "center", gap: "0.3rem",
@@ -951,6 +999,10 @@ export default function PartnersVizClient({
                           {idx < projects.length - 1 && (
                             <div style={{ width: "100%", height: 1, background: "rgba(255,255,255,0.08)", marginTop: "0.5rem" }} />
                           )}
+                          </div>
+                          </motion.div>
+                          )}
+                          </AnimatePresence>
                         </div>
                       );
                     })}
