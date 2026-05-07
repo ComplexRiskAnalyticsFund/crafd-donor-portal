@@ -3,6 +3,7 @@
 // src/app/partners/PartnersVizClient.tsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import dynamic from "next/dynamic";
 import type { HexNode } from "@/lib/partners/label";
@@ -790,9 +791,15 @@ export default function PartnersVizClient({
           to the SVG for pan/zoom and the SVG backdrop rect for close-on-click.
           Only the left panel is interactive (pointer-events: all).
       */}
+      <AnimatePresence>
       {lockedGroup && !clickedNode && (
         <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", pointerEvents: "none" }}>
-          <div
+          <motion.div
+            key="cs1-panel"
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.8 }}
             style={{
               width: 550,
               pointerEvents: "all",
@@ -913,9 +920,10 @@ export default function PartnersVizClient({
                 </>
               );
             })()}
-          </div>
+          </motion.div>
         </div>
       )}
+      </AnimatePresence>
 
       {/* ── "& Many More" modal ─────────────────────────────────────────────── */}
       {clickedNode?.kind === "more" && (
@@ -968,6 +976,7 @@ export default function PartnersVizClient({
       )}
 
       {/* ── Click state 2 — partner detail modal ──────────────────────────────── */}
+      <AnimatePresence>
       {clickedNode && clickedNode.kind !== "more" && (() => {
         const p = clickedNode.partner;
         const name = p?.org_short_name?.trim() ?? clickedNode.name ?? "Partner";
@@ -980,7 +989,12 @@ export default function PartnersVizClient({
           .map(proj => ({ key: proj, data: projectsByTitle[proj] ?? null }));
 
         return (
-          <div
+          <motion.div
+            key="cs2-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
             style={{
               position: "fixed", inset: 0, zIndex: 60,
               display: "flex", alignItems: "center", justifyContent: "center",
@@ -993,7 +1007,12 @@ export default function PartnersVizClient({
               else router.replace(pathname);
             }}
           >
-            <div
+            <motion.div
+              key="cs2-modal"
+              initial={{ opacity: 0, scale: 0.95, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 24 }}
+              transition={{ type: "spring", stiffness: 340, damping: 30, mass: 0.7 }}
               style={{
                 background: "#141414",
                 borderRadius: 18,
@@ -1171,10 +1190,11 @@ export default function PartnersVizClient({
               })}
 
               </div>{/* end scrollable content */}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         );
       })()}
+      </AnimatePresence>
 
       {/* ── Search UI ─────────────────────────────────────────────────────────── */}
       <div
