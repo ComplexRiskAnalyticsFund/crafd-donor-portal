@@ -970,32 +970,54 @@ export default function PartnersVizClient({
                               {pd.project_blurb}
                             </p>
                           )}
-                          {projPartners.length > 0 && (
-                            <p style={{ fontSize: "0.78rem", lineHeight: 1.9, margin: 0 }}>
-                              {projPartners.map((pn, pi) => (
-                                <span key={pn.id}>
-                                  {pi > 0 && <span style={{ color: "rgba(255,255,255,0.25)", margin: "0 0.25rem" }}>·</span>}
-                                  <button
-                                    onClick={() => {
-                                      setClickedNode(pn);
-                                      const slug = encodeURIComponent(pn.partner?.org_short_name ?? pn.name ?? "");
-                                      router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature ?? "")}&partner=${slug}`);
-                                    }}
-                                    style={{
-                                      background: "none", border: "none", padding: 0,
-                                      color: "rgba(255,255,255,0.65)", cursor: "pointer",
-                                      font: "inherit", fontSize: "0.78rem",
-                                      textDecoration: "none",
-                                    }}
-                                    onMouseEnter={e => (e.currentTarget.style.color = "white")}
-                                    onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.65)")}
-                                  >
-                                    {pn.partner?.org_short_name ?? pn.name}
-                                  </button>
-                                </span>
-                              ))}
-                            </p>
-                          )}
+                          {projPartners.length > 0 && (() => {
+                            const groups = projPartners.reduce<Record<string, typeof projPartners>>((acc, pn) => {
+                              const key = pn.partner?.crafd_connection ?? "Partner";
+                              (acc[key] ??= []).push(pn);
+                              return acc;
+                            }, {});
+                            const GROUP_ORDER = ["Lead Project Partner", "Project Lead Partner", "Implementing Partner", "Collaborating Partner", "Administrative Partner", "MoU Signatory", "UN Partner", "Complementary Donor", "Donor Partner", "CRAF'd"];
+                            const groupPriority = (key: string) => {
+                              const idx = GROUP_ORDER.findIndex(role => key.toLowerCase().includes(role.toLowerCase()));
+                              return idx === -1 ? 999 : idx;
+                            };
+                            const sortedGroups = Object.entries(groups).sort(([a], [b]) => groupPriority(a) - groupPriority(b));
+                            return (
+                              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                                {sortedGroups.map(([type, members]) => (
+                                  <div key={type}>
+                                    <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", margin: "0 0 0.2rem" }}>
+                                      {type}
+                                    </p>
+                                    <p style={{ fontSize: "0.78rem", lineHeight: 1.9, margin: 0 }}>
+                                      {members.map((pn, pi) => (
+                                        <span key={pn.id}>
+                                          {pi > 0 && <span style={{ color: "rgba(255,255,255,0.25)", margin: "0 0.25rem" }}>·</span>}
+                                          <button
+                                            onClick={() => {
+                                              setClickedNode(pn);
+                                              const slug = encodeURIComponent(pn.partner?.org_short_name ?? pn.name ?? "");
+                                              router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature ?? "")}&partner=${slug}`);
+                                            }}
+                                            style={{
+                                              background: "none", border: "none", padding: 0,
+                                              color: "rgba(255,255,255,0.65)", cursor: "pointer",
+                                              font: "inherit", fontSize: "0.78rem",
+                                              textDecoration: "none",
+                                            }}
+                                            onMouseEnter={e => (e.currentTarget.style.color = "white")}
+                                            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.65)")}
+                                          >
+                                            {pn.partner?.org_short_name ?? pn.name}
+                                          </button>
+                                        </span>
+                                      ))}
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          })()}
                           {idx < projects.length - 1 && (
                             <div style={{ width: "100%", height: 1, background: "rgba(255,255,255,0.08)", marginTop: "0.5rem" }} />
                           )}
