@@ -893,6 +893,30 @@ export default function PartnersVizClient({
                           <h3 style={{ fontSize: "1.15rem", fontWeight: 800, lineHeight: 1.25, margin: 0 }}>
                             {pd?.full_title ?? pd?.project_label ?? proj}
                           </h3>
+                          {(pd?.grant_size || pd?.duration_months) && (
+                            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                              {pd?.grant_size && (
+                                <span style={{
+                                  display: "inline-flex", alignItems: "center", gap: "0.3rem",
+                                  background: "rgba(241,180,52,0.12)", border: "1px solid rgba(241,180,52,0.35)",
+                                  borderRadius: 6, padding: "0.2rem 0.55rem",
+                                  fontSize: "0.9rem", fontWeight: 700, color: "#F1B434", letterSpacing: "0.04em",
+                                }}>
+                                  {formatGrantSize(pd.grant_size)}
+                                </span>
+                              )}
+                              {pd?.duration_months && (
+                                <span style={{
+                                  display: "inline-flex", alignItems: "center", gap: "0.3rem",
+                                  background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)",
+                                  borderRadius: 6, padding: "0.2rem 0.55rem",
+                                  fontSize: "0.9rem", fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "0.04em",
+                                }}>
+                                  {pd.duration_months} months
+                                </span>
+                              )}
+                            </div>
+                          )}
                           {pd?.project_blurb && (
                             <p style={{ fontSize: "0.88rem", lineHeight: 1.75, opacity: 0.78, margin: 0 }}>
                               {pd.project_blurb}
