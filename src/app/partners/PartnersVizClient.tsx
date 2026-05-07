@@ -175,6 +175,20 @@ export default function PartnersVizClient({
   const animTlRef = useRef<gsap.core.Timeline | null>(null);
   useEffect(() => { panRef.current = pan; }, [pan]);
   useEffect(() => { scaleRef.current = scale; }, [scale]);
+
+  // Prevent white body background from showing as a strip on the right (100vw vs scrollbar width)
+  useEffect(() => {
+    const prev = { overflow: document.body.style.overflow, bg: document.body.style.background };
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    document.body.style.background = "#FDB53C";
+    return () => {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = prev.overflow;
+      document.body.style.background = prev.bg;
+    };
+  }, []);
+
   const MIN_SCALE = 0.4;
   const MAX_SCALE = 2;
 
@@ -427,7 +441,7 @@ export default function PartnersVizClient({
   }, [projectLineData]);
 
   return (
-    <div className="relative h-full w-full">
+    <div className="fixed inset-0" style={{ background: "#FDB53C" }}>
       <style>{`
         .hub-ring {
           fill-opacity: 0.38;

@@ -33,7 +33,7 @@ export default async function PartnersPage() {
   }
 
   return (
-    <div className="h-screen w-screen bg-[#FDB53C]">
+    <div>
       <Suspense fallback={null}>
         <PartnersVizClient
           initialNodes={nodes}
