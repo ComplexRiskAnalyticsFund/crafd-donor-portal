@@ -794,7 +794,7 @@ export default function PartnersVizClient({
         <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", pointerEvents: "none" }}>
           <div
             style={{
-              width: 380,
+              width: 550,
               pointerEvents: "all",
               background: "rgba(8,8,8,0.93)",
               backdropFilter: "blur(12px)",
@@ -803,22 +803,10 @@ export default function PartnersVizClient({
               color: "white",
               display: "flex",
               flexDirection: "column",
-              padding: "2.5rem",
-              gap: "1.25rem",
-              overflowY: "auto",
+              overflow: "hidden",
             }}
             data-modal="true"
           >
-            <button
-              onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setClickedNode(null); router.replace(pathname); }}
-              style={{
-                alignSelf: "flex-end", background: "none",
-                border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%",
-                color: "white", width: 32, height: 32, fontSize: "1.1rem",
-                cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-              }}
-            >×</button>
-
             {(() => {
               const projects = [...parseProjects(lockedFeature)];
               const partnerName =
@@ -828,82 +816,100 @@ export default function PartnersVizClient({
                 ?? "Partner";
               return (
                 <>
-                  <p style={{ fontSize: "0.7rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#F1B434", margin: 0 }}>
-                    Ecosystem of {partnerName}
-                  </p>
+                  {/* Sticky header — close button, ecosystem label, project nav, separator */}
+                  <div style={{ padding: "2.5rem 2.5rem 1.25rem", flexShrink: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    {/* Header row — title + close button */}
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem" }}>
+                      <p style={{ fontSize: "1.3rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#F1B434", margin: 0, flex: 1 }}>
+                        Ecosystem of <span style={{ fontWeight: 800 }}>{partnerName}</span>
+                      </p>
+                      <button
+                        onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setClickedNode(null); router.replace(pathname); }}
+                        style={{
+                          flexShrink: 0, background: "none",
+                          border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%",
+                          color: "white", width: 32, height: 32, fontSize: "1.1rem",
+                          cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+                        }}
+                      >×</button>
+                    </div>
 
-                  <p style={{ fontSize: "0.8rem", margin: 0, lineHeight: 2 }}>
-                    {projects.map((proj, idx) => (
-                      <span key={proj}>
-                        {idx > 0 && <span style={{ color: "rgba(255,255,255,0.35)" }}> · </span>}
-                        <button
-                          onClick={() => document.getElementById(`cs1-proj-${idx}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                          style={{
-                            background: "none", border: "none", padding: 0,
-                            color: "#F1B434", textDecoration: projects.length > 1 ? "underline" : "none",
-                            cursor: projects.length > 1 ? "pointer" : "default",
-                            font: "inherit", fontSize: "0.8rem",
-                          }}
+                    <p style={{ fontSize: "0.8rem", margin: 0, lineHeight: 2 }}>
+                      {projects.map((proj, idx) => (
+                        <span key={proj}>
+                          {idx > 0 && <span style={{ color: "rgba(255,255,255,0.35)" }}> · </span>}
+                          <button
+                            onClick={() => document.getElementById(`cs1-proj-${idx}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                            style={{
+                              background: "none", border: "none", padding: 0,
+                              color: "#F1B434", textDecoration: projects.length > 1 ? "underline" : "none",
+                              cursor: projects.length > 1 ? "pointer" : "default",
+                              font: "inherit", fontSize: "0.8rem",
+                            }}
+                          >
+                            {proj}
+                          </button>
+                        </span>
+                      ))}
+                    </p>
+
+                    <div style={{ display: "block", width: "100%", height: 4, minHeight: 4, flexShrink: 0, background: "#F1B434", borderRadius: 2 }} />
+                  </div>
+
+                  {/* Scrollable content */}
+                  <div style={{ flex: 1, overflowY: "auto", padding: "0 2.5rem 2.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }} data-modal="true">
+                    {projects.map((proj, idx) => {
+                      const pd = projectsByTitle[proj];
+                      const projPartners = lockedNodes
+                        .filter(n => parseProjects(n.partner?.relational_project).has(proj))
+                        .sort((a, b) => (a.partner?.org_short_name ?? a.name ?? "").localeCompare(b.partner?.org_short_name ?? b.name ?? ""));
+                      return (
+                        <div
+                          key={proj}
+                          id={`cs1-proj-${idx}`}
+                          style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}
                         >
-                          {proj}
-                        </button>
-                      </span>
-                    ))}
-                  </p>
-
-                  <div style={{ display: "block", width: "100%", height: 4, minHeight: 4, flexShrink: 0, background: "#F1B434", borderRadius: 2 }} />
-
-                  {projects.map((proj, idx) => {
-                    const pd = projectsByTitle[proj];
-                    const projPartners = lockedNodes
-                      .filter(n => parseProjects(n.partner?.relational_project).has(proj))
-                      .sort((a, b) => (a.partner?.org_short_name ?? a.name ?? "").localeCompare(b.partner?.org_short_name ?? b.name ?? ""));
-                    return (
-                      <div
-                        key={proj}
-                        id={`cs1-proj-${idx}`}
-                        style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}
-                      >
-                        <h3 style={{ fontSize: "1.15rem", fontWeight: 800, lineHeight: 1.25, margin: 0 }}>
-                          {pd?.full_title ?? pd?.project_label ?? proj}
-                        </h3>
-                        {pd?.project_blurb && (
-                          <p style={{ fontSize: "0.88rem", lineHeight: 1.75, opacity: 0.78, margin: 0 }}>
-                            {pd.project_blurb}
-                          </p>
-                        )}
-                        {projPartners.length > 0 && (
-                          <p style={{ fontSize: "0.78rem", lineHeight: 1.9, margin: 0 }}>
-                            {projPartners.map((pn, pi) => (
-                              <span key={pn.id}>
-                                {pi > 0 && <span style={{ color: "rgba(255,255,255,0.25)", margin: "0 0.25rem" }}>·</span>}
-                                <button
-                                  onClick={() => {
-                                    setClickedNode(pn);
-                                    const slug = encodeURIComponent(pn.partner?.org_short_name ?? pn.name ?? "");
-                                    router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature ?? "")}&partner=${slug}`);
-                                  }}
-                                  style={{
-                                    background: "none", border: "none", padding: 0,
-                                    color: "rgba(255,255,255,0.65)", cursor: "pointer",
-                                    font: "inherit", fontSize: "0.78rem",
-                                    textDecoration: "none",
-                                  }}
-                                  onMouseEnter={e => (e.currentTarget.style.color = "white")}
-                                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.65)")}
-                                >
-                                  {pn.partner?.org_short_name ?? pn.name}
-                                </button>
-                              </span>
-                            ))}
-                          </p>
-                        )}
-                        {idx < projects.length - 1 && (
-                          <div style={{ width: "100%", height: 1, background: "rgba(255,255,255,0.08)", marginTop: "0.5rem" }} />
-                        )}
-                      </div>
-                    );
-                  })}
+                          <h3 style={{ fontSize: "1.15rem", fontWeight: 800, lineHeight: 1.25, margin: 0 }}>
+                            {pd?.full_title ?? pd?.project_label ?? proj}
+                          </h3>
+                          {pd?.project_blurb && (
+                            <p style={{ fontSize: "0.88rem", lineHeight: 1.75, opacity: 0.78, margin: 0 }}>
+                              {pd.project_blurb}
+                            </p>
+                          )}
+                          {projPartners.length > 0 && (
+                            <p style={{ fontSize: "0.78rem", lineHeight: 1.9, margin: 0 }}>
+                              {projPartners.map((pn, pi) => (
+                                <span key={pn.id}>
+                                  {pi > 0 && <span style={{ color: "rgba(255,255,255,0.25)", margin: "0 0.25rem" }}>·</span>}
+                                  <button
+                                    onClick={() => {
+                                      setClickedNode(pn);
+                                      const slug = encodeURIComponent(pn.partner?.org_short_name ?? pn.name ?? "");
+                                      router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature ?? "")}&partner=${slug}`);
+                                    }}
+                                    style={{
+                                      background: "none", border: "none", padding: 0,
+                                      color: "rgba(255,255,255,0.65)", cursor: "pointer",
+                                      font: "inherit", fontSize: "0.78rem",
+                                      textDecoration: "none",
+                                    }}
+                                    onMouseEnter={e => (e.currentTarget.style.color = "white")}
+                                    onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.65)")}
+                                  >
+                                    {pn.partner?.org_short_name ?? pn.name}
+                                  </button>
+                                </span>
+                              ))}
+                            </p>
+                          )}
+                          {idx < projects.length - 1 && (
+                            <div style={{ width: "100%", height: 1, background: "rgba(255,255,255,0.08)", marginTop: "0.5rem" }} />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </>
               );
             })()}
@@ -991,21 +997,19 @@ export default function PartnersVizClient({
               style={{
                 background: "#141414",
                 borderRadius: 18,
-                maxWidth: 920,
+                maxWidth: 1100,
                 width: "100%",
                 position: "relative",
-                padding: "2.5rem",
                 display: "flex",
                 flexDirection: "column",
-                gap: "1.75rem",
                 minHeight: "55vh",
                 maxHeight: "88vh",
-                overflowY: "auto",
+                overflow: "hidden",
               }}
               data-modal="true"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close */}
+              {/* Close — outside scroll area so it stays visible */}
               <button
                 onClick={() => {
                   setClickedNode(null);
@@ -1013,13 +1017,16 @@ export default function PartnersVizClient({
                   else router.replace(pathname);
                 }}
                 style={{
-                  position: "absolute", top: 20, right: 20,
+                  position: "absolute", top: 20, right: 20, zIndex: 1,
                   background: "none", border: "1px solid rgba(255,255,255,0.2)",
                   borderRadius: "50%", color: "white", width: 36, height: 36,
                   fontSize: "1.2rem", cursor: "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}
               >×</button>
+
+              {/* Scrollable content */}
+              <div style={{ flex: 1, overflowY: "auto", padding: "2.5rem", display: "flex", flexDirection: "column", gap: "1.75rem" }} data-modal="true">
 
               {/* Header: logo column (logo + name + website btn) + title column */}
               <div style={{ display: "flex", gap: "1.75rem", alignItems: "flex-start", paddingRight: "3rem" }}>
@@ -1163,6 +1170,7 @@ export default function PartnersVizClient({
                 );
               })}
 
+              </div>{/* end scrollable content */}
             </div>
           </div>
         );
