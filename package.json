@@ -1,5 +1,5 @@
 {
-  "name": "crafd-financial-dashboard-web",
+  "name": "crafd-donor-portal",
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@10.29.2",
