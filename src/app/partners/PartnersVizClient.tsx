@@ -1038,56 +1038,6 @@ export default function PartnersVizClient({
       )}
       </AnimatePresence>
 
-      {/* ── "& Many More" modal ─────────────────────────────────────────────── */}
-      {clickedNode?.kind === "more" && (
-        <div
-          style={{
-            position: "fixed", inset: 0, zIndex: 60,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            background: "rgba(0,0,0,0.72)",
-            padding: "1.5rem",
-          }}
-          onClick={() => { setClickedNode(null); router.replace(pathname); }}
-        >
-          <div
-            style={{
-              background: "#141414",
-              borderRadius: 18,
-              maxWidth: 480,
-              width: "100%",
-              position: "relative",
-              padding: "2.5rem",
-              display: "flex",
-              flexDirection: "column",
-              gap: "1.25rem",
-              alignItems: "center",
-              textAlign: "center",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => { setClickedNode(null); router.replace(pathname); }}
-              style={{
-                position: "absolute", top: 20, right: 20,
-                background: "none", border: "1px solid rgba(255,255,255,0.2)",
-                borderRadius: "50%", color: "white", width: 36, height: 36,
-                fontSize: "1.2rem", cursor: "pointer",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}
-            >×</button>
-            <p style={{ fontSize: "0.7rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#F1B434", margin: 0 }}>
-              CRAF&apos;d Ecosystem
-            </p>
-            <h2 style={{ fontSize: "3.5rem", fontWeight: 800, color: "white", margin: 0, lineHeight: 1 }}>
-              {clickedNode.anonCount}
-            </h2>
-            <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1rem", lineHeight: 1.75, margin: 0, maxWidth: 360 }}>
-              anonymous partners contribute to the CRAF&apos;d ecosystem, supporting crisis risk analytics and humanitarian response across the globe.
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* ── Click state 2 — partner detail side panel ─────────────────────────── */}
       <AnimatePresence>
       {clickedNode && clickedNode.kind !== "more" && (() => {
