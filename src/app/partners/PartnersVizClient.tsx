@@ -919,19 +919,8 @@ export default function PartnersVizClient({
                               <path d="M4 6l4 4 4-4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                             </motion.svg>
                           </button>
-                          <AnimatePresence initial={false}>
-                          {isProjOpen && (
-                          <motion.div
-                            key="body"
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ height: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.18 } }}
-                            style={{ overflow: "hidden" }}
-                          >
-                          <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", paddingBottom: "0.25rem" }}>
                           {(pd?.grant_size || pd?.duration_months || lockedSourceNode?.partner?.crafd_connection) && (
-                            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", paddingBottom: "0.5rem" }}>
                               {lockedSourceNode?.partner?.crafd_connection && (
                                 <span style={{
                                   display: "inline-flex", alignItems: "center",
@@ -965,6 +954,17 @@ export default function PartnersVizClient({
                               )}
                             </div>
                           )}
+                          <AnimatePresence initial={false}>
+                          {isProjOpen && (
+                          <motion.div
+                            key="body"
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ height: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.18 } }}
+                            style={{ overflow: "hidden" }}
+                          >
+                          <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", paddingBottom: "0.25rem" }}>
                           {pd?.project_blurb && (
                             <p style={{ fontSize: "0.88rem", lineHeight: 1.75, opacity: 0.78, margin: 0 }}>
                               {pd.project_blurb}
