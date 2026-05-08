@@ -487,6 +487,7 @@ export default function PartnersVizClient({
           {bgHexes.map(({ x, y, key, opacity }) => (
             <path
               key={key}
+              suppressHydrationWarning
               d={hexPathFlat(x, y, HEX_SIZE)}
               fill="none"
               stroke="white"
@@ -1087,7 +1088,7 @@ export default function PartnersVizClient({
         </div>
       )}
 
-      {/* ── Click state 2 — partner detail modal ──────────────────────────────── */}
+      {/* ── Click state 2 — partner detail side panel ─────────────────────────── */}
       <AnimatePresence>
       {clickedNode && clickedNode.kind !== "more" && (() => {
         const p = clickedNode.partner;
@@ -1096,214 +1097,211 @@ export default function PartnersVizClient({
         const connection = p?.crafd_connection ?? "";
         const logoSlug = toLogoSlug(name);
         const hasLogo = slugSet.has(logoSlug);
+        const isDonor = clickedNode.label === "donor";
 
         const partnerProjects = [...parseProjects(lockedFeature ?? p?.relational_project)]
           .map(proj => ({ key: proj, data: projectsByTitle[proj] ?? null }));
 
+        const closeCS2 = () => {
+          setClickedNode(null);
+          if (lockedFeature) router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature)}`);
+          else router.replace(pathname);
+        };
+
         return (
-          <motion.div
-            key="cs2-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            style={{
-              position: "fixed", inset: 0, zIndex: 60,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              background: "rgba(0,0,0,0.72)",
-              padding: "1.5rem",
-            }}
-            onClick={() => {
-              setClickedNode(null);
-              if (lockedFeature) router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature)}`);
-              else router.replace(pathname);
-            }}
-          >
+          <div style={{ position: "fixed", inset: 0, zIndex: 60, display: "flex", pointerEvents: "none" }}>
+            {/* Backdrop click-to-close */}
+            <div
+              style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.55)", pointerEvents: "all" }}
+              onClick={closeCS2}
+            />
             <motion.div
-              key="cs2-modal"
-              initial={{ opacity: 0, scale: 0.95, y: 24 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 24 }}
-              transition={{ type: "spring", stiffness: 340, damping: 30, mass: 0.7 }}
+              key="cs2-panel"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.8 }}
               style={{
-                background: "#141414",
-                borderRadius: 18,
-                maxWidth: 1100,
-                width: "100%",
+                width: 580,
+                height: "100%",
+                pointerEvents: "all",
                 position: "relative",
+                zIndex: 1,
+                background: "rgba(8,8,8,0.96)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                borderRight: "1px solid rgba(255,255,255,0.08)",
+                color: "white",
                 display: "flex",
                 flexDirection: "column",
-                minHeight: "55vh",
-                maxHeight: "88vh",
                 overflow: "hidden",
               }}
               data-modal="true"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close — outside scroll area so it stays visible */}
-              <button
-                onClick={() => {
-                  setClickedNode(null);
-                  if (lockedFeature) router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature)}`);
-                  else router.replace(pathname);
-                }}
-                style={{
-                  position: "absolute", top: 20, right: 20, zIndex: 1,
-                  background: "none", border: "1px solid rgba(255,255,255,0.2)",
-                  borderRadius: "50%", color: "white", width: 36, height: 36,
-                  fontSize: "1.2rem", cursor: "pointer",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}
-              >×</button>
-
-              {/* Scrollable content */}
-              <div style={{ flex: 1, overflowY: "auto", padding: "2.5rem", display: "flex", flexDirection: "column", gap: "1.75rem" }} data-modal="true">
-
-              {/* Header: logo column (logo + name + website btn) + title column */}
-              <div style={{ display: "flex", gap: "1.75rem", alignItems: "flex-start", paddingRight: "3rem" }}>
-                {/* Logo column */}
-                <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", width: 90 }}>
-                  {p?.org_url ? (
-                    <a href={p.org_url} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none" }}>
-                      <div style={{ width: 80, height: 80, border: "1px solid rgba(255,255,255,0.3)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.05)", overflow: "hidden", cursor: "pointer" }}>
-                        {hasLogo
-                          ? <img src={`/white_logos/${logoSlug}.png`} alt={name} style={{ width: "72%", height: "72%", objectFit: "contain" }} />
-                          : <span style={{ color: "white", fontWeight: 800, fontSize: "0.75rem", textAlign: "center", padding: "0.25rem" }}>{name}</span>
-                        }
-                      </div>
-                    </a>
-                  ) : (
-                    <div style={{ width: 80, height: 80, border: "1px solid rgba(255,255,255,0.15)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
-                      {hasLogo
+              {/* Sticky header */}
+              <div style={{ padding: "2.5rem 2.5rem 1.25rem", flexShrink: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {/* Header row: logo + name + close */}
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "1rem" }}>
+                  {/* Logo */}
+                  <div style={{
+                    flexShrink: 0, width: 56, height: 56,
+                    border: isDonor ? "1px solid rgba(0,0,0,0.12)" : "1px solid rgba(255,255,255,0.3)",
+                    borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+                    background: isDonor ? "white" : "rgba(255,255,255,0.05)", overflow: "hidden",
+                  }}>
+                    {isDonor
+                      ? <img src={`/logos/countries/${logoSlug}.svg`} alt={name} style={{ width: "80%", height: "80%", objectFit: "contain" }} />
+                      : hasLogo
                         ? <img src={`/white_logos/${logoSlug}.png`} alt={name} style={{ width: "72%", height: "72%", objectFit: "contain" }} />
-                        : <span style={{ color: "white", fontWeight: 800, fontSize: "0.75rem", textAlign: "center", padding: "0.25rem" }}>{name}</span>
-                      }
-                    </div>
-                  )}
-                  <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.68rem", letterSpacing: "0.06em", margin: 0, textAlign: "center" }}>
-                    {name}
-                  </p>
-                  {p?.org_url && (
-                    <a href={p.org_url} target="_blank" rel="noopener noreferrer"
-                      style={{ background: "transparent", color: "white", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.07em", textTransform: "uppercase", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 6, padding: "0.45rem 0.7rem", textDecoration: "none", display: "block", width: "100%", textAlign: "center", boxSizing: "border-box" }}>
-                      Partner Website
-                    </a>
-                  )}
-                </div>
-
-                {/* Title column */}
-                <div style={{ flex: 1 }}>
-                  <h1 style={{ color: "white", fontWeight: 800, fontSize: "clamp(1.2rem, 2.5vw, 1.75rem)", lineHeight: 1.15, margin: 0, textTransform: "uppercase", letterSpacing: "0.02em" }}>
-                    {name}{fullName ? `: ${fullName}` : ""}
-                  </h1>
-                </div>
-              </div>
-
-              {/* Donor funding stat — only for donor partners */}
-              {clickedNode.label === "donor" && p?.total_grant_size && (
-                <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem", display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-                  <p style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", margin: 0 }}>
-                    Total Contribution to CRAF&apos;d
-                  </p>
-                  <p style={{ fontWeight: 800, fontSize: "2.8rem", color: "white", margin: 0, lineHeight: 1 }}>
-                    {formatGrantSize(p.total_grant_size)}
-                  </p>
-                </div>
-              )}
-
-              {/* Per-project sections — accordion for >1 project, flat for exactly 1 */}
-              {partnerProjects.map((pp) => {
-                const pd = pp.data;
-                const title = pd?.full_title ?? pd?.project_label ?? pp.key;
-                const isSingle = partnerProjects.length === 1;
-
-                const body = (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", marginTop: isSingle ? 0 : undefined }}>
-                    {pd?.project_blurb && pd.project_blurb.trim() !== "N/A" && (
-                      <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "0.9rem", lineHeight: 1.75, margin: 0 }}>
-                        {pd.project_blurb}
+                        : <span style={{ color: "white", fontWeight: 800, fontSize: "0.7rem", textAlign: "center", padding: "0.25rem" }}>{name}</span>
+                    }
+                  </div>
+                  {/* Title */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "#F1B434", margin: "0 0 0.3rem" }}>
+                      {isDonor ? "Donor" : connection || "Partner"}
+                    </p>
+                    <h1 style={{ color: "white", fontWeight: 800, fontSize: "1.1rem", lineHeight: 1.2, margin: 0, textTransform: "uppercase", letterSpacing: "0.02em" }}>
+                      {name}
+                    </h1>
+                    {fullName && (
+                      <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.78rem", margin: "0.25rem 0 0", lineHeight: 1.4 }}>
+                        {fullName}
                       </p>
                     )}
-
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr 1fr 1fr", gap: "0.9rem" }}>
-                      <StatCard label="Role" accent>
-                        <p style={{ fontWeight: 800, fontSize: "0.85rem", margin: 0, textTransform: "uppercase", lineHeight: 1.4, textAlign: "center" }}>
-                          {connection || "Partner"}
-                        </p>
-                      </StatCard>
-
-                      <StatCard label="Coverage">
-                        {pd?.project_coverage
-                          ? <CoverageMap coverage={pd.project_coverage} />
-                          : <p style={{ fontWeight: 700, fontSize: "0.9rem", margin: 0 }}>—</p>
-                        }
-                      </StatCard>
-
-                      <StatCard label="Grant Size">
-                        <p style={{ fontWeight: 800, fontSize: "2.6rem", margin: 0, lineHeight: 1, textAlign: "center", width: "100%" }}>
-                          {formatGrantSize(pd?.grant_size)}
-                        </p>
-                      </StatCard>
-
-                      <StatCard label="Duration">
-                        <p style={{ fontWeight: 800, fontSize: "2.6rem", margin: 0, lineHeight: 1, textAlign: "center", width: "100%" }}>
-                          {pd?.duration_months ?? "—"}
-                        </p>
-                        {pd?.duration_months && (
-                          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", margin: 0, textAlign: "center", width: "100%" }}>MONTHS</p>
-                        )}
-                      </StatCard>
-                    </div>
-
-                    {pd?.project_url && (
-                      <div>
-                        <a
-                          href={pd.project_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            background: "#F1B434", color: "#000", fontWeight: 800,
-                            fontSize: "0.78rem", letterSpacing: "0.08em",
-                            textTransform: "uppercase", border: "none", borderRadius: 6,
-                            padding: "0.75rem 1.4rem", cursor: "pointer",
-                            textDecoration: "none", display: "inline-block",
-                          }}
-                        >
-                          CRAF&apos;d Project Page
-                        </a>
-                      </div>
-                    )}
                   </div>
-                );
+                  {/* Close */}
+                  <button
+                    onClick={closeCS2}
+                    style={{
+                      flexShrink: 0, background: "none",
+                      border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%",
+                      color: "white", width: 32, height: 32, fontSize: "1.1rem",
+                      cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+                    }}
+                  >×</button>
+                </div>
 
-                if (isSingle) {
-                  return (
-                    <div key={pp.key} style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                      <h3 style={{ fontWeight: 800, fontSize: "1.05rem", color: "white", margin: 0 }}>{title}</h3>
-                      {body}
+                {/* Website link */}
+                {p?.org_url && (
+                  <a href={p.org_url} target="_blank" rel="noopener noreferrer"
+                    style={{ background: "transparent", color: "white", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.07em", textTransform: "uppercase", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 6, padding: "0.45rem 0.7rem", textDecoration: "none", display: "inline-block", alignSelf: "flex-start" }}>
+                    Partner Website
+                  </a>
+                )}
+
+                <div style={{ display: "block", width: "100%", height: 4, minHeight: 4, flexShrink: 0, background: "#F1B434", borderRadius: 2 }} />
+              </div>
+
+              {/* Scrollable content */}
+              <div style={{ flex: 1, overflowY: "auto", padding: "0 2.5rem 2.5rem", display: "flex", flexDirection: "column", gap: "1.75rem" }} data-modal="true">
+
+                {/* Donor total contribution */}
+                {isDonor && p?.total_grant_size && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                    <p style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", margin: 0 }}>
+                      Total Contribution to CRAF&apos;d
+                    </p>
+                    <p style={{ fontWeight: 800, fontSize: "2.8rem", color: "white", margin: 0, lineHeight: 1 }}>
+                      {formatGrantSize(p.total_grant_size)}
+                    </p>
+                  </div>
+                )}
+
+                {/* Per-project sections — accordion for >1 project, flat for exactly 1 */}
+                {partnerProjects.map((pp) => {
+                  const pd = pp.data;
+                  const title = pd?.full_title ?? pd?.project_label ?? pp.key;
+                  const isSingle = partnerProjects.length === 1;
+
+                  const body = (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", marginTop: isSingle ? 0 : undefined }}>
+                      {pd?.project_blurb && pd.project_blurb.trim() !== "N/A" && (
+                        <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "0.9rem", lineHeight: 1.75, margin: 0 }}>
+                          {pd.project_blurb}
+                        </p>
+                      )}
+
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.9rem" }}>
+                        <StatCard label="Role" accent>
+                          <p style={{ fontWeight: 800, fontSize: "0.85rem", margin: 0, textTransform: "uppercase", lineHeight: 1.4, textAlign: "center" }}>
+                            {connection || "Partner"}
+                          </p>
+                        </StatCard>
+
+                        <StatCard label="Coverage">
+                          {pd?.project_coverage
+                            ? <CoverageMap coverage={pd.project_coverage} />
+                            : <p style={{ fontWeight: 700, fontSize: "0.9rem", margin: 0 }}>—</p>
+                          }
+                        </StatCard>
+
+                        <StatCard label="Grant Size">
+                          <p style={{ fontWeight: 800, fontSize: "2.6rem", margin: 0, lineHeight: 1, textAlign: "center", width: "100%" }}>
+                            {formatGrantSize(pd?.grant_size)}
+                          </p>
+                        </StatCard>
+
+                        <StatCard label="Duration">
+                          <p style={{ fontWeight: 800, fontSize: "2.6rem", margin: 0, lineHeight: 1, textAlign: "center", width: "100%" }}>
+                            {pd?.duration_months ?? "—"}
+                          </p>
+                          {pd?.duration_months && (
+                            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", margin: 0, textAlign: "center", width: "100%" }}>MONTHS</p>
+                          )}
+                        </StatCard>
+                      </div>
+
+                      {pd?.project_url && (
+                        <div>
+                          <a
+                            href={pd.project_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              background: "#F1B434", color: "#000", fontWeight: 800,
+                              fontSize: "0.78rem", letterSpacing: "0.08em",
+                              textTransform: "uppercase", border: "none", borderRadius: 6,
+                              padding: "0.75rem 1.4rem", cursor: "pointer",
+                              textDecoration: "none", display: "inline-block",
+                            }}
+                          >
+                            CRAF&apos;d Project Page
+                          </a>
+                        </div>
+                      )}
                     </div>
                   );
-                }
 
-                return (
-                  <details key={pp.key}
-                    style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem" }}>
-                    <summary style={{
-                      cursor: "pointer",
-                      display: "flex", justifyContent: "space-between", alignItems: "center",
-                      fontWeight: 800, fontSize: "1.05rem", color: "white", marginBottom: "1rem",
-                    }}>
-                      <span>{title}</span>
-                      <span className="summary-arrow" style={{ fontSize: "1.5rem", color: "white", fontWeight: 400, marginLeft: "1rem" }} />
-                    </summary>
-                    {body}
-                  </details>
-                );
-              })}
+                  if (isSingle) {
+                    return (
+                      <div key={pp.key} style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+                        <h3 style={{ fontWeight: 800, fontSize: "1.05rem", color: "white", margin: 0 }}>{title}</h3>
+                        {body}
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <details key={pp.key}
+                      style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem" }}>
+                      <summary style={{
+                        cursor: "pointer",
+                        display: "flex", justifyContent: "space-between", alignItems: "center",
+                        fontWeight: 800, fontSize: "1.05rem", color: "white", marginBottom: "1rem",
+                      }}>
+                        <span>{title}</span>
+                        <span className="summary-arrow" style={{ fontSize: "1.5rem", color: "white", fontWeight: 400, marginLeft: "1rem" }} />
+                      </summary>
+                      {body}
+                    </details>
+                  );
+                })}
 
               </div>{/* end scrollable content */}
             </motion.div>
-          </motion.div>
+          </div>
         );
       })()}
       </AnimatePresence>
