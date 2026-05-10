@@ -829,7 +829,7 @@ export default function PartnersVizClient({
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
-            transition={{ type: "spring", stiffness: 400, damping: 35, mass: 0.7 }}
+            transition={{ type: "tween", ease: "easeInOut", duration: 0.18 }}
             style={{
               width: 550,
               pointerEvents: "all",
