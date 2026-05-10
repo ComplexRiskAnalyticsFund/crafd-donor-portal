@@ -178,17 +178,22 @@ export default function PartnersVizClient({
         (n) => n.kind === "partner" && (n.partner?.org_short_name ?? n.name) === partnerParam,
       );
       if (node) {
-        // Open ecosystem view for this partner (consolidated modal)
-        const rf = node.partner?.relational_project;
-        if (rf) {
-          const peers = new Set(
-            initialNodes
-              .filter(n2 => n2.kind === "partner" && n2.id !== node.id && projectsOverlap(n2.partner?.relational_project, rf))
-              .map(n2 => n2.id),
-          );
-          setLockedGroup(new Set([node.id, ...peers]));
-          setLockedFeature(rf);
-          setLockedSourceNode(node);
+        if (node.label === "donor") {
+          // Donor — open donor detail panel
+          setClickedNode(node);
+        } else {
+          // Non-donor — open ecosystem view
+          const rf = node.partner?.relational_project;
+          if (rf) {
+            const peers = new Set(
+              initialNodes
+                .filter(n2 => n2.kind === "partner" && n2.id !== node.id && projectsOverlap(n2.partner?.relational_project, rf))
+                .map(n2 => n2.id),
+            );
+            setLockedGroup(new Set([node.id, ...peers]));
+            setLockedFeature(rf);
+            setLockedSourceNode(node);
+          }
         }
       }
     }
@@ -667,9 +672,15 @@ export default function PartnersVizClient({
                 }}
                 onClick={(e) => {
                   e.stopPropagation(); // prevent SVG backdrop rect from firing
+                  if (n.label === "donor") {
+                    // Donors have no relational_project — open donor detail panel
+                    setClickedNode(n);
+                    const slug = encodeURIComponent(n.partner?.org_short_name ?? n.name ?? "");
+                    router.replace(`${pathname}?partner=${slug}`);
+                    return;
+                  }
                   if (lockedGroup !== null) {
                     if (isLocked) {
-                      // Switch ecosystem view to this partner instead of opening a second modal
                       enterClickState1(n);
                     }
                   } else {
@@ -1046,6 +1057,166 @@ export default function PartnersVizClient({
           </AnimatePresence>
         </div>
       )}
+
+      {/* ── Donor detail panel ───────────────────────────────────────────────── */}
+      <AnimatePresence>
+      {clickedNode && clickedNode.label === "donor" && (() => {
+        const p = clickedNode.partner;
+        const name = p?.org_short_name?.trim() ?? clickedNode.name ?? "Donor";
+        const fullName = p?.org_full_name?.trim() ?? "";
+        const logoSlug = toLogoSlug(name);
+
+        const closeDonor = () => {
+          setClickedNode(null);
+          router.replace(pathname);
+        };
+
+        return (
+          <div style={{ position: "fixed", inset: 0, zIndex: 60, display: "flex", pointerEvents: "none" }}>
+            <div
+              style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.55)", pointerEvents: "all" }}
+              onClick={closeDonor}
+            />
+            <motion.div
+              key={`donor-panel-${clickedNode.id}`}
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "tween", ease: "easeInOut", duration: 0.18 }}
+              style={{
+                width: 550,
+                height: "100%",
+                pointerEvents: "all",
+                position: "relative",
+                zIndex: 1,
+                background: "rgba(8,8,8,0.96)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                borderRight: "1px solid rgba(255,255,255,0.08)",
+                color: "white",
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+              }}
+              data-modal="true"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div style={{ padding: "2.5rem 2.5rem 1.25rem", flexShrink: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "1rem" }}>
+                  {/* Flag */}
+                  <div style={{
+                    flexShrink: 0, width: 56, height: 56,
+                    border: "1px solid rgba(0,0,0,0.12)",
+                    borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+                    background: "white", overflow: "hidden",
+                  }}>
+                    <img src={`/logos/countries/${logoSlug}.svg`} alt={name} style={{ width: "80%", height: "80%", objectFit: "contain" }} />
+                  </div>
+                  {/* Title */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "#F1B434", margin: "0 0 0.3rem" }}>
+                      Donor Partner
+                    </p>
+                    <h1 style={{ color: "white", fontWeight: 800, fontSize: "1.1rem", lineHeight: 1.2, margin: 0, textTransform: "uppercase", letterSpacing: "0.02em" }}>
+                      {name}
+                    </h1>
+                    {fullName && fullName !== name && (
+                      <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.78rem", margin: "0.25rem 0 0", lineHeight: 1.4 }}>
+                        {fullName}
+                      </p>
+                    )}
+                  </div>
+                  {/* Close */}
+                  <button
+                    onClick={closeDonor}
+                    style={{
+                      flexShrink: 0, background: "none",
+                      border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%",
+                      color: "white", width: 32, height: 32, fontSize: "1.1rem",
+                      cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+                    }}
+                  >×</button>
+                </div>
+
+                <div style={{ display: "block", width: "100%", height: 4, minHeight: 4, flexShrink: 0, background: "#F1B434", borderRadius: 2 }} />
+              </div>
+
+              {/* Content */}
+              <div style={{ flex: 1, overflowY: "auto", padding: "0 2.5rem 2.5rem", display: "flex", flexDirection: "column", gap: "1.75rem" }} data-modal="true">
+                {/* Total contribution */}
+                {p?.total_grant_size && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                    <p style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", margin: 0 }}>
+                      Total Contribution to CRAF&apos;d
+                    </p>
+                    <p style={{ fontWeight: 800, fontSize: "2.8rem", color: "white", margin: 0, lineHeight: 1 }}>
+                      {formatGrantSize(p.total_grant_size)}
+                    </p>
+                  </div>
+                )}
+
+                {/* Per-project sections */}
+                {[...parseProjects(p?.relational_project)].map((proj) => {
+                  const pd = projectsByTitle[proj];
+                  if (!pd) return null;
+                  return (
+                    <div key={proj} style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                      <h3 style={{ fontWeight: 800, fontSize: "1.05rem", color: "white", margin: 0 }}>
+                        {pd.full_title ?? pd.project_label ?? proj}
+                      </h3>
+                      {pd.project_blurb && pd.project_blurb.trim() !== "N/A" && (
+                        <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "0.9rem", lineHeight: 1.75, margin: 0 }}>
+                          {pd.project_blurb}
+                        </p>
+                      )}
+                      {pd.grant_size && (
+                        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                          <span style={{
+                            display: "inline-flex", alignItems: "center", gap: "0.3rem",
+                            background: "rgba(241,180,52,0.12)", border: "1px solid rgba(241,180,52,0.35)",
+                            borderRadius: 6, padding: "0.2rem 0.55rem",
+                            fontSize: "0.9rem", fontWeight: 700, color: "#F1B434",
+                          }}>
+                            {formatGrantSize(pd.grant_size)}
+                          </span>
+                          {pd.duration_months && (
+                            <span style={{
+                              display: "inline-flex", alignItems: "center",
+                              background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)",
+                              borderRadius: 6, padding: "0.2rem 0.55rem",
+                              fontSize: "0.9rem", fontWeight: 700, color: "rgba(255,255,255,0.7)",
+                            }}>
+                              {pd.duration_months} months
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      {pd.project_url && (
+                        <a
+                          href={pd.project_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            background: "#F1B434", color: "#000", fontWeight: 800,
+                            fontSize: "0.72rem", letterSpacing: "0.08em",
+                            textTransform: "uppercase", border: "none", borderRadius: 6,
+                            padding: "0.6rem 1.1rem", cursor: "pointer",
+                            textDecoration: "none", display: "inline-block", alignSelf: "flex-start",
+                          }}
+                        >
+                          CRAF&apos;d Project Page
+                        </a>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </div>
+        );
+      })()}
+      </AnimatePresence>
 
       {/* ── Search UI ─────────────────────────────────────────────────────────── */}
       <div
