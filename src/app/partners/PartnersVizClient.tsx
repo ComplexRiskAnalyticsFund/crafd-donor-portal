@@ -158,6 +158,7 @@ export default function PartnersVizClient({
   const [lockedGroup, setLockedGroup] = useState<Set<string> | null>(null);
   const [lockedFeature, setLockedFeature] = useState<string | null>(null);
   const [lockedSourceNode, setLockedSourceNode] = useState<HexNode | null>(null);
+  const [ecosystemContextNode, setEcosystemContextNode] = useState<HexNode | null>(null);
   const [clickedNode, setClickedNode] = useState<HexNode | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -211,7 +212,20 @@ export default function PartnersVizClient({
       const node = initialNodes.find(
         (n) => n.kind === "partner" && (n.partner?.org_short_name ?? n.name) === partnerParam,
       );
-      if (node) setClickedNode(node);
+      if (node) {
+        // Open ecosystem view for this partner (consolidated modal)
+        const rf = node.partner?.relational_project;
+        if (rf) {
+          const peers = new Set(
+            initialNodes
+              .filter(n2 => n2.kind === "partner" && n2.id !== node.id && projectsOverlap(n2.partner?.relational_project, rf))
+              .map(n2 => n2.id),
+          );
+          setLockedGroup(new Set([node.id, ...peers]));
+          setLockedFeature(rf);
+          setLockedSourceNode(node);
+        }
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -327,9 +341,13 @@ export default function PartnersVizClient({
         .filter(node => node.kind === "partner" && node.id !== n.id && projectsOverlap(node.partner?.relational_project, rf))
         .map(node => node.id),
     );
-    if (peers.size === 0) return;
     setHoveredPartner(null);
     setHoveredLabel(null);
+    setClickedNode(null);
+    // Track the origin partner when navigating within an existing ecosystem.
+    // If navigating back to the context partner itself, clear the pretitle.
+    const isReturningToContext = lockedGroup !== null && n.id === ecosystemContextNode?.id;
+    setEcosystemContextNode(isReturningToContext ? null : (lockedGroup !== null ? (lockedSourceNode ?? null) : null));
     setLockedGroup(new Set([n.id, ...peers]));
     setLockedFeature(rf);
     setLockedSourceNode(n);
@@ -690,14 +708,10 @@ export default function PartnersVizClient({
                 }}
                 onClick={(e) => {
                   e.stopPropagation(); // prevent SVG backdrop rect from firing
-                  const slug = encodeURIComponent(n.partner?.org_short_name ?? n.name ?? "");
                   if (lockedGroup !== null) {
                     if (isLocked) {
-                      setClickedNode(n);
-                      const qs = lockedFeature
-                        ? `?group=${encodeURIComponent(lockedFeature)}&partner=${slug}`
-                        : `?partner=${slug}`;
-                      router.replace(`${pathname}${qs}`);
+                      // Switch ecosystem view to this partner instead of opening a second modal
+                      enterClickState1(n);
                     }
                   } else {
                     const rf = n.partner?.relational_project;
@@ -707,8 +721,8 @@ export default function PartnersVizClient({
                     if (hasPeers) {
                       enterClickState1(n); // enterClickState1 handles URL
                     } else {
-                      setClickedNode(n);
-                      router.replace(`${pathname}?partner=${slug}`);
+                      // Solo partner with no peers — open ecosystem view directly
+                      enterClickState1(n);
                     }
                   }
                 }}
@@ -807,15 +821,15 @@ export default function PartnersVizClient({
           to the SVG for pan/zoom and the SVG backdrop rect for close-on-click.
           Only the left panel is interactive (pointer-events: all).
       */}
-      <AnimatePresence>
       {lockedGroup && !clickedNode && (
         <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", pointerEvents: "none" }}>
+          <AnimatePresence mode="wait">
           <motion.div
-            key="cs1-panel"
+            key={`cs1-panel-${lockedSourceNode?.id ?? lockedFeature}`}
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
-            transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.8 }}
+            transition={{ type: "spring", stiffness: 400, damping: 35, mass: 0.7 }}
             style={{
               width: 550,
               pointerEvents: "all",
@@ -833,21 +847,37 @@ export default function PartnersVizClient({
             {(() => {
               const projects = [...parseProjects(lockedFeature)];
               const partnerName =
-                lockedSourceNode?.partner?.org_full_name?.trim()
-                ?? lockedSourceNode?.partner?.org_short_name
+                lockedSourceNode?.partner?.org_short_name?.trim()
                 ?? lockedSourceNode?.name
                 ?? "Partner";
+              const contextName =
+                ecosystemContextNode?.partner?.org_short_name?.trim()
+                ?? ecosystemContextNode?.name
+                ?? null;
               return (
                 <>
                   {/* Sticky header — close button, ecosystem label, project nav, separator */}
                   <div style={{ padding: "2.5rem 2.5rem 1.25rem", flexShrink: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
                     {/* Header row — title + close button */}
                     <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem" }}>
-                      <p style={{ fontSize: "1.3rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#F1B434", margin: 0, flex: 1 }}>
-                        Ecosystem of <span style={{ fontWeight: 800 }}>{partnerName}</span>
-                      </p>
+                      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                        {contextName ? (
+                          <>
+                            <p style={{ fontSize: "0.65rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(241,180,52,0.65)", margin: 0 }}>
+                              Ecosystem of <span style={{ fontWeight: 700 }}>{contextName}</span>
+                            </p>
+                            <p style={{ fontSize: "1.3rem", letterSpacing: "0.04em", textTransform: "uppercase", color: "#F1B434", fontWeight: 800, margin: 0 }}>
+                              {partnerName}
+                            </p>
+                          </>
+                        ) : (
+                          <p style={{ fontSize: "1.3rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#F1B434", margin: 0 }}>
+                            Ecosystem of <span style={{ fontWeight: 800 }}>{partnerName}</span>
+                          </p>
+                        )}
+                      </div>
                       <button
-                        onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setClickedNode(null); router.replace(pathname); }}
+                        onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setEcosystemContextNode(null); setClickedNode(null); router.replace(pathname); }}
                         style={{
                           flexShrink: 0, background: "none",
                           border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%",
@@ -971,6 +1001,37 @@ export default function PartnersVizClient({
                               {pd.project_blurb}
                             </p>
                           )}
+
+                          {/* Coverage map + project page link */}
+                          {(pd?.project_coverage || pd?.project_url) && (
+                            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                              {pd?.project_coverage && (
+                                <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: "0.75rem 1rem", background: "rgba(255,255,255,0.03)" }}>
+                                  <p style={{ fontSize: "0.62rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", margin: "0 0 0.4rem" }}>
+                                    Coverage
+                                  </p>
+                                  <CoverageMap coverage={pd.project_coverage} />
+                                </div>
+                              )}
+                              {pd?.project_url && (
+                                <a
+                                  href={pd.project_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style={{
+                                    background: "#F1B434", color: "#000", fontWeight: 800,
+                                    fontSize: "0.72rem", letterSpacing: "0.08em",
+                                    textTransform: "uppercase", border: "none", borderRadius: 6,
+                                    padding: "0.6rem 1.1rem", cursor: "pointer",
+                                    textDecoration: "none", display: "inline-block", alignSelf: "flex-start",
+                                  }}
+                                >
+                                  CRAF&apos;d Project Page
+                                </a>
+                              )}
+                            </div>
+                          )}
+
                           {projPartners.length > 0 && (() => {
                             const groups = projPartners.reduce<Record<string, typeof projPartners>>((acc, pn) => {
                               const key = pn.partner?.crafd_connection ?? "Partner";
@@ -996,9 +1057,7 @@ export default function PartnersVizClient({
                                           {pi > 0 && <span style={{ color: "rgba(255,255,255,0.25)", margin: "0 0.25rem" }}>·</span>}
                                           <button
                                             onClick={() => {
-                                              setClickedNode(pn);
-                                              const slug = encodeURIComponent(pn.partner?.org_short_name ?? pn.name ?? "");
-                                              router.replace(`${pathname}?group=${encodeURIComponent(lockedFeature ?? "")}&partner=${slug}`);
+                                              enterClickState1(pn);
                                             }}
                                             style={{
                                               background: "none", border: "none", padding: 0,
@@ -1034,9 +1093,9 @@ export default function PartnersVizClient({
               );
             })()}
           </motion.div>
+          </AnimatePresence>
         </div>
       )}
-      </AnimatePresence>
 
       {/* ── Click state 2 — partner detail side panel ─────────────────────────── */}
       <AnimatePresence>
