@@ -46,10 +46,17 @@ export default function CoverageMap({ coverage }: { coverage: string | null }) {
       sel.selectAll("*").remove();
       sel.append("rect").attr("width", W).attr("height", H).attr("fill", "#000");
 
+      // Exclude Antarctica (numeric id 10) from all render branches
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const noAntarcticaGeoms = (geoCache.objects.countries.geometries as any[]).filter(
+        (g: { id: number }) => +g.id !== 10
+      );
+      const noAntarcticaFeatures = countries.features.filter(f => f.id !== 10);
+
       if (highlightIds === null) {
         // Global coverage: draw all land white (no internal borders needed)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const land = topojson.merge(geoCache, geoCache.objects.countries.geometries as any);
+        const land = topojson.merge(geoCache, noAntarcticaGeoms as any);
         sel.append("path")
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .datum(land as any)
@@ -60,7 +67,7 @@ export default function CoverageMap({ coverage }: { coverage: string | null }) {
         // Non-global: show all landmasses very dark (physical map context), highlighted region white
         sel.append("g")
           .selectAll("path")
-          .data(countries.features)
+          .data(noAntarcticaFeatures)
           .join("path")
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .attr("d", (d) => pathGen(d as any) ?? "")

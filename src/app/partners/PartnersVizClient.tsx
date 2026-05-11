@@ -830,20 +830,9 @@ export default function PartnersVizClient({
                     {/* Header row — title + close button */}
                     <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem" }}>
                       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-                        {contextName ? (
-                          <>
-                            <p style={{ fontSize: "0.65rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(241,180,52,0.65)", margin: 0 }}>
-                              Ecosystem of <span style={{ fontWeight: 700 }}>{contextName}</span>
-                            </p>
-                            <p style={{ fontSize: "1.3rem", letterSpacing: "0.04em", textTransform: "uppercase", color: "#F1B434", fontWeight: 800, margin: 0 }}>
-                              {partnerName}
-                            </p>
-                          </>
-                        ) : (
-                          <p style={{ fontSize: "1.3rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#F1B434", margin: 0 }}>
-                            Ecosystem of <span style={{ fontWeight: 800 }}>{partnerName}</span>
-                          </p>
-                        )}
+                        <h1 style={{ fontSize: "1.6rem", letterSpacing: "0.03em", textTransform: "uppercase", color: "#F1B434", fontWeight: 800, margin: 0, lineHeight: 1.15 }}>
+                          Ecosystem of <span style={{ opacity: 0.9 }}>{partnerName}</span>
+                        </h1>
                       </div>
                       <button
                         onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setEcosystemContextNode(null); setClickedNode(null); router.replace(pathname); }}
@@ -856,7 +845,10 @@ export default function PartnersVizClient({
                       >×</button>
                     </div>
 
-                    <p style={{ fontSize: "0.8rem", margin: 0, lineHeight: 2 }}>
+                    <p style={{ fontSize: "0.8rem", margin: 0, lineHeight: 2, display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: "0.1rem" }}>
+                      <span style={{ fontSize: "0.6rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", fontWeight: 700, marginRight: "0.35rem", flexShrink: 0 }}>
+                        Projects:
+                      </span>
                       {projects.map((proj, idx) => (
                         <span key={proj}>
                           {idx > 0 && <span style={{ color: "rgba(255,255,255,0.35)" }}> · </span>}
@@ -864,10 +856,13 @@ export default function PartnersVizClient({
                             onClick={() => document.getElementById(`cs1-proj-${idx}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
                             style={{
                               background: "none", border: "none", padding: 0,
-                              color: "#F1B434", textDecoration: projects.length > 1 ? "underline" : "none",
-                              cursor: projects.length > 1 ? "pointer" : "default",
+                              color: "#F1B434", textDecoration: "underline",
+                              textUnderlineOffset: "3px",
+                              cursor: "pointer",
                               font: "inherit", fontSize: "0.8rem",
                             }}
+                            onMouseEnter={e => (e.currentTarget.style.color = "white")}
+                            onMouseLeave={e => (e.currentTarget.style.color = "#F1B434")}
                           >
                             {proj}
                           </button>
@@ -875,7 +870,7 @@ export default function PartnersVizClient({
                       ))}
                     </p>
 
-                    <div style={{ display: "block", width: "100%", height: 4, minHeight: 4, flexShrink: 0, background: "#F1B434", borderRadius: 2 }} />
+                    <div/>
                   </div>
 
                   {/* Scrollable content */}
@@ -897,13 +892,14 @@ export default function PartnersVizClient({
                           id={`cs1-proj-${idx}`}
                           style={{ display: "flex", flexDirection: "column" }}
                         >
+                          <div style={{ borderLeft: "3px solid #F1B434", paddingLeft: "0.6rem" }}>
                           <button
                             onClick={toggleProj}
                             style={{
                               background: "none", border: "none", padding: 0,
                               cursor: "pointer", color: "white",
                               display: "flex", justifyContent: "space-between", alignItems: "flex-start",
-                              gap: "0.75rem", paddingBottom: "0.6rem",
+                              gap: "0.75rem", paddingBottom: "0.45rem",
                               width: "100%", textAlign: "left",
                             }}
                           >
@@ -935,9 +931,9 @@ export default function PartnersVizClient({
                               {pd?.grant_size && (
                                 <span style={{
                                   display: "inline-flex", alignItems: "center", gap: "0.3rem",
-                                  background: "rgba(241,180,52,0.12)", border: "1px solid rgba(241,180,52,0.35)",
+                                  background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)",
                                   borderRadius: 6, padding: "0.2rem 0.55rem",
-                                  fontSize: "0.9rem", fontWeight: 700, color: "#F1B434", letterSpacing: "0.04em",
+                                  fontSize: "0.9rem", fontWeight: 700, color: "rgba(255,255,255,0.85)", letterSpacing: "0.04em",
                                 }}>
                                   {formatGrantSize(pd.grant_size)}
                                 </span>
@@ -954,6 +950,7 @@ export default function PartnersVizClient({
                               )}
                             </div>
                           )}
+                          </div>
                           <AnimatePresence initial={false}>
                           {isProjOpen && (
                           <motion.div
@@ -1047,9 +1044,6 @@ export default function PartnersVizClient({
                               </div>
                             );
                           })()}
-                          {idx < projects.length - 1 && (
-                            <div style={{ width: "100%", height: 1, background: "rgba(255,255,255,0.08)", marginTop: "0.5rem" }} />
-                          )}
                           </div>
                           </motion.div>
                           )}
@@ -1147,7 +1141,6 @@ export default function PartnersVizClient({
                   >×</button>
                 </div>
 
-                <div style={{ display: "block", width: "100%", height: 4, minHeight: 4, flexShrink: 0, background: "#F1B434", borderRadius: 2 }} />
               </div>
 
               {/* Content */}

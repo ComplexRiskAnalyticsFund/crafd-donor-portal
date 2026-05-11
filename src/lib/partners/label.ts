@@ -165,21 +165,35 @@ export function buildPartnerHexNodes(
   size = 80,
   anonCount?: string,
 ): HexNode[] {
-  // 1) group partners
-  const groups = new Map<PartnerLabel, Partner[]>();
+  // 1) filter, deduplicate, then group partners
+  const dedupedPartners: Partner[] = [];
+  const seenNames = new Map<string, number>();
   for (const p of partners) {
-    // Skip internal/administrative entries that should not appear in the viz
     const rawConn = (p.crafd_connection ?? "").replace(/[‘’]/g, "’");
     if (rawConn.toLowerCase().includes("craf’d")) continue;
     if (/mptfo/i.test(p.org_short_name ?? "") || /mptfo/i.test(p.org_full_name ?? "")) continue;
     if (rawConn.toLowerCase().includes("administrative agent")) continue;
 
-    // Action Aid International is an exception: always placed in the
-    // collaborating cluster regardless of its connection type.
+    const key = (p.org_short_name?.trim() ?? "").toLowerCase();
+    if (key && seenNames.has(key)) {
+      const idx = seenNames.get(key)!;
+      const existing = dedupedPartners[idx];
+      const merged = [...new Set([
+        ...(existing.relational_project ?? "").split(",").map(s => s.trim()).filter(Boolean),
+        ...(p.relational_project ?? "").split(",").map(s => s.trim()).filter(Boolean),
+      ])].join(", ");
+      dedupedPartners[idx] = { ...existing, relational_project: merged };
+    } else {
+      if (key) seenNames.set(key, dedupedPartners.length);
+      dedupedPartners.push(p);
+    }
+  }
+
+  const groups = new Map<PartnerLabel, Partner[]>();
+  for (const p of dedupedPartners) {
     const isActionAid = /action\s*aid/i.test(p.org_short_name ?? "") ||
                         /action\s*aid/i.test(p.org_full_name ?? "");
     const posLabel: PartnerLabel = isActionAid ? "collaborating" : labelPartner(p);
-
     const arr = groups.get(posLabel) ?? [];
     arr.push(p);
     groups.set(posLabel, arr);
@@ -310,16 +324,14 @@ export function buildPartnerHexNodes(
 
       const pxy = axialToPixel(abs.q, abs.r, size);
 
+      const displayName = partner.org_short_name?.trim() || partner.org_full_name?.trim() || "Unknown";
       nodes.push({
-        id: `partner-${label}-${i}-${partner.org_short_name ?? "Unknown"}`.replace(
-          /\s+/g,
-          "-",
-        ),
+        id: `partner-${label}-${i}-${displayName}`.replace(/\s+/g, "-"),
         kind: "partner",
         // Use the partner's actual connection label (not the position-override label)
         // so styling, hover, and label-hex highlights remain data-accurate.
         label: labelPartner(partner),
-        name: partner.org_short_name ?? "Unknown",
+        name: displayName,
         x: pxy.x,
         y: pxy.y,
         r: size,
