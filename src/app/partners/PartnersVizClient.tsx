@@ -800,7 +800,9 @@ export default function PartnersVizClient({
             exit={{ x: "-100%" }}
             transition={{ type: "tween", ease: "easeInOut", duration: 0.18 }}
             style={{
-              width: 550,
+              width: "33.33vw",
+              minWidth: 360,
+              maxWidth: 700,
               pointerEvents: "all",
               background: "rgba(8,8,8,0.93)",
               backdropFilter: "blur(12px)",
@@ -1086,7 +1088,9 @@ export default function PartnersVizClient({
               exit={{ x: "-100%" }}
               transition={{ type: "tween", ease: "easeInOut", duration: 0.18 }}
               style={{
-                width: 550,
+                width: "33.33vw",
+                minWidth: 360,
+                maxWidth: 700,
                 height: "100%",
                 pointerEvents: "all",
                 position: "relative",
