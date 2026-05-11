@@ -136,6 +136,7 @@ export default function PartnersVizClient({
   const pathname = usePathname();
 
   const svgRef = useRef<SVGSVGElement>(null);
+  const panGroupRef = useRef<SVGGElement>(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [scale, setScale] = useState(1);
   const panRef = useRef({ x: 0, y: 0 });
@@ -143,6 +144,15 @@ export default function PartnersVizClient({
   const animTlRef = useRef<gsap.core.Timeline | null>(null);
   useEffect(() => { panRef.current = pan; }, [pan]);
   useEffect(() => { scaleRef.current = scale; }, [scale]);
+
+  // Apply transform directly to DOM during touch (avoids React re-render on every move)
+  const applyTransformDirect = (px: number, py: number, s: number) => {
+    panRef.current = { x: px, y: py };
+    scaleRef.current = s;
+    if (panGroupRef.current) {
+      panGroupRef.current.setAttribute("transform", `translate(${px},${py}) scale(${s})`);
+    }
+  };
 
   // Touch pan/pinch refs
   const touchStartRef = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null);
@@ -221,6 +231,8 @@ export default function PartnersVizClient({
   // Pop-in animation — radial within group waves: Donor → UN/Project → Collab
   useEffect(() => {
     if (renderNodes.length === 0) return;
+    // Skip GSAP pop-in on mobile — too slow, just show nodes immediately
+    if (isMobile) return;
     const svgEl = svgRef.current;
     if (!svgEl) return;
     const id = requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -451,6 +463,9 @@ export default function PartnersVizClient({
           transform-origin: 0 0;
           animation: hub-ring-burst 2.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
         }
+        @media (max-width: 768px) {
+          .hub-ring { animation: none; fill-opacity: 0.18; stroke-opacity: 0.4; }
+        }
         @keyframes hub-ring-burst {
           0%   { fill-opacity: 0.38; stroke-opacity: 0.90; transform: scale(1.02); }
           100% { fill-opacity: 0;    stroke-opacity: 0;    transform: scale(1.62); }
@@ -496,11 +511,12 @@ export default function PartnersVizClient({
             const dy = e.touches[0].clientY - touchStartRef.current.y;
             if (Math.abs(dx) > 4 || Math.abs(dy) > 4) touchMovedRef.current = true;
             const px2unit = 1800 / rect.width;
-            setPan(clampPan(
+            const clamped = clampPan(
               touchStartRef.current.panX + dx * px2unit,
               touchStartRef.current.panY + dy * px2unit,
               scaleRef.current,
-            ));
+            );
+            applyTransformDirect(clamped.x, clamped.y, scaleRef.current);
           } else if (e.touches.length === 2 && pinchStartRef.current) {
             touchMovedRef.current = true;
             const dx = e.touches[1].clientX - e.touches[0].clientX;
@@ -511,11 +527,14 @@ export default function PartnersVizClient({
             const midSvgY = ((pinchStartRef.current.midY - rect.top) / rect.height) * 1000 - 500;
             const cx = (midSvgX - panRef.current.x) / scaleRef.current;
             const cy = (midSvgY - panRef.current.y) / scaleRef.current;
-            setPan(clampPan(midSvgX - cx * newScale, midSvgY - cy * newScale, newScale));
-            setScale(newScale);
+            const clamped = clampPan(midSvgX - cx * newScale, midSvgY - cy * newScale, newScale);
+            applyTransformDirect(clamped.x, clamped.y, newScale);
           }
         }}
         onTouchEnd={() => {
+          // Commit the imperatively applied transform back to React state
+          setPan({ x: panRef.current.x, y: panRef.current.y });
+          setScale(scaleRef.current);
           touchStartRef.current = null;
           pinchStartRef.current = null;
         }}
@@ -539,9 +558,9 @@ export default function PartnersVizClient({
           />
         )}
 
-        <g transform={`translate(${pan.x},${pan.y}) scale(${scale})`}>
-          {/* Background hex grid */}
-          {bgHexes.map(({ d, key, opacity }) => (
+        <g ref={panGroupRef} transform={`translate(${pan.x},${pan.y}) scale(${scale})`}>
+          {/* Background hex grid — skipped on mobile for performance */}
+          {!isMobile && bgHexes.map(({ d, key, opacity }) => (
             <path
               key={key}
               suppressHydrationWarning
