@@ -105,11 +105,13 @@ function formatGrantSize(raw: string | null | undefined): string {
 export default function PartnersVizClient({
   initialNodes,
   partnerLogos,
+  partnerLogoThumbs,
   asOf,
   projectsByTitle,
 }: {
   initialNodes: HexNode[];
   partnerLogos: Record<string, string>;
+  partnerLogoThumbs: Record<string, string>;
   asOf: string;
   projectsByTitle: Record<string, CrafdProject>;
 }) {
@@ -143,6 +145,11 @@ export default function PartnersVizClient({
   const animTlRef = useRef<gsap.core.Timeline | null>(null);
   useEffect(() => { panRef.current = pan; }, [pan]);
   useEffect(() => { scaleRef.current = scale; }, [scale]);
+
+  // Touch pan/pinch refs
+  const touchStartRef = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null);
+  const pinchStartRef = useRef<{ dist: number; scale: number; midX: number; midY: number } | null>(null);
+  const touchMovedRef = useRef(false);
 
   // Prevent white body background from showing as a strip on the right (100vw vs scrollbar width)
   useEffect(() => {
@@ -329,6 +336,7 @@ export default function PartnersVizClient({
     setLockedGroup(new Set([n.id, ...peers]));
     setLockedFeature(rf);
     setLockedSourceNode(n);
+    setOpenProjects(new Set(parseProjects(rf)));
     router.replace(`${pathname}?group=${encodeURIComponent(rf)}`);
   }
 
@@ -460,9 +468,59 @@ export default function PartnersVizClient({
         ref={svgRef}
         viewBox="-900 -500 1800 1000"
         className="h-full w-full"
-        style={{ cursor: "default" }}
+        style={{ cursor: "default", touchAction: "none" }}
         onDoubleClick={handleDoubleClick}
-        onClick={() => { if (isMobile) { setTappedNodeId(null); setHoveredPartner(null); } }}
+        onClick={() => { if (isMobile && !touchMovedRef.current) { setTappedNodeId(null); setHoveredPartner(null); } }}
+        onTouchStart={(e) => {
+          if ((e.target as Element)?.closest?.('[data-modal]')) return;
+          touchMovedRef.current = false;
+          if (e.touches.length === 1) {
+            touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, panX: panRef.current.x, panY: panRef.current.y };
+            pinchStartRef.current = null;
+          } else if (e.touches.length === 2) {
+            const dx = e.touches[1].clientX - e.touches[0].clientX;
+            const dy = e.touches[1].clientY - e.touches[0].clientY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+            const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+            pinchStartRef.current = { dist, scale: scaleRef.current, midX, midY };
+            touchStartRef.current = null;
+          }
+        }}
+        onTouchMove={(e) => {
+          if ((e.target as Element)?.closest?.('[data-modal]')) return;
+          e.preventDefault();
+          const el = svgRef.current;
+          if (!el) return;
+          const rect = el.getBoundingClientRect();
+          if (e.touches.length === 1 && touchStartRef.current) {
+            const dx = e.touches[0].clientX - touchStartRef.current.x;
+            const dy = e.touches[0].clientY - touchStartRef.current.y;
+            if (Math.abs(dx) > 4 || Math.abs(dy) > 4) touchMovedRef.current = true;
+            const px2unit = 1800 / rect.width;
+            setPan(clampPan(
+              touchStartRef.current.panX + dx * px2unit,
+              touchStartRef.current.panY + dy * px2unit,
+              scaleRef.current,
+            ));
+          } else if (e.touches.length === 2 && pinchStartRef.current) {
+            touchMovedRef.current = true;
+            const dx = e.touches[1].clientX - e.touches[0].clientX;
+            const dy = e.touches[1].clientY - e.touches[0].clientY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, pinchStartRef.current.scale * (dist / pinchStartRef.current.dist)));
+            const midSvgX = ((pinchStartRef.current.midX - rect.left) / rect.width) * 1800 - 900;
+            const midSvgY = ((pinchStartRef.current.midY - rect.top) / rect.height) * 1000 - 500;
+            const cx = (midSvgX - panRef.current.x) / scaleRef.current;
+            const cy = (midSvgY - panRef.current.y) / scaleRef.current;
+            setPan(clampPan(midSvgX - cx * newScale, midSvgY - cy * newScale, newScale));
+            setScale(newScale);
+          }
+        }}
+        onTouchEnd={() => {
+          touchStartRef.current = null;
+          pinchStartRef.current = null;
+        }}
       >
         <defs>
           <filter id="grayscale">
@@ -774,7 +832,7 @@ export default function PartnersVizClient({
                       </>
                     ) : logoSlugs.has(slug) ? (
                       <>
-                        <image href={partnerLogos[slug]} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" filter={n.id === lockedSourceNode?.id ? undefined : "url(#grayscale)"} />
+                        <image href={partnerLogoThumbs[slug] ?? partnerLogos[slug]} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" filter={n.id === lockedSourceNode?.id ? undefined : "url(#grayscale)"} />
                         {hoveredPartner === n.id && n.name && (
                           <text x={0} y={boxH / 2 + 14} textAnchor="middle" fontSize={9} fill="white" fontWeight={700}>{n.name}</text>
                         )}
@@ -932,36 +990,11 @@ export default function PartnersVizClient({
                       >×</button>
                     </div>
 
-                    <p style={{ fontSize: "0.8rem", margin: 0, lineHeight: 2, display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: "0.1rem" }}>
-                      <span style={{ fontSize: "0.6rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", fontWeight: 700, marginRight: "0.35rem", flexShrink: 0 }}>
-                        Projects:
-                      </span>
-                      {projects.map((proj, idx) => (
-                        <span key={proj}>
-                          {idx > 0 && <span style={{ color: "rgba(255,255,255,0.35)" }}> · </span>}
-                          <button
-                            onClick={() => document.getElementById(`cs1-proj-${idx}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                            style={{
-                              background: "none", border: "none", padding: 0,
-                              color: "#F1B434", textDecoration: "underline",
-                              textUnderlineOffset: "3px",
-                              cursor: "pointer",
-                              font: "inherit", fontSize: "0.8rem",
-                            }}
-                            onMouseEnter={e => (e.currentTarget.style.color = "white")}
-                            onMouseLeave={e => (e.currentTarget.style.color = "#F1B434")}
-                          >
-                            {proj}
-                          </button>
-                        </span>
-                      ))}
-                    </p>
 
-                    <div/>
                   </div>
 
                   {/* Scrollable content */}
-                  <div style={{ flex: 1, overflowY: "auto", padding: isMobile ? "0 1.5rem 1.5rem" : "0 2.5rem 2.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }} data-modal="true">
+                  <div style={{ flex: 1, overflowY: "auto", padding: isMobile ? "1rem 1.5rem 1.5rem" : "1.5rem 2.5rem 2.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }} data-modal="true">
                     {projects.map((proj, idx) => {
                       const pd = projectsByTitle[proj];
                       const projPartners = lockedNodes

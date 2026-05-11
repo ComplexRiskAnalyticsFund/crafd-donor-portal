@@ -17,10 +17,18 @@ export default async function PartnersPage() {
   const nodes = buildPartnerHexNodes([...donors, ...partners], 75, meta.anon_partner_count);
 
   const partnerLogos: Record<string, string> = {};
+  const partnerLogoThumbs: Record<string, string> = {};
   try {
     const whiteDir = path.join(process.cwd(), "public", "white_logos");
     for (const f of await fs.readdir(whiteDir)) {
+      if (f === "thumb") continue;
       partnerLogos[path.parse(f).name] = `/white_logos/${f}`;
+    }
+  } catch { /* directory doesn't exist yet */ }
+  try {
+    const thumbDir = path.join(process.cwd(), "public", "white_logos", "thumb");
+    for (const f of await fs.readdir(thumbDir)) {
+      partnerLogoThumbs[path.parse(f).name] = `/white_logos/thumb/${f}`;
     }
   } catch { /* directory doesn't exist yet */ }
   try {
@@ -41,6 +49,7 @@ export default async function PartnersPage() {
         <PartnersVizClient
           initialNodes={nodes}
           partnerLogos={partnerLogos}
+          partnerLogoThumbs={partnerLogoThumbs}
           asOf={meta.as_of}
           projectsByTitle={projectsByTitle}
         />
