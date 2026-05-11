@@ -329,6 +329,7 @@ export default function PartnersVizClient({
     setLockedGroup(new Set([n.id, ...peers]));
     setLockedFeature(rf);
     setLockedSourceNode(n);
+    setOpenProjects(new Set(parseProjects(rf)));
     router.replace(`${pathname}?group=${encodeURIComponent(rf)}`);
   }
 
@@ -932,36 +933,11 @@ export default function PartnersVizClient({
                       >×</button>
                     </div>
 
-                    <p style={{ fontSize: "0.8rem", margin: 0, lineHeight: 2, display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: "0.1rem" }}>
-                      <span style={{ fontSize: "0.6rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", fontWeight: 700, marginRight: "0.35rem", flexShrink: 0 }}>
-                        Projects:
-                      </span>
-                      {projects.map((proj, idx) => (
-                        <span key={proj}>
-                          {idx > 0 && <span style={{ color: "rgba(255,255,255,0.35)" }}> · </span>}
-                          <button
-                            onClick={() => document.getElementById(`cs1-proj-${idx}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                            style={{
-                              background: "none", border: "none", padding: 0,
-                              color: "#F1B434", textDecoration: "underline",
-                              textUnderlineOffset: "3px",
-                              cursor: "pointer",
-                              font: "inherit", fontSize: "0.8rem",
-                            }}
-                            onMouseEnter={e => (e.currentTarget.style.color = "white")}
-                            onMouseLeave={e => (e.currentTarget.style.color = "#F1B434")}
-                          >
-                            {proj}
-                          </button>
-                        </span>
-                      ))}
-                    </p>
 
-                    <div/>
                   </div>
 
                   {/* Scrollable content */}
-                  <div style={{ flex: 1, overflowY: "auto", padding: isMobile ? "0 1.5rem 1.5rem" : "0 2.5rem 2.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }} data-modal="true">
+                  <div style={{ flex: 1, overflowY: "auto", padding: isMobile ? "1rem 1.5rem 1.5rem" : "1.5rem 2.5rem 2.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }} data-modal="true">
                     {projects.map((proj, idx) => {
                       const pd = projectsByTitle[proj];
                       const projPartners = lockedNodes
