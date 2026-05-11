@@ -662,10 +662,10 @@ export default function PartnersVizClient({
                   data-label={n.label}
                   data-cx={n.x}
                   data-cy={n.y}
-                  onMouseEnter={() => { if (!lockedGroup && !isMobile) setHoveredPartner(n.id); }}
-                  onMouseLeave={() => { if (!lockedGroup && !isMobile) setHoveredPartner(null); }}
+                  onMouseEnter={isMobile ? undefined : () => { if (!lockedGroup) setHoveredPartner(n.id); }}
+                  onMouseLeave={isMobile ? undefined : () => { if (!lockedGroup) setHoveredPartner(null); }}
                   onClick={(e) => { e.stopPropagation(); setClickedNode(n); }}
-                  style={{ opacity: nodeOpacity, transition: "opacity 0.45s ease", cursor: "pointer" }}
+                  style={{ opacity: nodeOpacity, transition: isMobile ? undefined : "opacity 0.45s ease", cursor: "pointer" }}
                 >
                   <g transform={`translate(${n.x},${n.y})`}>
                     <g style={{ transformOrigin: "0 0", transform: nodeScale !== 1 ? `scale(${nodeScale})` : undefined, transition: "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)" }}>
@@ -697,17 +697,17 @@ export default function PartnersVizClient({
                   key={n.id}
                   data-node="true"
                   data-kind={n.kind}
-                  onMouseEnter={() => {
-                    if (lockedGroup || isMobile) return;
+                  onMouseEnter={isMobile ? undefined : () => {
+                    if (lockedGroup) return;
                     if (n.kind === "label") setHoveredLabel(n.label ?? null);
                   }}
-                  onMouseLeave={() => {
-                    if (lockedGroup || isMobile) return;
+                  onMouseLeave={isMobile ? undefined : () => {
+                    if (lockedGroup) return;
                     if (n.kind === "label") setHoveredLabel(null);
                   }}
                   style={{
                     opacity: nodeOpacity,
-                    transition: "opacity 0.45s ease",
+                    transition: isMobile ? undefined : "opacity 0.45s ease",
                     cursor: n.kind === "label" ? "pointer" : "default",
                   }}
                 >
@@ -757,12 +757,12 @@ export default function PartnersVizClient({
                 data-label={n.label}
                 data-cx={n.x}
                 data-cy={n.y}
-                onMouseEnter={() => {
-                  if (lockedGroup || isMobile) return;
+                onMouseEnter={isMobile ? undefined : () => {
+                  if (lockedGroup) return;
                   setHoveredPartner(n.id);
                 }}
-                onMouseLeave={() => {
-                  if (lockedGroup || isMobile) return;
+                onMouseLeave={isMobile ? undefined : () => {
+                  if (lockedGroup) return;
                   setHoveredPartner(null);
                 }}
                 onClick={(e) => {
@@ -793,7 +793,7 @@ export default function PartnersVizClient({
                 }}
                 style={{
                   opacity: nodeOpacity,
-                  transition: "opacity 0.45s ease",
+                  transition: isMobile ? undefined : "opacity 0.45s ease",
                   cursor: lockedGroup !== null ? (isLocked ? "pointer" : "default") : "pointer",
                 }}
               >
@@ -831,7 +831,7 @@ export default function PartnersVizClient({
                     style={{
                       transformOrigin: "0 0",
                       transform: nodeScale !== 1 ? `scale(${nodeScale})` : undefined,
-                      transition: "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
+                      transition: isMobile ? undefined : "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
                     }}
                   >
                     <path
@@ -842,11 +842,34 @@ export default function PartnersVizClient({
                     />
                     {n.label === "donor" ? (
                       <>
-                        <image href={`/logos/countries/${slug}.svg`} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" />
-                        {hoveredPartner === n.id && n.name && (
-                          <text x={0} y={boxH / 2 + 14} textAnchor="middle" fontSize={9} fill="#1C1C1C" fontWeight={700}>{n.name}</text>
+                        {!isMobile && <image href={`/logos/countries/${slug}.svg`} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" />}
+                        {(isMobile || hoveredPartner === n.id) && n.name && (
+                          <text x={0} y={isMobile ? 4 : boxH / 2 + 14} textAnchor="middle" fontSize={isMobile ? 10 : 9} fill="#1C1C1C" fontWeight={700}>{n.name}</text>
                         )}
                       </>
+                    ) : isMobile ? (
+                      /* Mobile: skip logo images entirely — show text labels */
+                      n.name ? (() => {
+                        const words = n.name.split(" ");
+                        const lines: string[] = [];
+                        let cur = "";
+                        for (const w of words) {
+                          if (cur && (cur + " " + w).length > 11) { lines.push(cur); cur = w; }
+                          else cur = cur ? cur + " " + w : w;
+                        }
+                        if (cur) lines.push(cur);
+                        const lineH = 13;
+                        const totalSpan = (lines.length - 1) * lineH;
+                        return (
+                          <>
+                            {lines.map((line, i) => (
+                              <text key={i} x={0} y={-totalSpan / 2 + i * lineH + 4} textAnchor="middle" fontSize={11} fill="white" fontWeight={700} letterSpacing="0.02em">
+                                {line}
+                              </text>
+                            ))}
+                          </>
+                        );
+                      })() : null
                     ) : logoSlugs.has(slug) ? (
                       <>
                         <image href={partnerLogos[slug]} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" filter={n.id === lockedSourceNode?.id ? undefined : "url(#grayscale)"} />
