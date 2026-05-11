@@ -975,6 +975,12 @@ export default function PartnersVizClient({
                             }}
                           >
                             <h3 style={{ fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.3, margin: 0, flex: 1 }}>
+                              {lockedSourceNode?.partner?.crafd_connection && (
+                                <span style={{ color: "#F1B434", fontWeight: 700 }}>
+                                  {lockedSourceNode.partner.crafd_connection}
+                                  <span style={{ opacity: 0.4, margin: "0 0.4rem" }}>|</span>
+                                </span>
+                              )}
                               {pd?.full_title ?? pd?.project_label ?? proj}
                             </h3>
                             <motion.svg
@@ -986,19 +992,8 @@ export default function PartnersVizClient({
                               <path d="M4 6l4 4 4-4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                             </motion.svg>
                           </button>
-                          {(pd?.grant_size || pd?.duration_months || lockedSourceNode?.partner?.crafd_connection) && (
+                          {(pd?.grant_size || pd?.duration_months) && (
                             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", paddingBottom: "0.5rem" }}>
-                              {lockedSourceNode?.partner?.crafd_connection && (
-                                <span style={{
-                                  display: "inline-flex", alignItems: "center",
-                                  background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.22)",
-                                  borderRadius: 6, padding: "0.2rem 0.55rem",
-                                  fontSize: "0.72rem", fontWeight: 600, color: "white", letterSpacing: "0.04em",
-                                  textTransform: "uppercase",
-                                }}>
-                                  {lockedSourceNode.partner.crafd_connection}
-                                </span>
-                              )}
                               {pd?.grant_size && (
                                 <span style={{
                                   display: "inline-flex", alignItems: "center", gap: "0.3rem",
