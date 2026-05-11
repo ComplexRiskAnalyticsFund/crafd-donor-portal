@@ -1034,7 +1034,7 @@ export default function PartnersVizClient({
                             transition={{ height: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.18 } }}
                             style={{ overflow: "hidden" }}
                           >
-                          <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", paddingBottom: "0.25rem" }}>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", paddingTop: "0.6rem", paddingBottom: "0.25rem", paddingLeft: "calc(3px + 0.6rem)" }}>
                           {pd?.project_blurb && (
                             <p style={{ fontSize: "0.88rem", lineHeight: 1.75, opacity: 0.78, margin: 0 }}>
                               {pd.project_blurb}
