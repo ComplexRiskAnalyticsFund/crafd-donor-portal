@@ -774,7 +774,7 @@ export default function PartnersVizClient({
                       </>
                     ) : logoSlugs.has(slug) ? (
                       <>
-                        <image href={partnerLogos[slug]} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" filter="url(#grayscale)" />
+                        <image href={partnerLogos[slug]} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" filter={n.id === lockedSourceNode?.id ? undefined : "url(#grayscale)"} />
                         {hoveredPartner === n.id && n.name && (
                           <text x={0} y={boxH / 2 + 14} textAnchor="middle" fontSize={9} fill="white" fontWeight={700}>{n.name}</text>
                         )}
