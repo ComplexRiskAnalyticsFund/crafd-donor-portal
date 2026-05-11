@@ -7,7 +7,7 @@ def export_dataframe(df, filename_base: str, output_dir: Path = Path(".")):
 
     csv_path = output_dir / f"{filename_base}.csv"
     df.to_csv(csv_path, index=False)
-    print(f" ✓ Exported CSV to: {csv_path}")
+    print(f" OK Exported CSV to: {csv_path}")
 
 # changed this because of a dependency error that I didnt want to deal with because I dont need parquet atm, can change back if parquet required at some point
     # if parquet:

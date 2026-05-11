@@ -902,6 +902,11 @@ export default function PartnersVizClient({
                         <h1 style={{ fontSize: isMobile ? "1.2rem" : "1.6rem", letterSpacing: "0.03em", textTransform: "uppercase", color: "#F1B434", fontWeight: 800, margin: 0, lineHeight: 1.15 }}>
                           Ecosystem of <span style={{ opacity: 0.9 }}>{partnerName}</span>
                         </h1>
+                        {lockedSourceNode?.partner?.org_type && (
+                          <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", margin: 0 }}>
+                            {lockedSourceNode.partner.org_type}
+                          </p>
+                        )}
                       </div>
                       <button
                         onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setEcosystemContextNode(null); setClickedNode(null); setTappedNodeId(null); setHoveredPartner(null); router.replace(pathname); }}
