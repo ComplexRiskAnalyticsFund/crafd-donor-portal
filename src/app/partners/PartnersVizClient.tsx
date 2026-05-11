@@ -910,7 +910,7 @@ export default function PartnersVizClient({
                         style={{
                           flexShrink: 0, background: "none",
                           border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%",
-                          color: "white", width: 32, height: 32, fontSize: "1.1rem",
+                          color: "white", width: isMobile ? 40 : 32, height: isMobile ? 40 : 32, fontSize: isMobile ? "1.4rem" : "1.1rem",
                           cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
                         }}
                       >×</button>
@@ -1246,7 +1246,7 @@ export default function PartnersVizClient({
                     style={{
                       flexShrink: 0, background: "none",
                       border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%",
-                      color: "white", width: 32, height: 32, fontSize: "1.1rem",
+                      color: "white", width: isMobile ? 40 : 32, height: isMobile ? 40 : 32, fontSize: isMobile ? "1.4rem" : "1.1rem",
                       cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
                     }}
                   >×</button>
