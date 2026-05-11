@@ -129,6 +129,7 @@ export default function PartnersVizClient({
   const [tappedNodeId, setTappedNodeId] = useState<string | null>(null);
   const [sheetSnap, setSheetSnap] = useState<"half" | "full">("half");
   const sheetTouchStartY = useRef(0);
+  const [partnerTooltip, setPartnerTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -1051,57 +1052,76 @@ export default function PartnersVizClient({
                                 background: "#F1B434", color: "#000", fontWeight: 800,
                                 fontSize: "0.72rem", letterSpacing: "0.08em",
                                 textTransform: "uppercase", border: "none", borderRadius: 6,
-                                padding: "0.6rem 1.1rem", cursor: "pointer",
-                                textDecoration: "none", display: "inline-block", alignSelf: "flex-start",
+                                padding: "0.55rem 1rem", cursor: "pointer",
+                                textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "0.5rem", alignSelf: "flex-start",
+                                transition: "all 0.2s ease",
                               }}
+                              onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)"; }}
+                              onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
                             >
-                              CRAF&apos;d Project Page
+                              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}>
+                                <path d="M2 8h12M10 6l2 2-2 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                              Visit project page
                             </a>
                           )}
 
                           {projPartners.length > 0 && (() => {
-                            const groups = projPartners.reduce<Record<string, typeof projPartners>>((acc, pn) => {
-                              const key = pn.partner?.crafd_connection ?? "Partner";
-                              (acc[key] ??= []).push(pn);
-                              return acc;
-                            }, {});
-                            const GROUP_ORDER = ["Lead Project Partner", "Project Lead Partner", "Implementing Partner", "Collaborating Partner", "Administrative Partner", "MoU Signatory", "UN Partner", "Complementary Donor", "Donor Partner", "CRAF'd"];
-                            const groupPriority = (key: string) => {
-                              const idx = GROUP_ORDER.findIndex(role => key.toLowerCase().includes(role.toLowerCase()));
-                              return idx === -1 ? 999 : idx;
-                            };
-                            const sortedGroups = Object.entries(groups).sort(([a], [b]) => groupPriority(a) - groupPriority(b));
+                            const isLead = (conn?: string) => conn?.toLowerCase().includes("project lead") || conn?.toLowerCase().includes("lead project");
+                            const leadPartners = projPartners.filter(pn => isLead(pn.partner?.crafd_connection));
+                            const otherPartners = projPartners.filter(pn => !isLead(pn.partner?.crafd_connection));
+                            const renderPartnerList = (members: typeof projPartners) => (
+                              <p style={{ fontSize: "0.78rem", lineHeight: 1.9, margin: 0 }}>
+                                {members.map((pn, pi) => (
+                                  <span key={pn.id}>
+                                    {pi > 0 && <span style={{ color: "rgba(255,255,255,0.25)", margin: "0 0.25rem" }}>·</span>}
+                                    <button
+                                      onClick={() => {
+                                        enterClickState1(pn);
+                                      }}
+                                      style={{
+                                        background: "none", border: "none", padding: 0,
+                                        color: "rgba(255,255,255,0.65)", cursor: "pointer",
+                                        font: "inherit", fontSize: "0.78rem",
+                                        textDecoration: "none",
+                                      }}
+                                      onMouseEnter={e => {
+                                        e.currentTarget.style.color = "white";
+                                        const conn = pn.partner?.crafd_connection;
+                                        if (conn) {
+                                          const rect = e.currentTarget.getBoundingClientRect();
+                                          setPartnerTooltip({ text: conn, x: rect.left + rect.width / 2, y: rect.top - 1 });
+                                        }
+                                      }}
+                                      onMouseLeave={e => {
+                                        e.currentTarget.style.color = "rgba(255,255,255,0.65)";
+                                        setPartnerTooltip(null);
+                                      }}
+                                    >
+                                      {pn.partner?.org_short_name ?? pn.name}
+                                    </button>
+                                  </span>
+                                ))}
+                              </p>
+                            );
                             return (
                               <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                                {sortedGroups.map(([type, members]) => (
-                                  <div key={type}>
+                                {leadPartners.length > 0 && (
+                                  <div>
                                     <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", margin: "0 0 0.2rem" }}>
-                                      {type}
+                                      Project Lead Partners
                                     </p>
-                                    <p style={{ fontSize: "0.78rem", lineHeight: 1.9, margin: 0 }}>
-                                      {members.map((pn, pi) => (
-                                        <span key={pn.id}>
-                                          {pi > 0 && <span style={{ color: "rgba(255,255,255,0.25)", margin: "0 0.25rem" }}>·</span>}
-                                          <button
-                                            onClick={() => {
-                                              enterClickState1(pn);
-                                            }}
-                                            style={{
-                                              background: "none", border: "none", padding: 0,
-                                              color: "rgba(255,255,255,0.65)", cursor: "pointer",
-                                              font: "inherit", fontSize: "0.78rem",
-                                              textDecoration: "none",
-                                            }}
-                                            onMouseEnter={e => (e.currentTarget.style.color = "white")}
-                                            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.65)")}
-                                          >
-                                            {pn.partner?.org_short_name ?? pn.name}
-                                          </button>
-                                        </span>
-                                      ))}
-                                    </p>
+                                    {renderPartnerList(leadPartners)}
                                   </div>
-                                ))}
+                                )}
+                                {otherPartners.length > 0 && (
+                                  <div>
+                                    <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", margin: "0 0 0.2rem" }}>
+                                      Collaborating &amp; Implementing Partners
+                                    </p>
+                                    {renderPartnerList(otherPartners)}
+                                  </div>
+                                )}
                               </div>
                             );
                           })()}
@@ -1303,11 +1323,17 @@ export default function PartnersVizClient({
                             background: "#F1B434", color: "#000", fontWeight: 800,
                             fontSize: "0.72rem", letterSpacing: "0.08em",
                             textTransform: "uppercase", border: "none", borderRadius: 6,
-                            padding: "0.6rem 1.1rem", cursor: "pointer",
-                            textDecoration: "none", display: "inline-block", alignSelf: "flex-start",
+                            padding: "0.55rem 1rem", cursor: "pointer",
+                            textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "0.5rem", alignSelf: "flex-start",
+                            transition: "all 0.2s ease",
                           }}
+                          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)"; }}
+                          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
                         >
-                          CRAF&apos;d Project Page
+                          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}>
+                            <path d="M2 8h12M10 6l2 2-2 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                          Visit project page
                         </a>
                       )}
                     </div>
@@ -1319,6 +1345,65 @@ export default function PartnersVizClient({
         );
       })()}
       </AnimatePresence>
+
+      {/* ── Partner role tooltip ──────────────────────────────────────────────── */}
+      {partnerTooltip && (
+        <div
+          style={{
+            position: "fixed",
+            left: partnerTooltip.x,
+            top: partnerTooltip.y,
+            transform: "translate(-50%, calc(-100% - 2px))",
+            zIndex: 200,
+            pointerEvents: "none",
+          }}
+        >
+          <div
+            style={{
+              background: "rgba(15,15,15,0.95)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+              border: "1px solid rgba(255,255,255,0.14)",
+              borderRadius: 7,
+              padding: "0.3rem 0.7rem",
+              fontSize: "0.67rem",
+              fontWeight: 600,
+              letterSpacing: "0.07em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.8)",
+              whiteSpace: "nowrap",
+              position: "relative",
+            }}
+          >
+            {partnerTooltip.text}
+            {/* Arrow pointing down */}
+            <span style={{
+              position: "absolute",
+              bottom: -6,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: 0,
+              height: 0,
+              borderLeft: "6px solid transparent",
+              borderRight: "6px solid transparent",
+              borderTop: "6px solid rgba(15,15,15,0.95)",
+            }} />
+            {/* Arrow border (outline) */}
+            <span style={{
+              position: "absolute",
+              bottom: -8,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: 0,
+              height: 0,
+              borderLeft: "7px solid transparent",
+              borderRight: "7px solid transparent",
+              borderTop: "7px solid rgba(255,255,255,0.14)",
+              zIndex: -1,
+            }} />
+          </div>
+        </div>
+      )}
 
       {/* ── Search UI ─────────────────────────────────────────────────────────── */}
       <div
