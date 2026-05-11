@@ -5,11 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
-import dynamic from "next/dynamic";
 import type { HexNode } from "@/lib/partners/label";
 import type { CrafdProject } from "@/types";
-
-const CoverageMap = dynamic(() => import("./CoverageMap"), { ssr: false, loading: () => null });
 
 const SQRT3 = Math.sqrt(3);
 const HEX_SIZE = 75;
@@ -992,7 +989,7 @@ export default function PartnersVizClient({
                               <path d="M4 6l4 4 4-4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                             </motion.svg>
                           </button>
-                          {(pd?.grant_size || pd?.duration_months) && (
+                          {(pd?.grant_size || pd?.duration_months || pd?.project_coverage) && (
                             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", paddingBottom: "0.5rem" }}>
                               {pd?.grant_size && (
                                 <span style={{
@@ -1012,6 +1009,16 @@ export default function PartnersVizClient({
                                   fontSize: "0.9rem", fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "0.04em",
                                 }}>
                                   {pd.duration_months} months
+                                </span>
+                              )}
+                              {pd?.project_coverage && (
+                                <span style={{
+                                  display: "inline-flex", alignItems: "center", gap: "0.3rem",
+                                  background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)",
+                                  borderRadius: 6, padding: "0.2rem 0.55rem",
+                                  fontSize: "0.9rem", fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "0.04em",
+                                }}>
+                                  {pd.project_coverage}
                                 </span>
                               )}
                             </div>
@@ -1034,34 +1041,22 @@ export default function PartnersVizClient({
                             </p>
                           )}
 
-                          {/* Coverage map + project page link */}
-                          {(pd?.project_coverage || pd?.project_url) && (
-                            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                              {pd?.project_coverage && (
-                                <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: "0.75rem 1rem", background: "rgba(255,255,255,0.03)" }}>
-                                  <p style={{ fontSize: "0.62rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", margin: "0 0 0.4rem" }}>
-                                    Coverage
-                                  </p>
-                                  <CoverageMap coverage={pd.project_coverage} />
-                                </div>
-                              )}
-                              {pd?.project_url && (
-                                <a
-                                  href={pd.project_url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  style={{
-                                    background: "#F1B434", color: "#000", fontWeight: 800,
-                                    fontSize: "0.72rem", letterSpacing: "0.08em",
-                                    textTransform: "uppercase", border: "none", borderRadius: 6,
-                                    padding: "0.6rem 1.1rem", cursor: "pointer",
-                                    textDecoration: "none", display: "inline-block", alignSelf: "flex-start",
-                                  }}
-                                >
-                                  CRAF&apos;d Project Page
-                                </a>
-                              )}
-                            </div>
+                          {/* Project page link */}
+                          {pd?.project_url && (
+                            <a
+                              href={pd.project_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                background: "#F1B434", color: "#000", fontWeight: 800,
+                                fontSize: "0.72rem", letterSpacing: "0.08em",
+                                textTransform: "uppercase", border: "none", borderRadius: 6,
+                                padding: "0.6rem 1.1rem", cursor: "pointer",
+                                textDecoration: "none", display: "inline-block", alignSelf: "flex-start",
+                              }}
+                            >
+                              CRAF&apos;d Project Page
+                            </a>
                           )}
 
                           {projPartners.length > 0 && (() => {
