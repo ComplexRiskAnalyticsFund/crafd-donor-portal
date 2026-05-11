@@ -128,6 +128,10 @@ export default function PartnersVizClient({
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchLocked, setSearchLocked] = useState(false);
   const [openProjects, setOpenProjects] = useState<Set<string>>(() => new Set());
+  const [isMobile, setIsMobile] = useState(false);
+  const [tappedNodeId, setTappedNodeId] = useState<string | null>(null);
+  const [sheetSnap, setSheetSnap] = useState<"half" | "full">("half");
+  const sheetTouchStartY = useRef(0);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -157,6 +161,18 @@ export default function PartnersVizClient({
 
   const MIN_SCALE = 0.4;
   const MAX_SCALE = 2;
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  // Reset bottom sheet to half when panel changes
+  useEffect(() => { setSheetSnap("half"); }, [lockedFeature, clickedNode]);
 
   useEffect(() => { setRenderNodes(initialNodes); }, [initialNodes]);
 
@@ -279,7 +295,7 @@ export default function PartnersVizClient({
     const PAN_STEP = 50;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setEcosystemContextNode(null); setClickedNode(null); router.replace(pathname); return;
+        setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setEcosystemContextNode(null); setClickedNode(null); setTappedNodeId(null); setHoveredPartner(null); router.replace(pathname); return;
       }
       if (e.key === "ArrowLeft")       setPan((p) => clampPan(p.x + PAN_STEP, p.y, scaleRef.current));
       else if (e.key === "ArrowRight") setPan((p) => clampPan(p.x - PAN_STEP, p.y, scaleRef.current));
@@ -307,6 +323,7 @@ export default function PartnersVizClient({
     setHoveredPartner(null);
     setHoveredLabel(null);
     setClickedNode(null);
+    setTappedNodeId(null);
     // Track the origin partner when navigating within an existing ecosystem.
     // If navigating back to the context partner itself, clear the pretitle.
     const isReturningToContext = lockedGroup !== null && n.id === ecosystemContextNode?.id;
@@ -447,6 +464,7 @@ export default function PartnersVizClient({
         className="h-full w-full"
         style={{ cursor: "default" }}
         onDoubleClick={handleDoubleClick}
+        onClick={() => { if (isMobile) { setTappedNodeId(null); setHoveredPartner(null); } }}
       >
         <defs>
           <filter id="grayscale">
@@ -463,7 +481,7 @@ export default function PartnersVizClient({
             x="-900" y="-500" width="1800" height="1000"
             fill="transparent"
             style={{ cursor: "default" }}
-            onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setEcosystemContextNode(null); setClickedNode(null); router.replace(pathname); }}
+            onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setEcosystemContextNode(null); setClickedNode(null); setTappedNodeId(null); setHoveredPartner(null); router.replace(pathname); }}
           />
         )}
 
@@ -571,8 +589,8 @@ export default function PartnersVizClient({
                   data-label={n.label}
                   data-cx={n.x}
                   data-cy={n.y}
-                  onMouseEnter={() => { if (!lockedGroup) setHoveredPartner(n.id); }}
-                  onMouseLeave={() => { if (!lockedGroup) setHoveredPartner(null); }}
+                  onMouseEnter={() => { if (!lockedGroup && !isMobile) setHoveredPartner(n.id); }}
+                  onMouseLeave={() => { if (!lockedGroup && !isMobile) setHoveredPartner(null); }}
                   onClick={(e) => { e.stopPropagation(); setClickedNode(n); }}
                   style={{ opacity: nodeOpacity, transition: "opacity 0.45s ease", cursor: "pointer" }}
                 >
@@ -607,11 +625,11 @@ export default function PartnersVizClient({
                   data-node="true"
                   data-kind={n.kind}
                   onMouseEnter={() => {
-                    if (lockedGroup) return;
+                    if (lockedGroup || isMobile) return;
                     if (n.kind === "label") setHoveredLabel(n.label ?? null);
                   }}
                   onMouseLeave={() => {
-                    if (lockedGroup) return;
+                    if (lockedGroup || isMobile) return;
                     if (n.kind === "label") setHoveredLabel(null);
                   }}
                   style={{
@@ -667,15 +685,24 @@ export default function PartnersVizClient({
                 data-cx={n.x}
                 data-cy={n.y}
                 onMouseEnter={() => {
-                  if (lockedGroup) return;
+                  if (lockedGroup || isMobile) return;
                   setHoveredPartner(n.id);
                 }}
                 onMouseLeave={() => {
-                  if (lockedGroup) return;
+                  if (lockedGroup || isMobile) return;
                   setHoveredPartner(null);
                 }}
                 onClick={(e) => {
                   e.stopPropagation(); // prevent SVG backdrop rect from firing
+
+                  // Mobile: first tap = hover state, second tap = open modal
+                  if (isMobile && tappedNodeId !== n.id) {
+                    setTappedNodeId(n.id);
+                    setHoveredPartner(n.id);
+                    return;
+                  }
+                  if (isMobile) { setTappedNodeId(null); setHoveredPartner(null); }
+
                   if (n.label === "donor") {
                     // Donors have no relational_project — open donor detail panel
                     setClickedNode(n);
@@ -792,14 +819,39 @@ export default function PartnersVizClient({
       */}
       {lockedGroup && !clickedNode && (
         <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", pointerEvents: "none" }}>
+          {/* Mobile backdrop */}
+          {isMobile && (
+            <div
+              style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.55)", pointerEvents: "all" }}
+              onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setEcosystemContextNode(null); setClickedNode(null); setTappedNodeId(null); setHoveredPartner(null); router.replace(pathname); }}
+            />
+          )}
           <AnimatePresence mode="wait">
           <motion.div
             key={`cs1-panel-${lockedSourceNode?.id ?? lockedFeature}`}
-            initial={{ x: "-100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "-100%" }}
+            initial={isMobile ? { y: "100%" } : { x: "-100%" }}
+            animate={isMobile ? { y: 0 } : { x: 0 }}
+            exit={isMobile ? { y: "100%" } : { x: "-100%" }}
             transition={{ type: "tween", ease: "easeInOut", duration: 0.18 }}
-            style={{
+            style={isMobile ? {
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: sheetSnap === "full" ? "100dvh" : "50dvh",
+              transition: "height 0.3s ease",
+              pointerEvents: "all",
+              background: "rgba(8,8,8,0.96)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              borderTop: "1px solid rgba(255,255,255,0.12)",
+              borderTopLeftRadius: sheetSnap === "full" ? 0 : 16,
+              borderTopRightRadius: sheetSnap === "full" ? 0 : 16,
+              color: "white",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+            } : {
               width: "33.33vw",
               minWidth: 360,
               maxWidth: 700,
@@ -827,17 +879,34 @@ export default function PartnersVizClient({
                 ?? null;
               return (
                 <>
+                  {/* Mobile drag handle */}
+                  {isMobile && (
+                    <div
+                      onTouchStart={(e) => { sheetTouchStartY.current = e.touches[0].clientY; }}
+                      onTouchEnd={(e) => {
+                        const dy = e.changedTouches[0].clientY - sheetTouchStartY.current;
+                        if (dy < -30) setSheetSnap("full");
+                        else if (dy > 30) {
+                          if (sheetSnap === "full") setSheetSnap("half");
+                          else { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setEcosystemContextNode(null); setTappedNodeId(null); setHoveredPartner(null); router.replace(pathname); }
+                        }
+                      }}
+                      style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px", cursor: "grab", touchAction: "none", flexShrink: 0 }}
+                    >
+                      <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.3)" }} />
+                    </div>
+                  )}
                   {/* Sticky header — close button, ecosystem label, project nav, separator */}
-                  <div style={{ padding: "2.5rem 2.5rem 1.25rem", flexShrink: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
+                  <div style={{ padding: isMobile ? "1rem 1.5rem 1rem" : "2.5rem 2.5rem 1.25rem", flexShrink: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
                     {/* Header row — title + close button */}
                     <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem" }}>
                       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-                        <h1 style={{ fontSize: "1.6rem", letterSpacing: "0.03em", textTransform: "uppercase", color: "#F1B434", fontWeight: 800, margin: 0, lineHeight: 1.15 }}>
+                        <h1 style={{ fontSize: isMobile ? "1.2rem" : "1.6rem", letterSpacing: "0.03em", textTransform: "uppercase", color: "#F1B434", fontWeight: 800, margin: 0, lineHeight: 1.15 }}>
                           Ecosystem of <span style={{ opacity: 0.9 }}>{partnerName}</span>
                         </h1>
                       </div>
                       <button
-                        onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setEcosystemContextNode(null); setClickedNode(null); router.replace(pathname); }}
+                        onClick={() => { setLockedGroup(null); setLockedFeature(null); setLockedSourceNode(null); setEcosystemContextNode(null); setClickedNode(null); setTappedNodeId(null); setHoveredPartner(null); router.replace(pathname); }}
                         style={{
                           flexShrink: 0, background: "none",
                           border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%",
@@ -876,7 +945,7 @@ export default function PartnersVizClient({
                   </div>
 
                   {/* Scrollable content */}
-                  <div style={{ flex: 1, overflowY: "auto", padding: "0 2.5rem 2.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }} data-modal="true">
+                  <div style={{ flex: 1, overflowY: "auto", padding: isMobile ? "0 1.5rem 1.5rem" : "0 2.5rem 2.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }} data-modal="true">
                     {projects.map((proj, idx) => {
                       const pd = projectsByTitle[proj];
                       const projPartners = lockedNodes
@@ -1072,6 +1141,8 @@ export default function PartnersVizClient({
 
         const closeDonor = () => {
           setClickedNode(null);
+          setTappedNodeId(null);
+          setHoveredPartner(null);
           router.replace(pathname);
         };
 
@@ -1083,11 +1154,30 @@ export default function PartnersVizClient({
             />
             <motion.div
               key={`donor-panel-${clickedNode.id}`}
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
+              initial={isMobile ? { y: "100%" } : { x: "-100%" }}
+              animate={isMobile ? { y: 0 } : { x: 0 }}
+              exit={isMobile ? { y: "100%" } : { x: "-100%" }}
               transition={{ type: "tween", ease: "easeInOut", duration: 0.18 }}
-              style={{
+              style={isMobile ? {
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: sheetSnap === "full" ? "100dvh" : "50dvh",
+                transition: "height 0.3s ease",
+                pointerEvents: "all",
+                zIndex: 1,
+                background: "rgba(8,8,8,0.96)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                borderTop: "1px solid rgba(255,255,255,0.12)",
+                borderTopLeftRadius: sheetSnap === "full" ? 0 : 16,
+                borderTopRightRadius: sheetSnap === "full" ? 0 : 16,
+                color: "white",
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+              } : {
                 width: "33.33vw",
                 minWidth: 360,
                 maxWidth: 700,
@@ -1107,8 +1197,25 @@ export default function PartnersVizClient({
               data-modal="true"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Mobile drag handle */}
+              {isMobile && (
+                <div
+                  onTouchStart={(e) => { sheetTouchStartY.current = e.touches[0].clientY; }}
+                  onTouchEnd={(e) => {
+                    const dy = e.changedTouches[0].clientY - sheetTouchStartY.current;
+                    if (dy < -30) setSheetSnap("full");
+                    else if (dy > 30) {
+                      if (sheetSnap === "full") setSheetSnap("half");
+                      else closeDonor();
+                    }
+                  }}
+                  style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px", cursor: "grab", touchAction: "none", flexShrink: 0 }}
+                >
+                  <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.3)" }} />
+                </div>
+              )}
               {/* Header */}
-              <div style={{ padding: "2.5rem 2.5rem 1.25rem", flexShrink: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
+              <div style={{ padding: isMobile ? "1rem 1.5rem 1rem" : "2.5rem 2.5rem 1.25rem", flexShrink: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "1rem" }}>
                   {/* Flag */}
                   <div style={{
@@ -1148,7 +1255,7 @@ export default function PartnersVizClient({
               </div>
 
               {/* Content */}
-              <div style={{ flex: 1, overflowY: "auto", padding: "0 2.5rem 2.5rem", display: "flex", flexDirection: "column", gap: "1.75rem" }} data-modal="true">
+              <div style={{ flex: 1, overflowY: "auto", padding: isMobile ? "0 1.5rem 1.5rem" : "0 2.5rem 2.5rem", display: "flex", flexDirection: "column", gap: "1.75rem" }} data-modal="true">
                 {/* Total contribution */}
                 {p?.total_grant_size && (
                   <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
