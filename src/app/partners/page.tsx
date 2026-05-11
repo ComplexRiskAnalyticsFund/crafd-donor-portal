@@ -16,16 +16,19 @@ export default async function PartnersPage() {
   // donors first so their group is processed before UN spreads into adjacent cells
   const nodes = buildPartnerHexNodes([...donors, ...partners], 75, meta.anon_partner_count);
 
-  // Build the set of logo slugs that actually exist in public/white_logos/
-  // so the client can fall back to text for any missing logo.
-  let availableSlugs: string[] = [];
+  const partnerLogos: Record<string, string> = {};
   try {
-    const logoDir = path.join(process.cwd(), "public", "white_logos");
-    const files = await fs.readdir(logoDir);
-    availableSlugs = files.map((f) => path.parse(f).name);
-  } catch {
-    // Directory doesn't exist yet — all hexes will show text
-  }
+    const whiteDir = path.join(process.cwd(), "public", "white_logos");
+    for (const f of await fs.readdir(whiteDir)) {
+      partnerLogos[path.parse(f).name] = `/white_logos/${f}`;
+    }
+  } catch { /* directory doesn't exist yet */ }
+  try {
+    const colorDir = path.join(process.cwd(), "public", "logos", "color");
+    for (const f of await fs.readdir(colorDir)) {
+      partnerLogos[path.parse(f).name] = `/logos/color/${f}`;
+    }
+  } catch { /* directory doesn't exist yet */ }
 
   const projectsByTitle: Record<string, CrafdProject> = {};
   for (const p of projects) {
@@ -37,7 +40,7 @@ export default async function PartnersPage() {
       <Suspense fallback={null}>
         <PartnersVizClient
           initialNodes={nodes}
-          availableSlugs={availableSlugs}
+          partnerLogos={partnerLogos}
           asOf={meta.as_of}
           projectsByTitle={projectsByTitle}
         />

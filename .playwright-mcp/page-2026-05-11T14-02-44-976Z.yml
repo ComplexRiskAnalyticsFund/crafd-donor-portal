@@ -1,0 +1,90 @@
+- generic [active]:
+  - generic [ref=e1]:
+    - img [ref=e2]:
+      - generic [ref=e3]:
+        - generic [ref=e1314] [cursor=pointer]: 3iS
+        - generic [ref=e1359] [cursor=pointer]: AFPA
+        - generic [ref=e1369] [cursor=pointer]: APW
+        - generic [ref=e1387] [cursor=pointer]:
+          - generic [ref=e1389]: Armillary
+          - generic [ref=e1390]: Services
+        - generic [ref=e1415] [cursor=pointer]: CHC
+        - generic [ref=e1445] [cursor=pointer]: CONRED
+        - generic [ref=e1480] [cursor=pointer]: DevTransform
+        - generic [ref=e1500] [cursor=pointer]: EGRISS
+        - generic [ref=e1505] [cursor=pointer]: EYE on ISIS
+        - generic [ref=e1520] [cursor=pointer]: FEWS NET
+        - generic [ref=e1550] [cursor=pointer]: FWM
+        - generic [ref=e1565] [cursor=pointer]: GI-TOC
+        - generic [ref=e1580] [cursor=pointer]: HDX
+        - generic [ref=e1605] [cursor=pointer]: ICRC
+        - generic [ref=e1620] [cursor=pointer]: IStories
+        - generic [ref=e1650] [cursor=pointer]: LSM
+        - generic [ref=e1660] [cursor=pointer]: MPM
+        - generic [ref=e1670] [cursor=pointer]: MilitiaWatch
+        - generic [ref=e1680] [cursor=pointer]: NDMA-SL
+        - generic [ref=e1715] [cursor=pointer]: ORDEDH
+        - generic [ref=e1720] [cursor=pointer]: ORF
+        - generic [ref=e1725] [cursor=pointer]: OSCAA
+        - generic [ref=e1730] [cursor=pointer]: OVPE
+        - generic [ref=e1735] [cursor=pointer]: PICSS
+        - generic [ref=e1740] [cursor=pointer]: PJS
+        - generic [ref=e1760] [cursor=pointer]: REACH
+        - generic [ref=e1765] [cursor=pointer]: REGAH
+        - generic [ref=e1783] [cursor=pointer]:
+          - generic [ref=e1785]: Sana’a
+          - generic [ref=e1786]: Center
+        - generic [ref=e1791] [cursor=pointer]: Shahit.biz
+        - generic [ref=e1794] [cursor=pointer]:
+          - generic [ref=e1796]: Sismología
+          - generic [ref=e1797]: Social
+        - generic [ref=e1817] [cursor=pointer]: UARIV
+        - generic [ref=e1832] [cursor=pointer]: UNIDIR
+        - generic [ref=e1837] [cursor=pointer]: UNMA
+        - generic [ref=e1842] [cursor=pointer]: UNOCC
+        - generic [ref=e1852] [cursor=pointer]: VIA
+        - generic [ref=e1857] [cursor=pointer]: WANEP-SL
+        - generic [ref=e1877] [cursor=pointer]: Yikono
+        - generic [ref=e1882] [cursor=pointer]: ZPP
+        - generic [ref=e1897] [cursor=pointer]: Unknown
+        - generic [ref=e1902] [cursor=pointer]: Unknown
+        - generic [ref=e1907] [cursor=pointer]: Unknown
+        - generic [ref=e1912] [cursor=pointer]: Unknown
+        - generic [ref=e1917] [cursor=pointer]: Unknown
+        - generic [ref=e1922] [cursor=pointer]: Unknown
+        - generic [ref=e1927] [cursor=pointer]: Unknown
+        - generic [ref=e1932] [cursor=pointer]: Unknown
+        - generic [ref=e1937] [cursor=pointer]: Unknown
+        - generic [ref=e1942] [cursor=pointer]: Unknown
+        - generic [ref=e1947] [cursor=pointer]: Unknown
+        - generic [ref=e1952] [cursor=pointer]: Unknown
+        - generic [ref=e1957] [cursor=pointer]: Unknown
+        - generic [ref=e1960] [cursor=pointer]:
+          - generic [ref=e1962]: "&"
+          - generic [ref=e1963]: MANY
+          - generic [ref=e1964]: MORE
+        - generic [ref=e2135] [cursor=pointer]:
+          - generic [ref=e2137]: "8"
+          - generic [ref=e2138]: DONOR
+          - generic [ref=e2139]: PARTNERS
+        - generic [ref=e2140] [cursor=pointer]:
+          - generic [ref=e2142]: "132"
+          - generic [ref=e2143]: COLLABORATING
+          - generic [ref=e2144]: PARTNERS
+        - generic [ref=e2145] [cursor=pointer]:
+          - generic [ref=e2147]: "16"
+          - generic [ref=e2148]: PROJECT
+          - generic [ref=e2149]: PARTNERS
+        - generic [ref=e2150] [cursor=pointer]:
+          - generic [ref=e2152]: "1"
+          - generic [ref=e2153]: OTHER
+        - generic [ref=e2154] [cursor=pointer]:
+          - generic [ref=e2156]: "17"
+          - generic [ref=e2157]: UN
+          - generic [ref=e2158]: PARTNERS
+    - generic [ref=e2162]:
+      - textbox "Search partners…" [ref=e2164]
+      - button "Search partners" [ref=e2165] [cursor=pointer]:
+        - img [ref=e2166]
+    - paragraph: As of April 2025
+  - alert [ref=e2169]

@@ -15,16 +15,15 @@ const SQRT3 = Math.sqrt(3);
 const HEX_SIZE = 75;
 const GRID_LIMIT = 2400;
 
-// Per-project line colors: brown/amber shades cycling through projects
-const PROJECT_LINE_COLORS = [
-  "rgba(210, 155, 75, 0.82)",
-  "rgba(155, 95,  40, 0.85)",
-  "rgba(230, 185, 100, 0.78)",
-  "rgba(120, 65,  20, 0.88)",
-  "rgba(190, 130, 55, 0.82)",
-  "rgba(240, 200, 120, 0.74)",
-  "rgba(135, 75,  25, 0.85)",
-  "rgba(170, 110, 45, 0.80)",
+const PROJECT_LINE_DASHES = [
+  "",
+  "14 8",
+  "3 8",
+  "14 6 3 6",
+  "24 10",
+  "8 5",
+  "3 5",
+  "20 6 3 6 3 6",
 ];
 
 function clampPan(x: number, y: number, s: number) {
@@ -108,12 +107,12 @@ function formatGrantSize(raw: string | null | undefined): string {
 
 export default function PartnersVizClient({
   initialNodes,
-  availableSlugs,
+  partnerLogos,
   asOf,
   projectsByTitle,
 }: {
   initialNodes: HexNode[];
-  availableSlugs: string[];
+  partnerLogos: Record<string, string>;
   asOf: string;
   projectsByTitle: Record<string, CrafdProject>;
 }) {
@@ -217,7 +216,7 @@ export default function PartnersVizClient({
       const GROUP_WAVE = 0.5;   // seconds between group onsets
       const RADIAL_SPREAD = 0.6; // radial window within each group
       const GROUP_ORDER: Record<string, number> = {
-        donor: 0, un: 1, project: 1, collaborating: 2, other: 2,
+        donor: 0, un: 1, project: 1, collaborating: 2,
       };
       const maxDist = partnerGs.reduce((m, el) => {
         const cx = parseFloat(el.getAttribute("data-cx") ?? "0");
@@ -335,7 +334,7 @@ export default function PartnersVizClient({
     return cells;
   }, []);
 
-  const slugSet = useMemo(() => new Set(availableSlugs), [availableSlugs]);
+  const logoSlugs = useMemo(() => new Set(Object.keys(partnerLogos)), [partnerLogos]);
 
   const hoveredPartnerNode = useMemo(
     () => (hoveredPartner ? renderNodes.find((n) => n.id === hoveredPartner) ?? null : null),
@@ -400,25 +399,24 @@ export default function PartnersVizClient({
         projNodes.find(n => n.partner?.crafd_connection?.includes("Project lead partner"))
         ?? (lockedSourceNode && projNodes.some(n => n.id === lockedSourceNode.id) ? lockedSourceNode : null)
         ?? projNodes[0];
-      const color = isSingle
-        ? "rgba(255,255,255,0.70)"
-        : PROJECT_LINE_COLORS[idx % PROJECT_LINE_COLORS.length];
+      const dasharray = isSingle
+        ? ""
+        : PROJECT_LINE_DASHES[idx % PROJECT_LINE_DASHES.length];
       return projNodes
         .filter(n => n.id !== hub.id)
         .map(spoke => ({
           hub,
           spoke,
-          color,
+          dasharray,
           isSourceLine: spoke.id === lockedSourceNode?.id || hub.id === lockedSourceNode?.id,
         }));
     });
   }, [lockedGroup, lockedNodes, lockedFeature, lockedSourceNode]);
 
-  // nodeId → first project color (used for hub glow ring)
-  const hubColors = useMemo(() => {
+  const hubDashes = useMemo(() => {
     const map = new Map<string, string>();
-    for (const { hub, color } of projectLineData) {
-      if (!map.has(hub.id)) map.set(hub.id, color);
+    for (const { hub, dasharray } of projectLineData) {
+      if (!map.has(hub.id)) map.set(hub.id, dasharray);
     }
     return map;
   }, [projectLineData]);
@@ -450,6 +448,11 @@ export default function PartnersVizClient({
         style={{ cursor: "default" }}
         onDoubleClick={handleDoubleClick}
       >
+        <defs>
+          <filter id="grayscale">
+            <feColorMatrix type="saturate" values="0" />
+          </filter>
+        </defs>
         {/*
           SVG backdrop rect — spans the full viewBox, drawn BEFORE the pan/scale group
           (so hexes above it in z-order still receive clicks first).
@@ -479,7 +482,7 @@ export default function PartnersVizClient({
           ))}
 
           {/* Connecting lines — per-project hub-spoke, drawn under hexes */}
-          {projectLineData.map(({ hub, spoke, color, isSourceLine }, i) => {
+          {projectLineData.map(({ hub, spoke, dasharray, isSourceLine }, i) => {
             const dx = spoke.x - hub.x;
             const dy = spoke.y - hub.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
@@ -491,13 +494,14 @@ export default function PartnersVizClient({
               <g key={`conn-${i}-${hub.id}-${spoke.id}`}>
                 {isSourceLine && (
                   <line x1={x1} y1={y1} x2={x2} y2={y2}
-                    stroke={color} strokeWidth={18} strokeOpacity={0.22} strokeLinecap="round" />
+                    stroke="white" strokeWidth={18} strokeOpacity={0.18} strokeLinecap="round" />
                 )}
                 <line x1={x1} y1={y1} x2={x2} y2={y2}
-                  stroke={color}
-                  strokeWidth={isSourceLine ? 7 : 2}
-                  strokeOpacity={isSourceLine ? 1 : undefined}
+                  stroke="white"
+                  strokeWidth={isSourceLine ? 7 : 2.5}
+                  strokeOpacity={isSourceLine ? 0.95 : 0.7}
                   strokeLinecap="round"
+                  strokeDasharray={dasharray || undefined}
                 />
               </g>
             );
@@ -696,22 +700,26 @@ export default function PartnersVizClient({
                 {/* SVG translate: positions origin at hex center */}
                 <g transform={`translate(${n.x},${n.y})`}>
                   {/* Hub glow — static inner halo + 3 expanding burst rings */}
-                  {hubColors.has(n.id) && (
+                  {hubDashes.has(n.id) && (
                     <>
                       <path
                         d={hexPathFlat(0, 0, n.r * 1.22)}
-                        fill={hubColors.get(n.id)!}
-                        stroke={hubColors.get(n.id)!}
+                        fill="rgba(255,255,255,0.12)"
+                        stroke="white"
                         strokeWidth={4}
+                        strokeDasharray={hubDashes.get(n.id) || undefined}
+                        strokeLinecap="round"
                         style={{ fillOpacity: 0.28, strokeOpacity: 0.70 }}
                       />
                       {([0, 0.8, 1.6] as const).map((delay) => (
                         <path
                           key={delay}
                           d={hexPathFlat(0, 0, n.r * 1.05)}
-                          fill={hubColors.get(n.id)!}
-                          stroke={hubColors.get(n.id)!}
+                          fill="rgba(255,255,255,0.10)"
+                          stroke="white"
                           strokeWidth={2.5}
+                          strokeDasharray={hubDashes.get(n.id) || undefined}
+                          strokeLinecap="round"
                           className="hub-ring"
                           style={{ animationDelay: `${delay}s`, transformOrigin: "0 0" }}
                         />
@@ -739,9 +747,9 @@ export default function PartnersVizClient({
                           <text x={0} y={boxH / 2 + 14} textAnchor="middle" fontSize={9} fill="#1C1C1C" fontWeight={700}>{n.name}</text>
                         )}
                       </>
-                    ) : slugSet.has(slug) ? (
+                    ) : logoSlugs.has(slug) ? (
                       <>
-                        <image href={`/white_logos/${slug}.png`} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" />
+                        <image href={partnerLogos[slug]} x={-boxW / 2} y={-boxH / 2} width={boxW} height={boxH} preserveAspectRatio="xMidYMid meet" filter="url(#grayscale)" />
                         {hoveredPartner === n.id && n.name && (
                           <text x={0} y={boxH / 2 + 14} textAnchor="middle" fontSize={9} fill="white" fontWeight={700}>{n.name}</text>
                         )}

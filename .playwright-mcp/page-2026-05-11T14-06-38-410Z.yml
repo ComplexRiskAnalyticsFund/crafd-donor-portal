@@ -1,0 +1,242 @@
+- generic [active]:
+  - generic [ref=e1]:
+    - img [ref=e2]:
+      - generic [ref=e3]:
+        - generic:
+          - generic:
+            - generic:
+              - generic: 3iS
+        - generic:
+          - generic:
+            - generic:
+              - generic: AFPA
+        - generic:
+          - generic:
+            - generic:
+              - generic: APW
+        - generic:
+          - generic:
+            - generic:
+              - generic: Armillary
+              - generic: Services
+        - generic:
+          - generic:
+            - generic:
+              - generic: CHC
+        - generic:
+          - generic:
+            - generic:
+              - generic: CONRED
+        - generic:
+          - generic:
+            - generic:
+              - generic: DevTransform
+        - generic:
+          - generic:
+            - generic:
+              - generic: EGRISS
+        - generic:
+          - generic:
+            - generic:
+              - generic: EYE on ISIS
+        - generic:
+          - generic:
+            - generic:
+              - generic: FEWS NET
+        - generic:
+          - generic:
+            - generic:
+              - generic: FWM
+        - generic:
+          - generic:
+            - generic:
+              - generic: GI-TOC
+        - generic:
+          - generic:
+            - generic:
+              - generic: HDX
+        - generic:
+          - generic:
+            - generic:
+              - generic: ICRC
+        - generic:
+          - generic:
+            - generic:
+              - generic: IStories
+        - generic:
+          - generic:
+            - generic:
+              - generic: LSM
+        - generic:
+          - generic:
+            - generic:
+              - generic: MPM
+        - generic:
+          - generic:
+            - generic:
+              - generic: MilitiaWatch
+        - generic:
+          - generic:
+            - generic:
+              - generic: NDMA-SL
+        - generic:
+          - generic:
+            - generic:
+              - generic: ORDEDH
+        - generic:
+          - generic:
+            - generic:
+              - generic: ORF
+        - generic:
+          - generic:
+            - generic:
+              - generic: OSCAA
+        - generic:
+          - generic:
+            - generic:
+              - generic: OVPE
+        - generic:
+          - generic:
+            - generic:
+              - generic: PICSS
+        - generic:
+          - generic:
+            - generic:
+              - generic: PJS
+        - generic:
+          - generic:
+            - generic:
+              - generic: REACH
+        - generic:
+          - generic:
+            - generic:
+              - generic: REGAH
+        - generic:
+          - generic:
+            - generic:
+              - generic: Sana’a
+              - generic: Center
+        - generic:
+          - generic:
+            - generic:
+              - generic: Shahit.biz
+        - generic:
+          - generic:
+            - generic:
+              - generic: Sismología
+              - generic: Social
+        - generic:
+          - generic:
+            - generic:
+              - generic: UARIV
+        - generic:
+          - generic:
+            - generic:
+              - generic: UNIDIR
+        - generic:
+          - generic:
+            - generic:
+              - generic: UNMA
+        - generic:
+          - generic:
+            - generic:
+              - generic: UNOCC
+        - generic:
+          - generic:
+            - generic:
+              - generic: VIA
+        - generic:
+          - generic:
+            - generic:
+              - generic: WANEP-SL
+        - generic:
+          - generic:
+            - generic:
+              - generic: Yikono
+        - generic:
+          - generic:
+            - generic:
+              - generic: ZPP
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: Unknown
+        - generic:
+          - generic:
+            - generic:
+              - generic: "&"
+              - generic: MANY
+              - generic: MORE
+        - generic [ref=e1255] [cursor=pointer]:
+          - generic [ref=e1257]: "8"
+          - generic [ref=e1258]: DONOR
+          - generic [ref=e1259]: PARTNERS
+        - generic [ref=e1260] [cursor=pointer]:
+          - generic [ref=e1262]: "132"
+          - generic [ref=e1263]: COLLABORATING
+          - generic [ref=e1264]: PARTNERS
+        - generic [ref=e1265] [cursor=pointer]:
+          - generic [ref=e1267]: "16"
+          - generic [ref=e1268]: PROJECT
+          - generic [ref=e1269]: PARTNERS
+        - generic [ref=e1270] [cursor=pointer]:
+          - generic [ref=e1272]: "1"
+          - generic [ref=e1273]: OTHER
+        - generic [ref=e1274] [cursor=pointer]:
+          - generic [ref=e1276]: "17"
+          - generic [ref=e1277]: UN
+          - generic [ref=e1278]: PARTNERS
+    - generic [ref=e1282]:
+      - textbox "Search partners…" [ref=e1284]
+      - button "Search partners" [ref=e1285] [cursor=pointer]:
+        - img [ref=e1286]
+    - paragraph: As of April 2025
+  - alert [ref=e1289]

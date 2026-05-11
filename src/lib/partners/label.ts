@@ -233,12 +233,11 @@ export function buildPartnerHexNodes(
   // - un: right side
   // - other: right-lower-ish (small cluster)
   // ------------------------------------------------------------
-  const labelAnchorAxial: Record<PartnerLabel, { q: number; r: number }> = {
+  const labelAnchorAxial: Partial<Record<PartnerLabel, { q: number; r: number }>> = {
     collaborating: { q: -2, r: 1 },
     project:       { q: -1,  r: 2 },
     un:            { q: 2,  r: -1 },
-    other:         { q: 1,  r: 1 },   // swapped with donor
-    donor:         { q: 1,  r: -2 },  // swapped with other, adjacent to hub edge
+    donor:         { q: 1,  r: -2 },
   };
 
   // ------------------------------------------------------------
@@ -261,26 +260,27 @@ export function buildPartnerHexNodes(
   // Pre-block ALL label anchors so no partner from any group can land on a label hex
   Object.values(labelAnchorAxial).forEach((a) => blockedAbs.add(keyAx(a)));
 
-  const wedgeByLabel: Record<PartnerLabel, number[]> = {
+  const wedgeByLabel: Partial<Record<PartnerLabel, number[]>> = {
     collaborating: [1, 2, 3, 4, 5],
     project:       [5, 0, 1],
     un:            [0, 1, 2],
-    other:         [0, 5, 4],           // kept from former donor position
-    // donor at (1,-2): dirs 0-3 reach the 4 non-hub neighbours, filling sides first
     donor:         [0, 1, 2, 3],
   };
 
   for (const [label, group] of groups.entries()) {
-    const anchor = labelAnchorAxial[label]; // ABS axial position for label
+    const anchor = labelAnchorAxial[label];
+    if (!anchor) continue;
     const anchorPx = axialToPixel(anchor.q, anchor.r, size);
 
     // block label cell so partners can't take it
     blockedAbs.add(keyAx(anchor));
 
     // compute actual positions BEFORE pushing the label so count is honest
+    const wedgeDirs = wedgeByLabel[label];
+    if (!wedgeDirs) continue;
     const candidateOffsets = generateWedgeOffsets(
       group.length * 8 + 50,
-      wedgeByLabel[label],
+      wedgeDirs,
     );
     const partnerAbsPositions = pickPositionsWithBlockFilter({
       anchorAbs: anchor,

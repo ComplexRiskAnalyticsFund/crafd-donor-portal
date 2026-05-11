@@ -132,6 +132,8 @@ selected_columns = [
     "relational_project",
     "org_logo_white",
     "logo_path",
+    "org_logo_color",
+    "color_logo_path",
     "org_url",
     "total_grant_size",
 ]
