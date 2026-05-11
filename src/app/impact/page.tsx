@@ -1,9 +1,7 @@
-export default function ImpactPage() {
-  return (
-    <iframe
-      src="/pdf/crafd-impact.pdf"
-      className="fixed inset-0 h-full w-full border-none"
-      title="CRAF'd Partners"
-    />
-  );
+import { getProjects } from "@/lib/data/partners";
+import ImpactMap from "./ImpactMap";
+
+export default async function ImpactPage() {
+  const projects = await getProjects();
+  return <ImpactMap projects={projects} />;
 }
