@@ -144,6 +144,11 @@ export default function PartnersVizClient({
   useEffect(() => { panRef.current = pan; }, [pan]);
   useEffect(() => { scaleRef.current = scale; }, [scale]);
 
+  // Touch pan/pinch refs
+  const touchStartRef = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null);
+  const pinchStartRef = useRef<{ dist: number; scale: number; midX: number; midY: number } | null>(null);
+  const touchMovedRef = useRef(false);
+
   // Prevent white body background from showing as a strip on the right (100vw vs scrollbar width)
   useEffect(() => {
     const prev = { overflow: document.body.style.overflow, bg: document.body.style.background };
@@ -461,9 +466,59 @@ export default function PartnersVizClient({
         ref={svgRef}
         viewBox="-900 -500 1800 1000"
         className="h-full w-full"
-        style={{ cursor: "default" }}
+        style={{ cursor: "default", touchAction: "none" }}
         onDoubleClick={handleDoubleClick}
-        onClick={() => { if (isMobile) { setTappedNodeId(null); setHoveredPartner(null); } }}
+        onClick={() => { if (isMobile && !touchMovedRef.current) { setTappedNodeId(null); setHoveredPartner(null); } }}
+        onTouchStart={(e) => {
+          if ((e.target as Element)?.closest?.('[data-modal]')) return;
+          touchMovedRef.current = false;
+          if (e.touches.length === 1) {
+            touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, panX: panRef.current.x, panY: panRef.current.y };
+            pinchStartRef.current = null;
+          } else if (e.touches.length === 2) {
+            const dx = e.touches[1].clientX - e.touches[0].clientX;
+            const dy = e.touches[1].clientY - e.touches[0].clientY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+            const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+            pinchStartRef.current = { dist, scale: scaleRef.current, midX, midY };
+            touchStartRef.current = null;
+          }
+        }}
+        onTouchMove={(e) => {
+          if ((e.target as Element)?.closest?.('[data-modal]')) return;
+          e.preventDefault();
+          const el = svgRef.current;
+          if (!el) return;
+          const rect = el.getBoundingClientRect();
+          if (e.touches.length === 1 && touchStartRef.current) {
+            const dx = e.touches[0].clientX - touchStartRef.current.x;
+            const dy = e.touches[0].clientY - touchStartRef.current.y;
+            if (Math.abs(dx) > 4 || Math.abs(dy) > 4) touchMovedRef.current = true;
+            const px2unit = 1800 / rect.width;
+            setPan(clampPan(
+              touchStartRef.current.panX + dx * px2unit,
+              touchStartRef.current.panY + dy * px2unit,
+              scaleRef.current,
+            ));
+          } else if (e.touches.length === 2 && pinchStartRef.current) {
+            touchMovedRef.current = true;
+            const dx = e.touches[1].clientX - e.touches[0].clientX;
+            const dy = e.touches[1].clientY - e.touches[0].clientY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, pinchStartRef.current.scale * (dist / pinchStartRef.current.dist)));
+            const midSvgX = ((pinchStartRef.current.midX - rect.left) / rect.width) * 1800 - 900;
+            const midSvgY = ((pinchStartRef.current.midY - rect.top) / rect.height) * 1000 - 500;
+            const cx = (midSvgX - panRef.current.x) / scaleRef.current;
+            const cy = (midSvgY - panRef.current.y) / scaleRef.current;
+            setPan(clampPan(midSvgX - cx * newScale, midSvgY - cy * newScale, newScale));
+            setScale(newScale);
+          }
+        }}
+        onTouchEnd={() => {
+          touchStartRef.current = null;
+          pinchStartRef.current = null;
+        }}
       >
         <defs>
           <filter id="grayscale">
