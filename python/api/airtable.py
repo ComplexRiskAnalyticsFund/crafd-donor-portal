@@ -10,7 +10,10 @@ from pyairtable import Api
 load_dotenv()
 
 # Initialize Airtable API connection
-api = Api(os.environ["AIRTABLE_API_KEY"])
+_api_key = os.environ.get("AIRTABLE_API_KEY")
+if not _api_key:
+    raise EnvironmentError("AIRTABLE_API_KEY is not set. Add it to your .env file.")
+api = Api(_api_key)
 
 
 def fetch_airtable_table(table_id: str, base_id: str) -> pd.DataFrame:
@@ -32,12 +35,8 @@ def fetch_airtable_table(table_id: str, base_id: str) -> pd.DataFrame:
         table_id,
     )
 
-    # Docs: https://pyairtable.readthedocs.io/en/stable/api.html?highlight=cell_format#pyairtable.Table.all
-    records = table.all(
-        cell_format="string", user_locale="en-ca", time_zone="America/New_York"
-    )
-
-    # cell_format – The cell format to request from the Airtable API. Supported options are json (the default) and string. json will return cells as a JSON object. string will return the cell as a string. user_locale and time_zone must be set when using string.
+    # cell_format="json" is the pyairtable default — attachment fields come as lists of dicts
+    records = table.all()
 
     if not records:
         raise ValueError(f"No records found in Airtable table {table_id}")

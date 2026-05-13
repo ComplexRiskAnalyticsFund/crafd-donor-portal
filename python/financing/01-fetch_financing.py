@@ -1,16 +1,19 @@
 # %% selecting interpreter
 import sys
+
 print("Interpreter:", sys.executable)
 
 import requests
+
 print("requests OK")
 
 from python.api.airtable import fetch_airtable_table
+
 print("airtable import OK")
 
 
-
 # %% imports
+import json
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -18,15 +21,11 @@ import requests
 
 from python.api.airtable import fetch_airtable_table
 from python.utils.utils import export_dataframe
-import json
-
-
 
 # %% keys/constants
 AIRTABLE_BASE_ID = "appIYFN5sAJzK1bPg"
 PARTNER_TABLE_ID = "tbl2FMZOARI7I66fq"
 PROJECTS_TABLE_ID = "tblgfDfV8s3mXHbUh"
-
 
 
 # %% Output Directory paths
@@ -41,9 +40,15 @@ for d in [RAW_DIR, PROCESSED_DIR, PUBLIC_DATA_DIR, PUBLIC_LOGOS_DIR]:
 
 # %% Using airtable.py
 
-df_parners_registry = fetch_airtable_table(table_id=PARTNER_TABLE_ID, base_id=AIRTABLE_BASE_ID, )
+df_parners_registry = fetch_airtable_table(
+    table_id=PARTNER_TABLE_ID,
+    base_id=AIRTABLE_BASE_ID,
+)
 
-df_projects = fetch_airtable_table(table_id=PROJECTS_TABLE_ID, base_id=AIRTABLE_BASE_ID, )
+df_projects = fetch_airtable_table(
+    table_id=PROJECTS_TABLE_ID,
+    base_id=AIRTABLE_BASE_ID,
+)
 
 # %% Qhat do we have
 
@@ -62,13 +67,10 @@ rename_mapping = {
     "Projects (Lead)": "projects_lead",
     "UN-Organization": "un_org",
     "Projects (Support)": "projects_support",
-
-
     # adding financing columns here:
     # this is from incoming:
     # "Contributing Country": "contributing_country",
     # "Amount": "amount",
-
     # this is from Projects:
     "Project title": "project_title",
     "Project short title": "project_short_title",
@@ -76,18 +78,14 @@ rename_mapping = {
     "Exact Grant Size": "grant_amt",
     "Lead organization": "org_full_name",
     "Organization": "org_short_name",
-
-
-
-   
-
 }
 
 
 df_parners_registry = df_parners_registry.rename(columns=rename_mapping)
 
-df_parners_registry = df_parners_registry.sort_values("org_short_name").reset_index(drop=True)
-
+df_parners_registry = df_parners_registry.sort_values("org_short_name").reset_index(
+    drop=True
+)
 
 
 # %% same for projects df, but sort by lead org for now
@@ -99,46 +97,42 @@ df_projects = df_projects.reset_index(drop=True)
 
 # %% reducing what I want in the dfs
 selected_columns_project = [
- "project_title",
- "project_short_title",
-"investment_type",
- "grant_amt",
- "org_full_name",
- "org_short_name",
+    "project_title",
+    "project_short_title",
+    "investment_type",
+    "grant_amt",
+    "org_full_name",
+    "org_short_name",
 ]
-selected_columns_partners= [
+selected_columns_partners = [
     "org_full_name",
     "org_short_name",
     "org_type",
     "projects_lead",
     "un_org",
-    
 ]
 
 df_projects = df_projects[selected_columns_project]
 df_parners_registry = df_parners_registry[selected_columns_partners]
 
 
-
-# %% Export both as different jsons+dfs--wrangling/joining in 02_transform_financing.py
+# %% Export intermediates for 02_transform_financing.py
+# Pickle/CSV go to data/processed/ (for inspection); JSON go to data/raw/ (pipeline input).
 
 output_dir = Path("data") / "processed"
 export_dataframe(df_projects, "df_projects", output_dir)
 export_dataframe(df_parners_registry, "df_parners_registry", output_dir)
 
-
-# Export to JSON for website use
-public_dir = Path("public") / "data"
-public_dir.mkdir(parents=True, exist_ok=True)
-
-
-df_projects.to_json(public_dir / "df_projects.json", orient="records", indent=2)
-
-df_parners_registry.to_json(public_dir / "df_parners_registry.json", orient="records", indent=2)
+raw_dir = Path("data") / "raw"
+raw_dir.mkdir(parents=True, exist_ok=True)
+df_projects.to_json(raw_dir / "df_projects.json", orient="records", indent=2)
+df_parners_registry.to_json(
+    raw_dir / "df_parners_registry.json", orient="records", indent=2
+)
+print(f"✓ Wrote intermediates to {raw_dir}")
 
 # %%
 # %% DONT RUN THIS--dont need logos for now
-
 
 
 # Download logos
@@ -223,9 +217,6 @@ def download_logo(row):
 
 # Apply download function to each row
 df_financing["logo_path"] = df_financing.apply(download_logo, axis=1)
-
-
-
 
 
 # this is some other way to export, not exporting in these ways as of now:

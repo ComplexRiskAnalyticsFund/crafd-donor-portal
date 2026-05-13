@@ -11,42 +11,42 @@ export interface GridRegion {
 // "Global" is rendered separately as a special tile, not in the grid.
 export const GRID_REGIONS: GridRegion[] = [
   // Americas
-  { name: "Northern America",        col: 0, row: 0 },
-  { name: "Central America",         col: 0, row: 1 },
-  { name: "Caribbean",               col: 1, row: 1 },
-  { name: "South America",           col: 0, row: 2 },
+  { name: "Northern America", col: 0, row: 0 },
+  { name: "Central America", col: 0, row: 1 },
+  { name: "Caribbean", col: 1, row: 1 },
+  { name: "South America", col: 0, row: 2 },
 
   // Europe
-  { name: "Northern Europe",         col: 2, row: 0 },
-  { name: "Western Europe",          col: 2, row: 1 },
-  { name: "Southern Europe",         col: 2, row: 2 },
-  { name: "Eastern Europe",          col: 3, row: 0 },
+  { name: "Northern Europe", col: 2, row: 0 },
+  { name: "Western Europe", col: 2, row: 1 },
+  { name: "Southern Europe", col: 2, row: 2 },
+  { name: "Eastern Europe", col: 3, row: 0 },
 
   // Africa
-  { name: "Northern Africa",         col: 3, row: 2 },
-  { name: "Western Africa",          col: 3, row: 3 },
-  { name: "Middle Africa",           col: 3, row: 4 },
-  { name: "Eastern Africa",          col: 4, row: 3 },
-  { name: "Southern Africa",         col: 4, row: 4 },
+  { name: "Northern Africa", col: 3, row: 2 },
+  { name: "Western Africa", col: 3, row: 3 },
+  { name: "Middle Africa", col: 3, row: 4 },
+  { name: "Eastern Africa", col: 4, row: 3 },
+  { name: "Southern Africa", col: 4, row: 4 },
 
   // Asia
-  { name: "Western Asia",            col: 4, row: 1 },
-  { name: "Central Asia",            col: 4, row: 0 },
-  { name: "Southern Asia",           col: 5, row: 1 },
-  { name: "Eastern Asia",            col: 5, row: 0 },
-  { name: "Southeastern Asia",       col: 6, row: 1 },
+  { name: "Western Asia", col: 4, row: 1 },
+  { name: "Central Asia", col: 4, row: 0 },
+  { name: "Southern Asia", col: 5, row: 1 },
+  { name: "Eastern Asia", col: 5, row: 0 },
+  { name: "Southeastern Asia", col: 6, row: 1 },
 
   // Oceania
   { name: "Australia and New Zealand", col: 7, row: 2 },
-  { name: "Melanesia",               col: 7, row: 1 },
-  { name: "Micronesia",              col: 7, row: 0 },
-  { name: "Polynesia",               col: 8, row: 1 },
+  { name: "Melanesia", col: 7, row: 1 },
+  { name: "Micronesia", col: 7, row: 0 },
+  { name: "Polynesia", col: 8, row: 1 },
 ];
 
 // Hex geometry helpers — pointy-top hexagons
-export const HEX_SIZE = 52;          // circumradius
-export const H_SPACING = HEX_SIZE * Math.sqrt(3);        // col pitch
-export const V_SPACING = HEX_SIZE * 1.5;                 // row pitch
+export const HEX_SIZE = 52; // circumradius
+export const H_SPACING = HEX_SIZE * Math.sqrt(3); // col pitch
+export const V_SPACING = HEX_SIZE * 1.5; // row pitch
 export const GRID_COLS = 9;
 export const GRID_ROWS = 5;
 export const SVG_W = Math.ceil((GRID_COLS + 0.5) * H_SPACING + HEX_SIZE * 2);

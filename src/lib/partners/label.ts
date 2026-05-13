@@ -1,23 +1,30 @@
 // src/lib/partners/label.ts
 import type { Partner } from "@/types";
 
-export type PartnerLabel = "collaborating" | "project" | "un" | "other" | "donor";
+export type PartnerLabel =
+  | "collaborating"
+  | "project"
+  | "un"
+  | "other"
+  | "donor";
 
 export function labelPartner(p: Partner): PartnerLabel {
-  const conn = (p.crafd_connection ?? "").toLowerCase();
+  const conn = (p.crafd_connection ?? []).join(" ").toLowerCase();
 
   // "donor partner" comes from donors.json; keep the check for safety
   if (conn.includes("donor partner")) return "donor";
   // "project lead partner" (new format) or "lead project partner" (old format)
-  if (conn.includes("project lead") || conn.includes("lead project")) return "project";
+  if (conn.includes("project lead") || conn.includes("lead project"))
+    return "project";
   // "mou signatory" (new) or "mou signatory/un partner" (old)
   if (conn.includes("mou")) return "un";
   // "collaborating partner", "implementing partner", "complementary donor, collaborating partner"
-  if (conn.includes("collaborating") || conn.includes("implementing")) return "collaborating";
+  if (conn.includes("collaborating") || conn.includes("implementing"))
+    return "collaborating";
   return "other";
 }
 
-export type HexNodeKind = "partner" | "label" | "center" | "outline" | "more";
+export type HexNodeKind = "partner" | "label" | "center" | "outline";
 
 export type HexNode = {
   id: string;
@@ -31,9 +38,6 @@ export type HexNode = {
 
   // label hex extra
   count?: number;
-
-  // "& Many More" hex: anonymous partner count string (e.g. "xx" or "42")
-  anonCount?: string;
 
   // geometry in pixels
   x: number;
@@ -53,7 +57,7 @@ function axialToPixel(q: number, r: number, size: number) {
   };
 }
 
-// 6 axial directions (pointy-top)
+// 6 axial directions (flat-top)
 const DIRS = [
   { dq: 1, dr: 0 },
   { dq: 1, dr: -1 },
@@ -163,25 +167,30 @@ function labelDisplay(label: PartnerLabel) {
 export function buildPartnerHexNodes(
   partners: Partner[],
   size = 80,
-  anonCount?: string,
 ): HexNode[] {
   // 1) filter, deduplicate, then group partners
   const dedupedPartners: Partner[] = [];
   const seenNames = new Map<string, number>();
   for (const p of partners) {
-    const rawConn = (p.crafd_connection ?? "").replace(/[‘’]/g, "’");
+    const rawConn = (p.crafd_connection ?? []).join(" ").replace(/[‘’]/g, "’");
     if (rawConn.toLowerCase().includes("craf’d")) continue;
-    if (/mptfo/i.test(p.org_short_name ?? "") || /mptfo/i.test(p.org_full_name ?? "")) continue;
+    if (
+      /mptfo/i.test(p.org_short_name ?? "") ||
+      /mptfo/i.test(p.org_full_name ?? "")
+    )
+      continue;
     if (rawConn.toLowerCase().includes("administrative agent")) continue;
 
     const key = (p.org_short_name?.trim() ?? "").toLowerCase();
     if (key && seenNames.has(key)) {
       const idx = seenNames.get(key)!;
       const existing = dedupedPartners[idx];
-      const merged = [...new Set([
-        ...(existing.relational_project ?? "").split(",").map(s => s.trim()).filter(Boolean),
-        ...(p.relational_project ?? "").split(",").map(s => s.trim()).filter(Boolean),
-      ])].join(", ");
+      const merged = [
+        ...new Set([
+          ...(existing.relational_project ?? []),
+          ...(p.relational_project ?? []),
+        ]),
+      ];
       dedupedPartners[idx] = { ...existing, relational_project: merged };
     } else {
       if (key) seenNames.set(key, dedupedPartners.length);
@@ -191,9 +200,12 @@ export function buildPartnerHexNodes(
 
   const groups = new Map<PartnerLabel, Partner[]>();
   for (const p of dedupedPartners) {
-    const isActionAid = /action\s*aid/i.test(p.org_short_name ?? "") ||
-                        /action\s*aid/i.test(p.org_full_name ?? "");
-    const posLabel: PartnerLabel = isActionAid ? "collaborating" : labelPartner(p);
+    const isActionAid =
+      /action\s*aid/i.test(p.org_short_name ?? "") ||
+      /action\s*aid/i.test(p.org_full_name ?? "");
+    const posLabel: PartnerLabel = isActionAid
+      ? "collaborating"
+      : labelPartner(p);
     const arr = groups.get(posLabel) ?? [];
     arr.push(p);
     groups.set(posLabel, arr);
@@ -247,11 +259,13 @@ export function buildPartnerHexNodes(
   // - un: right side
   // - other: right-lower-ish (small cluster)
   // ------------------------------------------------------------
-  const labelAnchorAxial: Partial<Record<PartnerLabel, { q: number; r: number }>> = {
+  const labelAnchorAxial: Partial<
+    Record<PartnerLabel, { q: number; r: number }>
+  > = {
     collaborating: { q: -2, r: 1 },
-    project:       { q: -1,  r: 2 },
-    un:            { q: 2,  r: -1 },
-    donor:         { q: 1,  r: -2 },
+    project: { q: -1, r: 2 },
+    un: { q: 2, r: -1 },
+    donor: { q: 1, r: -2 },
   };
 
   // ------------------------------------------------------------
@@ -276,13 +290,14 @@ export function buildPartnerHexNodes(
 
   const wedgeByLabel: Partial<Record<PartnerLabel, number[]>> = {
     collaborating: [1, 2, 3, 4, 5],
-    project:       [5, 0, 1],
-    un:            [0, 1, 2],
-    donor:         [0, 1, 2, 3],
+    project: [5, 0, 1],
+    un: [0, 1, 2],
+    donor: [0, 1, 2, 3],
   };
 
   for (const [label, group] of groups.entries()) {
     const anchor = labelAnchorAxial[label];
+    // "other" has no anchor/wedge by design — those partners are intentionally not placed
     if (!anchor) continue;
     const anchorPx = axialToPixel(anchor.q, anchor.r, size);
 
@@ -315,6 +330,13 @@ export function buildPartnerHexNodes(
       r: size,
     });
 
+    // logo partners first → inner positions; no-logo partners → outskirts
+    group.sort((a, b) => {
+      const hasLogo = (p: Partner) =>
+        !!(p.thumb_logo_path ?? p.white_logo_path ?? p.color_logo_path);
+      return Number(hasLogo(b)) - Number(hasLogo(a));
+    });
+
     // create partner nodes and block their cells for subsequent groups
     group.forEach((partner, i) => {
       const abs = partnerAbsPositions[i];
@@ -324,7 +346,10 @@ export function buildPartnerHexNodes(
 
       const pxy = axialToPixel(abs.q, abs.r, size);
 
-      const displayName = partner.org_short_name?.trim() || partner.org_full_name?.trim() || "Unknown";
+      const displayName =
+        partner.org_short_name?.trim() ||
+        partner.org_full_name?.trim() ||
+        "Unknown";
       nodes.push({
         id: `partner-${label}-${i}-${displayName}`.replace(/\s+/g, "-"),
         kind: "partner",
@@ -338,39 +363,7 @@ export function buildPartnerHexNodes(
         partner,
       });
     });
-
-    // After all collaborating partners are placed, append the "& Many More" node
-    // at the very next available position in the same wedge.
-    if (label === "collaborating" && anonCount) {
-      const morePos = pickPositionsWithBlockFilter({
-        anchorAbs: anchor,
-        offsets: candidateOffsets,
-        blockedAbs,
-        needed: 1,
-      });
-      if (morePos[0]) {
-        blockedAbs.add(keyAx(morePos[0]));
-        const mpx = axialToPixel(morePos[0].q, morePos[0].r, size);
-        nodes.push({
-          id: "more-collab",
-          kind: "more",
-          label: "collaborating",
-          name: "&\nMANY\nMORE",
-          anonCount,
-          x: mpx.x,
-          y: mpx.y,
-          r: size,
-        });
-      }
-    }
   }
 
   return nodes;
 }
-// [DONE] 1. all of them need to be connected to my big white hex: craf'd
-// [DONE]2. there needs to be a mechanism for them not overlapping
-// [DONE] 3. where is project partners? I don't see it at all.
-//  4. Should I put in the logos already--it will  help identify?
-// [DONE] 5. hover responses for each hex.
-//  6. my current data also doesn't show me the actual connection between these across the different partners. will need data joining here?
-// [DONE] 7. the whole thing should be on a canvas, not svg,  so that nothing gets cut off and its explorable.

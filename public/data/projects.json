@@ -1,233 +1,627 @@
 [
   {
+    "airtable_id":"rec6FcYVivJIogG0J",
     "project_short_title":"Hazard Modeling",
     "project_label":"ICPAC: Hazard Modeling",
     "full_title":"Hazard modeling, impact estimation, climate storylines for event catalogue on drought and flood disasters in the Eastern Africa",
     "project_blurb":"A new composite-risk initiative that is transforming drought and\nflood modelling across Eastern Africa. It pairs ensemble forecasts with concise climate storylines to reveal how climate, conflict, and displacement pressures overlap. The resulting hazard-impact datasets give governments and humanitarian partners a sharper basis for impact-based forecasting, anticipatory action, and loss-and-damage assessment. Led by ICPAC, the project will feed these insights into early-warning triggers and response planning across East Africa. ",
     "project_url":"https:\/\/crafd.io\/projects\/igad",
-    "grant_size":"$500,065",
+    "grant_size":500065.0,
     "project_status":"Ongoing",
-    "duration_months":"24",
-    "project_coverage":"East Africa"
+    "duration_months":24,
+    "project_coverage":"East Africa",
+    "linked_lead_org":[
+      "recLEtULboPmoSb1B"
+    ],
+    "linked_supporting_org":[
+      "recLEtULboPmoSb1B",
+      "reciSCrJAGrkoTltl",
+      "recUdvit71762ZdID"
+    ]
   },
   {
+    "airtable_id":"recDLaWeOg2tT9IM2",
     "project_short_title":"GEOGUARD",
     "project_label":"DPPA: GEOGUARD",
     "full_title":"Geoguard - Geospatial Dashboards for Climate Assessment and Early Warning",
     "project_blurb":"Geoguard is a geospatial crisis-forecasting platform that brings\ntogether environmental, conflict, and social data to surface patterns linked to emerging climate-security risks. Piloted across Central Africa, West Africa, and the Middle East, its methodology has been applied in 29 countries. With CRAF\u2019d support, the platform is strengthening its data infrastructure and expanding collaboration on transboundary risks. Developed by the Innovation Cell of the United Nations Department of Political and Peacebuilding Affairs (DPPA), Geoguard supports preventive efforts through geospatial analysis.",
     "project_url":"https:\/\/crafd.io\/projects\/geoguard",
-    "grant_size":"$700,000",
+    "grant_size":700000.0,
     "project_status":"Operationally closed",
-    "duration_months":"24",
-    "project_coverage":"Middle East, Central & West Africa"
+    "duration_months":24,
+    "project_coverage":"Middle East, Central & West Africa",
+    "linked_lead_org":[
+      "recXzMOIf3S6mlmkO"
+    ],
+    "linked_supporting_org":[
+      "recp8HVGf6R1dlhNs",
+      "recwafQXwz91ijNnX",
+      "recbeXeiVqOdIX7Db",
+      "recNd6lty5CiGs93S",
+      "recCqvat7JdX2NRpo",
+      "rec8ogUa6PWpDwXM7",
+      "recXzMOIf3S6mlmkO"
+    ]
   },
   {
+    "airtable_id":"recH3jdM4WmYoiku6",
     "project_short_title":"Maintaining ACLED",
     "project_label":"ACLED: Maintaining ACLED",
     "full_title":"Maintaining & Improving ACLED's Core Operations, Accessibility, and Interoperability",
     "project_blurb":"With a new two-year CRAF\u2019d grant (2024-2026), ACLED is expanding its reach, sharpening its tools, and delivering conflict\ninsights when they matter most. ACLED is the world\u2019s leading\nsource of high-quality, real-time data and analysis on political violence and protest, powering earlier, faster, and more targeted crisis action. Its trusted, evidence-based insights serve policymakers, humanitarian practitioners, journalists, academics, and the\nwider public. With global coverage, ACLED has documented more\nthan 1.9 million conflict events from sources in over 100 languages, grounded in more than 60 partnerships and long standing\nrelationships with local actors across the crisis data ecosystem.\nThe CRAF\u2019d-ACLED partnership has already delivered tangible\nresults, reinforcing ACLED\u2019s role as a cornerstone of the crisis\ndata ecosystem. Between 2022 and 2024, ACLED nearly doubled\nits registered users to over 67,000, expanded its network to more\nthan 60 partners, and introduced or refined 5 analytical tools now\nembedded in decision-making processes and program planning to\nbetter anticipate, prevent, and respond to crises.",
     "project_url":"https:\/\/crafd.io\/projects\/acled",
-    "grant_size":"$14,800,000",
+    "grant_size":14800000.0,
     "project_status":"Ongoing",
-    "duration_months":"24",
-    "project_coverage":"Global"
+    "duration_months":24,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "reclFvEkKR7sCD7l3"
+    ],
+    "linked_supporting_org":[
+      "recnlpfRuvi3EcUXx",
+      "recPUtyjHFZWWnDQd",
+      "recK29aXD9Vj9G1T1",
+      "recqcx0YaFwpyx1Ng",
+      "recdCoHVW8WoLoMiY",
+      "recA94rfL25336oit",
+      "rec1ZtuGgRSwYb1kb",
+      "reckDjUX0npjHdheE",
+      "rec0ZpGsPKsJm96A4",
+      "recXU563WiRkgyROS",
+      "recneEDP9tuSzj5ot",
+      "reclFvEkKR7sCD7l3",
+      "recwGIekEB6Xj358I",
+      "reczdlVQMF047v0nj",
+      "rec00zB9pxvICkXlD",
+      "recfrD8qipAMPcUjq",
+      "recfdb3RouRwhHw6f",
+      "recIv7CbEShW4suGB",
+      "recsxCMPGJsnWEYhs",
+      "recEWl8VACuv0xB4P",
+      "recd2NemaGQpt3UxW",
+      "recoIFcE6w3Hsae4X",
+      "recpbZmXLEuzXryYU",
+      "reci8nIW8FikV7QkS",
+      "reclrWwtVC1Q1Q1JX",
+      "rect8hHbbrjNW36ad",
+      "reckCsqk0PVwYy4Og",
+      "recinExdPqGohTGK0",
+      "recVHWBaYiL6909wx",
+      "recKJOTOnJMSUQ4jy",
+      "recM8eUHUIAWzUQBk",
+      "recbgn2ZhnYFQttF3",
+      "recp0HAnw6EPPC3OW",
+      "recvFZbnvfgTCF1kO",
+      "recLoVJq8pDzIedXk",
+      "recDxbkJHbz6xfd4K",
+      "recPunBwLpRrXHlwq",
+      "recVf9RzZuLP5yNpi",
+      "recTIXreKHiTQGWsx",
+      "recMtysKzIycMKR7h",
+      "recJEhP3EKDSXjrCX",
+      "recC3UpUQI0CqGLaz",
+      "recZjny7sSSH9KFpR",
+      "recEPXUwCZaNbcPrH",
+      "receBSaLPYEDEBGNd",
+      "recNGqgmLxYkLjANh",
+      "recniEOG9zir2PVmw",
+      "recXdnrR9AhKkHLY8",
+      "recUUsB0UIecRfTTW",
+      "rec9lbmFImNrdMxkK",
+      "recdDOgxu0SVX16nk",
+      "recKpFnYAxX0bv1Pc",
+      "recbmxNonvrMWBtpg",
+      "recdQLwKq7xKRBOzY",
+      "recpm6kuE19YvnZP3",
+      "recAxyX7GxC2cXYyE",
+      "rec3glPJJtfcztggh",
+      "reciSbDaT9ZALvizJ",
+      "recW31L57JYruqoxN",
+      "reczAYK2VasZ2H6NL",
+      "recZz9cnLXGUV3iNC",
+      "recblQJ3hKNIxCwcU",
+      "rec4VAOW9S6UKO2dA",
+      "recvfKNNEYjFKp1Oh",
+      "recA8tc5h5rCi64fE",
+      "recgtnwMtxK1hRUX5",
+      "rect2875PwCHTkNlM",
+      "recORQtvP59nyRDWk",
+      "recw6GIlhftXiELaO",
+      "recBp6Ko5jW11ebgd",
+      "recqml085v174uHki",
+      "recYN6OSTDVZVwRsk",
+      "recmtvKDZHLoeieIn",
+      "recHv6hZ0SCI0cjT8",
+      "rechxxzOmEgDlQqca"
+    ]
   },
   {
+    "airtable_id":"recK7YpAfDSsOeMLa",
     "project_short_title":"Kente Threads",
     "project_label":"FHN: Kente Threads",
     "full_title":"Kente Threads: Weaving leadership from displacement data",
     "project_blurb":"A participatory data initiative rooted in local leadership,\nincluding HERDATA, is set to strengthen crisis response\nand resilience by elevating displaced women\u2019s leadership. Led by the Feminist Humanitarian Network\nwith local partners, the project will reach over 100,000\nwomen in displacement settings.",
     "project_url":null,
-    "grant_size":"$299,749",
+    "grant_size":299749.0,
     "project_status":"Ongoing",
-    "duration_months":"12",
-    "project_coverage":"Kenya"
+    "duration_months":12,
+    "project_coverage":"Kenya",
+    "linked_lead_org":[
+      "recv0iM90I12ie7kn"
+    ],
+    "linked_supporting_org":[
+      "recCk8bKbhh8uAJku",
+      "recv0iM90I12ie7kn",
+      "recEnOOH6LbsiR8kd",
+      "recOme3wOJeYUvtue"
+    ]
   },
   {
+    "airtable_id":"recKB3FnVyFkRNwXZ",
     "project_short_title":"Women's Mobilization Within Armed Groups",
     "project_label":"Korbel: Women's Mobilization Within Armed Groups",
     "full_title":"Women\u2019s Mobilization Within Armed Groups During and After War",
     "project_blurb":"A first-of-its-kind global dataset on women\u2019s roles\nin non-state armed groups is set to enhance peacebuilding across 500 women\u2019s wings of non-state\narmed groups. Led by the University of Denver in\ncollaboration with research partners, the project will\ninform programming in conflict-affected settings. ",
     "project_url":null,
-    "grant_size":"$400,000",
+    "grant_size":400000.0,
     "project_status":"Ongoing",
-    "duration_months":"24",
-    "project_coverage":"Global"
+    "duration_months":24,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "recF5o67nvN5x9chH"
+    ],
+    "linked_supporting_org":[
+      "recF5o67nvN5x9chH",
+      "recHKayBVNHm8QsXP",
+      "recNoQ8c9b3jDN6l2",
+      "recrjN0nS3ygzhIKK",
+      "recftBhjPv4GNzudJ",
+      "recq38srV2SLqwZZ0"
+    ]
   },
   {
+    "airtable_id":"recLzUBYjCmlalnB5",
     "project_short_title":"Internal Displacement Data",
     "project_label":"IDMC: Internal Displacement Data",
     "full_title":"Global harmonized data on internal displacement to inform prevention, response and solutions",
     "project_blurb":"The IDMC is reshaping how displacement data drives crisis action. By applying AI, automated pipelines, and a worldwide monitoring network, it harmonizes the leading datasets on internal displacement, now affecting more than 83 million people, to deliver timely, disaggregated insights. IDMC equips humanitarian and development actors with the evidence needed for faster, more targeted, and dignified support. ",
     "project_url":"https:\/\/crafd.io\/projects\/idmc",
-    "grant_size":"$1,500,000",
+    "grant_size":1500000.0,
     "project_status":"Ongoing",
-    "duration_months":"24",
-    "project_coverage":"Global"
+    "duration_months":24,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "recPFxoMtMX2tV021"
+    ],
+    "linked_supporting_org":[
+      "recPFxoMtMX2tV021",
+      "recjaqYpyPQLi5Ibg",
+      "recE7NdoxNUgVthSy",
+      "recHv6hZ0SCI0cjT8",
+      "recHPPeg1e3HoJKda",
+      "reciSCrJAGrkoTltl",
+      "recRGWc0JJ4I8EBrf",
+      "recbkjM5Hz6h15DL6",
+      "recHC34bzY2vcigGt",
+      "recG9gXmj4mAvsVtu",
+      "recHl5sLQVNe5hjQs",
+      "recKtKaa7JrvQL2iv"
+    ]
   },
   {
+    "airtable_id":"recN7H5G0nlU4k3TS",
     "project_short_title":"Transformative Outcomes",
     "project_label":"UN Women: Transformative Outcomes",
     "full_title":"Transformative Outcomes: Leveraging Crisis Data in conflict",
     "project_blurb":"Disaggregated data made accessible through an interactive platform and standardized analysis will support\nmore informed, real-time assistance for at least 20\nmillion people in crisis settings. The project is led by\nUN Women and backed by a broad coalition of six\nnational NGO partners.",
     "project_url":null,
-    "grant_size":"$1,000,000",
+    "grant_size":999999.53,
     "project_status":"Ongoing",
-    "duration_months":"24",
-    "project_coverage":"Global"
+    "duration_months":24,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "recow8fQAyzfPp706"
+    ],
+    "linked_supporting_org":[
+      "recNFNXY9J4vRcovQ",
+      "recoEozGFP6Ycs4yg",
+      "recIkfrcHN7IIcNpa",
+      "recwpsZQ44K1LzFJK",
+      "rece6AYcCMsE52j5w",
+      "rec6LmfpV1yxpXe7E",
+      "rec2khy3Zee3pMwnt",
+      "recrPeYq39rhXpYlw",
+      "reccrXdMvRpnCJQXI",
+      "recow8fQAyzfPp706",
+      "recDaH9ijqoZ6wQcg",
+      "rec5zYCydH47medAi",
+      "recV9NGqXFt9upTiD",
+      "recFpx3eRIBWQQjl2"
+    ]
   },
   {
+    "airtable_id":"recUrUUESMc1dGaGr",
     "project_short_title":"INFORM Warning",
     "project_label":"INFORM Consortium: INFORM Warning",
     "full_title":"INFORM WARNING - An open system to aggregate and present quantified, multi-hazard information to support crisis preparedness and anticipatory action",
     "project_blurb":"INFORM Warning is setting a new benchmark for global risk anticipation. Developed by a global consortium of over 35 partners, INFORM Warning will be a state-of-the-art global risk monitoring tool for anticipating complex risks up to a year in advance. As part of the INFORM product family, it complements existing tools by linking baseline risk metrics to actionable foresight. INFORM Warning beyond traditional methods by integrating new multi-hazard information from diverse sources. The tool\u2019s distinctive approach will provide valuable insights into forecasts, scenarios, and potential crisis-triggering events. Hosted by United Nations Development Programme (UNDP) Crisis Bureau, the platform is being scaled globally with support from CRAF\u2019d.",
     "project_url":"https:\/\/crafd.io\/projects\/inform-warning",
-    "grant_size":"$700,000",
+    "grant_size":700000.0,
     "project_status":"Project closed",
-    "duration_months":"24",
-    "project_coverage":"Global"
+    "duration_months":24,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "recliM1NwnhtY4nY8"
+    ],
+    "linked_supporting_org":[
+      "recnlpfRuvi3EcUXx",
+      "recH7mLkvz5jClYoY",
+      "recRGWc0JJ4I8EBrf",
+      "recahMK1Tns4wXAgP",
+      "recbPqF2fSGA6RbZO",
+      "recliM1NwnhtY4nY8"
+    ]
   },
   {
+    "airtable_id":"recVQtT1tEPJ0Zhwv",
     "project_short_title":"Conflict Climate Displacement",
     "project_label":"RCCC: Conflict Climate Displacement",
     "full_title":"Conflict-climate-displacement & vulnerability data in Africa and MENA",
     "project_blurb":"A new generation risk data initiative is shining a light on where\nclimate, conflict, and displacement risks collide across sub-Saharan Africa, North Africa, and the Middle East (MENA). By integrating these drivers into one analytical stream, it delivers actionable insights tailored to conflict-affected and climate-vulnerable populations, filling critical gaps and enabling anticipatory action. Led by the Red Cross Red Crescent Climate Centre, together with the Netherlands Red Cross\u2019 510 Initiative and the International Committee of the Red Cross (ICRC), the risk data supports more informed and anticipatory decision-making across the humanitarian system. ",
     "project_url":"https:\/\/crafd.io\/projects\/rccc",
-    "grant_size":"$499,986",
+    "grant_size":499986.0,
     "project_status":"Ongoing",
-    "duration_months":"24",
-    "project_coverage":"East Africa & MENA"
+    "duration_months":24,
+    "project_coverage":"East Africa & MENA",
+    "linked_lead_org":[
+      "recivcR2hSHFfyvT8"
+    ],
+    "linked_supporting_org":[
+      "recivcR2hSHFfyvT8",
+      "recI88jmqaSSfDdcZ",
+      "recEad5oVuZNEBSML",
+      "reclFvEkKR7sCD7l3",
+      "recRGWc0JJ4I8EBrf",
+      "recHPPeg1e3HoJKda",
+      "recHv6hZ0SCI0cjT8",
+      "recjaqYpyPQLi5Ibg"
+    ]
   },
   {
+    "airtable_id":"recVhadI6PvXyCIlZ",
     "project_short_title":"PRIMARI",
     "project_label":"IOM: PRIMARI",
     "full_title":"Progressive Representation of Internal Migration and Risk Intelligence (PRIMARI)",
     "project_blurb":"PRIMARI sets a new benchmark for displacement insight. Delivered through IOM\u2019s public Displacement Tracking Matrix (DTM) API, the open, sub-national dataset merges mobility-tracking and flow-monitoring data from up to 90 countries. Its harmonized feeds let responders track movements in near-real time, map emerging risks, and direct assistance faster. Backed by CRAF\u2019d, IOM\u2019s Global Data Institute is positioning PRIMARI as the humanitarian sector\u2019s core data backbone. ",
     "project_url":"https:\/\/crafd.io\/projects\/iom",
-    "grant_size":"$500,000",
+    "grant_size":500000.0,
     "project_status":"Operationally closed",
-    "duration_months":"18",
-    "project_coverage":"Global"
+    "duration_months":18,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "recHv6hZ0SCI0cjT8"
+    ],
+    "linked_supporting_org":[
+      "rec7JlmrrEu5W20ML",
+      "recahMK1Tns4wXAgP",
+      "recE7NdoxNUgVthSy",
+      "recPIWKwnlHP0OkbT",
+      "recPEjNyS6pP2Ipcy"
+    ]
   },
   {
+    "airtable_id":"recVueNQ76CpXnkZa",
     "project_short_title":"GUARD",
     "project_label":"IFRC: GUARD",
     "full_title":"Gender Understanding and Analysis for Response to Disasters",
     "project_blurb":"Innovative real-time data and tools will identify at-risk\npopulations within 48 hours of disasters, enabling\nfaster and more equitable response. Led by IFRC with\na broad coalition of eight partners, the project could\nimprove assistance for up to 100 million people. ",
     "project_url":null,
-    "grant_size":"$599,735",
+    "grant_size":599735.0,
     "project_status":"Ongoing",
-    "duration_months":"24",
-    "project_coverage":"Global"
+    "duration_months":24,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "recmg6BiaYlTvSxkx"
+    ],
+    "linked_supporting_org":[
+      "recPOKEvEog864xqk",
+      "recH7mLkvz5jClYoY",
+      "rec1o98za8Ade3j1L",
+      "recmg6BiaYlTvSxkx",
+      "rec8SLRmza7VMMfXg",
+      "rec30zeOlK0uUqeBm",
+      "recBhDewqIus1Rszb",
+      "rec2jQWpBnNnZputz",
+      "recqcnvu0nSqC5L4Y",
+      "recjaqYpyPQLi5Ibg"
+    ]
   },
   {
+    "airtable_id":"rechF1C4gRNWZRX3o",
     "project_short_title":"CRAF'd Sec.Direct Cost 2022",
     "project_label":"CRAF'd Sec.Direct Cost 2022(2)",
     "full_title":"CRAF'd Sec.Direct Cost 2022(2)",
     "project_blurb":"N\/A",
     "project_url":null,
-    "grant_size":"$1,428,022",
+    "grant_size":1428022.0,
     "project_status":"Ongoing",
-    "duration_months":"12",
-    "project_coverage":"Global"
+    "duration_months":12,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "receDDy7TCG7FPn5i"
+    ],
+    "linked_supporting_org":[
+      "recRGWc0JJ4I8EBrf",
+      "receDDy7TCG7FPn5i",
+      "recLRSST0fgmhKZc6"
+    ]
   },
   {
+    "airtable_id":"rechMbv6uSC10bgdN",
     "project_short_title":"Strengthening CRAF'd Ecosystem",
     "project_label":"NORCAP: Strengthening CRAF'd Ecosystem",
     "full_title":"Strengthening the CRAF\u2019d Data Ecosystem for More Effective Crisis Action",
     "project_blurb":"With this project, CRAF\u2019d and its partners help better connect\nstakeholders across the crisis data ecosystem. Conferences,\nresearch and other initiatives supported by this project are designed to bring data providers, practitioners, and policy experts together. NORCAP acts as the manager for the project and collaborates closely with CRAF\u2019d and its partners to enable ecosystem activities.",
     "project_url":"https:\/\/crafd.io\/data-financing\/norcap",
-    "grant_size":"$1,000,000",
+    "grant_size":1000000.0,
     "project_status":"Ongoing",
-    "duration_months":"51",
-    "project_coverage":"Global"
+    "duration_months":51,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "recjaqYpyPQLi5Ibg"
+    ],
+    "linked_supporting_org":[
+      "rec3EXEhWXJLnnQeT",
+      "recjaqYpyPQLi5Ibg",
+      "rec14sEumsXvivblc",
+      "recSfL18Z81deq9OB",
+      "recuLlbKt3it5v0yd"
+    ]
   },
   {
+    "airtable_id":"reciI9Y9kF8R90HMa",
     "project_short_title":"VIEWS-PIN",
     "project_label":"PRIO: VIEWS",
     "full_title":"VIEWS-PIN: People in Need",
     "project_blurb":"VIEWS-PIN is breaking new ground in forecasting conflict-driven\nhumanitarian needs. It blends curated, high-resolution conflict and climate data with advanced machine learning to deliver sub-national forecasts up to 36 months in advance. Available via an open dashboard, these forecasts inform planning for food insecurity, displacement, and political violence in fragile settings. Developed by the PRIO and Uppsala University, VIEWS-PIN brings over 60 years of conflict research into the next generation of early warning systems. ",
     "project_url":"https:\/\/crafd.io\/data-financing\/norcap",
-    "grant_size":"$700,000",
+    "grant_size":700000.0,
     "project_status":"Ongoing",
-    "duration_months":"24",
-    "project_coverage":"All low-and middle-income countries"
+    "duration_months":24,
+    "project_coverage":"All low-and middle-income countries",
+    "linked_lead_org":[
+      "recHKayBVNHm8QsXP"
+    ],
+    "linked_supporting_org":[
+      "recHKayBVNHm8QsXP",
+      "rec14sEumsXvivblc",
+      "recKZUJrah8DHb2Wu",
+      "recX3x2JhsQlXK4R8",
+      "reciSCrJAGrkoTltl",
+      "recQy3kbk9oEdYN1X",
+      "recow8fQAyzfPp706"
+    ]
   },
   {
+    "airtable_id":"reclh3auLZCpsMNFZ",
     "project_short_title":"Rapid Assessment Data",
     "project_label":"OHCHR: Rapid Assessment Data",
     "full_title":"Rapid Assessment Data: Preventing conflict-related sexual violence",
     "project_blurb":"Cutting-edge AI-powered data on conflict-related sexual\nviolence will expand coverage, accelerate reporting,\nand inform more than $15 million in protection efforts.\nPiloted in six conflict-affected countries, the project is\nled by Office of the United Nations High Commissioner\nfor Human Rights with a view to broader scale-up",
     "project_url":null,
-    "grant_size":"$499,968",
+    "grant_size":499968.0,
     "project_status":"Ongoing",
-    "duration_months":"24",
-    "project_coverage":"Global"
+    "duration_months":24,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "recUZaC92PmOziMtC"
+    ],
+    "linked_supporting_org":[
+      "recUZaC92PmOziMtC",
+      "recahMK1Tns4wXAgP",
+      "recJEhP3EKDSXjrCX",
+      "recUTp7WiJei7A91P",
+      "recXXW1pfMBl4S9q4"
+    ]
   },
   {
+    "airtable_id":"recmrtrQhRDBZVxxz",
     "project_short_title":"eEARTH",
     "project_label":"ICG: EEARTH",
     "full_title":"Environmental Early Action and Risk Tracking Hub (EEARTH)",
     "project_blurb":"The Environmental Early Action and Risk Tracking Hub (eEARTH)\nis breaking new ground in how we anticipate climate-driven conflict. Piloted in Somalia and South Sudan, it equips decision-makers with tailored intelligence to prevent crises before they escalate. Developed by the International Crisis Group, the leading conflict prevention organization grounded in field research, eEARTH transforms data into timely, anticipatory action. ",
     "project_url":"https:\/\/crafd.io\/projects\/eearth",
-    "grant_size":"$700,000",
+    "grant_size":700000.0,
     "project_status":"Project closed",
-    "duration_months":"18",
-    "project_coverage":"Somalia, South Sudan"
+    "duration_months":18,
+    "project_coverage":"Somalia, South Sudan",
+    "linked_lead_org":[
+      "rec8fighUv8Q9hCX6"
+    ],
+    "linked_supporting_org":[
+      "rec8fighUv8Q9hCX6",
+      "reclFvEkKR7sCD7l3",
+      "recPFxoMtMX2tV021",
+      "recLEtULboPmoSb1B",
+      "recRGWc0JJ4I8EBrf",
+      "recZfAy6LiSQgVHF9"
+    ]
   },
   {
+    "airtable_id":"recoHPHGk3I9tXZMs",
     "project_short_title":"ACLED Data",
     "project_label":"ACLED: ACLED Data",
     "full_title":"Armed Conflict Location & Event Data Project (ACLED)",
     "project_blurb":"N\/A",
     "project_url":"https:\/\/crafd.io\/projects\/acled-grant-2021",
-    "grant_size":"$14,708,969",
+    "grant_size":14708969.0,
     "project_status":"Fully closed",
-    "duration_months":"24",
-    "project_coverage":"Global"
+    "duration_months":24,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "reclFvEkKR7sCD7l3"
+    ],
+    "linked_supporting_org":[
+      "recnlpfRuvi3EcUXx",
+      "recPUtyjHFZWWnDQd",
+      "recK29aXD9Vj9G1T1",
+      "recqcx0YaFwpyx1Ng",
+      "recdCoHVW8WoLoMiY",
+      "recA94rfL25336oit",
+      "rec1ZtuGgRSwYb1kb",
+      "reckDjUX0npjHdheE",
+      "rec0ZpGsPKsJm96A4",
+      "recXU563WiRkgyROS",
+      "recneEDP9tuSzj5ot",
+      "reclFvEkKR7sCD7l3",
+      "recwGIekEB6Xj358I",
+      "reczdlVQMF047v0nj",
+      "rec00zB9pxvICkXlD",
+      "recfrD8qipAMPcUjq",
+      "recfdb3RouRwhHw6f",
+      "recIv7CbEShW4suGB",
+      "recsxCMPGJsnWEYhs",
+      "recEWl8VACuv0xB4P",
+      "recd2NemaGQpt3UxW",
+      "recoIFcE6w3Hsae4X",
+      "recpbZmXLEuzXryYU",
+      "reci8nIW8FikV7QkS",
+      "reclrWwtVC1Q1Q1JX",
+      "rect8hHbbrjNW36ad",
+      "reckCsqk0PVwYy4Og",
+      "recinExdPqGohTGK0",
+      "recVHWBaYiL6909wx",
+      "recKJOTOnJMSUQ4jy",
+      "recM8eUHUIAWzUQBk",
+      "recbgn2ZhnYFQttF3",
+      "recp0HAnw6EPPC3OW",
+      "recvFZbnvfgTCF1kO",
+      "recLoVJq8pDzIedXk",
+      "recDxbkJHbz6xfd4K",
+      "recPunBwLpRrXHlwq",
+      "recVf9RzZuLP5yNpi",
+      "recTIXreKHiTQGWsx",
+      "recMtysKzIycMKR7h",
+      "recJEhP3EKDSXjrCX",
+      "recC3UpUQI0CqGLaz",
+      "recZjny7sSSH9KFpR",
+      "recEPXUwCZaNbcPrH",
+      "receBSaLPYEDEBGNd",
+      "recNGqgmLxYkLjANh",
+      "recniEOG9zir2PVmw",
+      "recXdnrR9AhKkHLY8",
+      "recUUsB0UIecRfTTW",
+      "rec9lbmFImNrdMxkK",
+      "recdDOgxu0SVX16nk",
+      "recKpFnYAxX0bv1Pc",
+      "recbmxNonvrMWBtpg",
+      "recdQLwKq7xKRBOzY",
+      "recpm6kuE19YvnZP3",
+      "recAxyX7GxC2cXYyE",
+      "rec3glPJJtfcztggh",
+      "reciSbDaT9ZALvizJ",
+      "recW31L57JYruqoxN",
+      "reczAYK2VasZ2H6NL",
+      "recZz9cnLXGUV3iNC",
+      "recblQJ3hKNIxCwcU",
+      "rec4VAOW9S6UKO2dA",
+      "recvfKNNEYjFKp1Oh",
+      "recA8tc5h5rCi64fE",
+      "recgtnwMtxK1hRUX5",
+      "rect2875PwCHTkNlM",
+      "recORQtvP59nyRDWk",
+      "recw6GIlhftXiELaO",
+      "recBp6Ko5jW11ebgd",
+      "recqml085v174uHki",
+      "recYN6OSTDVZVwRsk",
+      "rechxxzOmEgDlQqca",
+      "rechfyCRxJkkyWTWm"
+    ]
   },
   {
+    "airtable_id":"reconoiv65LoDbUFr",
     "project_short_title":"Risk DataHub",
     "project_label":"UNDP: DataHub",
     "full_title":"Risk Anticipation Data Hub",
     "project_blurb":"A next-generation platform brings more than 15,000 crisis indicators into one open, AI-enabled space, making risk data faster, smarter, and easier to act on. Drawing from over 20 public sources, it pairs real-time analytics with a conversational AI assistant so users can query risks in plain language, track emerging threats, and pull insights directly into their own systems through an open API, supporting over 7,500 practitioners across the humanitarian, development, and peace fields. The Data Hub is being developed by United Nations Development Programme (UNDP) Crisis Bureau to help partners to better crisis anticipation, prevention, and response. ",
     "project_url":"https:\/\/crafd.io\/projects\/undp",
-    "grant_size":"$500,000",
+    "grant_size":500000.0,
     "project_status":"Ongoing",
-    "duration_months":"24",
-    "project_coverage":"Global"
+    "duration_months":24,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "recRGWc0JJ4I8EBrf"
+    ],
+    "linked_supporting_org":[
+      "recRGWc0JJ4I8EBrf",
+      "recKc0Z0jE6Lb4Moe",
+      "reclFvEkKR7sCD7l3"
+    ]
   },
   {
+    "airtable_id":"recovFaPBY6M8k5Ow",
     "project_short_title":"EMPOW",
     "project_label":"PRIO: EMPOW",
     "full_title":"Women\u2019s Empowerment in Peace Processes",
     "project_blurb":"A new multi-decade dataset tracking women\u2019s roles\nin peace processes is set to improve inclusive peacebuilding worldwide. Led by Peace Research Institute\nOslo (PRIO) with academic partners, the project will\nshare open data and insights that could benefit 20\nmillion people.",
     "project_url":null,
-    "grant_size":"$800,000",
+    "grant_size":800000.0,
     "project_status":"Ongoing",
-    "duration_months":"24",
-    "project_coverage":"Global"
+    "duration_months":24,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "recHKayBVNHm8QsXP"
+    ],
+    "linked_supporting_org":[
+      "recHKayBVNHm8QsXP",
+      "rec14sEumsXvivblc",
+      "recF5o67nvN5x9chH"
+    ]
   },
   {
+    "airtable_id":"recvpn8u6HBffMRWu",
     "project_short_title":"CLIFDEW-GRID",
     "project_label":"UNHCR: CLIFDEW-GRID",
     "full_title":"CLIFDEW-GRID: Early Warning Grid-Based Risk Modelling of Climate Induced Forced Displacement",
     "project_blurb":"CLIFDEW-GRID is redefining how we understand climate-induced displacement. By shifting from national averages to a granular, grid-level view, this pioneering model captures where and how displacement risks are rising across West and East Africa. Drawing on cutting-edge analytics, the initiative offers a powerful tool to anticipate future hotspots and enable faster, more targeted crisis action. Developed by UNHCR and the University of California, Irvine, CLIFDEW-GRID helps turn data into early action. ",
     "project_url":"https:\/\/crafd.io\/projects\/clifdewgrid",
-    "grant_size":"$500,071",
+    "grant_size":500071.0,
     "project_status":"Operationally closed",
-    "duration_months":"24",
-    "project_coverage":"West and East Africa"
+    "duration_months":24,
+    "project_coverage":"West and East Africa",
+    "linked_lead_org":[
+      "recE7NdoxNUgVthSy"
+    ],
+    "linked_supporting_org":[
+      "recE7NdoxNUgVthSy",
+      "recAauXiY8op7MeKJ",
+      "rec8fighUv8Q9hCX6",
+      "reclFvEkKR7sCD7l3",
+      "recRGWc0JJ4I8EBrf",
+      "reclXF1UUrRo8XVrH",
+      "recLEtULboPmoSb1B",
+      "recPFxoMtMX2tV021",
+      "reciSCrJAGrkoTltl",
+      "recivcR2hSHFfyvT8"
+    ]
   },
   {
+    "airtable_id":"recxxh817VHuFZWuc",
     "project_short_title":"CRAF'd Direct Costs",
     "project_label":"CRAF'd Direct Costs",
     "full_title":null,
     "project_blurb":"With CRAF\u2019d funding, ACLED continues providing real-time, geo-coded and disaggregated conflict data worldwide and enables its 40,000 users to generate insights that feed directly into evidence-based policymaking and decision-making, strategic planning, and effective programming around the world.  ",
     "project_url":null,
-    "grant_size":"$8,560",
+    "grant_size":8560.0,
     "project_status":"Fully closed",
-    "duration_months":"12",
-    "project_coverage":"Global"
+    "duration_months":12,
+    "project_coverage":"Global",
+    "linked_lead_org":[
+      "receDDy7TCG7FPn5i"
+    ],
+    "linked_supporting_org":[
+      "receDDy7TCG7FPn5i",
+      "recLRSST0fgmhKZc6"
+    ]
   }
 ]

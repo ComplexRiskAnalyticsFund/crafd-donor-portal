@@ -19,7 +19,10 @@ function lerpHex(a: [number, number, number], b: [number, number, number], t: nu
   return `rgb(${r},${g},${bl})`;
 }
 
-const EXCLUDED_PROJECTS = new Set(["CRAF'd Direct Costs", "CRAF'd Sec.Direct Cost 2022"]);
+const EXCLUDED_PROJECTS = new Set([
+  "CRAF'd Direct Costs",
+  "CRAF'd Sec.Direct Cost 2022",
+]);
 
 function splitLabel(name: string): [string, string] {
   const words = name.split(" ");
@@ -45,12 +48,19 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
   const activeRegion = locked ?? hovered ?? "Global";
 
   useEffect(() => {
-    fetch("/data/hex-tiles.json").then((r) => r.json()).then(setTileData);
+    fetch("/data/hex-tiles.json")
+      .then((r) => r.json())
+      .then(setTileData);
   }, []);
 
   const filteredProjects = useMemo(
-    () => projects.filter((p) => !EXCLUDED_PROJECTS.has(p.project_short_title)),
-    [projects]
+    () =>
+      projects.filter(
+        (p) =>
+          p.project_short_title &&
+          !EXCLUDED_PROJECTS.has(p.project_short_title),
+      ),
+    [projects],
   );
 
   const projectsByRegion = useMemo(() => {
@@ -89,7 +99,9 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
     const sums = new Map<string, { x: number; y: number; n: number }>();
     for (const t of tileData.tiles) {
       const s = sums.get(t.region) ?? { x: 0, y: 0, n: 0 };
-      s.x += t.x; s.y += t.y; s.n += 1;
+      s.x += t.x;
+      s.y += t.y;
+      s.n += 1;
       sums.set(t.region, s);
     }
     const out = new Map<string, [number, number]>();
@@ -104,7 +116,7 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
 
   function handleTileClick(e: React.MouseEvent, region: string) {
     e.stopPropagation();
-    setLocked(prev => prev === region ? null : region);
+    setLocked((prev) => (prev === region ? null : region));
   }
 
   const globalProjects = projectsByRegion.get("Global") ?? [];
@@ -128,7 +140,13 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
         height="100%"
         style={{ overflow: "visible" }}
       >
-        <rect x={-60} y={-60} width={tileData.width + 120} height={tileData.height + 120} fill="#F1B434" />
+        <rect
+          x={-60}
+          y={-60}
+          width={tileData.width + 120}
+          height={tileData.height + 120}
+          fill="#F1B434"
+        />
 
         {/* Tiles */}
         {Array.from(new Set(tileData.tiles.map((t) => t.region))).map((region) => {
@@ -170,7 +188,10 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
           const bgW = maxLen * 9 + 18;
           const bgH = line2 ? 40 : 27;
           return (
-            <g key={region} style={{ pointerEvents: "none", userSelect: "none" }}>
+            <g
+              key={region}
+              style={{ pointerEvents: "none", userSelect: "none" }}
+            >
               {hl && (
                 <rect
                   x={cx - bgW / 2}
@@ -202,7 +223,6 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
 
       {/* ── Modal ────────────────────────────────────────── */}
       <div className={styles.card} onClick={(e) => e.stopPropagation()}>
-
         {/* Zone 1 — region identity (always present) */}
         <div className={styles.zoneLeft}>
           {isSelected ? (
@@ -210,7 +230,10 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
               <p className={styles.zoneEyebrow}>Selected region</p>
               <h2 className={styles.zoneTitle}>{activeRegion}</h2>
               {locked && (
-                <button className={styles.unlockBtn} onClick={() => setLocked(null)}>
+                <button
+                  className={styles.unlockBtn}
+                  onClick={() => setLocked(null)}
+                >
                   ✕ Unlock
                 </button>
               )}
@@ -219,7 +242,9 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
             <>
               <p className={styles.zoneEyebrow}>Worldwide</p>
               <h2 className={styles.zoneTitle}>Global view</h2>
-              <p className={styles.zoneHint}>Hover or click a region to explore</p>
+              <p className={styles.zoneHint}>
+                Hover or click a region to explore
+              </p>
             </>
           )}
         </div>
@@ -234,15 +259,28 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
               {hasRegional ? (
                 <ul className={styles.projectList}>
                   {regionalProjects.map((p) => (
-                    <li key={p.project_short_title} className={styles.projectBlock}>
-                      {p.project_url
-                        ? <a href={p.project_url} target="_blank" rel="noreferrer">{p.project_short_title}</a>
-                        : <span>{p.project_short_title}</span>}
+                    <li
+                      key={p.project_short_title}
+                      className={styles.projectBlock}
+                    >
+                      {p.project_url ? (
+                        <a
+                          href={p.project_url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {p.project_short_title}
+                        </a>
+                      ) : (
+                        <span>{p.project_short_title}</span>
+                      )}
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className={styles.emptyState}>No targeted projects in this region</p>
+                <p className={styles.emptyState}>
+                  No targeted projects in this region
+                </p>
               )}
             </div>
             <div className={styles.zoneDivider} />
@@ -251,20 +289,21 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
 
         {/* Zone 3 — global projects (always present) */}
         <div className={styles.zoneRight}>
-          <p className={styles.zoneLabel}>
-            Global
-          </p>
+          <p className={styles.zoneLabel}>Global</p>
           <ul className={styles.projectList}>
             {globalProjects.map((p) => (
               <li key={p.project_short_title} className={styles.projectBlock}>
-                {p.project_url
-                  ? <a href={p.project_url} target="_blank" rel="noreferrer">{p.project_short_title}</a>
-                  : <span>{p.project_short_title}</span>}
+                {p.project_url ? (
+                  <a href={p.project_url} target="_blank" rel="noreferrer">
+                    {p.project_short_title}
+                  </a>
+                ) : (
+                  <span>{p.project_short_title}</span>
+                )}
               </li>
             ))}
           </ul>
         </div>
-
       </div>
     </div>
   );
