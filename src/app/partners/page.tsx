@@ -27,12 +27,10 @@ export default async function PartnersPage() {
   }
 
   return (
-    <div>
-      <PartnersVizClient
-        initialNodes={nodes}
-        asOf={meta.as_of}
-        projectsById={projectsById}
-      />
-    </div>
+    <PartnersVizClient
+      initialNodes={nodes}
+      asOf={meta.as_of}
+      projectsById={projectsById}
+    />
   );
 }
