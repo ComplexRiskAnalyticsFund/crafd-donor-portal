@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
+import Image from "next/image";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
@@ -396,7 +397,6 @@ export default function PartnersVizClient({
       animTlRef.current?.kill();
       animTlRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [renderNodes.length]);
 
   // Pan (two-finger) + zoom (pinch/Ctrl+scroll)
@@ -1302,10 +1302,6 @@ export default function PartnersVizClient({
                   lockedSourceNode?.partner?.org_short_name?.trim() ??
                   lockedSourceNode?.name ??
                   "Partner";
-                const contextName =
-                  ecosystemContextNode?.partner?.org_short_name?.trim() ??
-                  ecosystemContextNode?.name ??
-                  null;
                 return (
                   <>
                     {/* Mobile drag handle */}
@@ -1380,9 +1376,11 @@ export default function PartnersVizClient({
                             const needsFilter =
                               !p?.white_logo_path && !!p?.color_logo_path;
                             return src ? (
-                              <img
+                              <Image
                                 src={src}
                                 alt={partnerName}
+                                width={100}
+                                height={44}
                                 style={{
                                   height: isMobile ? 32 : 44,
                                   width: "auto",
@@ -2094,9 +2092,11 @@ export default function PartnersVizClient({
                           overflow: "hidden",
                         }}
                       >
-                        <img
+                        <Image
                           src={`/logos/countries/${logoSlug}.svg`}
                           alt={name}
+                          width={0}
+                          height={0}
                           style={{
                             width: "80%",
                             height: "80%",

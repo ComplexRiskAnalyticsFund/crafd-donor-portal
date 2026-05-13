@@ -56,10 +56,9 @@ export default function CoverageMap({ coverage }: { coverage: string | null }) {
         .attr("fill", "#000");
 
       // Exclude Antarctica (numeric id 10) from all render branches
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const noAntarcticaGeoms = (
-        geoCache.objects.countries.geometries as any[]
-      ).filter((g: { id: number }) => +g.id !== 10);
+      const noAntarcticaGeoms = geoCache.objects.countries.geometries.filter(
+        (g: { id: number }) => +g.id !== 10,
+      );
       const noAntarcticaFeatures = countries.features.filter(
         (f) => f.id !== 10,
       );
@@ -88,10 +87,9 @@ export default function CoverageMap({ coverage }: { coverage: string | null }) {
 
         if (highlightIds.size > 0) {
           // Merge highlighted countries → dissolves internal political borders
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const highlightGeoms = (
-            geoCache.objects.countries.geometries as any[]
-          ).filter((g: { id: number }) => highlightIds.has(+g.id));
+          const highlightGeoms = geoCache.objects.countries.geometries.filter(
+            (g: { id: number }) => highlightIds.has(+g.id),
+          );
           if (highlightGeoms.length > 0) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const merged = topojson.merge(geoCache, highlightGeoms as any);
