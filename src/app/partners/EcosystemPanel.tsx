@@ -20,6 +20,7 @@ interface EcosystemPanelProps {
   onClose: () => void;
   onPartnerClick: (n: HexNode) => void;
   setPartnerTooltip: (t: { text: string; x: number; y: number } | null) => void;
+  onProjectHover: (project: string | null) => void;
 }
 
 function ProjectVisitLink({ href }: { href: string }) {
@@ -63,6 +64,7 @@ export function EcosystemPanel({
   onClose,
   onPartnerClick,
   setPartnerTooltip,
+  onProjectHover,
 }: EcosystemPanelProps) {
   const sheetTouchStartY = useRef(0);
   const projects = [...parseProjects(lockedFeature)];
@@ -269,6 +271,8 @@ export function EcosystemPanel({
                   key={proj}
                   id={`cs1-proj-${idx}`}
                   className="flex flex-col border-l-4 border-crafd-yellow pl-4"
+                  onMouseEnter={() => onProjectHover(proj)}
+                  onMouseLeave={() => onProjectHover(null)}
                 >
                   <div>
                     <button

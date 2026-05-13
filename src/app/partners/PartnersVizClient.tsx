@@ -54,6 +54,7 @@ export default function PartnersVizClient({
       window.matchMedia("(max-width: 768px)").matches,
   );
   const [tappedNodeId, setTappedNodeId] = useState<string | null>(null);
+  const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [sheetSnap, setSheetSnap] = useState<"half" | "full">("half");
   const [partnerTooltip, setPartnerTooltip] = useState<{
     text: string;
@@ -530,8 +531,14 @@ export default function PartnersVizClient({
                 nodeOpacity = 1;
                 nodeScale = 1.15;
               } else if (lockedGroup.has(n.id)) {
-                nodeOpacity = 1;
-                nodeScale = 1.15;
+                if (hoveredProject) {
+                  const inProject = parseProjects(n.partner?.relational_project).has(hoveredProject);
+                  nodeOpacity = inProject ? 1 : 0.25;
+                  nodeScale = inProject ? 1.4 : 1.0;
+                } else {
+                  nodeOpacity = 1;
+                  nodeScale = 1.15;
+                }
               } else {
                 nodeOpacity = 0.07;
               }
@@ -837,6 +844,7 @@ export default function PartnersVizClient({
           onClose={closeAll}
           onPartnerClick={enterClickState1}
           setPartnerTooltip={setPartnerTooltip}
+          onProjectHover={setHoveredProject}
         />
       )}
 
