@@ -856,7 +856,7 @@ export default function PartnersVizClient({
       {/* ── Partner role tooltip ────────────────────────────────────────────── */}
       {partnerTooltip && (
         <div
-          className="pointer-events-none fixed z-[200]"
+          className="pointer-events-none fixed z-200"
           style={{
             left: partnerTooltip.x,
             top: partnerTooltip.y,
@@ -864,7 +864,7 @@ export default function PartnersVizClient({
           }}
         >
           <div
-            className="relative rounded-[7px] border border-white/[0.14] px-[0.7rem] py-[0.3rem] text-[0.67rem] font-semibold tracking-[0.07em] whitespace-nowrap text-white/80 uppercase"
+            className="relative rounded-[7px] border border-white/[0.14] px-[0.7rem] py-[0.3rem] text-xs font-semibold tracking-wider whitespace-nowrap text-white/80 uppercase"
             style={{
               background: "rgba(15,15,15,0.95)",
               backdropFilter: "blur(10px)",
@@ -872,7 +872,7 @@ export default function PartnersVizClient({
           >
             {partnerTooltip.text}
             <span
-              className="absolute -bottom-[6px] left-1/2 -translate-x-1/2"
+              className="absolute -bottom-1.5 left-1/2 -translate-x-1/2"
               style={{
                 width: 0,
                 height: 0,
@@ -882,7 +882,7 @@ export default function PartnersVizClient({
               }}
             />
             <span
-              className="absolute -bottom-[8px] left-1/2 -z-[1] -translate-x-1/2"
+              className="absolute -bottom-2 left-1/2 -z-1 -translate-x-1/2"
               style={{
                 width: 0,
                 height: 0,
@@ -909,13 +909,13 @@ export default function PartnersVizClient({
           className="ease flex items-center overflow-hidden transition-[width] duration-300"
           style={{ width: searchOpen ? 240 : 0 }}
         >
-          <div className="relative flex w-[240px] items-center">
+          <div className="relative flex w-60 items-center">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search partners…"
-              className="w-full rounded-[20px] border border-white/[0.18] py-2 pr-8 pl-[0.85rem] text-[0.82rem] text-white outline-none"
+              className="w-full rounded-[20px] border border-white/18 py-2 pr-8 pl-[0.85rem] text-sm text-white outline-none"
               style={{
                 background: "rgba(0,0,0,0.65)",
                 backdropFilter: "blur(10px)",
@@ -925,7 +925,7 @@ export default function PartnersVizClient({
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-[9px] cursor-pointer border-none bg-transparent p-0 text-[1rem] leading-none text-white/50"
+                className="absolute right-2.25 cursor-pointer border-none bg-transparent p-0 text-base leading-none text-white/50"
               >
                 ×
               </button>
@@ -943,7 +943,7 @@ export default function PartnersVizClient({
               setSearchOpen(true);
             }
           }}
-          className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/[0.22] bg-black text-white"
+          className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/22 bg-black text-white"
           aria-label="Search partners"
         >
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
@@ -963,7 +963,7 @@ export default function PartnersVizClient({
 
       {/* ── Footnote ───────────────────────────────────────────────────────── */}
       <p
-        className="pointer-events-none fixed right-5 bottom-4 z-30 m-0 font-[inherit] text-[0.68rem] tracking-[0.14em] text-white uppercase opacity-65"
+        className="pointer-events-none fixed right-5 bottom-4 z-30 m-0 font-[inherit] text-xs tracking-widest text-white uppercase opacity-65"
         style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
       >
         As of {asOf}

@@ -22,7 +22,7 @@ function ProjectVisitLink({ href }: { href: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 self-start rounded-md bg-crafd-yellow px-4 py-2 text-[0.72rem] font-extrabold tracking-[0.08em] text-black uppercase no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+      className="inline-flex items-center gap-2 self-start rounded-md bg-crafd-yellow px-4 py-2 text-xs font-extrabold tracking-wider text-black uppercase no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
     >
       <svg
         width="13"
@@ -133,14 +133,14 @@ export function DonorPanel({
 
             {/* Title */}
             <div className="min-w-0 flex-1">
-              <p className="m-0 mb-[0.3rem] text-[0.65rem] tracking-[0.12em] text-crafd-yellow uppercase">
+              <p className="m-0 mb-[0.3rem] text-xs tracking-widest text-crafd-yellow uppercase">
                 Donor Partner
               </p>
-              <h1 className="m-0 text-[1.1rem] leading-[1.2] font-extrabold tracking-[0.02em] text-white uppercase">
+              <h1 className="m-0 text-lg leading-[1.2] font-extrabold tracking-wide text-white uppercase">
                 {name}
               </h1>
               {fullName && fullName !== name && (
-                <p className="m-0 mt-1 text-[0.78rem] leading-[1.4] text-white/55">
+                <p className="m-0 mt-1 text-sm leading-[1.4] text-white/55">
                   {fullName}
                 </p>
               )}
@@ -151,7 +151,7 @@ export function DonorPanel({
               onClick={onClose}
               className={cn(
                 "flex shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-transparent text-white",
-                isMobile ? "h-10 w-10 text-[1.4rem]" : "h-8 w-8 text-[1.1rem]",
+                isMobile ? "h-10 w-10 text-xl" : "h-8 w-8 text-lg",
               )}
             >
               ×
@@ -170,10 +170,10 @@ export function DonorPanel({
           {/* Total contribution */}
           {p?.total_grant_size && (
             <div className="flex flex-col gap-[0.4rem]">
-              <p className="m-0 text-[0.65rem] tracking-[0.12em] text-white/50 uppercase">
+              <p className="m-0 text-xs tracking-widest text-white/50 uppercase">
                 Total Contribution to CRAF&apos;d
               </p>
-              <p className="m-0 text-[2.8rem] leading-none font-extrabold text-white">
+              <p className="m-0 text-5xl leading-none font-extrabold text-white">
                 {formatGrantSize(p.total_grant_size)}
               </p>
             </div>
@@ -188,23 +188,23 @@ export function DonorPanel({
                 key={proj}
                 className="flex flex-col gap-4 border-t border-white/8 pt-5"
               >
-                <h3 className="m-0 text-[1.05rem] font-extrabold text-white">
+                <h3 className="m-0 text-base font-extrabold text-white">
                   {pd.full_title ?? pd.project_label ?? proj}
                 </h3>
 
                 {pd.project_blurb && pd.project_blurb.trim() !== "N/A" && (
-                  <p className="m-0 text-[0.9rem] leading-[1.75] text-white/72">
+                  <p className="m-0 text-sm leading-[1.75] text-white/72">
                     {pd.project_blurb}
                   </p>
                 )}
 
                 {pd.grant_size && (
                   <div className="flex flex-wrap gap-2">
-                    <span className="inline-flex items-center rounded-md border border-crafd-yellow/35 bg-crafd-yellow/12 px-[0.55rem] py-[0.2rem] text-[0.9rem] font-bold text-crafd-yellow">
+                    <span className="inline-flex items-center rounded-md border border-crafd-yellow/35 bg-crafd-yellow/12 px-[0.55rem] py-[0.2rem] text-sm font-bold text-crafd-yellow">
                       {formatGrantSize(pd.grant_size)}
                     </span>
                     {pd.duration_months && (
-                      <span className="inline-flex items-center rounded-md border border-white/15 bg-white/6 px-[0.55rem] py-[0.2rem] text-[0.9rem] font-bold text-white/70">
+                      <span className="inline-flex items-center rounded-md border border-white/15 bg-white/6 px-[0.55rem] py-[0.2rem] text-sm font-bold text-white/70">
                         {pd.duration_months} months
                       </span>
                     )}
