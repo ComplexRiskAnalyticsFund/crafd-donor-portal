@@ -706,7 +706,8 @@ export default function PartnersVizClient({
                   } else cur = cur ? cur + " " + w : w;
                 }
                 if (cur) nameLines.push(cur);
-                const lineH = 13;
+                const fontSize = Math.round(n.r * 0.2);
+                const lineH = fontSize * 1.25;
                 const totalSpan = (nameLines.length - 1) * lineH;
                 return (
                   <>
@@ -714,12 +715,12 @@ export default function PartnersVizClient({
                       <text
                         key={i}
                         x={0}
-                        y={-totalSpan / 2 + i * lineH + 4}
+                        y={-totalSpan / 2 + i * lineH + fontSize * 0.35}
                         textAnchor="middle"
-                        fontSize={11}
+                        fontSize={fontSize}
                         fill="white"
                         fontWeight={700}
-                        letterSpacing="0.02em"
+                        letterSpacing="0.01em"
                       >
                         {line}
                       </text>
