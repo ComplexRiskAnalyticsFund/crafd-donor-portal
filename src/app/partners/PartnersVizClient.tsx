@@ -11,6 +11,8 @@ import type { CrafdProject } from "@/types";
 const SQRT3 = Math.sqrt(3);
 const HEX_SIZE = 75;
 const GRID_LIMIT = 2400;
+const MIN_SCALE = 0.4;
+const MAX_SCALE = 2;
 
 const PROJECT_LINE_DASHES = [
   "",
@@ -36,13 +38,8 @@ function toLogoSlug(name: string): string {
   return name
     .trim()
     .toLowerCase()
-    .replace(/ /g, "-")
-    .replace(/\//g, "-")
-    .replace(/_/g, "-")
-    .replace(/&/g, "")
-    .replace(/\(/g, "")
-    .replace(/\)/g, "")
-    .replace(/,/g, "");
+    .replace(/[ /_]/g, "-")
+    .replace(/[&(),]/g, "");
 }
 
 function hexPathFlat(cx: number, cy: number, r: number) {
@@ -53,13 +50,12 @@ function hexPathFlat(cx: number, cy: number, r: number) {
   return `M ${pts.map((p) => p.join(",")).join(" L ")} Z`;
 }
 
-function fillFor(n: HexNode, highlight: "primary" | "secondary" | null = null) {
+function fillFor(n: HexNode, highlighted = false) {
   if (n.kind === "center") return "white";
   if (n.kind === "label") return "#FFD89C";
   if (n.kind === "outline") return "none";
   if (n.kind === "partner" && n.label === "donor") return "white";
-  if (highlight === "primary") return "#000000";
-  if (highlight === "secondary") return "#000000";
+  if (highlighted) return "#000000";
   return "#1C1C1C";
 }
 
@@ -199,9 +195,6 @@ export default function PartnersVizClient({
       document.body.style.background = prev.bg;
     };
   }, []);
-
-  const MIN_SCALE = 0.4;
-  const MAX_SCALE = 2;
 
   // Detect mobile viewport
   useEffect(() => {
@@ -385,6 +378,8 @@ export default function PartnersVizClient({
   useEffect(() => {
     const PAN_STEP = 50;
     const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
       if (e.key === "Escape") {
         setLockedGroup(null);
         setLockedFeature(null);
@@ -613,24 +608,6 @@ export default function PartnersVizClient({
 
   return (
     <div className="fixed inset-0" style={{ background: "#FDB53C" }}>
-      <style>{`
-        .hub-ring {
-          fill-opacity: 0.38;
-          stroke-opacity: 0.90;
-          transform-origin: 0 0;
-          animation: hub-ring-burst 2.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
-        }
-        @keyframes hub-ring-burst {
-          0%   { fill-opacity: 0.38; stroke-opacity: 0.90; transform: scale(1.02); }
-          100% { fill-opacity: 0;    stroke-opacity: 0;    transform: scale(1.62); }
-        }
-        details summary::-webkit-details-marker { display: none; }
-        details > summary { list-style: none; }
-        details[open] > summary .summary-arrow::after { content: "▾"; }
-        details:not([open]) > summary .summary-arrow::after { content: "▸"; }
-        [data-modal] { scrollbar-width: none; -ms-overflow-style: none; }
-        [data-modal]::-webkit-scrollbar { display: none; }
-      `}</style>
       <svg
         ref={svgRef}
         viewBox="-900 -500 1800 1000"
@@ -814,7 +791,7 @@ export default function PartnersVizClient({
             let nodeOpacity =
               n.kind === "partner" || n.kind === "more" ? 0.95 : 1;
             let nodeScale = 1;
-            let highlight: "primary" | "secondary" | null = null;
+            let highlight = false;
 
             if (lockedGroup !== null) {
               if (n.kind === "outline") {
@@ -841,13 +818,13 @@ export default function PartnersVizClient({
                 if (n.id === hoveredPartnerNode.id) {
                   nodeScale = 1.5;
                   nodeOpacity = 1;
-                  highlight = "primary";
+                  highlight = true;
                 } else if (
                   rf &&
                   projectsOverlap(n.partner?.relational_project, rf)
                 ) {
                   nodeOpacity = 1;
-                  highlight = "secondary";
+                  highlight = true;
                 } else {
                   nodeOpacity = 0.35;
                 }

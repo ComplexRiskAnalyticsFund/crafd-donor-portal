@@ -60,7 +60,7 @@ function axialToPixel(q: number, r: number, size: number) {
   };
 }
 
-// 6 axial directions (pointy-top)
+// 6 axial directions (flat-top)
 const DIRS = [
   { dq: 1, dr: 0 },
   { dq: 1, dr: -1 },
@@ -307,6 +307,7 @@ export function buildPartnerHexNodes(
 
   for (const [label, group] of groups.entries()) {
     const anchor = labelAnchorAxial[label];
+    // "other" has no anchor/wedge by design — those partners are intentionally not placed
     if (!anchor) continue;
     const anchorPx = axialToPixel(anchor.q, anchor.r, size);
 
@@ -394,10 +395,3 @@ export function buildPartnerHexNodes(
 
   return nodes;
 }
-// [DONE] 1. all of them need to be connected to my big white hex: craf'd
-// [DONE]2. there needs to be a mechanism for them not overlapping
-// [DONE] 3. where is project partners? I don't see it at all.
-//  4. Should I put in the logos already--it will  help identify?
-// [DONE] 5. hover responses for each hex.
-//  6. my current data also doesn't show me the actual connection between these across the different partners. will need data joining here?
-// [DONE] 7. the whole thing should be on a canvas, not svg,  so that nothing gets cut off and its explorable.

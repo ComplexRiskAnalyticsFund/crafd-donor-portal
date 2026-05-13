@@ -55,6 +55,24 @@
   font-display: swap;
 }
 
+/* Partners visualization */
+.hub-ring {
+  fill-opacity: 0.38;
+  stroke-opacity: 0.90;
+  transform-origin: 0 0;
+  animation: hub-ring-burst 2.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+}
+@keyframes hub-ring-burst {
+  0%   { fill-opacity: 0.38; stroke-opacity: 0.90; transform: scale(1.02); }
+  100% { fill-opacity: 0;    stroke-opacity: 0;    transform: scale(1.62); }
+}
+details summary::-webkit-details-marker { display: none; }
+details > summary { list-style: none; }
+details[open] > summary .summary-arrow::after { content: "▾"; }
+details:not([open]) > summary .summary-arrow::after { content: "▸"; }
+[data-modal] { scrollbar-width: none; -ms-overflow-style: none; }
+[data-modal]::-webkit-scrollbar { display: none; }
+
 /* LiquidityWarning slide-in animation */
 @keyframes slide-in-down {
   from {

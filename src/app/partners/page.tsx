@@ -1,7 +1,6 @@
 // src/app/partners/page.tsx
 export const dynamic = "force-dynamic";
 
-import { Suspense } from "react";
 import fs from "fs/promises";
 import path from "path";
 import {
@@ -28,32 +27,25 @@ export default async function PartnersPage() {
     meta.anon_partner_count,
   );
 
+  const [whiteFiles, thumbFiles, colorFiles] = await Promise.all([
+    fs.readdir(path.join(process.cwd(), "public", "white_logos")).catch(() => [] as string[]),
+    fs.readdir(path.join(process.cwd(), "public", "white_logos", "thumb")).catch(() => [] as string[]),
+    fs.readdir(path.join(process.cwd(), "public", "logos", "color")).catch(() => [] as string[]),
+  ]);
+
   const partnerLogos: Record<string, string> = {};
   const partnerLogoThumbs: Record<string, string> = {};
-  try {
-    const whiteDir = path.join(process.cwd(), "public", "white_logos");
-    for (const f of await fs.readdir(whiteDir)) {
-      if (f === "thumb") continue;
-      partnerLogos[path.parse(f).name] = `/white_logos/${f}`;
-    }
-  } catch {
-    /* directory doesn't exist yet */
+
+  for (const f of whiteFiles) {
+    if (f === "thumb") continue;
+    partnerLogos[path.parse(f).name] = `/white_logos/${f}`;
   }
-  try {
-    const thumbDir = path.join(process.cwd(), "public", "white_logos", "thumb");
-    for (const f of await fs.readdir(thumbDir)) {
-      partnerLogoThumbs[path.parse(f).name] = `/white_logos/thumb/${f}`;
-    }
-  } catch {
-    /* directory doesn't exist yet */
+  for (const f of thumbFiles) {
+    partnerLogoThumbs[path.parse(f).name] = `/white_logos/thumb/${f}`;
   }
-  try {
-    const colorDir = path.join(process.cwd(), "public", "logos", "color");
-    for (const f of await fs.readdir(colorDir)) {
-      partnerLogos[path.parse(f).name] = `/logos/color/${f}`;
-    }
-  } catch {
-    /* directory doesn't exist yet */
+  // color logos intentionally override white_logos entries (used in detail panel)
+  for (const f of colorFiles) {
+    partnerLogos[path.parse(f).name] = `/logos/color/${f}`;
   }
 
   const projectsByTitle: Record<string, CrafdProject> = {};
@@ -63,15 +55,13 @@ export default async function PartnersPage() {
 
   return (
     <div>
-      <Suspense fallback={null}>
-        <PartnersVizClient
-          initialNodes={nodes}
-          partnerLogos={partnerLogos}
-          partnerLogoThumbs={partnerLogoThumbs}
-          asOf={meta.as_of}
-          projectsByTitle={projectsByTitle}
-        />
-      </Suspense>
+      <PartnersVizClient
+        initialNodes={nodes}
+        partnerLogos={partnerLogos}
+        partnerLogoThumbs={partnerLogoThumbs}
+        asOf={meta.as_of}
+        projectsByTitle={projectsByTitle}
+      />
     </div>
   );
 }
