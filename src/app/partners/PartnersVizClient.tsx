@@ -49,11 +49,7 @@ export default function PartnersVizClient({
   const [openProjects, setOpenProjects] = useState<Set<string>>(
     () => new Set(),
   );
-  const [isMobile, setIsMobile] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(max-width: 768px)").matches,
-  );
+  const [isMobile, setIsMobile] = useState(false);
   const [tappedNodeId, setTappedNodeId] = useState<string | null>(null);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [hoveredOrgNodeId, setHoveredOrgNodeId] = useState<string | null>(null);
@@ -281,7 +277,7 @@ export default function PartnersVizClient({
       window.matchMedia("(max-width: 768px)").matches;
     const RANGE = isMobileInit ? 13 : 28;
     const FADE_START = 200;
-    const FADE_END = isMobileInit ? 1000 : 2400;
+    const FADE_END = isMobileInit ? 1600 : 2400;
     const cells: { d: string; key: string; opacity: number }[] = [];
     for (let q = -RANGE; q <= RANGE; q++) {
       for (let r = -RANGE; r <= RANGE; r++) {
@@ -638,7 +634,8 @@ export default function PartnersVizClient({
         }}
         style={{
           opacity: nodeOpacity,
-          transition: isMobile ? "opacity 0.2s ease" : "opacity 0.45s ease",
+          filter: isSelected ? undefined : "grayscale(1) brightness(1.1)",
+          transition: isMobile ? "opacity 0.2s ease, filter 0.25s ease" : "opacity 0.45s ease, filter 0.3s ease",
           cursor: lockedGroup !== null ? (isLocked ? "pointer" : "default") : "pointer",
         }}
       >
@@ -689,7 +686,6 @@ export default function PartnersVizClient({
                   width={boxW}
                   height={boxH}
                   preserveAspectRatio="xMidYMid meet"
-                  filter={isSelected ? undefined : "url(#grayscale)"}
                 />
               </>
             ) : (n.partner?.thumb_logo_path ??
@@ -709,7 +705,6 @@ export default function PartnersVizClient({
                   height={boxH}
                   preserveAspectRatio="xMidYMid meet"
                   imageRendering={isMobile ? "auto" : "optimizeQuality"}
-                  filter={isSelected ? undefined : "url(#grayscale)"}
                 />
               </>
             ) : n.name ? (
