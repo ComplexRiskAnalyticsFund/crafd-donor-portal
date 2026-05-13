@@ -98,8 +98,8 @@ export function EcosystemPanel({
           className={cn(
             "pointer-events-auto flex flex-col overflow-hidden text-white backdrop-blur-md",
             isMobile
-              ? "absolute inset-x-0 bottom-0 border-t border-white/[0.12]"
-              : "w-1/3 max-w-[700px] min-w-[360px] border-r border-white/[0.08]",
+              ? "absolute inset-x-0 bottom-0 border-t border-white/12"
+              : "w-1/3 max-w-175 min-w-90 border-r border-white/8",
             isMobile && sheetSnap === "full"
               ? "rounded-t-none"
               : isMobile
@@ -264,7 +264,7 @@ export function EcosystemPanel({
                           stiffness: 300,
                           damping: 28,
                         }}
-                        className="mt-[3px] shrink-0 opacity-60"
+                        className="mt-0.75 shrink-0 opacity-60"
                       >
                         <path
                           d="M4 6l4 4 4-4"
@@ -281,17 +281,17 @@ export function EcosystemPanel({
                       pd?.project_coverage) && (
                       <div className="flex flex-wrap gap-2 pb-2">
                         {pd?.grant_size && (
-                          <span className="inline-flex items-center gap-[0.3rem] rounded-md border border-white/[0.18] bg-white/[0.08] px-[0.55rem] py-[0.2rem] text-[0.9rem] font-bold tracking-[0.04em] text-white/85">
+                          <span className="inline-flex items-center gap-[0.3rem] rounded-md border border-white/18 bg-white/8 px-[0.55rem] py-[0.2rem] text-[0.9rem] font-bold tracking-[0.04em] text-white/85">
                             {formatGrantSize(pd.grant_size)}
                           </span>
                         )}
                         {pd?.duration_months && (
-                          <span className="inline-flex items-center gap-[0.3rem] rounded-md border border-white/[0.15] bg-white/[0.06] px-[0.55rem] py-[0.2rem] text-[0.9rem] font-bold tracking-[0.04em] text-white/70">
+                          <span className="inline-flex items-center gap-[0.3rem] rounded-md border border-white/15 bg-white/6 px-[0.55rem] py-[0.2rem] text-[0.9rem] font-bold tracking-[0.04em] text-white/70">
                             {pd.duration_months} months
                           </span>
                         )}
                         {pd?.project_coverage && (
-                          <span className="inline-flex items-center gap-[0.3rem] rounded-md border border-white/[0.15] bg-white/[0.06] px-[0.55rem] py-[0.2rem] text-[0.9rem] font-bold tracking-[0.04em] text-white/70">
+                          <span className="inline-flex items-center gap-[0.3rem] rounded-md border border-white/15 bg-white/6 px-[0.55rem] py-[0.2rem] text-[0.9rem] font-bold tracking-[0.04em] text-white/70">
                             {pd.project_coverage}
                           </span>
                         )}
@@ -317,7 +317,7 @@ export function EcosystemPanel({
                         className="overflow-hidden"
                       >
                         <div
-                          className="flex flex-col gap-[0.6rem] pt-[0.6rem] pb-[0.25rem]"
+                          className="flex flex-col gap-[0.6rem] pt-[0.6rem] pb-1"
                           style={{ paddingLeft: "calc(3px + 0.6rem)" }}
                         >
                           {pd?.project_blurb && (
@@ -354,7 +354,7 @@ export function EcosystemPanel({
                                   {members.map((pn, pi) => (
                                     <span key={pn.id}>
                                       {pi > 0 && (
-                                        <span className="mx-[0.25rem] text-white/25">
+                                        <span className="mx-1 text-white/25">
                                           ·
                                         </span>
                                       )}
@@ -398,7 +398,7 @@ export function EcosystemPanel({
                                 <div className="flex flex-col gap-2">
                                   {leadPartners.length > 0 && (
                                     <div>
-                                      <p className="m-0 mb-[0.2rem] text-[0.62rem] font-bold tracking-[0.1em] text-white/35 uppercase">
+                                      <p className="m-0 mb-[0.2rem] text-[0.62rem] font-bold tracking-widest text-white/35 uppercase">
                                         Project Lead Partners
                                       </p>
                                       {renderPartnerList(leadPartners)}
@@ -406,7 +406,7 @@ export function EcosystemPanel({
                                   )}
                                   {otherPartners.length > 0 && (
                                     <div>
-                                      <p className="m-0 mb-[0.2rem] text-[0.62rem] font-bold tracking-[0.1em] text-white/35 uppercase">
+                                      <p className="m-0 mb-[0.2rem] text-[0.62rem] font-bold tracking-widest text-white/35 uppercase">
                                         Collaborating &amp; Implementing
                                         Partners
                                       </p>

@@ -59,7 +59,7 @@ export function DonorPanel({
   const logoSlug = toLogoSlug(name);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[60] flex">
+    <div className="pointer-events-none fixed inset-0 z-60 flex">
       <div
         className="pointer-events-auto absolute inset-0 bg-black/55"
         onClick={onClose}
@@ -72,10 +72,10 @@ export function DonorPanel({
         exit={isMobile ? { y: "100%" } : { x: "-100%" }}
         transition={{ type: "tween", ease: "easeInOut", duration: 0.18 }}
         className={cn(
-          "pointer-events-auto relative z-[1] flex flex-col overflow-hidden text-white backdrop-blur-md",
+          "pointer-events-auto relative z-1 flex flex-col overflow-hidden text-white backdrop-blur-md",
           isMobile
-            ? "absolute inset-x-0 bottom-0 border-t border-white/[0.12]"
-            : "h-full w-1/3 max-w-[700px] min-w-[360px] border-r border-white/[0.08]",
+            ? "absolute inset-x-0 bottom-0 border-t border-white/12"
+            : "h-full min-w-90 max-w-175 w-1/3 border-r border-white/8",
           isMobile && sheetSnap === "full"
             ? "rounded-t-none"
             : isMobile
@@ -121,7 +121,7 @@ export function DonorPanel({
         >
           <div className="flex items-start gap-4">
             {/* Flag */}
-            <div className="justify-content-center flex h-14 w-14 shrink-0 items-center overflow-hidden rounded-lg border border-black/[0.12] bg-white">
+            <div className="justify-content-center flex h-14 w-14 shrink-0 items-center overflow-hidden rounded-lg border border-black/12 bg-white">
               <Image
                 src={`/logos/countries/${logoSlug}.svg`}
                 alt={name}
@@ -186,14 +186,14 @@ export function DonorPanel({
             return (
               <div
                 key={proj}
-                className="flex flex-col gap-4 border-t border-white/[0.08] pt-5"
+                className="flex flex-col gap-4 border-t border-white/8 pt-5"
               >
                 <h3 className="m-0 text-[1.05rem] font-extrabold text-white">
                   {pd.full_title ?? pd.project_label ?? proj}
                 </h3>
 
                 {pd.project_blurb && pd.project_blurb.trim() !== "N/A" && (
-                  <p className="m-0 text-[0.9rem] leading-[1.75] text-white/[0.72]">
+                  <p className="m-0 text-[0.9rem] leading-[1.75] text-white/72">
                     {pd.project_blurb}
                   </p>
                 )}
@@ -204,7 +204,7 @@ export function DonorPanel({
                       {formatGrantSize(pd.grant_size)}
                     </span>
                     {pd.duration_months && (
-                      <span className="inline-flex items-center rounded-md border border-white/[0.15] bg-white/[0.06] px-[0.55rem] py-[0.2rem] text-[0.9rem] font-bold text-white/70">
+                      <span className="inline-flex items-center rounded-md border border-white/15 bg-white/6 px-[0.55rem] py-[0.2rem] text-[0.9rem] font-bold text-white/70">
                         {pd.duration_months} months
                       </span>
                     )}
