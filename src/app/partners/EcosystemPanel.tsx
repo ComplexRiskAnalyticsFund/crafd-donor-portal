@@ -67,7 +67,9 @@ export function EcosystemPanel({
   onProjectHover,
 }: EcosystemPanelProps) {
   const sheetTouchStartY = useRef(0);
-  const projects = [...parseProjects(lockedFeature)];
+  const projects = [...parseProjects(lockedFeature)].filter(
+    (proj) => proj in projectsById,
+  );
   const partnerShortName =
     lockedSourceNode?.partner?.org_short_name?.trim() ??
     lockedSourceNode?.name ??
