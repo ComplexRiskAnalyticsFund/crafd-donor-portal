@@ -469,6 +469,16 @@ export default function PartnersVizClient({
       } else {
         nodeOpacity = 0.07;
       }
+    } else if (clickedNode !== null) {
+      if (n.kind === "label") nodeOpacity = 0.4;
+      else if (n.kind === "partner") {
+        if (n.id === clickedNode.id) {
+          nodeScale = 1.5;
+          nodeOpacity = 1;
+        } else {
+          nodeOpacity = 0.35;
+        }
+      }
     } else if (hoveredPartner !== null && hoveredPartnerNode) {
       if (n.kind === "label") nodeOpacity = 0.4;
       else if (n.kind === "partner") {
@@ -802,8 +812,8 @@ export default function PartnersVizClient({
             ))}
           </g>
 
-          {/* Background hex nodes — excludes hovered and locked partners */}
-          {ordered.filter((n) => !(n.kind === "partner" && (lockedGroup?.has(n.id) || n.id === hoveredPartner))).map(renderNode)}
+          {/* Background hex nodes — excludes hovered, locked, and clicked-donor partners */}
+          {ordered.filter((n) => !(n.kind === "partner" && (lockedGroup?.has(n.id) || n.id === hoveredPartner || n.id === clickedNode?.id))).map(renderNode)}
 
           {/* Hub-spoke connecting lines — above dimmed hexes, below locked hexes */}
           {projectLineData.map(({ hub, spoke, isSourceLine }, i) => {
@@ -826,6 +836,10 @@ export default function PartnersVizClient({
 
           {/* Hovered hex node — rendered last so it's always on top */}
           {ordered.filter((n) => n.kind === "partner" && n.id === hoveredPartner).map(renderNode)}
+
+          {/* Clicked donor hex — topmost so scaled hex is never occluded */}
+          {clickedNode && ordered.filter((n) => n.kind === "partner" && n.id === clickedNode.id).map(renderNode)}
+
 
           {/* Locked hex nodes — dimmed project-hover nodes first, focused on top */}
           {ordered.filter((n) => {
