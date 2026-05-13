@@ -1,7 +1,12 @@
 // src/lib/partners/label.ts
 import type { Partner } from "@/types";
 
-export type PartnerLabel = "collaborating" | "project" | "un" | "other" | "donor";
+export type PartnerLabel =
+  | "collaborating"
+  | "project"
+  | "un"
+  | "other"
+  | "donor";
 
 export function labelPartner(p: Partner): PartnerLabel {
   const conn = (p.crafd_connection ?? "").toLowerCase();
@@ -9,11 +14,13 @@ export function labelPartner(p: Partner): PartnerLabel {
   // "donor partner" comes from donors.json; keep the check for safety
   if (conn.includes("donor partner")) return "donor";
   // "project lead partner" (new format) or "lead project partner" (old format)
-  if (conn.includes("project lead") || conn.includes("lead project")) return "project";
+  if (conn.includes("project lead") || conn.includes("lead project"))
+    return "project";
   // "mou signatory" (new) or "mou signatory/un partner" (old)
   if (conn.includes("mou")) return "un";
   // "collaborating partner", "implementing partner", "complementary donor, collaborating partner"
-  if (conn.includes("collaborating") || conn.includes("implementing")) return "collaborating";
+  if (conn.includes("collaborating") || conn.includes("implementing"))
+    return "collaborating";
   return "other";
 }
 
@@ -171,17 +178,29 @@ export function buildPartnerHexNodes(
   for (const p of partners) {
     const rawConn = (p.crafd_connection ?? "").replace(/[‘’]/g, "’");
     if (rawConn.toLowerCase().includes("craf’d")) continue;
-    if (/mptfo/i.test(p.org_short_name ?? "") || /mptfo/i.test(p.org_full_name ?? "")) continue;
+    if (
+      /mptfo/i.test(p.org_short_name ?? "") ||
+      /mptfo/i.test(p.org_full_name ?? "")
+    )
+      continue;
     if (rawConn.toLowerCase().includes("administrative agent")) continue;
 
     const key = (p.org_short_name?.trim() ?? "").toLowerCase();
     if (key && seenNames.has(key)) {
       const idx = seenNames.get(key)!;
       const existing = dedupedPartners[idx];
-      const merged = [...new Set([
-        ...(existing.relational_project ?? "").split(",").map(s => s.trim()).filter(Boolean),
-        ...(p.relational_project ?? "").split(",").map(s => s.trim()).filter(Boolean),
-      ])].join(", ");
+      const merged = [
+        ...new Set([
+          ...(existing.relational_project ?? "")
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean),
+          ...(p.relational_project ?? "")
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean),
+        ]),
+      ].join(", ");
       dedupedPartners[idx] = { ...existing, relational_project: merged };
     } else {
       if (key) seenNames.set(key, dedupedPartners.length);
@@ -191,9 +210,12 @@ export function buildPartnerHexNodes(
 
   const groups = new Map<PartnerLabel, Partner[]>();
   for (const p of dedupedPartners) {
-    const isActionAid = /action\s*aid/i.test(p.org_short_name ?? "") ||
-                        /action\s*aid/i.test(p.org_full_name ?? "");
-    const posLabel: PartnerLabel = isActionAid ? "collaborating" : labelPartner(p);
+    const isActionAid =
+      /action\s*aid/i.test(p.org_short_name ?? "") ||
+      /action\s*aid/i.test(p.org_full_name ?? "");
+    const posLabel: PartnerLabel = isActionAid
+      ? "collaborating"
+      : labelPartner(p);
     const arr = groups.get(posLabel) ?? [];
     arr.push(p);
     groups.set(posLabel, arr);
@@ -247,11 +269,13 @@ export function buildPartnerHexNodes(
   // - un: right side
   // - other: right-lower-ish (small cluster)
   // ------------------------------------------------------------
-  const labelAnchorAxial: Partial<Record<PartnerLabel, { q: number; r: number }>> = {
+  const labelAnchorAxial: Partial<
+    Record<PartnerLabel, { q: number; r: number }>
+  > = {
     collaborating: { q: -2, r: 1 },
-    project:       { q: -1,  r: 2 },
-    un:            { q: 2,  r: -1 },
-    donor:         { q: 1,  r: -2 },
+    project: { q: -1, r: 2 },
+    un: { q: 2, r: -1 },
+    donor: { q: 1, r: -2 },
   };
 
   // ------------------------------------------------------------
@@ -276,9 +300,9 @@ export function buildPartnerHexNodes(
 
   const wedgeByLabel: Partial<Record<PartnerLabel, number[]>> = {
     collaborating: [1, 2, 3, 4, 5],
-    project:       [5, 0, 1],
-    un:            [0, 1, 2],
-    donor:         [0, 1, 2, 3],
+    project: [5, 0, 1],
+    un: [0, 1, 2],
+    donor: [0, 1, 2, 3],
   };
 
   for (const [label, group] of groups.entries()) {
@@ -324,7 +348,10 @@ export function buildPartnerHexNodes(
 
       const pxy = axialToPixel(abs.q, abs.r, size);
 
-      const displayName = partner.org_short_name?.trim() || partner.org_full_name?.trim() || "Unknown";
+      const displayName =
+        partner.org_short_name?.trim() ||
+        partner.org_full_name?.trim() ||
+        "Unknown";
       nodes.push({
         id: `partner-${label}-${i}-${displayName}`.replace(/\s+/g, "-"),
         kind: "partner",

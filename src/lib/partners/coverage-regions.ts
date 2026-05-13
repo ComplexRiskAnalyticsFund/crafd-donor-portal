@@ -1,10 +1,10 @@
 // Maps project_coverage strings to ISO-3166-1 numeric country codes used by world-atlas TopoJSON.
 // null = highlight all countries (Global / All LMICs)
 export const COVERAGE_COUNTRY_IDS: Record<string, number[] | null> = {
-  "Global": null,
+  Global: null,
   "All low-and middle-income countries": null,
 
-  "Kenya": [404],
+  Kenya: [404],
 
   "Somalia, South Sudan": [706, 728],
 
@@ -31,10 +31,27 @@ export const COVERAGE_COUNTRY_IDS: Record<string, number[] | null> = {
 
   "East Africa & MENA": [
     // East Africa
-    108, 174, 262, 232, 231, 404, 450, 454, 480, 508, 646, 690, 706, 728, 834, 800, 894, 716,
+    108,
+    174,
+    262,
+    232,
+    231,
+    404,
+    450,
+    454,
+    480,
+    508,
+    646,
+    690,
+    706,
+    728,
+    834,
+    800,
+    894,
+    716,
     // MENA
-    12,  // Algeria
-    48,  // Bahrain
+    12, // Algeria
+    48, // Bahrain
     818, // Egypt
     364, // Iran
     368, // Iraq
@@ -57,7 +74,24 @@ export const COVERAGE_COUNTRY_IDS: Record<string, number[] | null> = {
 
   "West and East Africa": [
     // East Africa
-    108, 174, 262, 232, 231, 404, 450, 454, 480, 508, 646, 690, 706, 728, 834, 800, 894, 716,
+    108,
+    174,
+    262,
+    232,
+    231,
+    404,
+    450,
+    454,
+    480,
+    508,
+    646,
+    690,
+    706,
+    728,
+    834,
+    800,
+    894,
+    716,
     // West Africa
     204, // Benin
     854, // Burkina Faso
@@ -79,9 +113,28 @@ export const COVERAGE_COUNTRY_IDS: Record<string, number[] | null> = {
 
   "Middle East, Central & West Africa": [
     // MENA
-    12, 48, 818, 364, 368, 376, 400, 414, 422, 434, 504, 512, 275, 634, 682, 760, 788, 792, 784, 887,
+    12,
+    48,
+    818,
+    364,
+    368,
+    376,
+    400,
+    414,
+    422,
+    434,
+    504,
+    512,
+    275,
+    634,
+    682,
+    760,
+    788,
+    792,
+    784,
+    887,
     // Central Africa
-    24,  // Angola
+    24, // Angola
     120, // Cameroon
     140, // Central African Republic
     148, // Chad
@@ -91,6 +144,21 @@ export const COVERAGE_COUNTRY_IDS: Record<string, number[] | null> = {
     266, // Gabon
     678, // São Tomé and Príncipe
     // West Africa
-    204, 854, 132, 384, 270, 288, 324, 624, 430, 466, 478, 562, 566, 686, 694, 768,
+    204,
+    854,
+    132,
+    384,
+    270,
+    288,
+    324,
+    624,
+    430,
+    466,
+    478,
+    562,
+    566,
+    686,
+    694,
+    768,
   ],
 };

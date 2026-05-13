@@ -1,7 +1,7 @@
 export interface CrafdProject {
-  project_short_title: string;   // join key — matches relational_project tokens
-  project_label: string | null;  // "Org: ProjectName" concise display
-  full_title: string | null;     // long descriptive title
+  project_short_title: string; // join key — matches relational_project tokens
+  project_label: string | null; // "Org: ProjectName" concise display
+  full_title: string | null; // long descriptive title
   project_blurb: string | null;
   project_url: string | null;
   grant_size: string | null;

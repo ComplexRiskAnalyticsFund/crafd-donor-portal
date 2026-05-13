@@ -12,19 +12,11 @@ export default function PartnersVizClientInner({
 }: {
   initialNodes: HexNode[];
 }) {
-  if (typeof window !== "undefined") {
-    debugger; // This will force your browser to pause if JS is running
-    console.log("CLIENT REACHED");
-  }
   const [renderNodes, setRenderNodes] = useState<SimNode[]>([]);
   const [hasHydrated, setHasHydrated] = useState(false);
 
-  // 1. THIS IS YOUR TRUTH TEST
   useEffect(() => {
     setHasHydrated(true);
-    // If you don't see this popup, the Client JS isn't running at all
-    window.alert("CLIENT JS IS RUNNING");
-    console.log("CLIENT HYDRATED");
   }, []);
 
   const simNodesBase = useMemo<SimNode[]>(() => {
