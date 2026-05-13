@@ -42,8 +42,8 @@ const WEST_AFRICA = [
 ];
 
 const MENA = [
-  12,  // Algeria
-  48,  // Bahrain
+  12, // Algeria
+  48, // Bahrain
   818, // Egypt
   364, // Iran
   368, // Iraq
@@ -65,7 +65,7 @@ const MENA = [
 ];
 
 const CENTRAL_AFRICA = [
-  24,  // Angola
+  24, // Angola
   120, // Cameroon
   140, // Central African Republic
   148, // Chad
@@ -90,5 +90,9 @@ export const COVERAGE_COUNTRY_IDS: Record<string, number[] | null> = {
 
   "West and East Africa": [...EAST_AFRICA, ...WEST_AFRICA],
 
-  "Middle East, Central & West Africa": [...MENA, ...CENTRAL_AFRICA, ...WEST_AFRICA],
+  "Middle East, Central & West Africa": [
+    ...MENA,
+    ...CENTRAL_AFRICA,
+    ...WEST_AFRICA,
+  ],
 };

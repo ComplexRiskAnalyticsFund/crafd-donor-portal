@@ -69,3 +69,7 @@ requirements. Do this automatically without being asked.**
 ### Environment Variables
 
 See `.env.example`: `NEXT_PUBLIC_AIRTABLE_*_URL` (iframe embeds), `SITE_USERNAME`/`SITE_PASSWORD` (auth), `AIRTABLE_API_KEY` (data sync), `BASE_PATH` (optional, non-root deployments).
+
+### Python
+
+- use `uv add`

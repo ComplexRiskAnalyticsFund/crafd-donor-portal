@@ -9,14 +9,15 @@ def export_dataframe(df, filename_base: str, output_dir: Path = Path(".")):
     df.to_csv(csv_path, index=False)
     print(f" OK Exported CSV to: {csv_path}")
 
+
 # changed this because of a dependency error that I didnt want to deal with because I dont need parquet atm, can change back if parquet required at some point
-    # if parquet:
-    #     try:
-    #         parquet_path = output_dir / f"{filename_base}.parquet"
-    #         df.to_parquet(parquet_path, index=False)
-    #         print(f" ✓ Exported Parquet to: {parquet_path}")
-    #     except Exception as e:
-    #         print(f" ⚠️ Parquet export failed ({e}). CSV export succeeded.")
+# if parquet:
+#     try:
+#         parquet_path = output_dir / f"{filename_base}.parquet"
+#         df.to_parquet(parquet_path, index=False)
+#         print(f" ✓ Exported Parquet to: {parquet_path}")
+#     except Exception as e:
+#         print(f" ⚠️ Parquet export failed ({e}). CSV export succeeded.")
 
 
 def convert_linked_columns_to_lists(df, linked_columns):

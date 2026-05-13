@@ -9,7 +9,7 @@ export type PartnerLabel =
   | "donor";
 
 export function labelPartner(p: Partner): PartnerLabel {
-  const conn = (p.crafd_connection ?? "").toLowerCase();
+  const conn = (p.crafd_connection ?? []).join(" ").toLowerCase();
 
   // "donor partner" comes from donors.json; keep the check for safety
   if (conn.includes("donor partner")) return "donor";
@@ -24,7 +24,7 @@ export function labelPartner(p: Partner): PartnerLabel {
   return "other";
 }
 
-export type HexNodeKind = "partner" | "label" | "center" | "outline" | "more";
+export type HexNodeKind = "partner" | "label" | "center" | "outline";
 
 export type HexNode = {
   id: string;
@@ -38,9 +38,6 @@ export type HexNode = {
 
   // label hex extra
   count?: number;
-
-  // "& Many More" hex: anonymous partner count string (e.g. "xx" or "42")
-  anonCount?: string;
 
   // geometry in pixels
   x: number;
@@ -170,13 +167,12 @@ function labelDisplay(label: PartnerLabel) {
 export function buildPartnerHexNodes(
   partners: Partner[],
   size = 80,
-  anonCount?: string,
 ): HexNode[] {
   // 1) filter, deduplicate, then group partners
   const dedupedPartners: Partner[] = [];
   const seenNames = new Map<string, number>();
   for (const p of partners) {
-    const rawConn = (p.crafd_connection ?? "").replace(/[‘’]/g, "’");
+    const rawConn = (p.crafd_connection ?? []).join(" ").replace(/[‘’]/g, "’");
     if (rawConn.toLowerCase().includes("craf’d")) continue;
     if (
       /mptfo/i.test(p.org_short_name ?? "") ||
@@ -191,16 +187,10 @@ export function buildPartnerHexNodes(
       const existing = dedupedPartners[idx];
       const merged = [
         ...new Set([
-          ...(existing.relational_project ?? "")
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean),
-          ...(p.relational_project ?? "")
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean),
+          ...(existing.relational_project ?? []),
+          ...(p.relational_project ?? []),
         ]),
-      ].join(", ");
+      ];
       dedupedPartners[idx] = { ...existing, relational_project: merged };
     } else {
       if (key) seenNames.set(key, dedupedPartners.length);
@@ -340,6 +330,13 @@ export function buildPartnerHexNodes(
       r: size,
     });
 
+    // logo partners first → inner positions; no-logo partners → outskirts
+    group.sort((a, b) => {
+      const hasLogo = (p: Partner) =>
+        !!(p.thumb_logo_path ?? p.white_logo_path ?? p.color_logo_path);
+      return Number(hasLogo(b)) - Number(hasLogo(a));
+    });
+
     // create partner nodes and block their cells for subsequent groups
     group.forEach((partner, i) => {
       const abs = partnerAbsPositions[i];
@@ -366,31 +363,6 @@ export function buildPartnerHexNodes(
         partner,
       });
     });
-
-    // After all collaborating partners are placed, append the "& Many More" node
-    // at the very next available position in the same wedge.
-    if (label === "collaborating" && anonCount) {
-      const morePos = pickPositionsWithBlockFilter({
-        anchorAbs: anchor,
-        offsets: candidateOffsets,
-        blockedAbs,
-        needed: 1,
-      });
-      if (morePos[0]) {
-        blockedAbs.add(keyAx(morePos[0]));
-        const mpx = axialToPixel(morePos[0].q, morePos[0].r, size);
-        nodes.push({
-          id: "more-collab",
-          kind: "more",
-          label: "collaborating",
-          name: "&\nMANY\nMORE",
-          anonCount,
-          x: mpx.x,
-          y: mpx.y,
-          r: size,
-        });
-      }
-    }
   }
 
   return nodes;

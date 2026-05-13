@@ -55,7 +55,12 @@ export default function ImpactMap({ projects }: Props) {
   }, []);
 
   const filteredProjects = useMemo(
-    () => projects.filter((p) => !EXCLUDED_PROJECTS.has(p.project_short_title)),
+    () =>
+      projects.filter(
+        (p) =>
+          p.project_short_title &&
+          !EXCLUDED_PROJECTS.has(p.project_short_title),
+      ),
     [projects],
   );
 

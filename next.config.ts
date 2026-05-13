@@ -12,9 +12,7 @@ const nextConfig: NextConfig = {
     assetPrefix: basePath,
     reactStrictMode: true,
     poweredByHeader: false,
-    images: {
-        unoptimized: true
-    },
+
     env: {
         NEXT_PUBLIC_BASE_PATH: basePath,
     },

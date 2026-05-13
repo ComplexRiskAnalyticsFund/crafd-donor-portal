@@ -71,8 +71,11 @@ function strokeWidthFor(n: HexNode) {
 
 const _parseCache = new Map<string, Set<string>>();
 const _emptySet: Set<string> = new Set();
-function parseProjects(rp: string | undefined | null): Set<string> {
+function parseProjects(rp: string[] | string | undefined | null): Set<string> {
   if (!rp) return _emptySet;
+  if (Array.isArray(rp)) {
+    return rp.length === 0 ? _emptySet : new Set(rp);
+  }
   let cached = _parseCache.get(rp);
   if (!cached) {
     cached = new Set(
@@ -87,8 +90,8 @@ function parseProjects(rp: string | undefined | null): Set<string> {
 }
 
 function projectsOverlap(
-  a: string | undefined | null,
-  b: string | undefined | null,
+  a: string[] | string | undefined | null,
+  b: string[] | string | undefined | null,
 ): boolean {
   const pa = parseProjects(a);
   if (pa.size === 0) return false;
@@ -98,28 +101,25 @@ function projectsOverlap(
   return false;
 }
 
-function formatGrantSize(raw: string | null | undefined): string {
-  if (!raw) return "—";
-  const num = parseFloat(raw.replace(/[^0-9.]/g, ""));
-  if (isNaN(num)) return raw;
-  const prefix = raw.includes("$") ? "$" : "";
+function formatGrantSize(raw: string | number | null | undefined): string {
+  if (raw == null || raw === "") return "—";
+  const num =
+    typeof raw === "number" ? raw : parseFloat(raw.replace(/[^0-9.]/g, ""));
+  if (isNaN(num)) return String(raw);
+  const prefix = typeof raw === "string" && raw.includes("$") ? "$" : "$";
   if (num >= 1_000_000) return `${prefix}${(num / 1_000_000).toFixed(1)}M`;
   if (num >= 1_000) return `${prefix}${(num / 1_000).toFixed(0)}K`;
-  return raw;
+  return `${prefix}${num}`;
 }
 
 export default function PartnersVizClient({
   initialNodes,
-  partnerLogos,
-  partnerLogoThumbs,
   asOf,
-  projectsByTitle,
+  projectsById,
 }: {
   initialNodes: HexNode[];
-  partnerLogos: Record<string, string>;
-  partnerLogoThumbs: Record<string, string>;
   asOf: string;
-  projectsByTitle: Record<string, CrafdProject>;
+  projectsById: Record<string, CrafdProject>;
 }) {
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
   const [hoveredPartner, setHoveredPartner] = useState<string | null>(null);
@@ -246,7 +246,8 @@ export default function PartnersVizClient({
         } else {
           // Non-donor — open ecosystem view
           const rf = node.partner?.relational_project;
-          if (rf) {
+          if (rf && rf.length > 0) {
+            const rfStr = rf.join(", ");
             const peers = new Set(
               initialNodes
                 .filter(
@@ -258,7 +259,7 @@ export default function PartnersVizClient({
                 .map((n2) => n2.id),
             );
             setLockedGroup(new Set([node.id, ...peers]));
-            setLockedFeature(rf);
+            setLockedFeature(rfStr);
             setLockedSourceNode(node);
           }
         }
@@ -275,9 +276,7 @@ export default function PartnersVizClient({
     const id = requestAnimationFrame(() =>
       requestAnimationFrame(() => {
         const partnerGs = Array.from(
-          svgEl.querySelectorAll<SVGGElement>(
-            '[data-kind="partner"],[data-kind="more"]',
-          ),
+          svgEl.querySelectorAll<SVGGElement>('[data-kind="partner"]'),
         );
         if (partnerGs.length === 0) return;
         partnerGs.forEach((el) => {
@@ -419,7 +418,8 @@ export default function PartnersVizClient({
   // Enter click state 1: lock the relational group of this partner
   function enterClickState1(n: HexNode) {
     const rf = n.partner?.relational_project;
-    if (!rf) return;
+    if (!rf || rf.length === 0) return;
+    const rfStr = rf.join(", ");
     const peers = new Set(
       renderNodes
         .filter(
@@ -446,10 +446,10 @@ export default function PartnersVizClient({
           : null,
     );
     setLockedGroup(new Set([n.id, ...peers]));
-    setLockedFeature(rf);
+    setLockedFeature(rfStr);
     setLockedSourceNode(n);
-    setOpenProjects(new Set(parseProjects(rf)));
-    router.replace(`${pathname}?group=${encodeURIComponent(rf)}`);
+    setOpenProjects(new Set(rf));
+    router.replace(`${pathname}?group=${encodeURIComponent(rfStr)}`);
   }
 
   const bgHexes = useMemo(() => {
@@ -472,11 +472,6 @@ export default function PartnersVizClient({
     }
     return cells;
   }, []);
-
-  const logoSlugs = useMemo(
-    () => new Set(Object.keys(partnerLogos)),
-    [partnerLogos],
-  );
 
   const hoveredPartnerNode = useMemo(
     () =>
@@ -514,7 +509,11 @@ export default function PartnersVizClient({
         );
         const hub =
           projNodes.find((n) =>
-            n.partner?.crafd_connection?.includes("Project lead partner"),
+            n.partner?.crafd_connection?.some(
+              (c) =>
+                c.toLowerCase().includes("project lead") ||
+                c.toLowerCase().includes("lead project"),
+            ),
           ) ??
           (lockedSourceNode &&
           projNodes.some((n) => n.id === lockedSourceNode.id)
@@ -537,7 +536,6 @@ export default function PartnersVizClient({
       const base: Record<HexNode["kind"], number> = {
         outline: 0,
         partner: 1,
-        more: 1,
         label: 2,
         center: 3,
       };
@@ -576,7 +574,11 @@ export default function PartnersVizClient({
       // Hub: project lead in this group, then the clicked node if it's here, then first node
       const hub =
         projNodes.find((n) =>
-          n.partner?.crafd_connection?.includes("Project lead partner"),
+          n.partner?.crafd_connection?.some(
+            (c) =>
+              c.toLowerCase().includes("project lead") ||
+              c.toLowerCase().includes("lead project"),
+          ),
         ) ??
         (lockedSourceNode && projNodes.some((n) => n.id === lockedSourceNode.id)
           ? lockedSourceNode
@@ -705,6 +707,12 @@ export default function PartnersVizClient({
           <filter id="grayscale">
             <feColorMatrix type="saturate" values="0" />
           </filter>
+          <filter id="to-white" colorInterpolationFilters="sRGB">
+            <feColorMatrix
+              type="matrix"
+              values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"
+            />
+          </filter>
         </defs>
         {/*
           SVG backdrop rect — spans the full viewBox, drawn BEFORE the pan/scale group
@@ -788,8 +796,7 @@ export default function PartnersVizClient({
           })}
 
           {ordered.map((n) => {
-            let nodeOpacity =
-              n.kind === "partner" || n.kind === "more" ? 0.95 : 1;
+            let nodeOpacity = n.kind === "partner" ? 0.95 : 1;
             let nodeScale = 1;
             let highlight = false;
 
@@ -830,7 +837,7 @@ export default function PartnersVizClient({
                 }
               }
             } else if (searchQuery.trim()) {
-              if (n.kind === "partner" || n.kind === "more") {
+              if (n.kind === "partner") {
                 const q = searchQuery.toLowerCase();
                 const hit =
                   (n.name ?? "").toLowerCase().includes(q) ||
@@ -839,9 +846,7 @@ export default function PartnersVizClient({
               }
             } else if (hoveredLabel !== null) {
               const isSameGroup =
-                (n.kind === "label" ||
-                  n.kind === "partner" ||
-                  n.kind === "more") &&
+                (n.kind === "label" || n.kind === "partner") &&
                 n.label === hoveredLabel;
               if (n.kind === "outline" || n.kind === "center") {
                 nodeOpacity = 1;
@@ -850,84 +855,6 @@ export default function PartnersVizClient({
               } else {
                 nodeOpacity = 0.2;
               }
-            }
-
-            // ── "& Many More" node ───────────────────────────────────────────
-            if (n.kind === "more") {
-              const isHovered = hoveredPartner === n.id;
-              return (
-                <g
-                  key={n.id}
-                  data-node="true"
-                  data-kind="more"
-                  data-label={n.label}
-                  data-cx={n.x}
-                  data-cy={n.y}
-                  onMouseEnter={() => {
-                    if (!lockedGroup && !isMobile) setHoveredPartner(n.id);
-                  }}
-                  onMouseLeave={() => {
-                    if (!lockedGroup && !isMobile) setHoveredPartner(null);
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setClickedNode(n);
-                  }}
-                  style={{
-                    opacity: nodeOpacity,
-                    transition: "opacity 0.45s ease",
-                    cursor: "pointer",
-                  }}
-                >
-                  <g transform={`translate(${n.x},${n.y})`}>
-                    <g
-                      style={{
-                        transformOrigin: "0 0",
-                        transform:
-                          nodeScale !== 1 ? `scale(${nodeScale})` : undefined,
-                        transition:
-                          "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
-                      }}
-                    >
-                      <path
-                        d={hexPathFlat(0, 0, n.r)}
-                        fill="#1C1C1C"
-                        stroke="white"
-                        strokeWidth={2}
-                      />
-                      {n.name?.split("\n").map((line, i, arr) => {
-                        const lineH = 15;
-                        const totalSpan = (arr.length - 1) * lineH;
-                        return (
-                          <text
-                            key={i}
-                            x={0}
-                            y={-totalSpan / 2 + i * lineH + 5}
-                            textAnchor="middle"
-                            fontSize={13}
-                            fill="white"
-                            fontWeight={800}
-                            letterSpacing="0.05em"
-                          >
-                            {line}
-                          </text>
-                        );
-                      })}
-                      {isHovered && n.anonCount && (
-                        <text
-                          x={0}
-                          y={38}
-                          textAnchor="middle"
-                          fontSize={9}
-                          fill="rgba(255,255,255,0.55)"
-                        >
-                          {n.anonCount} anonymous
-                        </text>
-                      )}
-                    </g>
-                  </g>
-                </g>
-              );
             }
 
             // ── Non-partner nodes ──────────────────────────────────────────────
@@ -959,7 +886,7 @@ export default function PartnersVizClient({
                   />
                   {n.kind === "center" && (
                     <image
-                      href="/logos/crafd-full.svg"
+                      href="/images/crafd-logo-full-black.svg"
                       x={n.x - n.r * 0.54}
                       y={n.y - n.r * 0.37}
                       width={n.r * 1.08}
@@ -979,6 +906,7 @@ export default function PartnersVizClient({
                         fontFamily="inherit"
                       >
                         {n.count}
+                        {n.label === "collaborating" ? "+" : ""}
                       </text>
                       {n.name?.split("\n").map((line, idx) => (
                         <text
@@ -1134,19 +1062,28 @@ export default function PartnersVizClient({
                           </text>
                         )}
                       </>
-                    ) : logoSlugs.has(slug) ? (
+                    ) : (n.partner?.thumb_logo_path ??
+                      n.partner?.white_logo_path ??
+                      n.partner?.color_logo_path) ? (
                       <>
                         <image
-                          href={partnerLogoThumbs[slug] ?? partnerLogos[slug]}
+                          href={
+                            n.partner!.thumb_logo_path ??
+                            n.partner!.white_logo_path ??
+                            n.partner!.color_logo_path ??
+                            ""
+                          }
                           x={-boxW / 2}
                           y={-boxH / 2}
                           width={boxW}
                           height={boxH}
                           preserveAspectRatio="xMidYMid meet"
-                          filter={
-                            n.id === lockedSourceNode?.id
-                              ? undefined
-                              : "url(#grayscale)"
+                          imageRendering="optimizeQuality"
+                          style={
+                            !n.partner!.thumb_logo_path &&
+                            !n.partner!.white_logo_path
+                              ? { filter: "grayscale(100%) brightness(1.1)" }
+                              : undefined
                           }
                         />
                         {hoveredPartner === n.id && n.name && (
@@ -1371,14 +1308,14 @@ export default function PartnersVizClient({
                         >
                           {/* Logo */}
                           {(() => {
-                            const slug = toLogoSlug(
-                              lockedSourceNode?.partner?.org_short_name ??
-                                lockedSourceNode?.name ??
-                                "",
-                            );
-                            return partnerLogos[slug] ? (
+                            const p = lockedSourceNode?.partner;
+                            const src =
+                              p?.white_logo_path ?? p?.color_logo_path;
+                            const needsFilter =
+                              !p?.white_logo_path && !!p?.color_logo_path;
+                            return src ? (
                               <img
-                                src={partnerLogos[slug]}
+                                src={src}
                                 alt={partnerName}
                                 style={{
                                   height: isMobile ? 32 : 44,
@@ -1386,6 +1323,9 @@ export default function PartnersVizClient({
                                   maxWidth: 100,
                                   objectFit: "contain",
                                   flexShrink: 0,
+                                  filter: needsFilter
+                                    ? "grayscale(100%) brightness(1.1)"
+                                    : undefined,
                                 }}
                               />
                             ) : null;
@@ -1475,7 +1415,7 @@ export default function PartnersVizClient({
                       data-modal="true"
                     >
                       {projects.map((proj, idx) => {
-                        const pd = projectsByTitle[proj];
+                        const pd = projectsById[proj];
                         const projPartners = lockedNodes
                           .filter((n) =>
                             parseProjects(n.partner?.relational_project).has(
@@ -1537,28 +1477,38 @@ export default function PartnersVizClient({
                                     flex: 1,
                                   }}
                                 >
-                                  {lockedSourceNode?.partner
-                                    ?.crafd_connection && (
-                                    <span
-                                      style={{
-                                        color: "#F1B434",
-                                        fontWeight: 700,
-                                      }}
-                                    >
-                                      {
-                                        lockedSourceNode.partner
-                                          .crafd_connection
-                                      }
+                                  {(() => {
+                                    const pId =
+                                      lockedSourceNode?.partner?.airtable_id;
+                                    const isLead =
+                                      pId && pd?.linked_lead_org?.includes(pId);
+                                    const isSupporting =
+                                      pId &&
+                                      pd?.linked_supporting_org?.includes(pId);
+                                    const role = isLead
+                                      ? "Project Lead"
+                                      : isSupporting
+                                        ? "Collaborating Partner"
+                                        : null;
+                                    return role ? (
                                       <span
                                         style={{
-                                          opacity: 0.4,
-                                          margin: "0 0.4rem",
+                                          color: "#F1B434",
+                                          fontWeight: 700,
                                         }}
                                       >
-                                        |
+                                        {role}
+                                        <span
+                                          style={{
+                                            opacity: 0.4,
+                                            margin: "0 0.4rem",
+                                          }}
+                                        >
+                                          |
+                                        </span>
                                       </span>
-                                    </span>
-                                  )}
+                                    ) : null;
+                                  })()}
                                   {pd?.full_title ?? pd?.project_label ?? proj}
                                 </h3>
                                 <motion.svg
@@ -1765,25 +1715,20 @@ export default function PartnersVizClient({
 
                                     {projPartners.length > 0 &&
                                       (() => {
-                                        const isLead = (conn?: string) =>
-                                          conn
-                                            ?.toLowerCase()
-                                            .includes("project lead") ||
-                                          conn
-                                            ?.toLowerCase()
-                                            .includes("lead project");
-                                        const leadPartners =
-                                          projPartners.filter((pn) =>
-                                            isLead(
-                                              pn.partner?.crafd_connection,
-                                            ),
+                                        const isLeadInProj = (
+                                          pn: (typeof projPartners)[0],
+                                        ) =>
+                                          !!(
+                                            pn.partner?.airtable_id &&
+                                            pd?.linked_lead_org?.includes(
+                                              pn.partner.airtable_id,
+                                            )
                                           );
+                                        const leadPartners =
+                                          projPartners.filter(isLeadInProj);
                                         const otherPartners =
                                           projPartners.filter(
-                                            (pn) =>
-                                              !isLead(
-                                                pn.partner?.crafd_connection,
-                                              ),
+                                            (pn) => !isLeadInProj(pn),
                                           );
                                         const renderPartnerList = (
                                           members: typeof projPartners,
@@ -1826,14 +1771,25 @@ export default function PartnersVizClient({
                                                   onMouseEnter={(e) => {
                                                     e.currentTarget.style.color =
                                                       "white";
-                                                    const conn =
-                                                      pn.partner
-                                                        ?.crafd_connection;
-                                                    if (conn) {
+                                                    const pId =
+                                                      pn.partner?.airtable_id;
+                                                    const role =
+                                                      pId &&
+                                                      pd?.linked_lead_org?.includes(
+                                                        pId,
+                                                      )
+                                                        ? "Project Lead"
+                                                        : pId &&
+                                                            pd?.linked_supporting_org?.includes(
+                                                              pId,
+                                                            )
+                                                          ? "Collaborating Partner"
+                                                          : null;
+                                                    if (role) {
                                                       const rect =
                                                         e.currentTarget.getBoundingClientRect();
                                                       setPartnerTooltip({
-                                                        text: conn,
+                                                        text: role,
                                                         x:
                                                           rect.left +
                                                           rect.width / 2,
@@ -2201,7 +2157,7 @@ export default function PartnersVizClient({
 
                     {/* Per-project sections */}
                     {[...parseProjects(p?.relational_project)].map((proj) => {
-                      const pd = projectsByTitle[proj];
+                      const pd = projectsById[proj];
                       if (!pd) return null;
                       return (
                         <div

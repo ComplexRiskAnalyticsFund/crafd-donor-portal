@@ -21,7 +21,7 @@ src/lib/data/
 
 src/types/index.ts            Partner, CrafdProject, PartnerLabel types
 
-public/data/uv 
+public/data/uv
   partners.json               All non-donor partner records (from Airtable sync)
   donors.json                 The 8 donor-country partners (separate to control ordering)
   projects.json               Project metadata (title, blurb, grant size, coverage, status)

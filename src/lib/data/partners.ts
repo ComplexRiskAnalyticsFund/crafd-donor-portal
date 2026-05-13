@@ -38,4 +38,3 @@ export async function getProjects(): Promise<CrafdProject[]> {
   const filePath = path.join(process.cwd(), "public/data/projects.json");
   return JSON.parse(await readFile(filePath, "utf8"));
 }
-
