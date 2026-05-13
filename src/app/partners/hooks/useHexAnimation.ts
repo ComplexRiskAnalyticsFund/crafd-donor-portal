@@ -1,7 +1,7 @@
 "use client";
 import type React from "react";
 import { useLayoutEffect, useRef } from "react";
-import type { HexNode } from "@/lib/partners/label";
+import type { HexNode } from "@/app/partners/lib/label";
 import gsap from "gsap";
 
 export function useHexAnimation({

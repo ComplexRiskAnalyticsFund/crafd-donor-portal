@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import type { HexNode } from "@/lib/partners/label";
+import type { HexNode } from "@/app/partners/lib/label";
 import type { CrafdProject } from "@/types";
 
 import {
@@ -16,7 +16,7 @@ import {
   toLogoSlug,
   parseProjects,
   projectsOverlap,
-} from "./utils";
+} from "./lib/utils";
 import { usePanZoom } from "./hooks/usePanZoom";
 import { useHexAnimation } from "./hooks/useHexAnimation";
 import { EcosystemPanel } from "./EcosystemPanel";
@@ -183,18 +183,20 @@ export default function PartnersVizClient({
 
   function enterClickState1(n: HexNode) {
     const rf = n.partner?.relational_project;
-    if (!rf || rf.length === 0) return;
-    const rfStr = rf.join(", ");
-    const peers = new Set(
-      renderNodes
-        .filter(
-          (node) =>
-            node.kind === "partner" &&
-            node.id !== n.id &&
-            projectsOverlap(node.partner?.relational_project, rf),
-        )
-        .map((node) => node.id),
-    );
+    const rfStr = rf && rf.length > 0 ? rf.join(", ") : "";
+    const peers =
+      rf && rf.length > 0
+        ? new Set(
+            renderNodes
+              .filter(
+                (node) =>
+                  node.kind === "partner" &&
+                  node.id !== n.id &&
+                  projectsOverlap(node.partner?.relational_project, rf),
+              )
+              .map((node) => node.id),
+          )
+        : new Set<string>();
     setHoveredPartner(null);
     setHoveredLabel(null);
     setClickedNode(null);
@@ -211,8 +213,12 @@ export default function PartnersVizClient({
     setLockedGroup(new Set([n.id, ...peers]));
     setLockedFeature(rfStr);
     setLockedSourceNode(n);
-    setOpenProjects(new Set(rf));
-    router.replace(`${pathname}?group=${encodeURIComponent(rfStr)}`);
+    setOpenProjects(new Set(rf ?? []));
+    if (rfStr) {
+      router.replace(`${pathname}?group=${encodeURIComponent(rfStr)}`);
+    } else {
+      router.replace(pathname);
+    }
   }
 
   // ── Memos ──────────────────────────────────────────────────────────────────
@@ -792,7 +798,7 @@ export default function PartnersVizClient({
       </svg>
 
       {/* ── Ecosystem panel (click state 1) ────────────────────────────────── */}
-      {lockedGroup && !clickedNode && lockedFeature && (
+      {lockedGroup && !clickedNode && lockedFeature !== null && (
         <EcosystemPanel
           lockedFeature={lockedFeature}
           lockedSourceNode={lockedSourceNode}

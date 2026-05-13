@@ -2,10 +2,10 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import type { HexNode } from "@/lib/partners/label";
+import type { HexNode } from "@/app/partners/lib/label";
 import type { CrafdProject } from "@/types";
 import { cn } from "@/lib/utils";
-import { parseProjects, toLogoSlug, formatGrantSize } from "./utils";
+import { parseProjects, toLogoSlug, formatGrantSize } from "./lib/utils";
 
 interface DonorPanelProps {
   clickedNode: HexNode;
@@ -75,7 +75,7 @@ export function DonorPanel({
           "pointer-events-auto relative z-1 flex flex-col overflow-hidden text-white backdrop-blur-md",
           isMobile
             ? "absolute inset-x-0 bottom-0 border-t border-white/12"
-            : "h-full min-w-90 max-w-175 w-1/3 border-r border-white/8",
+            : "h-full w-1/3 max-w-175 min-w-90 border-r border-white/8",
           isMobile && sheetSnap === "full"
             ? "rounded-t-none"
             : isMobile

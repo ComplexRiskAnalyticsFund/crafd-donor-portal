@@ -212,7 +212,7 @@
     "airtable_id":"recN7H5G0nlU4k3TS",
     "project_short_title":"Transformative Outcomes",
     "project_label":"UN Women: Transformative Outcomes",
-    "full_title":"Transformative Outcomes: Leveraging Crisis Data in conflict",
+    "full_title":"Transformative Outcomes: Leveraging Crisis Data in Conflict",
     "project_blurb":"Disaggregated data made accessible through an interactive platform and standardized analysis will support\nmore informed, real-time assistance for at least 20\nmillion people in crisis settings. The project is led by\nUN Women and backed by a broad coalition of six\nnational NGO partners.",
     "project_url":null,
     "grant_size":999999.53,
@@ -334,26 +334,6 @@
       "rec2jQWpBnNnZputz",
       "recqcnvu0nSqC5L4Y",
       "recjaqYpyPQLi5Ibg"
-    ]
-  },
-  {
-    "airtable_id":"rechF1C4gRNWZRX3o",
-    "project_short_title":"CRAF'd Sec.Direct Cost 2022",
-    "project_label":"CRAF'd Sec.Direct Cost 2022(2)",
-    "full_title":"CRAF'd Sec.Direct Cost 2022(2)",
-    "project_blurb":"N\/A",
-    "project_url":null,
-    "grant_size":1428022.0,
-    "project_status":"Ongoing",
-    "duration_months":12,
-    "project_coverage":"Global",
-    "linked_lead_org":[
-      "receDDy7TCG7FPn5i"
-    ],
-    "linked_supporting_org":[
-      "recRGWc0JJ4I8EBrf",
-      "receDDy7TCG7FPn5i",
-      "recLRSST0fgmhKZc6"
     ]
   },
   {
@@ -603,25 +583,6 @@
       "recPFxoMtMX2tV021",
       "reciSCrJAGrkoTltl",
       "recivcR2hSHFfyvT8"
-    ]
-  },
-  {
-    "airtable_id":"recxxh817VHuFZWuc",
-    "project_short_title":"CRAF'd Direct Costs",
-    "project_label":"CRAF'd Direct Costs",
-    "full_title":null,
-    "project_blurb":"With CRAF\u2019d funding, ACLED continues providing real-time, geo-coded and disaggregated conflict data worldwide and enables its 40,000 users to generate insights that feed directly into evidence-based policymaking and decision-making, strategic planning, and effective programming around the world.  ",
-    "project_url":null,
-    "grant_size":8560.0,
-    "project_status":"Fully closed",
-    "duration_months":12,
-    "project_coverage":"Global",
-    "linked_lead_org":[
-      "receDDy7TCG7FPn5i"
-    ],
-    "linked_supporting_org":[
-      "receDDy7TCG7FPn5i",
-      "recLRSST0fgmhKZc6"
     ]
   }
 ]

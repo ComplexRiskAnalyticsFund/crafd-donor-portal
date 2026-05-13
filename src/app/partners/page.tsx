@@ -8,7 +8,7 @@ import {
   getProjects,
 } from "@/lib/data/partners";
 import type { CrafdProject } from "@/types";
-import { buildPartnerHexNodes } from "@/lib/partners/label";
+import { buildPartnerHexNodes } from "@/app/partners/lib/label";
 import PartnersVizClient from "./PartnersVizClient";
 
 export default async function PartnersPage() {

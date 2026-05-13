@@ -19,7 +19,7 @@ PROJECT_TABLE_ID = "tblgfDfV8s3mXHbUh"
 
 # Set True to wipe public/logos/partners/ and redownload everything from Airtable.
 # Set False to skip files that already exist on disk (fast incremental update).
-FORCE_REDOWNLOAD = True
+FORCE_REDOWNLOAD = False
 
 PARTNERS_LOGO_DIR = Path("public") / "logos" / "partners"
 
@@ -47,6 +47,7 @@ rename_mapping = {
 }
 
 df_partners = df_partners.rename(columns=rename_mapping)
+# df_partners.columns
 
 # In cell_format="json":
 #   - linked-record fields → list of opaque Airtable record IDs — kept as-is (join key = RECORD_ID)
@@ -345,6 +346,18 @@ projects_rename = {
     "Supporting organizations": "linked_supporting_org",  # linked partner record IDs
 }
 df_projects = df_projects.rename(columns=projects_rename)
+
+# Drop projects whose short title begins with "CRAF'd"
+# CRAF'd Direct Costs
+# CRAF'd Sec.Direct Cost 2022(2)
+if "project_short_title" in df_projects.columns:
+    df_projects = df_projects[
+        ~df_projects["project_short_title"]
+        .fillna("")
+        .astype(str)
+        .str.startswith("CRAF'd")
+    ].reset_index(drop=True)
+
 
 # Keep linked org fields as raw record ID lists
 for col in ("linked_lead_org", "linked_supporting_org"):
