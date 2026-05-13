@@ -279,9 +279,9 @@ export default function PartnersVizClient({
     const isMobileInit =
       typeof window !== "undefined" &&
       window.matchMedia("(max-width: 768px)").matches;
-    const RANGE = isMobileInit ? 10 : 28;
+    const RANGE = isMobileInit ? 13 : 28;
     const FADE_START = 200;
-    const FADE_END = isMobileInit ? 900 : 2400;
+    const FADE_END = isMobileInit ? 1000 : 2400;
     const cells: { d: string; key: string; opacity: number }[] = [];
     for (let q = -RANGE; q <= RANGE; q++) {
       for (let r = -RANGE; r <= RANGE; r++) {
@@ -689,6 +689,7 @@ export default function PartnersVizClient({
                   width={boxW}
                   height={boxH}
                   preserveAspectRatio="xMidYMid meet"
+                  filter={isSelected ? undefined : "url(#grayscale)"}
                 />
               </>
             ) : (n.partner?.thumb_logo_path ??
