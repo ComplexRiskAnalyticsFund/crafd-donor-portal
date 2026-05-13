@@ -22,16 +22,6 @@ const GRID_LIMIT = 2400;
 const MIN_SCALE = 0.4;
 const MAX_SCALE = 2;
 
-const PROJECT_LINE_DASHES = [
-  "",
-  "14 8",
-  "3 8",
-  "14 6 3 6",
-  "24 10",
-  "8 5",
-  "3 5",
-  "20 6 3 6 3 6",
-];
 
 function clampPan(x: number, y: number, s: number) {
   const maxX = Math.max(0, GRID_LIMIT * s - 900);
@@ -633,8 +623,7 @@ export default function PartnersVizClient({
   const projectLineData = useMemo(() => {
     if (!lockedGroup || !lockedNodes.length || !lockedFeature) return [];
     const projects = [...parseProjects(lockedFeature)];
-    const isSingle = projects.length === 1;
-    return projects.flatMap((proj, idx) => {
+    return projects.flatMap((proj) => {
       const projNodes = lockedNodes.filter((n) =>
         parseProjects(n.partner?.relational_project).has(proj),
       );
@@ -652,15 +641,11 @@ export default function PartnersVizClient({
           ? lockedSourceNode
           : null) ??
         projNodes[0];
-      const dasharray = isSingle
-        ? ""
-        : PROJECT_LINE_DASHES[idx % PROJECT_LINE_DASHES.length];
       return projNodes
         .filter((n) => n.id !== hub.id)
         .map((spoke) => ({
           hub,
           spoke,
-          dasharray,
           isSourceLine:
             spoke.id === lockedSourceNode?.id ||
             hub.id === lockedSourceNode?.id,
@@ -668,12 +653,10 @@ export default function PartnersVizClient({
     });
   }, [lockedGroup, lockedNodes, lockedFeature, lockedSourceNode]);
 
-  const hubDashes = useMemo(() => {
-    const map = new Map<string, string>();
-    for (const { hub, dasharray } of projectLineData) {
-      if (!map.has(hub.id)) map.set(hub.id, dasharray);
-    }
-    return map;
+  const hubIds = useMemo(() => {
+    const set = new Set<string>();
+    for (const { hub } of projectLineData) set.add(hub.id);
+    return set;
   }, [projectLineData]);
 
   const hexPaths = useMemo(() => {
@@ -838,7 +821,7 @@ export default function PartnersVizClient({
           </g>
 
           {/* Connecting lines — per-project hub-spoke, drawn under hexes */}
-          {projectLineData.map(({ hub, spoke, dasharray, isSourceLine }, i) => {
+          {projectLineData.map(({ hub, spoke, isSourceLine }, i) => {
             const dx = spoke.x - hub.x;
             const dy = spoke.y - hub.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
@@ -872,7 +855,6 @@ export default function PartnersVizClient({
                   strokeWidth={isSourceLine ? 7 : 2.5}
                   strokeOpacity={isSourceLine ? 0.95 : 0.7}
                   strokeLinecap="round"
-                  strokeDasharray={dasharray || undefined}
                 />
               </g>
             );
@@ -1077,14 +1059,13 @@ export default function PartnersVizClient({
                 {/* SVG translate: positions origin at hex center */}
                 <g transform={`translate(${n.x},${n.y})`}>
                   {/* Hub glow — static inner halo + 3 expanding burst rings */}
-                  {hubDashes.has(n.id) && (
+                  {hubIds.has(n.id) && (
                     <>
                       <path
                         d={hexPaths.get(`${n.id}-outer`) ?? ""}
                         fill="rgba(255,255,255,0.12)"
                         stroke="white"
                         strokeWidth={4}
-                        strokeDasharray={hubDashes.get(n.id) || undefined}
                         strokeLinecap="round"
                         style={{ fillOpacity: 0.28, strokeOpacity: 0.7 }}
                       />
@@ -1095,7 +1076,6 @@ export default function PartnersVizClient({
                           fill="rgba(255,255,255,0.10)"
                           stroke="white"
                           strokeWidth={2.5}
-                          strokeDasharray={hubDashes.get(n.id) || undefined}
                           strokeLinecap="round"
                           className="hub-ring"
                           style={{
