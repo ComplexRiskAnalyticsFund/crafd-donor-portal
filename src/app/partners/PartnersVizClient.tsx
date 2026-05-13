@@ -580,6 +580,7 @@ export default function PartnersVizClient({
         key={n.id}
         data-node="true"
         data-kind="partner"
+        data-id={n.id}
         data-label={n.label}
         data-cx={n.x}
         data-cy={n.y}
@@ -801,8 +802,8 @@ export default function PartnersVizClient({
             ))}
           </g>
 
-          {/* Non-locked hex nodes (below lines) */}
-          {ordered.filter((n) => !(n.kind === "partner" && lockedGroup?.has(n.id))).map(renderNode)}
+          {/* Background hex nodes — excludes hovered and locked partners */}
+          {ordered.filter((n) => !(n.kind === "partner" && (lockedGroup?.has(n.id) || n.id === hoveredPartner))).map(renderNode)}
 
           {/* Hub-spoke connecting lines — above dimmed hexes, below locked hexes */}
           {projectLineData.map(({ hub, spoke, isSourceLine }, i) => {
@@ -823,8 +824,23 @@ export default function PartnersVizClient({
             );
           })}
 
-          {/* Locked hex nodes — above lines so hex corners cover the line ends */}
-          {ordered.filter((n) => n.kind === "partner" && !!lockedGroup?.has(n.id)).map(renderNode)}
+          {/* Hovered hex node — rendered last so it's always on top */}
+          {ordered.filter((n) => n.kind === "partner" && n.id === hoveredPartner).map(renderNode)}
+
+          {/* Locked hex nodes — dimmed project-hover nodes first, focused on top */}
+          {ordered.filter((n) => {
+            if (!lockedGroup?.has(n.id) || n.kind !== "partner") return false;
+            if (n.id === hoveredOrgNodeId) return false;
+            if (hoveredProject) {
+              const inProject = parseProjects(n.partner?.relational_project).has(hoveredProject);
+              return !inProject; // dimmed ones first
+            }
+            return true;
+          }).map(renderNode)}
+          {hoveredProject && ordered.filter((n) => n.kind === "partner" && !!lockedGroup?.has(n.id) && n.id !== hoveredOrgNodeId && parseProjects(n.partner?.relational_project).has(hoveredProject)).map(renderNode)}
+
+          {/* Org-hovered locked node — topmost */}
+          {ordered.filter((n) => n.kind === "partner" && n.id === hoveredOrgNodeId).map(renderNode)}
 
         </g>
         </g>
