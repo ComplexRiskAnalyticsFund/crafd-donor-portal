@@ -1,7 +1,14 @@
 "use client";
 
 // src/app/partners/PartnersVizClient.tsx
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
@@ -106,7 +113,7 @@ function formatGrantSize(raw: string | number | null | undefined): string {
   const num =
     typeof raw === "number" ? raw : parseFloat(raw.replace(/[^0-9.]/g, ""));
   if (isNaN(num)) return String(raw);
-  const prefix = typeof raw === "string" && raw.includes("$") ? "$" : "$";
+  const prefix = "$";
   if (num >= 1_000_000) return `${prefix}${(num / 1_000_000).toFixed(1)}M`;
   if (num >= 1_000) return `${prefix}${(num / 1_000).toFixed(0)}K`;
   return `${prefix}${num}`;
@@ -138,7 +145,11 @@ export default function PartnersVizClient({
   const [openProjects, setOpenProjects] = useState<Set<string>>(
     () => new Set(),
   );
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 768px)").matches,
+  );
   const [tappedNodeId, setTappedNodeId] = useState<string | null>(null);
   const [sheetSnap, setSheetSnap] = useState<"half" | "full">("half");
   const sheetTouchStartY = useRef(0);
@@ -152,18 +163,40 @@ export default function PartnersVizClient({
   const router = useRouter();
   const pathname = usePathname();
 
+  const closeAll = useCallback(() => {
+    setLockedGroup(null);
+    setLockedFeature(null);
+    setLockedSourceNode(null);
+    setEcosystemContextNode(null);
+    setClickedNode(null);
+    setTappedNodeId(null);
+    setHoveredPartner(null);
+    router.replace(pathname);
+  }, [router, pathname]);
+
   const svgRef = useRef<SVGSVGElement>(null);
+  const panGroupRef = useRef<SVGGElement>(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [scale, setScale] = useState(1);
   const panRef = useRef({ x: 0, y: 0 });
   const scaleRef = useRef(1);
   const animTlRef = useRef<gsap.core.Timeline | null>(null);
+
   useEffect(() => {
     panRef.current = pan;
   }, [pan]);
   useEffect(() => {
     scaleRef.current = scale;
   }, [scale]);
+
+  function applyTransform(x: number, y: number, s: number) {
+    panRef.current = { x, y };
+    scaleRef.current = s;
+    panGroupRef.current?.setAttribute(
+      "transform",
+      `translate(${x},${y}) scale(${s})`,
+    );
+  }
 
   // Touch pan/pinch refs
   const touchStartRef = useRef<{
@@ -197,6 +230,10 @@ export default function PartnersVizClient({
   }, []);
 
   // Detect mobile viewport
+  const isMobileRef = useRef(isMobile);
+  useEffect(() => {
+    isMobileRef.current = isMobile;
+  }, [isMobile]);
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px)");
     setIsMobile(mq.matches);
@@ -283,12 +320,39 @@ export default function PartnersVizClient({
 
     // Hide immediately before the browser paints
     partnerGs.forEach((el) => {
-      const cx = el.getAttribute("data-cx") ?? "0";
-      const cy = el.getAttribute("data-cy") ?? "0";
-      gsap.set(el, { opacity: 0, scale: 0, svgOrigin: `${cx} ${cy}` });
+      gsap.set(el, { opacity: 0 });
     });
 
-    // Schedule the reveal animation for the next frame
+    // On mobile: simple fade-in to avoid the heavy staggered scale animation on low-end GPUs
+    if (isMobileRef.current) {
+      const id = requestAnimationFrame(() => {
+        const tl = gsap.timeline({
+          onComplete: () => {
+            animTlRef.current = null;
+          },
+        });
+        animTlRef.current = tl;
+        tl.to(partnerGs, {
+          opacity: 1,
+          duration: 0.4,
+          stagger: 0.003,
+          ease: "power1.out",
+        });
+      });
+      return () => {
+        cancelAnimationFrame(id);
+        animTlRef.current?.kill();
+        animTlRef.current = null;
+      };
+    }
+
+    // Desktop: radial group-wave with scale pop
+    partnerGs.forEach((el) => {
+      const cx = el.getAttribute("data-cx") ?? "0";
+      const cy = el.getAttribute("data-cy") ?? "0";
+      gsap.set(el, { scale: 0, svgOrigin: `${cx} ${cy}` });
+    });
+
     const id = requestAnimationFrame(() => {
       const GROUP_WAVE = 0.5; // seconds between group onsets
       const RADIAL_SPREAD = 0.6; // radial window within each group
@@ -337,6 +401,8 @@ export default function PartnersVizClient({
 
   // Pan (two-finger) + zoom (pinch/Ctrl+scroll)
   // Attached to window so it works even when click-state-1 modal overlay is present.
+  // Wheel events are browser-throttled so React setState is fine here; using applyTransform
+  // caused jitter on desktop because React's reconciliation overwrote the DOM between events.
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
       // Let the modal scroll naturally when the cursor is inside it
@@ -385,14 +451,7 @@ export default function PartnersVizClient({
       const tag = (e.target as HTMLElement).tagName;
       if (tag === "INPUT" || tag === "TEXTAREA") return;
       if (e.key === "Escape") {
-        setLockedGroup(null);
-        setLockedFeature(null);
-        setLockedSourceNode(null);
-        setEcosystemContextNode(null);
-        setClickedNode(null);
-        setTappedNodeId(null);
-        setHoveredPartner(null);
-        router.replace(pathname);
+        closeAll();
         return;
       }
       if (e.key === "ArrowLeft")
@@ -413,7 +472,7 @@ export default function PartnersVizClient({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [router, pathname]);
+  }, [closeAll]);
 
   function handleDoubleClick() {
     setPan({ x: 0, y: 0 });
@@ -458,11 +517,15 @@ export default function PartnersVizClient({
   }
 
   const bgHexes = useMemo(() => {
+    const isMobileInit =
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 768px)").matches;
+    const RANGE = isMobileInit ? 14 : 28;
     const FADE_START = 200;
-    const FADE_END = 2400;
+    const FADE_END = isMobileInit ? 1200 : 2400;
     const cells: { d: string; key: string; opacity: number }[] = [];
-    for (let q = -28; q <= 28; q++) {
-      for (let r = -28; r <= 28; r++) {
+    for (let q = -RANGE; q <= RANGE; q++) {
+      for (let r = -RANGE; r <= RANGE; r++) {
         const x = HEX_SIZE * 1.5 * q;
         const y = HEX_SIZE * SQRT3 * (r + q / 2);
         const dist = Math.sqrt(x * x + y * y);
@@ -613,6 +676,20 @@ export default function PartnersVizClient({
     return map;
   }, [projectLineData]);
 
+  const hexPaths = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const n of renderNodes) {
+      if (n.kind === "partner") {
+        m.set(n.id, hexPathFlat(0, 0, n.r));
+        m.set(`${n.id}-outer`, hexPathFlat(0, 0, n.r * 1.22));
+        m.set(`${n.id}-inner`, hexPathFlat(0, 0, n.r * 1.05));
+      } else {
+        m.set(n.id, hexPathFlat(n.x, n.y, n.r));
+      }
+    }
+    return m;
+  }, [renderNodes]);
+
   return (
     <div className="fixed inset-0" style={{ background: "#FDB53C" }}>
       <svg
@@ -665,13 +742,12 @@ export default function PartnersVizClient({
             if (Math.abs(dx) > 4 || Math.abs(dy) > 4)
               touchMovedRef.current = true;
             const px2unit = 1800 / rect.width;
-            setPan(
-              clampPan(
-                touchStartRef.current.panX + dx * px2unit,
-                touchStartRef.current.panY + dy * px2unit,
-                scaleRef.current,
-              ),
+            const { x, y } = clampPan(
+              touchStartRef.current.panX + dx * px2unit,
+              touchStartRef.current.panY + dy * px2unit,
+              scaleRef.current,
             );
+            applyTransform(x, y, scaleRef.current);
           } else if (e.touches.length === 2 && pinchStartRef.current) {
             touchMovedRef.current = true;
             const dx = e.touches[1].clientX - e.touches[0].clientX;
@@ -693,19 +769,20 @@ export default function PartnersVizClient({
               500;
             const cx = (midSvgX - panRef.current.x) / scaleRef.current;
             const cy = (midSvgY - panRef.current.y) / scaleRef.current;
-            setPan(
-              clampPan(
-                midSvgX - cx * newScale,
-                midSvgY - cy * newScale,
-                newScale,
-              ),
+            const { x, y } = clampPan(
+              midSvgX - cx * newScale,
+              midSvgY - cy * newScale,
+              newScale,
             );
-            setScale(newScale);
+            applyTransform(x, y, newScale);
           }
         }}
         onTouchEnd={() => {
           touchStartRef.current = null;
           pinchStartRef.current = null;
+          // Commit to React state so memos (opacity, ordering) stay in sync
+          setPan({ ...panRef.current });
+          setScale(scaleRef.current);
         }}
       >
         <defs>
@@ -732,32 +809,33 @@ export default function PartnersVizClient({
             height="1000"
             fill="transparent"
             style={{ cursor: "default" }}
-            onClick={() => {
-              setLockedGroup(null);
-              setLockedFeature(null);
-              setLockedSourceNode(null);
-              setEcosystemContextNode(null);
-              setClickedNode(null);
-              setTappedNodeId(null);
-              setHoveredPartner(null);
-              router.replace(pathname);
-            }}
+            onClick={closeAll}
           />
         )}
 
-        <g transform={`translate(${pan.x},${pan.y}) scale(${scale})`}>
-          {/* Background hex grid */}
-          {bgHexes.map(({ d, key, opacity }) => (
-            <path
-              key={key}
-              suppressHydrationWarning
-              d={d}
-              fill="none"
-              stroke="white"
-              strokeWidth={1.5}
-              strokeOpacity={opacity * (lockedGroup !== null ? 0.18 : 1)}
-            />
-          ))}
+        <g
+          ref={panGroupRef}
+          transform={`translate(${pan.x},${pan.y}) scale(${scale})`}
+        >
+          {/* Background hex grid — group opacity handles lock-state dimming in one DOM update */}
+          <g
+            style={{
+              opacity: lockedGroup !== null ? 0.18 : 1,
+              transition: "opacity 0.3s",
+            }}
+          >
+            {bgHexes.map(({ d, key, opacity }) => (
+              <path
+                key={key}
+                suppressHydrationWarning
+                d={d}
+                fill="none"
+                stroke="white"
+                strokeWidth={1.5}
+                strokeOpacity={opacity}
+              />
+            ))}
+          </g>
 
           {/* Connecting lines — per-project hub-spoke, drawn under hexes */}
           {projectLineData.map(({ hub, spoke, dasharray, isSourceLine }, i) => {
@@ -884,7 +962,7 @@ export default function PartnersVizClient({
                   }}
                 >
                   <path
-                    d={hexPathFlat(n.x, n.y, n.r)}
+                    d={hexPaths.get(n.id) ?? ""}
                     fill={fillFor(n, highlight)}
                     stroke={strokeFor(n)}
                     strokeWidth={strokeWidthFor(n)}
@@ -1002,7 +1080,7 @@ export default function PartnersVizClient({
                   {hubDashes.has(n.id) && (
                     <>
                       <path
-                        d={hexPathFlat(0, 0, n.r * 1.22)}
+                        d={hexPaths.get(`${n.id}-outer`) ?? ""}
                         fill="rgba(255,255,255,0.12)"
                         stroke="white"
                         strokeWidth={4}
@@ -1013,7 +1091,7 @@ export default function PartnersVizClient({
                       {([0, 0.8, 1.6] as const).map((delay) => (
                         <path
                           key={delay}
-                          d={hexPathFlat(0, 0, n.r * 1.05)}
+                          d={hexPaths.get(`${n.id}-inner`) ?? ""}
                           fill="rgba(255,255,255,0.10)"
                           stroke="white"
                           strokeWidth={2.5}
@@ -1039,7 +1117,7 @@ export default function PartnersVizClient({
                     }}
                   >
                     <path
-                      d={hexPathFlat(0, 0, n.r)}
+                      d={hexPaths.get(n.id) ?? ""}
                       fill={fillFor(n, highlight)}
                       stroke={strokeFor(n)}
                       strokeWidth={strokeWidthFor(n)}
@@ -1170,16 +1248,7 @@ export default function PartnersVizClient({
                 background: "rgba(0,0,0,0.55)",
                 pointerEvents: "all",
               }}
-              onClick={() => {
-                setLockedGroup(null);
-                setLockedFeature(null);
-                setLockedSourceNode(null);
-                setEcosystemContextNode(null);
-                setClickedNode(null);
-                setTappedNodeId(null);
-                setHoveredPartner(null);
-                router.replace(pathname);
-              }}
+              onClick={closeAll}
             />
           )}
           <AnimatePresence mode="wait">
@@ -1252,15 +1321,7 @@ export default function PartnersVizClient({
                           if (dy < -30) setSheetSnap("full");
                           else if (dy > 30) {
                             if (sheetSnap === "full") setSheetSnap("half");
-                            else {
-                              setLockedGroup(null);
-                              setLockedFeature(null);
-                              setLockedSourceNode(null);
-                              setEcosystemContextNode(null);
-                              setTappedNodeId(null);
-                              setHoveredPartner(null);
-                              router.replace(pathname);
-                            }
+                            else closeAll();
                           }
                         }}
                         style={{
@@ -1375,16 +1436,7 @@ export default function PartnersVizClient({
                           </div>
                         </div>
                         <button
-                          onClick={() => {
-                            setLockedGroup(null);
-                            setLockedFeature(null);
-                            setLockedSourceNode(null);
-                            setEcosystemContextNode(null);
-                            setClickedNode(null);
-                            setTappedNodeId(null);
-                            setHoveredPartner(null);
-                            router.replace(pathname);
-                          }}
+                          onClick={closeAll}
                           style={{
                             flexShrink: 0,
                             background: "none",
@@ -2383,9 +2435,11 @@ export default function PartnersVizClient({
           alignItems: "center",
           gap: 8,
         }}
-        onMouseEnter={() => setSearchOpen(true)}
+        onMouseEnter={() => {
+          if (!isMobile) setSearchOpen(true);
+        }}
         onMouseLeave={() => {
-          if (!searchQuery && !searchLocked) setSearchOpen(false);
+          if (!isMobile && !searchQuery && !searchLocked) setSearchOpen(false);
         }}
       >
         <div
