@@ -1,7 +1,7 @@
 "use client";
 
 // src/app/partners/PartnersVizClient.tsx
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
@@ -269,59 +269,64 @@ export default function PartnersVizClient({
   }, []);
 
   // Pop-in animation — radial within group waves: Donor → UN/Project → Collab
-  useEffect(() => {
+  // useLayoutEffect runs synchronously after DOM update but before browser paint,
+  // so gsap.set(opacity:0) hides nodes before they're ever visible — no flash.
+  useLayoutEffect(() => {
     if (renderNodes.length === 0) return;
     const svgEl = svgRef.current;
     if (!svgEl) return;
-    const id = requestAnimationFrame(() =>
-      requestAnimationFrame(() => {
-        const partnerGs = Array.from(
-          svgEl.querySelectorAll<SVGGElement>('[data-kind="partner"]'),
-        );
-        if (partnerGs.length === 0) return;
-        partnerGs.forEach((el) => {
-          const cx = el.getAttribute("data-cx") ?? "0";
-          const cy = el.getAttribute("data-cy") ?? "0";
-          gsap.set(el, { opacity: 0, scale: 0, svgOrigin: `${cx} ${cy}` });
-        });
 
-        const GROUP_WAVE = 0.5; // seconds between group onsets
-        const RADIAL_SPREAD = 0.6; // radial window within each group
-        const GROUP_ORDER: Record<string, number> = {
-          donor: 0,
-          un: 1,
-          project: 1,
-          collaborating: 2,
-        };
-        const maxDist = partnerGs.reduce((m, el) => {
-          const cx = parseFloat(el.getAttribute("data-cx") ?? "0");
-          const cy = parseFloat(el.getAttribute("data-cy") ?? "0");
-          return Math.max(m, Math.sqrt(cx * cx + cy * cy));
-        }, 1);
-
-        const tl = gsap.timeline({
-          onComplete: () => {
-            gsap.set(partnerGs, { clearProps: "transform,transformOrigin" });
-          },
-        });
-        animTlRef.current = tl;
-
-        partnerGs.forEach((el) => {
-          const label = el.getAttribute("data-label") ?? "other";
-          const cx = parseFloat(el.getAttribute("data-cx") ?? "0");
-          const cy = parseFloat(el.getAttribute("data-cy") ?? "0");
-          const dist = Math.sqrt(cx * cx + cy * cy);
-          const t =
-            (GROUP_ORDER[label] ?? 2) * GROUP_WAVE +
-            (dist / maxDist) * RADIAL_SPREAD;
-          tl.to(
-            el,
-            { opacity: 1, scale: 1, duration: 0.28, ease: "back.out(1.7)" },
-            t,
-          );
-        });
-      }),
+    const partnerGs = Array.from(
+      svgEl.querySelectorAll<SVGGElement>('[data-kind="partner"]'),
     );
+    if (partnerGs.length === 0) return;
+
+    // Hide immediately before the browser paints
+    partnerGs.forEach((el) => {
+      const cx = el.getAttribute("data-cx") ?? "0";
+      const cy = el.getAttribute("data-cy") ?? "0";
+      gsap.set(el, { opacity: 0, scale: 0, svgOrigin: `${cx} ${cy}` });
+    });
+
+    // Schedule the reveal animation for the next frame
+    const id = requestAnimationFrame(() => {
+      const GROUP_WAVE = 0.5; // seconds between group onsets
+      const RADIAL_SPREAD = 0.6; // radial window within each group
+      const GROUP_ORDER: Record<string, number> = {
+        donor: 0,
+        un: 1,
+        project: 1,
+        collaborating: 2,
+      };
+      const maxDist = partnerGs.reduce((m, el) => {
+        const cx = parseFloat(el.getAttribute("data-cx") ?? "0");
+        const cy = parseFloat(el.getAttribute("data-cy") ?? "0");
+        return Math.max(m, Math.sqrt(cx * cx + cy * cy));
+      }, 1);
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          gsap.set(partnerGs, { clearProps: "transform,transformOrigin" });
+        },
+      });
+      animTlRef.current = tl;
+
+      partnerGs.forEach((el) => {
+        const label = el.getAttribute("data-label") ?? "other";
+        const cx = parseFloat(el.getAttribute("data-cx") ?? "0");
+        const cy = parseFloat(el.getAttribute("data-cy") ?? "0");
+        const dist = Math.sqrt(cx * cx + cy * cy);
+        const t =
+          (GROUP_ORDER[label] ?? 2) * GROUP_WAVE +
+          (dist / maxDist) * RADIAL_SPREAD;
+        tl.to(
+          el,
+          { opacity: 1, scale: 1, duration: 0.28, ease: "back.out(1.7)" },
+          t,
+        );
+      });
+    });
+
     return () => {
       cancelAnimationFrame(id);
       animTlRef.current?.kill();
