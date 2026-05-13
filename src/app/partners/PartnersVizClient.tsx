@@ -275,14 +275,17 @@ export default function PartnersVizClient({
 
   // ── Memos ──────────────────────────────────────────────────────────────────
 
-  const bgHexes = useMemo(() => {
+  // Background hex grid — bucket by rounded opacity so we render ~10 <path>
+  // elements instead of ~400 individual ones.
+  const bgHexBuckets = useMemo(() => {
     const isMobileInit =
       typeof window !== "undefined" &&
       window.matchMedia("(max-width: 768px)").matches;
     const RANGE = isMobileInit ? 10 : 28;
     const FADE_START = 200;
     const FADE_END = isMobileInit ? 900 : 2400;
-    const cells: { d: string; key: string; opacity: number }[] = [];
+    const BUCKET_COUNT = 10;
+    const buckets: string[][] = Array.from({ length: BUCKET_COUNT + 1 }, () => []);
     for (let q = -RANGE; q <= RANGE; q++) {
       for (let r = -RANGE; r <= RANGE; r++) {
         const x = HEX_SIZE * 1.5 * q;
@@ -290,14 +293,17 @@ export default function PartnersVizClient({
         const dist = Math.sqrt(x * x + y * y);
         if (dist > FADE_END) continue;
         const t = Math.max(0, (dist - FADE_START) / (FADE_END - FADE_START));
-        cells.push({
-          d: hexPathFlat(x, y, HEX_SIZE),
-          key: `bg-${q}-${r}`,
-          opacity: 0.9 * (1 - t),
-        });
+        const opacity = 0.9 * (1 - t);
+        const bucket = Math.round(opacity * BUCKET_COUNT);
+        buckets[bucket].push(hexPathFlat(x, y, HEX_SIZE));
       }
     }
-    return cells;
+    return buckets
+      .map((paths, i) => ({
+        d: paths.join(" "),
+        opacity: i / BUCKET_COUNT,
+      }))
+      .filter((b) => b.d.length > 0);
   }, []);
 
   const hoveredPartnerNode = useMemo(
@@ -377,8 +383,7 @@ export default function PartnersVizClient({
     for (const n of renderNodes) {
       if (n.kind === "partner") {
         m.set(n.id, hexPathFlat(0, 0, n.r));
-        m.set(`${n.id}-outer`, hexPathFlat(0, 0, n.r * 1.22));
-        m.set(`${n.id}-inner`, hexPathFlat(0, 0, n.r * 1.05));
+        // outer/inner paths only needed for hub nodes — computed lazily below
       } else {
         m.set(n.id, hexPathFlat(n.x, n.y, n.r));
       }
@@ -386,7 +391,86 @@ export default function PartnersVizClient({
     return m;
   }, [renderNodes]);
 
+  // Outer/inner ring paths — only for hub nodes (typically 3-5), not all ~100 partners
+  const hubRingPaths = useMemo(() => {
+    const m = new Map<string, { outer: string; inner: string }>();
+    for (const id of hubIds) {
+      const n = renderNodes.find((nd) => nd.id === id);
+      if (!n) continue;
+      m.set(id, {
+        outer: hexPathFlat(0, 0, n.r * 1.22),
+        inner: hexPathFlat(0, 0, n.r * 1.05),
+      });
+    }
+    return m;
+  }, [hubIds, renderNodes]);
+
+  // Base kind ordering — stable across hover/tap, only changes when nodes change.
+  // Hovered/locked/clicked nodes are rendered in separate SVG layers on top,
+  // so this only determines the z-order of the background mass.
+  const baseOrdered = useMemo(() => {
+    const BASE: Record<HexNode["kind"], number> = {
+      outline: 0,
+      partner: 1,
+      label: 2,
+      center: 3,
+    };
+    return [...renderNodes].sort(
+      (a, b) => BASE[a.kind] - BASE[b.kind],
+    );
+  }, [renderNodes]);
+
+  // Full z-ordered list — on mobile, skip hover-based re-sorting (hover is N/A,
+  // hovered/locked nodes are rendered in separate overlay passes anyway).
   const ordered = useMemo(() => {
+    if (isMobile) {
+      // Only re-sort when locked state changes (tap → ecosystem panel)
+      if (!lockedGroup) return baseOrdered;
+      const hubIdSet = new Set<string>();
+      const lockedPartners = baseOrdered.filter(
+        (n) => n.kind === "partner" && lockedGroup.has(n.id),
+      );
+      for (const proj of parseProjects(lockedFeature ?? "")) {
+        const projNodes = lockedPartners.filter((n) =>
+          parseProjects(n.partner?.relational_project).has(proj),
+        );
+        const hub =
+          projNodes.find((n) =>
+            n.partner?.crafd_connection?.some(
+              (c) =>
+                c.toLowerCase().includes("project lead") ||
+                c.toLowerCase().includes("lead project"),
+            ),
+          ) ??
+          (lockedSourceNode &&
+          projNodes.some((n) => n.id === lockedSourceNode.id)
+            ? lockedSourceNode
+            : null) ??
+          projNodes[0];
+        if (hub) hubIdSet.add(hub.id);
+      }
+      return [...baseOrdered].sort((a, b) => {
+        const pa =
+          a.kind === "partner" && lockedGroup.has(a.id)
+            ? hubIdSet.has(a.id)
+              ? 200
+              : a.id === lockedSourceNode?.id
+                ? 150
+                : 100
+            : 0;
+        const pb =
+          b.kind === "partner" && lockedGroup.has(b.id)
+            ? hubIdSet.has(b.id)
+              ? 200
+              : b.id === lockedSourceNode?.id
+                ? 150
+                : 100
+            : 0;
+        return pa - pb;
+      });
+    }
+
+    // Desktop: full priority sort including hover
     const hubIdSet = new Set<string>();
     if (lockedGroup && lockedFeature) {
       const lockedPartners = renderNodes.filter(
@@ -412,7 +496,6 @@ export default function PartnersVizClient({
         if (hub) hubIdSet.add(hub.id);
       }
     }
-
     function priority(n: HexNode): number {
       if (lockedGroup !== null && n.kind === "partner") {
         if (hubIdSet.has(n.id)) return 200;
@@ -433,6 +516,8 @@ export default function PartnersVizClient({
     }
     return [...renderNodes].sort((a, b) => priority(a) - priority(b));
   }, [
+    isMobile,
+    baseOrdered,
     renderNodes,
     hoveredPartnerNode,
     relationalPeers,
@@ -511,12 +596,17 @@ export default function PartnersVizClient({
       else nodeOpacity = 0.2;
     }
 
+    // Snap opacity to nearest CSS-defined step to avoid inline style objects
+    const opacityStr = String(Math.round(nodeOpacity * 100) / 100);
+
     if (n.kind !== "partner") {
       return (
         <g
           key={n.id}
+          className="hex-node"
           data-node="true"
           data-kind={n.kind}
+          data-opacity={opacityStr}
           onMouseEnter={() => {
             if (lockedGroup || isMobile) return;
             if (n.kind === "label") setHoveredLabel(n.label ?? null);
@@ -526,8 +616,6 @@ export default function PartnersVizClient({
             if (n.kind === "label") setHoveredLabel(null);
           }}
           style={{
-            opacity: nodeOpacity,
-            transition: isMobile ? "opacity 0.2s ease" : "opacity 0.45s ease",
             cursor: n.kind === "label" ? "pointer" : "default",
           }}
         >
@@ -589,12 +677,14 @@ export default function PartnersVizClient({
     return (
       <g
         key={n.id}
+        className="hex-node"
         data-node="true"
         data-kind="partner"
         data-id={n.id}
         data-label={n.label}
         data-cx={n.x}
         data-cy={n.y}
+        data-opacity={opacityStr}
         onMouseEnter={() => {
           if (lockedGroup || isMobile) return;
           setHoveredPartner(n.id);
@@ -628,16 +718,14 @@ export default function PartnersVizClient({
           }
         }}
         style={{
-          opacity: nodeOpacity,
-          transition: isMobile ? "opacity 0.2s ease" : "opacity 0.45s ease",
           cursor: lockedGroup !== null ? (isLocked ? "pointer" : "default") : "pointer",
         }}
       >
         <g transform={`translate(${n.x},${n.y})`}>
-          {hubIds.has(n.id) && (
+          {hubIds.has(n.id) && hubRingPaths.get(n.id) && (
             <>
               <path
-                d={hexPaths.get(`${n.id}-outer`) ?? ""}
+                d={hubRingPaths.get(n.id)!.outer}
                 fill="rgba(255,255,255,0.12)"
                 stroke="white"
                 strokeWidth={4}
@@ -647,7 +735,7 @@ export default function PartnersVizClient({
               {([0, 0.8, 1.6] as const).map((delay) => (
                 <path
                   key={delay}
-                  d={hexPaths.get(`${n.id}-inner`) ?? ""}
+                  d={hubRingPaths.get(n.id)!.inner}
                   fill="rgba(255,255,255,0.10)"
                   stroke="white"
                   strokeWidth={2.5}
@@ -699,7 +787,7 @@ export default function PartnersVizClient({
                   height={boxH}
                   preserveAspectRatio="xMidYMid meet"
                   imageRendering={isMobile ? "auto" : "optimizeQuality"}
-                  style={{ filter: "grayscale(100%) brightness(1.1)" }}
+                  filter="url(#bw)"
                 />
               </>
             ) : n.name ? (
@@ -763,6 +851,15 @@ export default function PartnersVizClient({
           <filter id="grayscale">
             <feColorMatrix type="saturate" values="0" />
           </filter>
+          {/* Black-and-white + slight brightness lift for partner logos */}
+          <filter id="bw" colorInterpolationFilters="sRGB">
+            <feColorMatrix type="saturate" values="0" />
+            <feComponentTransfer>
+              <feFuncR type="linear" slope="1.1" />
+              <feFuncG type="linear" slope="1.1" />
+              <feFuncB type="linear" slope="1.1" />
+            </feComponentTransfer>
+          </filter>
           <filter id="to-white" colorInterpolationFilters="sRGB">
             <feColorMatrix
               type="matrix"
@@ -789,16 +886,16 @@ export default function PartnersVizClient({
           ref={panGroupRef}
           transform={`translate(${pan.x},${pan.y}) scale(${scale})`}
         >
-          {/* Background hex grid — group opacity handles lock-state dimming in one DOM update */}
+          {/* Background hex grid — bucketed into ~10 <path> elements instead of ~400 */}
           <g
             style={{
               opacity: lockedGroup !== null ? 0.18 : 1,
               transition: "opacity 0.3s",
             }}
           >
-            {bgHexes.map(({ d, key, opacity }) => (
+            {bgHexBuckets.map(({ d, opacity }, i) => (
               <path
-                key={key}
+                key={`bg-bucket-${i}`}
                 suppressHydrationWarning
                 d={d}
                 fill="none"

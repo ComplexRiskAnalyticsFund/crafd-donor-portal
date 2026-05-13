@@ -43,6 +43,8 @@ export function useHexAnimation({
       const id = requestAnimationFrame(() => {
         const tl = gsap.timeline({
           onComplete: () => {
+            // Clear inline opacity so CSS data-opacity attributes take over
+            gsap.set(partnerGs, { clearProps: "opacity" });
             animTlRef.current = null;
           },
         });
@@ -85,7 +87,7 @@ export function useHexAnimation({
 
       const tl = gsap.timeline({
         onComplete: () => {
-          gsap.set(partnerGs, { clearProps: "transform,transformOrigin" });
+          gsap.set(partnerGs, { clearProps: "opacity,transform,transformOrigin" });
         },
       });
       animTlRef.current = tl;
