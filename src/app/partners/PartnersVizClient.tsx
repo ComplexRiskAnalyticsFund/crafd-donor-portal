@@ -131,21 +131,37 @@ export default function PartnersVizClient({
 
   // Restore modal state from URL on mount (enables shareable links)
   useEffect(() => {
-    const groupParam = searchParams.get("group");
+    const projectsParam = searchParams.get("projects");
+    const orgParam = searchParams.get("org");
     const partnerParam = searchParams.get("partner");
-    if (groupParam) {
+    if (projectsParam) {
       const peers = new Set(
         initialNodes
           .filter(
             (n) =>
               n.kind === "partner" &&
-              projectsOverlap(n.partner?.relational_project, groupParam),
+              projectsOverlap(n.partner?.relational_project, projectsParam),
           )
           .map((n) => n.id),
       );
       if (peers.size > 0) {
         setLockedGroup(peers);
-        setLockedFeature(groupParam);
+        setLockedFeature(projectsParam);
+        if (orgParam) {
+          const sourceNode = initialNodes.find(
+            (n) => n.kind === "partner" && n.partner?.airtable_id === orgParam,
+          );
+          if (sourceNode) setLockedSourceNode(sourceNode);
+        }
+      }
+    } else if (orgParam) {
+      const sourceNode = initialNodes.find(
+        (n) => n.kind === "partner" && n.partner?.airtable_id === orgParam,
+      );
+      if (sourceNode) {
+        setLockedGroup(new Set([sourceNode.id]));
+        setLockedFeature("");
+        setLockedSourceNode(sourceNode);
       }
     }
     if (partnerParam) {
@@ -160,7 +176,7 @@ export default function PartnersVizClient({
         } else {
           const rf = node.partner?.relational_project;
           if (rf && rf.length > 0) {
-            const rfStr = rf.join(", ");
+            const rfStr = rf.join(",");
             const peers = new Set(
               initialNodes
                 .filter(
@@ -183,7 +199,7 @@ export default function PartnersVizClient({
 
   function enterClickState1(n: HexNode) {
     const rf = n.partner?.relational_project;
-    const rfStr = rf && rf.length > 0 ? rf.join(", ") : "";
+    const rfStr = rf && rf.length > 0 ? rf.join(",") : "";
     const peers =
       rf && rf.length > 0
         ? new Set(
@@ -214,8 +230,12 @@ export default function PartnersVizClient({
     setLockedFeature(rfStr);
     setLockedSourceNode(n);
     setOpenProjects(new Set(rf ?? []));
+    const orgId = n.partner?.airtable_id;
+    const orgParam = orgId ? `&org=${orgId}` : "";
     if (rfStr) {
-      router.replace(`${pathname}?group=${encodeURIComponent(rfStr)}`);
+      router.replace(`${pathname}?projects=${rfStr}${orgParam}`);
+    } else if (orgId) {
+      router.replace(`${pathname}?org=${orgId}`);
     } else {
       router.replace(pathname);
     }
