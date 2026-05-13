@@ -55,6 +55,8 @@ export default function PartnersVizClient({
   );
   const [tappedNodeId, setTappedNodeId] = useState<string | null>(null);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
+  const [hoveredOrgNodeId, setHoveredOrgNodeId] = useState<string | null>(null);
+  const [vizBiasX, setVizBiasX] = useState(0);
   const [sheetSnap, setSheetSnap] = useState<"half" | "full">("half");
   const [partnerTooltip, setPartnerTooltip] = useState<{
     text: string;
@@ -68,6 +70,7 @@ export default function PartnersVizClient({
 
   const svgRef = useRef<SVGSVGElement>(null);
   const isMobileRef = useRef(isMobile);
+  const flyBackRef = useRef<(() => void) | null>(null);
 
   const closeAll = useCallback(() => {
     setLockedGroup(null);
@@ -78,6 +81,7 @@ export default function PartnersVizClient({
     setTappedNodeId(null);
     setHoveredPartner(null);
     router.replace(pathname);
+    flyBackRef.current?.();
   }, [router, pathname]);
 
   const {
@@ -87,7 +91,11 @@ export default function PartnersVizClient({
     handleDoubleClick,
     svgTouchHandlers,
     touchMovedRef,
+    flyToNodes,
+    flyBack,
   } = usePanZoom({ svgRef, closeAll });
+
+  flyBackRef.current = flyBack;
 
   const hasUrlState = !!(
     searchParams.get("projects") ||
@@ -126,6 +134,17 @@ export default function PartnersVizClient({
     };
   }, []);
 
+  // Shift the viz right to center in the visible area beside the panel
+  const isModalOpen = lockedGroup !== null && clickedNode === null;
+  useEffect(() => {
+    if (isMobile || !isModalOpen) {
+      setVizBiasX(0);
+      return;
+    }
+    const panelPx = Math.min(window.innerWidth / 3, 700);
+    setVizBiasX(panelPx / 2);
+  }, [isModalOpen, isMobile]);
+
   // Reset bottom sheet snap when the active panel changes
   useEffect(() => {
     setSheetSnap("half");
@@ -140,16 +159,18 @@ export default function PartnersVizClient({
     const projectsParam = searchParams.get("projects");
     const orgParam = searchParams.get("org");
     const partnerParam = searchParams.get("partner");
+    const isMobileNow =
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 768px)").matches;
+    const panelPx = isMobileNow ? 0 : Math.min(window.innerWidth / 3, 700);
+
     if (projectsParam) {
-      const peers = new Set(
-        initialNodes
-          .filter(
-            (n) =>
-              n.kind === "partner" &&
-              projectsOverlap(n.partner?.relational_project, projectsParam),
-          )
-          .map((n) => n.id),
+      const peerNodes = initialNodes.filter(
+        (n) =>
+          n.kind === "partner" &&
+          projectsOverlap(n.partner?.relational_project, projectsParam),
       );
+      const peers = new Set(peerNodes.map((n) => n.id));
       if (peers.size > 0) {
         setLockedGroup(peers);
         setLockedFeature(projectsParam);
@@ -159,6 +180,7 @@ export default function PartnersVizClient({
           );
           if (sourceNode) setLockedSourceNode(sourceNode);
         }
+        if (!isMobileNow) flyToNodes(peerNodes, panelPx / 2);
       }
     } else if (orgParam) {
       const sourceNode = initialNodes.find(
@@ -168,6 +190,7 @@ export default function PartnersVizClient({
         setLockedGroup(new Set([sourceNode.id]));
         setLockedFeature("");
         setLockedSourceNode(sourceNode);
+        if (!isMobileNow) flyToNodes([sourceNode], panelPx / 2);
       }
     }
     if (partnerParam) {
@@ -206,19 +229,16 @@ export default function PartnersVizClient({
   function enterClickState1(n: HexNode) {
     const rf = n.partner?.relational_project;
     const rfStr = rf && rf.length > 0 ? rf.join(",") : "";
-    const peers =
+    const peerNodes =
       rf && rf.length > 0
-        ? new Set(
-            renderNodes
-              .filter(
-                (node) =>
-                  node.kind === "partner" &&
-                  node.id !== n.id &&
-                  projectsOverlap(node.partner?.relational_project, rf),
-              )
-              .map((node) => node.id),
+        ? renderNodes.filter(
+            (node) =>
+              node.kind === "partner" &&
+              node.id !== n.id &&
+              projectsOverlap(node.partner?.relational_project, rf),
           )
-        : new Set<string>();
+        : [];
+    const peers = new Set(peerNodes.map((node) => node.id));
     setHoveredPartner(null);
     setHoveredLabel(null);
     setClickedNode(null);
@@ -244,6 +264,11 @@ export default function PartnersVizClient({
       router.replace(`${pathname}?org=${orgId}`);
     } else {
       router.replace(pathname);
+    }
+    // Auto-zoom to frame all ecosystem nodes in the visible right area
+    if (!isMobile) {
+      const panelPx = Math.min(window.innerWidth / 3, 700);
+      flyToNodes([n, ...peerNodes], panelPx / 2);
     }
   }
 
@@ -458,6 +483,7 @@ export default function PartnersVizClient({
           />
         )}
 
+        <g style={{ transform: `translateX(${vizBiasX}px)`, transition: "transform 0.35s ease" }}>
         <g
           ref={panGroupRef}
           transform={`translate(${pan.x},${pan.y}) scale(${scale})`}
@@ -536,7 +562,10 @@ export default function PartnersVizClient({
                 nodeOpacity = 1;
                 nodeScale = 1.15;
               } else if (lockedGroup.has(n.id)) {
-                if (hoveredProject) {
+                if (hoveredOrgNodeId) {
+                  nodeOpacity = n.id === hoveredOrgNodeId ? 1 : 0.3;
+                  nodeScale = n.id === hoveredOrgNodeId ? 1.5 : 1.0;
+                } else if (hoveredProject) {
                   const inProject = parseProjects(n.partner?.relational_project).has(hoveredProject);
                   nodeOpacity = inProject ? 1 : 0.25;
                   nodeScale = inProject ? 1.4 : 1.0;
@@ -832,6 +861,7 @@ export default function PartnersVizClient({
             );
           })}
         </g>
+        </g>
       </svg>
 
       {/* ── Ecosystem panel (click state 1) ────────────────────────────────── */}
@@ -850,6 +880,7 @@ export default function PartnersVizClient({
           onPartnerClick={enterClickState1}
           setPartnerTooltip={setPartnerTooltip}
           onProjectHover={setHoveredProject}
+          onOrgHover={setHoveredOrgNodeId}
         />
       )}
 

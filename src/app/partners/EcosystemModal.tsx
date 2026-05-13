@@ -21,6 +21,7 @@ interface EcosystemPanelProps {
   onPartnerClick: (n: HexNode) => void;
   setPartnerTooltip: (t: { text: string; x: number; y: number } | null) => void;
   onProjectHover: (project: string | null) => void;
+  onOrgHover: (nodeId: string | null) => void;
 }
 
 function ProjectVisitLink({ href }: { href: string }) {
@@ -65,6 +66,7 @@ export function EcosystemPanel({
   onPartnerClick,
   setPartnerTooltip,
   onProjectHover,
+  onOrgHover,
 }: EcosystemPanelProps) {
   const sheetTouchStartY = useRef(0);
   const projects = [...parseProjects(lockedFeature)].filter(
@@ -407,6 +409,7 @@ export function EcosystemPanel({
                                       onClick={() => onPartnerClick(pn)}
                                       className="cursor-pointer rounded border border-white/12 bg-white/5 px-2 py-0.5 text-xs font-bold tracking-wide text-white/60 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-white"
                                       onMouseEnter={(e) => {
+                                        onOrgHover(pn.id);
                                         const pId = pn.partner?.airtable_id;
                                         const role =
                                           pId &&
@@ -428,9 +431,10 @@ export function EcosystemPanel({
                                           });
                                         }
                                       }}
-                                      onMouseLeave={() =>
-                                        setPartnerTooltip(null)
-                                      }
+                                      onMouseLeave={() => {
+                                        onOrgHover(null);
+                                        setPartnerTooltip(null);
+                                      }}
                                     >
                                       {pn.partner?.org_short_name ?? pn.name}
                                     </button>

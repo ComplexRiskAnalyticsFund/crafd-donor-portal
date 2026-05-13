@@ -1,7 +1,9 @@
 "use client";
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
-import { clampPan, MIN_SCALE, MAX_SCALE } from "../lib/utils";
+import { useCallback, useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { clampPan, HEX_SIZE, MIN_SCALE, MAX_SCALE } from "../lib/utils";
+import type { HexNode } from "../lib/label";
 
 export function usePanZoom({
   svgRef,
@@ -200,6 +202,110 @@ export function usePanZoom({
     },
   };
 
+  const flyTlRef = useRef<gsap.core.Timeline | null>(null);
+  const savedViewRef = useRef<{ x: number; y: number; s: number } | null>(null);
+
+  function animateTo(
+    targetX: number,
+    targetY: number,
+    targetS: number,
+    groupEl: SVGGElement,
+    onDone?: () => void,
+  ) {
+    flyTlRef.current?.kill();
+    const proxy = {
+      tx: panRef.current.x,
+      ty: panRef.current.y,
+      s: scaleRef.current,
+    };
+    flyTlRef.current = gsap.timeline({
+      onComplete: () => {
+        setPan({ x: targetX, y: targetY });
+        setScale(targetS);
+        flyTlRef.current = null;
+        onDone?.();
+      },
+    });
+    flyTlRef.current.to(proxy, {
+      tx: targetX,
+      ty: targetY,
+      s: targetS,
+      duration: 0.7,
+      ease: "power3.inOut",
+      onUpdate() {
+        panRef.current = { x: proxy.tx, y: proxy.ty };
+        scaleRef.current = proxy.s;
+        groupEl.setAttribute(
+          "transform",
+          `translate(${proxy.tx},${proxy.ty}) scale(${proxy.s})`,
+        );
+      },
+    });
+  }
+
+  // Animate pan+scale to frame the given nodes in the visible area.
+  // vizBiasXPx: how many CSS pixels the content has been shifted right (= panelWidth/2).
+  // With vizBiasX applied, SVG user-space (0,0) sits at the center of the right visible area,
+  // so we just need to translate the bbox center to (0,0).
+  const flyToNodes = useCallback(
+    (nodes: HexNode[], vizBiasXPx = 0) => {
+      if (!nodes.length) return;
+      const svgEl = svgRef.current;
+      const groupEl = panGroupRef.current;
+      if (!svgEl || !groupEl) return;
+
+      // Save current view so flyBack can restore it
+      savedViewRef.current = {
+        x: panRef.current.x,
+        y: panRef.current.y,
+        s: scaleRef.current,
+      };
+
+      const pad = HEX_SIZE * 2;
+      const xs = nodes.map((n) => n.x);
+      const ys = nodes.map((n) => n.y);
+      const minX = Math.min(...xs) - pad;
+      const maxX = Math.max(...xs) + pad;
+      const minY = Math.min(...ys) - pad;
+      const maxY = Math.max(...ys) + pad;
+      const cx = (minX + maxX) / 2;
+      const cy = (minY + maxY) / 2;
+      const bboxW = maxX - minX;
+      const bboxH = maxY - minY;
+
+      // Convert available screen area → SVG user units
+      const screenW = svgEl.clientWidth || window.innerWidth;
+      const screenH = svgEl.clientHeight || window.innerHeight;
+      const panelPx = vizBiasXPx * 2;
+      const availWpx = Math.max(screenW - panelPx, screenW * 0.5) * 0.88;
+      const availHpx = screenH * 0.88;
+      const pxPerUnit = screenW / 1800;
+      const availW = availWpx / pxPerUnit;
+      const availH = availHpx / (screenH / 1000);
+
+      const newScale = Math.min(availW / bboxW, availH / bboxH, MAX_SCALE);
+      const clampedScale = Math.max(MIN_SCALE, newScale);
+      const { x: newX, y: newY } = clampPan(
+        -cx * clampedScale,
+        -cy * clampedScale,
+        clampedScale,
+      );
+
+      animateTo(newX, newY, clampedScale, groupEl);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [svgRef],
+  );
+
+  const flyBack = useCallback(() => {
+    const saved = savedViewRef.current;
+    const groupEl = panGroupRef.current;
+    if (!saved || !groupEl) return;
+    savedViewRef.current = null;
+    animateTo(saved.x, saved.y, saved.s, groupEl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return {
     pan,
     scale,
@@ -207,5 +313,7 @@ export function usePanZoom({
     handleDoubleClick,
     svgTouchHandlers,
     touchMovedRef,
+    flyToNodes,
+    flyBack,
   };
 }
