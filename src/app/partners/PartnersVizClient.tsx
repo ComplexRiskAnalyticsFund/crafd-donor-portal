@@ -708,12 +708,7 @@ export default function PartnersVizClient({
                   height={boxH}
                   preserveAspectRatio="xMidYMid meet"
                   imageRendering={isMobile ? "auto" : "optimizeQuality"}
-                  style={{
-                    filter: isSelected
-                      ? undefined
-                      : "grayscale(100%) brightness(1.1)",
-                    transition: "filter 0.3s ease",
-                  }}
+                  filter={isSelected ? undefined : "url(#grayscale)"}
                 />
               </>
             ) : n.name ? (
