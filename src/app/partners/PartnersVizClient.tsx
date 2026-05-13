@@ -364,6 +364,7 @@ export default function PartnersVizClient({
     function priority(n: HexNode): number {
       if (lockedGroup !== null && n.kind === "partner") {
         if (hubIdSet.has(n.id)) return 200;
+        if (n.id === lockedSourceNode?.id) return 150;
         if (lockedGroup.has(n.id)) return 100;
       }
       if (hoveredPartnerNode && n.kind === "partner") {
@@ -505,7 +506,10 @@ export default function PartnersVizClient({
               if (n.kind === "outline") nodeOpacity = 0.1;
               else if (n.kind === "center") nodeOpacity = 0.18;
               else if (n.kind === "label") nodeOpacity = 0.07;
-              else if (lockedGroup.has(n.id)) {
+              else if (n.id === lockedSourceNode?.id) {
+                nodeOpacity = 1;
+                nodeScale = 1.15;
+              } else if (lockedGroup.has(n.id)) {
                 nodeOpacity = 1;
                 nodeScale = 1.15;
               } else {
@@ -622,6 +626,7 @@ export default function PartnersVizClient({
             const boxW = n.r * 0.72;
             const boxH = n.r * 0.62;
             const isLocked = lockedGroup?.has(n.id) ?? false;
+            const isSource = lockedGroup !== null && n.id === lockedSourceNode?.id;
 
             return (
               <g
@@ -716,8 +721,8 @@ export default function PartnersVizClient({
                     <path
                       d={hexPaths.get(n.id) ?? ""}
                       fill={fillFor(n, highlight)}
-                      stroke={strokeFor(n)}
-                      strokeWidth={strokeWidthFor(n)}
+                      stroke={isSource ? "white" : strokeFor(n)}
+                      strokeWidth={isSource ? 5 : strokeWidthFor(n)}
                     />
                     {n.label === "donor" ? (
                       <>
