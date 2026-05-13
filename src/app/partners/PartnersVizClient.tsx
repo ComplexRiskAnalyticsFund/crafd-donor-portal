@@ -49,7 +49,11 @@ export default function PartnersVizClient({
   const [openProjects, setOpenProjects] = useState<Set<string>>(
     () => new Set(),
   );
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 768px)").matches,
+  );
   const [tappedNodeId, setTappedNodeId] = useState<string | null>(null);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [hoveredOrgNodeId, setHoveredOrgNodeId] = useState<string | null>(null);
@@ -275,9 +279,9 @@ export default function PartnersVizClient({
     const isMobileInit =
       typeof window !== "undefined" &&
       window.matchMedia("(max-width: 768px)").matches;
-    const RANGE = isMobileInit ? 13 : 28;
+    const RANGE = isMobileInit ? 10 : 28;
     const FADE_START = 200;
-    const FADE_END = isMobileInit ? 1600 : 2400;
+    const FADE_END = isMobileInit ? 900 : 2400;
     const cells: { d: string; key: string; opacity: number }[] = [];
     for (let q = -RANGE; q <= RANGE; q++) {
       for (let r = -RANGE; r <= RANGE; r++) {
@@ -443,8 +447,6 @@ export default function PartnersVizClient({
     let nodeOpacity = n.kind === "partner" ? 0.95 : 1;
     let nodeScale = 1;
     let highlight = false;
-    // Whether this partner's logo should show in color (false = grayscale)
-    let isSelected = false;
 
     if (lockedGroup !== null) {
       if (n.kind === "outline") nodeOpacity = 0.1;
@@ -453,21 +455,17 @@ export default function PartnersVizClient({
       else if (n.id === lockedSourceNode?.id) {
         nodeOpacity = 1;
         nodeScale = 1.15;
-        isSelected = true;
       } else if (lockedGroup.has(n.id)) {
         if (hoveredOrgNodeId) {
           nodeOpacity = n.id === hoveredOrgNodeId ? 1 : 0.3;
           nodeScale = n.id === hoveredOrgNodeId ? 1.5 : 1.0;
-          isSelected = n.id === hoveredOrgNodeId;
         } else if (hoveredProject) {
           const inProject = parseProjects(n.partner?.relational_project).has(hoveredProject);
           nodeOpacity = inProject ? 1 : 0.25;
           nodeScale = inProject ? 1.4 : 1.0;
-          isSelected = inProject;
         } else {
           nodeOpacity = 1;
           nodeScale = 1.15;
-          isSelected = true;
         }
       } else {
         nodeOpacity = 0.07;
@@ -478,7 +476,6 @@ export default function PartnersVizClient({
         if (n.id === clickedNode.id) {
           nodeScale = 1.5;
           nodeOpacity = 1;
-          isSelected = true;
         } else {
           nodeOpacity = 0.35;
         }
@@ -491,11 +488,9 @@ export default function PartnersVizClient({
           nodeScale = 1.5;
           nodeOpacity = 1;
           highlight = true;
-          isSelected = true;
         } else if (rf && projectsOverlap(n.partner?.relational_project, rf)) {
           nodeOpacity = 1;
           highlight = true;
-          isSelected = true;
         } else {
           nodeOpacity = 0.35;
         }
@@ -634,8 +629,7 @@ export default function PartnersVizClient({
         }}
         style={{
           opacity: nodeOpacity,
-          filter: isSelected ? undefined : "grayscale(1) brightness(1.1)",
-          transition: isMobile ? "opacity 0.2s ease, filter 0.25s ease" : "opacity 0.45s ease, filter 0.3s ease",
+          transition: isMobile ? "opacity 0.2s ease" : "opacity 0.45s ease",
           cursor: lockedGroup !== null ? (isLocked ? "pointer" : "default") : "pointer",
         }}
       >
@@ -705,6 +699,7 @@ export default function PartnersVizClient({
                   height={boxH}
                   preserveAspectRatio="xMidYMid meet"
                   imageRendering={isMobile ? "auto" : "optimizeQuality"}
+                  style={{ filter: "grayscale(100%) brightness(1.1)" }}
                 />
               </>
             ) : n.name ? (

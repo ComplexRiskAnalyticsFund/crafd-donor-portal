@@ -80,12 +80,12 @@ export function EcosystemPanel({
   const orgUrl = lockedSourceNode?.partner?.org_url;
 
   const logoSrc =
+    lockedSourceNode?.partner?.color_logo_path ??
     lockedSourceNode?.partner?.thumb_logo_path ??
-    lockedSourceNode?.partner?.white_logo_path ??
-    lockedSourceNode?.partner?.color_logo_path;
+    lockedSourceNode?.partner?.white_logo_path;
   const logoIsWhiteOnly =
-    !lockedSourceNode?.partner?.thumb_logo_path &&
     !lockedSourceNode?.partner?.color_logo_path &&
+    !lockedSourceNode?.partner?.thumb_logo_path &&
     !!lockedSourceNode?.partner?.white_logo_path;
 
   return (
@@ -170,7 +170,7 @@ export function EcosystemPanel({
                       maxWidth: 110,
                       filter: logoIsWhiteOnly
                         ? "brightness(0) invert(1) opacity(0.7)"
-                        : "grayscale(100%) brightness(1.1)",
+                        : undefined,
                     }}
                   />
                 )}
