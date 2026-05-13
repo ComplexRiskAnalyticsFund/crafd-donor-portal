@@ -447,6 +447,8 @@ export default function PartnersVizClient({
     let nodeOpacity = n.kind === "partner" ? 0.95 : 1;
     let nodeScale = 1;
     let highlight = false;
+    // Whether this partner's logo should show in color (false = grayscale)
+    let isSelected = false;
 
     if (lockedGroup !== null) {
       if (n.kind === "outline") nodeOpacity = 0.1;
@@ -455,17 +457,21 @@ export default function PartnersVizClient({
       else if (n.id === lockedSourceNode?.id) {
         nodeOpacity = 1;
         nodeScale = 1.15;
+        isSelected = true;
       } else if (lockedGroup.has(n.id)) {
         if (hoveredOrgNodeId) {
           nodeOpacity = n.id === hoveredOrgNodeId ? 1 : 0.3;
           nodeScale = n.id === hoveredOrgNodeId ? 1.5 : 1.0;
+          isSelected = n.id === hoveredOrgNodeId;
         } else if (hoveredProject) {
           const inProject = parseProjects(n.partner?.relational_project).has(hoveredProject);
           nodeOpacity = inProject ? 1 : 0.25;
           nodeScale = inProject ? 1.4 : 1.0;
+          isSelected = inProject;
         } else {
           nodeOpacity = 1;
           nodeScale = 1.15;
+          isSelected = true;
         }
       } else {
         nodeOpacity = 0.07;
@@ -476,6 +482,7 @@ export default function PartnersVizClient({
         if (n.id === clickedNode.id) {
           nodeScale = 1.5;
           nodeOpacity = 1;
+          isSelected = true;
         } else {
           nodeOpacity = 0.35;
         }
@@ -488,9 +495,11 @@ export default function PartnersVizClient({
           nodeScale = 1.5;
           nodeOpacity = 1;
           highlight = true;
+          isSelected = true;
         } else if (rf && projectsOverlap(n.partner?.relational_project, rf)) {
           nodeOpacity = 1;
           highlight = true;
+          isSelected = true;
         } else {
           nodeOpacity = 0.35;
         }
@@ -699,11 +708,12 @@ export default function PartnersVizClient({
                   height={boxH}
                   preserveAspectRatio="xMidYMid meet"
                   imageRendering={isMobile ? "auto" : "optimizeQuality"}
-                  style={
-                    !n.partner!.thumb_logo_path && !n.partner!.white_logo_path
-                      ? { filter: "grayscale(100%) brightness(1.1)" }
-                      : undefined
-                  }
+                  style={{
+                    filter: isSelected
+                      ? undefined
+                      : "grayscale(100%) brightness(1.1)",
+                    transition: "filter 0.3s ease",
+                  }}
                 />
               </>
             ) : n.name ? (
