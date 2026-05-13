@@ -30,13 +30,13 @@ export function useHexAnimation({
     );
     if (partnerGs.length === 0) return;
 
-    partnerGs.forEach((el) => gsap.set(el, { opacity: 0 }));
-
-    // Skip intro when restoring from URL — hexes must be visible before lines render
+    // Skip intro when restoring from URL — React inline style controls opacity for lock state,
+    // so only clear any GSAP transform props without touching opacity.
     if (skipIntroRef.current) {
-      gsap.set(partnerGs, { opacity: 1, scale: 1, clearProps: "transform,transformOrigin" });
       return;
     }
+
+    partnerGs.forEach((el) => gsap.set(el, { opacity: 0 }));
 
     // Mobile: simple fade-in to avoid the heavy staggered scale on low-end GPUs
     if (isMobileRef.current) {

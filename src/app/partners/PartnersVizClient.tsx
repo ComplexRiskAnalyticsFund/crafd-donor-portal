@@ -442,6 +442,298 @@ export default function PartnersVizClient({
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
+  function renderNode(n: HexNode): React.ReactNode {
+    let nodeOpacity = n.kind === "partner" ? 0.95 : 1;
+    let nodeScale = 1;
+    let highlight = false;
+
+    if (lockedGroup !== null) {
+      if (n.kind === "outline") nodeOpacity = 0.1;
+      else if (n.kind === "center") nodeOpacity = 0.18;
+      else if (n.kind === "label") nodeOpacity = 0.07;
+      else if (n.id === lockedSourceNode?.id) {
+        nodeOpacity = 1;
+        nodeScale = 1.15;
+      } else if (lockedGroup.has(n.id)) {
+        if (hoveredOrgNodeId) {
+          nodeOpacity = n.id === hoveredOrgNodeId ? 1 : 0.3;
+          nodeScale = n.id === hoveredOrgNodeId ? 1.5 : 1.0;
+        } else if (hoveredProject) {
+          const inProject = parseProjects(n.partner?.relational_project).has(hoveredProject);
+          nodeOpacity = inProject ? 1 : 0.25;
+          nodeScale = inProject ? 1.4 : 1.0;
+        } else {
+          nodeOpacity = 1;
+          nodeScale = 1.15;
+        }
+      } else {
+        nodeOpacity = 0.07;
+      }
+    } else if (hoveredPartner !== null && hoveredPartnerNode) {
+      if (n.kind === "label") nodeOpacity = 0.4;
+      else if (n.kind === "partner") {
+        const rf = hoveredPartnerNode.partner?.relational_project;
+        if (n.id === hoveredPartnerNode.id) {
+          nodeScale = 1.5;
+          nodeOpacity = 1;
+          highlight = true;
+        } else if (rf && projectsOverlap(n.partner?.relational_project, rf)) {
+          nodeOpacity = 1;
+          highlight = true;
+        } else {
+          nodeOpacity = 0.35;
+        }
+      }
+    } else if (searchQuery.trim()) {
+      if (n.kind === "partner") {
+        const q = searchQuery.toLowerCase();
+        const hit =
+          (n.name ?? "").toLowerCase().includes(q) ||
+          (n.partner?.org_full_name ?? "").toLowerCase().includes(q);
+        nodeOpacity = hit ? 1 : 0.12;
+      }
+    } else if (hoveredLabel !== null) {
+      const isSameGroup =
+        (n.kind === "label" || n.kind === "partner") && n.label === hoveredLabel;
+      if (n.kind === "outline" || n.kind === "center") nodeOpacity = 1;
+      else if (isSameGroup) nodeOpacity = n.kind === "partner" ? 0.9 : 1;
+      else nodeOpacity = 0.2;
+    }
+
+    if (n.kind !== "partner") {
+      return (
+        <g
+          key={n.id}
+          data-node="true"
+          data-kind={n.kind}
+          onMouseEnter={() => {
+            if (lockedGroup || isMobile) return;
+            if (n.kind === "label") setHoveredLabel(n.label ?? null);
+          }}
+          onMouseLeave={() => {
+            if (lockedGroup || isMobile) return;
+            if (n.kind === "label") setHoveredLabel(null);
+          }}
+          style={{
+            opacity: nodeOpacity,
+            transition: "opacity 0.45s ease",
+            cursor: n.kind === "label" ? "pointer" : "default",
+          }}
+        >
+          <path
+            d={hexPaths.get(n.id) ?? ""}
+            fill={fillFor(n, highlight)}
+            stroke={strokeFor(n)}
+            strokeWidth={strokeWidthFor(n)}
+          />
+          {n.kind === "center" && (
+            <image
+              href="/images/crafd-logo-full-black.svg"
+              x={n.x - n.r * 0.54}
+              y={n.y - n.r * 0.37}
+              width={n.r * 1.08}
+              height={n.r * 0.735}
+              preserveAspectRatio="xMidYMid meet"
+            />
+          )}
+          {n.kind === "label" && (
+            <>
+              <text
+                x={n.x}
+                y={n.y - 4}
+                textAnchor="middle"
+                fontSize="42"
+                fill="black"
+                fontWeight={1000}
+                fontFamily="inherit"
+              >
+                {n.count}
+                {n.label === "collaborating" ? "+" : ""}
+              </text>
+              {n.name?.split("\n").map((line, idx) => (
+                <text
+                  key={idx}
+                  x={n.x}
+                  y={n.y + 20 + idx * 13}
+                  textAnchor="middle"
+                  fontSize="12"
+                  fill="black"
+                  fontWeight={1000}
+                >
+                  {line}
+                </text>
+              ))}
+            </>
+          )}
+        </g>
+      );
+    }
+
+    const slug = toLogoSlug(n.partner?.org_short_name ?? n.name ?? "");
+    const boxW = n.r * 0.72;
+    const boxH = n.r * 0.62;
+    const isLocked = lockedGroup?.has(n.id) ?? false;
+    const isSource = lockedGroup !== null && n.id === lockedSourceNode?.id;
+
+    return (
+      <g
+        key={n.id}
+        data-node="true"
+        data-kind="partner"
+        data-label={n.label}
+        data-cx={n.x}
+        data-cy={n.y}
+        onMouseEnter={() => {
+          if (lockedGroup || isMobile) return;
+          setHoveredPartner(n.id);
+        }}
+        onMouseLeave={() => {
+          if (lockedGroup || isMobile) return;
+          setHoveredPartner(null);
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+          if (isMobile && tappedNodeId !== n.id) {
+            setTappedNodeId(n.id);
+            setHoveredPartner(n.id);
+            return;
+          }
+          if (isMobile) {
+            setTappedNodeId(null);
+            setHoveredPartner(null);
+          }
+          if (n.label === "donor") {
+            setClickedNode(n);
+            router.replace(
+              `${pathname}?partner=${encodeURIComponent(n.partner?.org_short_name ?? n.name ?? "")}`,
+            );
+            return;
+          }
+          if (lockedGroup !== null) {
+            if (isLocked) enterClickState1(n);
+          } else {
+            enterClickState1(n);
+          }
+        }}
+        style={{
+          opacity: nodeOpacity,
+          transition: "opacity 0.45s ease",
+          cursor: lockedGroup !== null ? (isLocked ? "pointer" : "default") : "pointer",
+        }}
+      >
+        <g transform={`translate(${n.x},${n.y})`}>
+          {hubIds.has(n.id) && (
+            <>
+              <path
+                d={hexPaths.get(`${n.id}-outer`) ?? ""}
+                fill="rgba(255,255,255,0.12)"
+                stroke="white"
+                strokeWidth={4}
+                strokeLinecap="round"
+                style={{ fillOpacity: 0.28, strokeOpacity: 0.7 }}
+              />
+              {([0, 0.8, 1.6] as const).map((delay) => (
+                <path
+                  key={delay}
+                  d={hexPaths.get(`${n.id}-inner`) ?? ""}
+                  fill="rgba(255,255,255,0.10)"
+                  stroke="white"
+                  strokeWidth={2.5}
+                  strokeLinecap="round"
+                  className="hub-ring"
+                  style={{ animationDelay: `${delay}s`, transformOrigin: "0 0" }}
+                />
+              ))}
+            </>
+          )}
+          <g
+            style={{
+              transformOrigin: "0 0",
+              transform: nodeScale !== 1 ? `scale(${nodeScale})` : undefined,
+              transition: "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
+            }}
+          >
+            <path
+              d={hexPaths.get(n.id) ?? ""}
+              fill={fillFor(n, highlight)}
+              stroke={isSource ? "white" : strokeFor(n)}
+              strokeWidth={isSource ? 5 : strokeWidthFor(n)}
+            />
+            {n.label === "donor" ? (
+              <>
+                <image
+                  href={`/logos/countries/${slug}.svg`}
+                  x={-boxW / 2}
+                  y={-boxH / 2}
+                  width={boxW}
+                  height={boxH}
+                  preserveAspectRatio="xMidYMid meet"
+                />
+              </>
+            ) : (n.partner?.thumb_logo_path ??
+              n.partner?.white_logo_path ??
+              n.partner?.color_logo_path) ? (
+              <>
+                <image
+                  href={
+                    n.partner!.thumb_logo_path ??
+                    n.partner!.white_logo_path ??
+                    n.partner!.color_logo_path ??
+                    ""
+                  }
+                  x={-boxW / 2}
+                  y={-boxH / 2}
+                  width={boxW}
+                  height={boxH}
+                  preserveAspectRatio="xMidYMid meet"
+                  imageRendering="optimizeQuality"
+                  style={
+                    !n.partner!.thumb_logo_path && !n.partner!.white_logo_path
+                      ? { filter: "grayscale(100%) brightness(1.1)" }
+                      : undefined
+                  }
+                />
+              </>
+            ) : n.name ? (
+              (() => {
+                const words = n.name.split(" ");
+                const nameLines: string[] = [];
+                let cur = "";
+                for (const w of words) {
+                  if (cur && (cur + " " + w).length > 11) {
+                    nameLines.push(cur);
+                    cur = w;
+                  } else cur = cur ? cur + " " + w : w;
+                }
+                if (cur) nameLines.push(cur);
+                const lineH = 13;
+                const totalSpan = (nameLines.length - 1) * lineH;
+                return (
+                  <>
+                    {nameLines.map((line, i) => (
+                      <text
+                        key={i}
+                        x={0}
+                        y={-totalSpan / 2 + i * lineH + 4}
+                        textAnchor="middle"
+                        fontSize={11}
+                        fill="white"
+                        fontWeight={700}
+                        letterSpacing="0.02em"
+                      >
+                        {line}
+                      </text>
+                    ))}
+                  </>
+                );
+              })()
+            ) : null}
+          </g>
+        </g>
+      </g>
+    );
+  }
+
   return (
     <div className="fixed inset-0 bg-crafd-bg">
       <svg
@@ -508,362 +800,34 @@ export default function PartnersVizClient({
             ))}
           </g>
 
-          {/* Hub-spoke connecting lines — drawn under hexes */}
+          {/* Non-locked hex nodes (below lines) */}
+          {ordered.filter((n) => !(n.kind === "partner" && lockedGroup?.has(n.id))).map(renderNode)}
+
+          {/* Hub-spoke connecting lines — above dimmed hexes, below locked hexes */}
           {projectLineData.map(({ hub, spoke, isSourceLine }, i) => {
             const dx = spoke.x - hub.x;
             const dy = spoke.y - hub.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist === 0) return null;
-            const ux = dx / dist,
-              uy = dy / dist;
-            const x1 = hub.x + ux * hub.r,
-              y1 = hub.y + uy * hub.r;
-            const x2 = spoke.x - ux * spoke.r,
-              y2 = spoke.y - uy * spoke.r;
+            const ux = dx / dist, uy = dy / dist;
+            const x1 = hub.x + ux * hub.r, y1 = hub.y + uy * hub.r;
+            const x2 = spoke.x - ux * spoke.r, y2 = spoke.y - uy * spoke.r;
             return (
               <g key={`conn-${i}-${hub.id}-${spoke.id}`}>
                 {isSourceLine && (
-                  <line
-                    x1={x1}
-                    y1={y1}
-                    x2={x2}
-                    y2={y2}
-                    stroke="white"
-                    strokeWidth={18}
-                    strokeOpacity={0.18}
-                    strokeLinecap="round"
-                  />
+                  <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="white" strokeWidth={18} strokeOpacity={0.18} strokeLinecap="round" />
                 )}
-                <line
-                  x1={x1}
-                  y1={y1}
-                  x2={x2}
-                  y2={y2}
-                  stroke="white"
-                  strokeWidth={isSourceLine ? 7 : 2.5}
-                  strokeOpacity={isSourceLine ? 0.95 : 0.7}
-                  strokeLinecap="round"
-                />
+                <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="white" strokeWidth={isSourceLine ? 7 : 2.5} strokeOpacity={isSourceLine ? 0.95 : 0.7} strokeLinecap="round" />
               </g>
             );
           })}
 
-          {/* Hex nodes */}
-          {ordered.map((n) => {
-            let nodeOpacity = n.kind === "partner" ? 0.95 : 1;
-            let nodeScale = 1;
-            let highlight = false;
+          {/* Locked hex nodes — above lines so hex corners cover the line ends */}
+          {ordered.filter((n) => n.kind === "partner" && !!lockedGroup?.has(n.id)).map(renderNode)}
 
-            if (lockedGroup !== null) {
-              if (n.kind === "outline") nodeOpacity = 0.1;
-              else if (n.kind === "center") nodeOpacity = 0.18;
-              else if (n.kind === "label") nodeOpacity = 0.07;
-              else if (n.id === lockedSourceNode?.id) {
-                nodeOpacity = 1;
-                nodeScale = 1.15;
-              } else if (lockedGroup.has(n.id)) {
-                if (hoveredOrgNodeId) {
-                  nodeOpacity = n.id === hoveredOrgNodeId ? 1 : 0.3;
-                  nodeScale = n.id === hoveredOrgNodeId ? 1.5 : 1.0;
-                } else if (hoveredProject) {
-                  const inProject = parseProjects(n.partner?.relational_project).has(hoveredProject);
-                  nodeOpacity = inProject ? 1 : 0.25;
-                  nodeScale = inProject ? 1.4 : 1.0;
-                } else {
-                  nodeOpacity = 1;
-                  nodeScale = 1.15;
-                }
-              } else {
-                nodeOpacity = 0.07;
-              }
-            } else if (hoveredPartner !== null && hoveredPartnerNode) {
-              if (n.kind === "label") nodeOpacity = 0.4;
-              else if (n.kind === "partner") {
-                const rf = hoveredPartnerNode.partner?.relational_project;
-                if (n.id === hoveredPartnerNode.id) {
-                  nodeScale = 1.5;
-                  nodeOpacity = 1;
-                  highlight = true;
-                } else if (
-                  rf &&
-                  projectsOverlap(n.partner?.relational_project, rf)
-                ) {
-                  nodeOpacity = 1;
-                  highlight = true;
-                } else {
-                  nodeOpacity = 0.35;
-                }
-              }
-            } else if (searchQuery.trim()) {
-              if (n.kind === "partner") {
-                const q = searchQuery.toLowerCase();
-                const hit =
-                  (n.name ?? "").toLowerCase().includes(q) ||
-                  (n.partner?.org_full_name ?? "").toLowerCase().includes(q);
-                nodeOpacity = hit ? 1 : 0.12;
-              }
-            } else if (hoveredLabel !== null) {
-              const isSameGroup =
-                (n.kind === "label" || n.kind === "partner") &&
-                n.label === hoveredLabel;
-              if (n.kind === "outline" || n.kind === "center") nodeOpacity = 1;
-              else if (isSameGroup)
-                nodeOpacity = n.kind === "partner" ? 0.9 : 1;
-              else nodeOpacity = 0.2;
-            }
-
-            // ── Non-partner nodes ─────────────────────────────────────────────
-            if (n.kind !== "partner") {
-              return (
-                <g
-                  key={n.id}
-                  data-node="true"
-                  data-kind={n.kind}
-                  onMouseEnter={() => {
-                    if (lockedGroup || isMobile) return;
-                    if (n.kind === "label") setHoveredLabel(n.label ?? null);
-                  }}
-                  onMouseLeave={() => {
-                    if (lockedGroup || isMobile) return;
-                    if (n.kind === "label") setHoveredLabel(null);
-                  }}
-                  style={{
-                    opacity: nodeOpacity,
-                    transition: "opacity 0.45s ease",
-                    cursor: n.kind === "label" ? "pointer" : "default",
-                  }}
-                >
-                  <path
-                    d={hexPaths.get(n.id) ?? ""}
-                    fill={fillFor(n, highlight)}
-                    stroke={strokeFor(n)}
-                    strokeWidth={strokeWidthFor(n)}
-                  />
-                  {n.kind === "center" && (
-                    <image
-                      href="/images/crafd-logo-full-black.svg"
-                      x={n.x - n.r * 0.54}
-                      y={n.y - n.r * 0.37}
-                      width={n.r * 1.08}
-                      height={n.r * 0.735}
-                      preserveAspectRatio="xMidYMid meet"
-                    />
-                  )}
-                  {n.kind === "label" && (
-                    <>
-                      <text
-                        x={n.x}
-                        y={n.y - 4}
-                        textAnchor="middle"
-                        fontSize="42"
-                        fill="black"
-                        fontWeight={1000}
-                        fontFamily="inherit"
-                      >
-                        {n.count}
-                        {n.label === "collaborating" ? "+" : ""}
-                      </text>
-                      {n.name?.split("\n").map((line, idx) => (
-                        <text
-                          key={idx}
-                          x={n.x}
-                          y={n.y + 20 + idx * 13}
-                          textAnchor="middle"
-                          fontSize="12"
-                          fill="black"
-                          fontWeight={1000}
-                        >
-                          {line}
-                        </text>
-                      ))}
-                    </>
-                  )}
-                </g>
-              );
-            }
-
-            // ── Partner nodes ─────────────────────────────────────────────────
-            const slug = toLogoSlug(n.partner?.org_short_name ?? n.name ?? "");
-            const boxW = n.r * 0.72;
-            const boxH = n.r * 0.62;
-            const isLocked = lockedGroup?.has(n.id) ?? false;
-            const isSource = lockedGroup !== null && n.id === lockedSourceNode?.id;
-
-            return (
-              <g
-                key={n.id}
-                data-node="true"
-                data-kind="partner"
-                data-label={n.label}
-                data-cx={n.x}
-                data-cy={n.y}
-                onMouseEnter={() => {
-                  if (lockedGroup || isMobile) return;
-                  setHoveredPartner(n.id);
-                }}
-                onMouseLeave={() => {
-                  if (lockedGroup || isMobile) return;
-                  setHoveredPartner(null);
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (isMobile && tappedNodeId !== n.id) {
-                    setTappedNodeId(n.id);
-                    setHoveredPartner(n.id);
-                    return;
-                  }
-                  if (isMobile) {
-                    setTappedNodeId(null);
-                    setHoveredPartner(null);
-                  }
-                  if (n.label === "donor") {
-                    setClickedNode(n);
-                    router.replace(
-                      `${pathname}?partner=${encodeURIComponent(n.partner?.org_short_name ?? n.name ?? "")}`,
-                    );
-                    return;
-                  }
-                  if (lockedGroup !== null) {
-                    if (isLocked) enterClickState1(n);
-                  } else {
-                    enterClickState1(n);
-                  }
-                }}
-                style={{
-                  opacity: nodeOpacity,
-                  transition: "opacity 0.45s ease",
-                  cursor:
-                    lockedGroup !== null
-                      ? isLocked
-                        ? "pointer"
-                        : "default"
-                      : "pointer",
-                }}
-              >
-                <g transform={`translate(${n.x},${n.y})`}>
-                  {/* Hub glow */}
-                  {hubIds.has(n.id) && (
-                    <>
-                      <path
-                        d={hexPaths.get(`${n.id}-outer`) ?? ""}
-                        fill="rgba(255,255,255,0.12)"
-                        stroke="white"
-                        strokeWidth={4}
-                        strokeLinecap="round"
-                        style={{ fillOpacity: 0.28, strokeOpacity: 0.7 }}
-                      />
-                      {([0, 0.8, 1.6] as const).map((delay) => (
-                        <path
-                          key={delay}
-                          d={hexPaths.get(`${n.id}-inner`) ?? ""}
-                          fill="rgba(255,255,255,0.10)"
-                          stroke="white"
-                          strokeWidth={2.5}
-                          strokeLinecap="round"
-                          className="hub-ring"
-                          style={{
-                            animationDelay: `${delay}s`,
-                            transformOrigin: "0 0",
-                          }}
-                        />
-                      ))}
-                    </>
-                  )}
-                  {/* Scale anchor at hex center */}
-                  <g
-                    style={{
-                      transformOrigin: "0 0",
-                      transform:
-                        nodeScale !== 1 ? `scale(${nodeScale})` : undefined,
-                      transition:
-                        "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
-                    }}
-                  >
-                    <path
-                      d={hexPaths.get(n.id) ?? ""}
-                      fill={fillFor(n, highlight)}
-                      stroke={isSource ? "white" : strokeFor(n)}
-                      strokeWidth={isSource ? 5 : strokeWidthFor(n)}
-                    />
-                    {n.label === "donor" ? (
-                      <>
-                        <image
-                          href={`/logos/countries/${slug}.svg`}
-                          x={-boxW / 2}
-                          y={-boxH / 2}
-                          width={boxW}
-                          height={boxH}
-                          preserveAspectRatio="xMidYMid meet"
-                        />
-                      </>
-                    ) : (n.partner?.thumb_logo_path ??
-                      n.partner?.white_logo_path ??
-                      n.partner?.color_logo_path) ? (
-                      <>
-                        <image
-                          href={
-                            n.partner!.thumb_logo_path ??
-                            n.partner!.white_logo_path ??
-                            n.partner!.color_logo_path ??
-                            ""
-                          }
-                          x={-boxW / 2}
-                          y={-boxH / 2}
-                          width={boxW}
-                          height={boxH}
-                          preserveAspectRatio="xMidYMid meet"
-                          imageRendering="optimizeQuality"
-                          style={
-                            !n.partner!.thumb_logo_path &&
-                            !n.partner!.white_logo_path
-                              ? { filter: "grayscale(100%) brightness(1.1)" }
-                              : undefined
-                          }
-                        />
-                      </>
-                    ) : n.name ? (
-                      (() => {
-                        const words = n.name.split(" ");
-                        const lines: string[] = [];
-                        let cur = "";
-                        for (const w of words) {
-                          if (cur && (cur + " " + w).length > 11) {
-                            lines.push(cur);
-                            cur = w;
-                          } else cur = cur ? cur + " " + w : w;
-                        }
-                        if (cur) lines.push(cur);
-                        const lineH = 13;
-                        const totalSpan = (lines.length - 1) * lineH;
-                        return (
-                          <>
-                            {lines.map((line, i) => (
-                              <text
-                                key={i}
-                                x={0}
-                                y={-totalSpan / 2 + i * lineH + 4}
-                                textAnchor="middle"
-                                fontSize={11}
-                                fill="white"
-                                fontWeight={700}
-                                letterSpacing="0.02em"
-                              >
-                                {line}
-                              </text>
-                            ))}
-                          </>
-                        );
-                      })()
-                    ) : null}
-                  </g>
-                </g>
-              </g>
-            );
-          })}
         </g>
         </g>
       </svg>
-
       {/* ── Ecosystem panel (click state 1) ────────────────────────────────── */}
       {lockedGroup && !clickedNode && lockedFeature !== null && (
         <EcosystemPanel
