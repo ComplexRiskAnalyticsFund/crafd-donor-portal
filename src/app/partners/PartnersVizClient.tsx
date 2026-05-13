@@ -723,18 +723,6 @@ export default function PartnersVizClient({
                           height={boxH}
                           preserveAspectRatio="xMidYMid meet"
                         />
-                        {hoveredPartner === n.id && n.name && (
-                          <text
-                            x={0}
-                            y={boxH / 2 + 14}
-                            textAnchor="middle"
-                            fontSize={9}
-                            fill="#1C1C1C"
-                            fontWeight={700}
-                          >
-                            {n.name}
-                          </text>
-                        )}
                       </>
                     ) : (n.partner?.thumb_logo_path ??
                       n.partner?.white_logo_path ??
@@ -760,18 +748,6 @@ export default function PartnersVizClient({
                               : undefined
                           }
                         />
-                        {hoveredPartner === n.id && n.name && (
-                          <text
-                            x={0}
-                            y={boxH / 2 + 14}
-                            textAnchor="middle"
-                            fontSize={9}
-                            fill="white"
-                            fontWeight={700}
-                          >
-                            {n.name}
-                          </text>
-                        )}
                       </>
                     ) : n.name ? (
                       (() => {
