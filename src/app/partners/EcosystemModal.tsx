@@ -106,7 +106,8 @@ export function EcosystemPanel({
           exit={isMobile ? { y: "100%" } : { x: "-100%" }}
           transition={{ type: "tween", ease: "easeInOut", duration: 0.18 }}
           className={cn(
-            "pointer-events-auto flex flex-col overflow-hidden text-white backdrop-blur-md",
+            "pointer-events-auto flex flex-col overflow-hidden text-white",
+            isMobile ? "backdrop-blur-sm" : "backdrop-blur-md",
             isMobile
               ? "absolute inset-x-0 bottom-0 border-t border-white/12"
               : "w-1/3 max-w-175 min-w-90 border-r border-white/8",

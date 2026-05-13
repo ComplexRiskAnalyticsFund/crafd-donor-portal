@@ -60,7 +60,13 @@
   fill-opacity: 0.38;
   stroke-opacity: 0.9;
   transform-origin: 0 0;
+  will-change: transform, opacity;
   animation: hub-ring-burst 2.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+}
+@media (max-width: 768px) {
+  .hub-ring {
+    animation-duration: 3s;
+  }
 }
 @keyframes hub-ring-burst {
   0% {

@@ -5,6 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import type { HexNode } from "@/app/partners/lib/label";
 import type { CrafdProject } from "@/types";
+import { cn } from "@/lib/utils";
 
 import {
   SQRT3,
@@ -278,9 +279,9 @@ export default function PartnersVizClient({
     const isMobileInit =
       typeof window !== "undefined" &&
       window.matchMedia("(max-width: 768px)").matches;
-    const RANGE = isMobileInit ? 14 : 28;
+    const RANGE = isMobileInit ? 10 : 28;
     const FADE_START = 200;
-    const FADE_END = isMobileInit ? 1200 : 2400;
+    const FADE_END = isMobileInit ? 900 : 2400;
     const cells: { d: string; key: string; opacity: number }[] = [];
     for (let q = -RANGE; q <= RANGE; q++) {
       for (let r = -RANGE; r <= RANGE; r++) {
@@ -526,7 +527,7 @@ export default function PartnersVizClient({
           }}
           style={{
             opacity: nodeOpacity,
-            transition: "opacity 0.45s ease",
+            transition: isMobile ? "opacity 0.2s ease" : "opacity 0.45s ease",
             cursor: n.kind === "label" ? "pointer" : "default",
           }}
         >
@@ -628,7 +629,7 @@ export default function PartnersVizClient({
         }}
         style={{
           opacity: nodeOpacity,
-          transition: "opacity 0.45s ease",
+          transition: isMobile ? "opacity 0.2s ease" : "opacity 0.45s ease",
           cursor: lockedGroup !== null ? (isLocked ? "pointer" : "default") : "pointer",
         }}
       >
@@ -697,7 +698,7 @@ export default function PartnersVizClient({
                   width={boxW}
                   height={boxH}
                   preserveAspectRatio="xMidYMid meet"
-                  imageRendering="optimizeQuality"
+                  imageRendering={isMobile ? "auto" : "optimizeQuality"}
                   style={
                     !n.partner!.thumb_logo_path && !n.partner!.white_logo_path
                       ? { filter: "grayscale(100%) brightness(1.1)" }
@@ -813,7 +814,10 @@ export default function PartnersVizClient({
           </g>
 
           {/* Background hex nodes — excludes hovered, locked, and clicked-donor partners */}
-          {ordered.filter((n) => !(n.kind === "partner" && (lockedGroup?.has(n.id) || n.id === hoveredPartner || n.id === clickedNode?.id))).map(renderNode)}
+          {ordered.map((n) => {
+            if (n.kind === "partner" && (lockedGroup?.has(n.id) || n.id === hoveredPartner || n.id === clickedNode?.id)) return null;
+            return renderNode(n);
+          })}
 
           {/* Hub-spoke connecting lines — above dimmed hexes, below locked hexes */}
           {projectLineData.map(({ hub, spoke, isSourceLine }, i) => {
@@ -834,27 +838,27 @@ export default function PartnersVizClient({
             );
           })}
 
+          {/* Locked hex nodes — dimmed project-hover nodes first, focused on top */}
+          {lockedGroup && ordered.map((n) => {
+            if (n.kind !== "partner" || !lockedGroup.has(n.id)) return null;
+            if (n.id === hoveredOrgNodeId) return null;
+            if (hoveredProject && parseProjects(n.partner?.relational_project).has(hoveredProject)) return null;
+            return renderNode(n);
+          })}
+          {hoveredProject && lockedGroup && ordered.map((n) => {
+            if (n.kind !== "partner" || !lockedGroup.has(n.id) || n.id === hoveredOrgNodeId) return null;
+            if (!parseProjects(n.partner?.relational_project).has(hoveredProject)) return null;
+            return renderNode(n);
+          })}
+
           {/* Hovered hex node — rendered last so it's always on top */}
-          {ordered.filter((n) => n.kind === "partner" && n.id === hoveredPartner).map(renderNode)}
+          {hoveredPartner && ordered.map((n) => (n.kind === "partner" && n.id === hoveredPartner) ? renderNode(n) : null)}
 
           {/* Clicked donor hex — topmost so scaled hex is never occluded */}
-          {clickedNode && ordered.filter((n) => n.kind === "partner" && n.id === clickedNode.id).map(renderNode)}
-
-
-          {/* Locked hex nodes — dimmed project-hover nodes first, focused on top */}
-          {ordered.filter((n) => {
-            if (!lockedGroup?.has(n.id) || n.kind !== "partner") return false;
-            if (n.id === hoveredOrgNodeId) return false;
-            if (hoveredProject) {
-              const inProject = parseProjects(n.partner?.relational_project).has(hoveredProject);
-              return !inProject; // dimmed ones first
-            }
-            return true;
-          }).map(renderNode)}
-          {hoveredProject && ordered.filter((n) => n.kind === "partner" && !!lockedGroup?.has(n.id) && n.id !== hoveredOrgNodeId && parseProjects(n.partner?.relational_project).has(hoveredProject)).map(renderNode)}
+          {clickedNode && ordered.map((n) => (n.kind === "partner" && n.id === clickedNode.id) ? renderNode(n) : null)}
 
           {/* Org-hovered locked node — topmost */}
-          {ordered.filter((n) => n.kind === "partner" && n.id === hoveredOrgNodeId).map(renderNode)}
+          {hoveredOrgNodeId && ordered.map((n) => (n.kind === "partner" && n.id === hoveredOrgNodeId) ? renderNode(n) : null)}
 
         </g>
         </g>
@@ -953,9 +957,9 @@ export default function PartnersVizClient({
       >
         <div
           className="ease flex items-center overflow-hidden transition-[width] duration-300"
-          style={{ width: searchOpen ? 240 : 0 }}
+          style={{ width: searchOpen ? (isMobile ? 180 : 240) : 0 }}
         >
-          <div className="relative flex w-60 items-center">
+          <div className={cn("relative flex items-center", isMobile ? "w-[180px]" : "w-60")}>
             <input
               type="text"
               value={searchQuery}

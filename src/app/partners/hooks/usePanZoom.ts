@@ -196,9 +196,12 @@ export function usePanZoom({
     onTouchEnd() {
       touchStartRef.current = null;
       pinchStartRef.current = null;
-      // Commit to React state so memos (opacity, ordering) stay in sync
-      setPan({ ...panRef.current });
-      setScale(scaleRef.current);
+      // Only commit to React state if the user actually panned/zoomed,
+      // avoids an unnecessary full re-render on simple taps
+      if (touchMovedRef.current) {
+        setPan({ ...panRef.current });
+        setScale(scaleRef.current);
+      }
     },
   };
 

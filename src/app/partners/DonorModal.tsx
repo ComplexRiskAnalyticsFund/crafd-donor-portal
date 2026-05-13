@@ -85,7 +85,8 @@ export function DonorPanel({
         exit={isMobile ? { y: "100%" } : { x: "-100%" }}
         transition={{ type: "tween", ease: "easeInOut", duration: 0.18 }}
         className={cn(
-          "pointer-events-auto flex flex-col overflow-hidden text-white backdrop-blur-md",
+          "pointer-events-auto flex flex-col overflow-hidden text-white",
+          isMobile ? "backdrop-blur-sm" : "backdrop-blur-md",
           isMobile
             ? "absolute inset-x-0 bottom-0 border-t border-white/10"
             : "h-full w-1/3 max-w-2xl min-w-80 border-r border-white/10",
