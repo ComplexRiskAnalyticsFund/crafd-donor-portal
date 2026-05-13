@@ -7,7 +7,17 @@ import styles from "./impact-map.module.css";
 
 interface HexTile { x: number; y: number; region: string }
 interface TileData { width: number; height: number; hexRadius: number; tiles: HexTile[] }
-interface Props { projects: CrafdProject[] }
+interface Props { projects: CrafdProject[]; variant?: "flat" | "density" }
+
+const DENSITY_LOW: [number, number, number] = [246, 210, 133]; // #F6D285 — floor (fewest)
+const DENSITY_HIGH: [number, number, number] = [253, 247, 234]; // #FDF7EA — ceiling (most)
+
+function lerpHex(a: [number, number, number], b: [number, number, number], t: number): string {
+  const r = Math.round(a[0] + (b[0] - a[0]) * t);
+  const g = Math.round(a[1] + (b[1] - a[1]) * t);
+  const bl = Math.round(a[2] + (b[2] - a[2]) * t);
+  return `rgb(${r},${g},${bl})`;
+}
 
 const EXCLUDED_PROJECTS = new Set(["CRAF'd Direct Costs", "CRAF'd Sec.Direct Cost 2022"]);
 
@@ -26,7 +36,7 @@ function hexPoints(cx: number, cy: number, r: number): string {
   }).join(" ");
 }
 
-export default function ImpactMap({ projects }: Props) {
+export default function ImpactMap({ projects, variant = "flat" }: Props) {
   const [tileData, setTileData] = useState<TileData | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const [locked, setLocked] = useState<string | null>(null);
@@ -53,6 +63,26 @@ export default function ImpactMap({ projects }: Props) {
     }
     return map;
   }, [filteredProjects]);
+
+  const regionDensity = useMemo(() => {
+    if (variant !== "density") return null;
+    const globalCount = projectsByRegion.get("Global")?.length ?? 0;
+    const map = new Map<string, number>();
+    for (const [r, ps] of projectsByRegion) {
+      if (r === "Global") continue;
+      map.set(r, globalCount + ps.length);
+    }
+    const maxDensity = map.size > 0 ? Math.max(...map.values()) : globalCount;
+    return { map, globalCount, maxDensity };
+  }, [projectsByRegion, variant]);
+
+  function densityFill(region: string): string {
+    if (!regionDensity) return "rgba(255,255,255,0.28)";
+    const { map, globalCount, maxDensity } = regionDensity;
+    const count = map.get(region) ?? globalCount;
+    const t = maxDensity === globalCount ? 0 : (count - globalCount) / (maxDensity - globalCount);
+    return lerpHex(DENSITY_LOW, DENSITY_HIGH, t);
+  }
 
   const regionCentroids = useMemo(() => {
     if (!tileData) return new Map<string, [number, number]>();
@@ -118,9 +148,13 @@ export default function ImpactMap({ projects }: Props) {
                   <polygon
                     key={i}
                     points={hexPoints(t.x, t.y, drawR)}
-                    fill={hl ? "rgba(255,255,255,0.80)" : "rgba(255,255,255,0.28)"}
-                    stroke={isLock ? "rgba(68,42,10,0.7)" : hl ? "rgba(68,42,10,0.45)" : "rgba(255,255,255,0.30)"}
-                    strokeWidth={isLock ? 2 : hl ? 1.6 : 0.8}
+                    fill={hl ? "rgba(255,255,255,0.80)" : densityFill(region)}
+                    stroke={variant === "density"
+                      ? (isLock ? "rgba(68,42,10,0.5)" : hl ? "rgba(68,42,10,0.6)" : "none")
+                      : (isLock ? "rgba(68,42,10,0.7)" : hl ? "rgba(68,42,10,0.45)" : "rgba(255,255,255,0.30)")}
+                    strokeWidth={variant === "density"
+                      ? (isLock ? 2 : hl ? 1.5 : 0)
+                      : (isLock ? 2 : hl ? 1.6 : 0.8)}
                     style={{ transition: "fill 140ms ease, stroke 140ms ease" }}
                   />
                 ))}
@@ -133,31 +167,33 @@ export default function ImpactMap({ projects }: Props) {
           const [line1, line2] = splitLabel(region);
           const hl = isHighlighted(region);
           const maxLen = Math.max(line1.length, line2?.length ?? 0);
-          const bgW = maxLen * 6.8 + 14;
-          const bgH = line2 ? 30 : 16;
+          const bgW = maxLen * 9 + 18;
+          const bgH = line2 ? 40 : 27;
           return (
             <g key={region} style={{ pointerEvents: "none", userSelect: "none" }}>
               {hl && (
                 <rect
                   x={cx - bgW / 2}
-                  y={cy - (line2 ? 17 : 9)}
+                  y={cy - (line2 ? 20 : 23)}
                   width={bgW}
                   height={bgH}
-                  rx={4}
-                  fill="white"
-                  opacity={0.88}
+                  rx={5}
+                  fill={variant === "density" ? "#FDF7EA" : "rgba(255,255,255,0.88)"}
                 />
               )}
               <text
                 textAnchor="middle"
-                fontFamily="Qanelas, Roboto, sans-serif"
-                fontWeight={900}
-                fontSize={12}
-                letterSpacing={0.4}
-                fill={hl ? "rgba(68,42,10,0.95)" : "rgba(68,42,10,0.52)"}
+                fontFamily="Roboto, sans-serif"
+                fontWeight={500}
+                fontSize={14}
+                letterSpacing={0.5}
+                fill={variant === "density" ? "#BC840F" : (hl ? "rgba(68,42,10,0.95)" : "rgba(68,42,10,0.52)")}
+                stroke={variant === "density" ? "rgba(68,42,10,0.65)" : undefined}
+                strokeWidth={variant === "density" ? 0.5 : undefined}
+                style={variant === "density" ? { paintOrder: "stroke fill" } : undefined}
               >
                 <tspan x={cx} y={cy - 5}>{line1}</tspan>
-                {line2 && <tspan x={cx} dy={14}>{line2}</tspan>}
+                {line2 && <tspan x={cx} dy={16}>{line2}</tspan>}
               </text>
             </g>
           );
