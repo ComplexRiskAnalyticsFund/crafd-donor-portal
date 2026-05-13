@@ -28,7 +28,7 @@ function ProjectVisitLink({ href }: { href: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 self-start rounded-md bg-[#F1B434] px-4 py-2 text-[0.72rem] font-extrabold tracking-[0.08em] text-black uppercase no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+      className="inline-flex items-center gap-2 self-start rounded-md bg-crafd-yellow px-4 py-2 text-[0.72rem] font-extrabold tracking-[0.08em] text-black uppercase no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
     >
       <svg
         width="13"
@@ -164,7 +164,7 @@ export function EcosystemPanel({
                 )}
                 <div className="flex flex-col gap-1">
                   <h1
-                    className="m-0 leading-[1.15] font-normal tracking-[0.03em] text-[#F1B434] uppercase"
+                    className="m-0 leading-[1.15] font-normal tracking-[0.03em] text-crafd-yellow uppercase"
                     style={{ fontSize: isMobile ? "1.2rem" : "1.6rem" }}
                   >
                     Ecosystem of{" "}
@@ -226,7 +226,7 @@ export function EcosystemPanel({
                   id={`cs1-proj-${idx}`}
                   className="flex flex-col"
                 >
-                  <div className="border-l-[3px] border-[#F1B434] pl-[0.6rem]">
+                  <div className="border-l-[3px] border-crafd-yellow pl-[0.6rem]">
                     <button
                       onClick={toggleProj}
                       className="flex w-full cursor-pointer items-start justify-between gap-3 border-none bg-transparent pb-[0.45rem] text-left text-white"
@@ -245,7 +245,7 @@ export function EcosystemPanel({
                               ? "Collaborating Partner"
                               : null;
                           return role ? (
-                            <span className="font-bold text-[#F1B434]">
+                            <span className="font-bold text-crafd-yellow">
                               {role}
                               <span className="mx-[0.4rem] opacity-40">|</span>
                             </span>

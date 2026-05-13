@@ -41,7 +41,7 @@ export function fillFor(n: HexNode, highlighted = false) {
 }
 
 export function strokeFor(n: HexNode): string {
-  if (n.kind === "partner" && n.label === "donor") return "#F1B434";
+  if (n.kind === "partner" && n.label === "donor") return "var(--color-crafd-yellow)";
   return "white";
 }
 

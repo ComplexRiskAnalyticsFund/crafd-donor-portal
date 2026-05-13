@@ -162,6 +162,7 @@ details:not([open]) > summary .summary-arrow::after {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-crafd-yellow: #f1b434;
+  --color-crafd-bg: #fdb53c;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

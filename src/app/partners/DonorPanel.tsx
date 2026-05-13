@@ -22,7 +22,7 @@ function ProjectVisitLink({ href }: { href: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 self-start rounded-md bg-[#F1B434] px-4 py-2 text-[0.72rem] font-extrabold tracking-[0.08em] text-black uppercase no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+      className="inline-flex items-center gap-2 self-start rounded-md bg-crafd-yellow px-4 py-2 text-[0.72rem] font-extrabold tracking-[0.08em] text-black uppercase no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
     >
       <svg
         width="13"
@@ -133,7 +133,7 @@ export function DonorPanel({
 
             {/* Title */}
             <div className="min-w-0 flex-1">
-              <p className="m-0 mb-[0.3rem] text-[0.65rem] tracking-[0.12em] text-[#F1B434] uppercase">
+              <p className="m-0 mb-[0.3rem] text-[0.65rem] tracking-[0.12em] text-crafd-yellow uppercase">
                 Donor Partner
               </p>
               <h1 className="m-0 text-[1.1rem] leading-[1.2] font-extrabold tracking-[0.02em] text-white uppercase">
@@ -200,7 +200,7 @@ export function DonorPanel({
 
                 {pd.grant_size && (
                   <div className="flex flex-wrap gap-2">
-                    <span className="inline-flex items-center rounded-md border border-[rgba(241,180,52,0.35)] bg-[rgba(241,180,52,0.12)] px-[0.55rem] py-[0.2rem] text-[0.9rem] font-bold text-[#F1B434]">
+                    <span className="inline-flex items-center rounded-md border border-crafd-yellow/35 bg-crafd-yellow/12 px-[0.55rem] py-[0.2rem] text-[0.9rem] font-bold text-crafd-yellow">
                       {formatGrantSize(pd.grant_size)}
                     </span>
                     {pd.duration_months && (

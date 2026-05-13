@@ -112,7 +112,7 @@ export default function PartnersVizClient({
     };
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
-    document.body.style.background = "#FDB53C";
+    document.body.style.background = "var(--color-crafd-bg)";
     return () => {
       document.documentElement.style.overflow = "";
       document.body.style.overflow = prev.overflow;
@@ -385,7 +385,7 @@ export default function PartnersVizClient({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="fixed inset-0" style={{ background: "#FDB53C" }}>
+    <div className="fixed inset-0 bg-crafd-bg">
       <svg
         ref={svgRef}
         viewBox="-900 -500 1800 1000"
