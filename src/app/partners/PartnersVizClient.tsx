@@ -19,8 +19,8 @@ import {
 } from "./lib/utils";
 import { usePanZoom } from "./hooks/usePanZoom";
 import { useHexAnimation } from "./hooks/useHexAnimation";
-import { EcosystemPanel } from "./EcosystemPanel";
-import { DonorPanel } from "./DonorPanel";
+import { EcosystemPanel } from "./EcosystemModal";
+import { DonorPanel } from "./DonorModal";
 
 export default function PartnersVizClient({
   initialNodes,
@@ -89,7 +89,12 @@ export default function PartnersVizClient({
     touchMovedRef,
   } = usePanZoom({ svgRef, closeAll });
 
-  useHexAnimation({ renderNodes, svgRef, isMobileRef });
+  const hasUrlState = !!(
+    searchParams.get("projects") ||
+    searchParams.get("org") ||
+    searchParams.get("partner")
+  );
+  useHexAnimation({ renderNodes, svgRef, isMobileRef, skipIntro: hasUrlState });
 
   // Keep mobile ref in sync
   useEffect(() => {

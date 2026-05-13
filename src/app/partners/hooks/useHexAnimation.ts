@@ -8,12 +8,15 @@ export function useHexAnimation({
   renderNodes,
   svgRef,
   isMobileRef,
+  skipIntro = false,
 }: {
   renderNodes: HexNode[];
   svgRef: React.RefObject<SVGSVGElement | null>;
   isMobileRef: React.RefObject<boolean>;
+  skipIntro?: boolean;
 }) {
   const animTlRef = useRef<gsap.core.Timeline | null>(null);
+  const skipIntroRef = useRef(skipIntro);
 
   // useLayoutEffect: runs synchronously after DOM update but before browser paint,
   // so gsap.set(opacity:0) hides nodes before they're ever visible — no flash.
@@ -28,6 +31,12 @@ export function useHexAnimation({
     if (partnerGs.length === 0) return;
 
     partnerGs.forEach((el) => gsap.set(el, { opacity: 0 }));
+
+    // Skip intro when restoring from URL — hexes must be visible before lines render
+    if (skipIntroRef.current) {
+      gsap.set(partnerGs, { opacity: 1, scale: 1, clearProps: "transform,transformOrigin" });
+      return;
+    }
 
     // Mobile: simple fade-in to avoid the heavy staggered scale on low-end GPUs
     if (isMobileRef.current) {
