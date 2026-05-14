@@ -348,13 +348,12 @@ export default function PartnersVizClient({
         parseProjects(n.partner?.relational_project).has(proj),
       );
       if (projNodes.length < 2) return [];
+      // Use per-project linked_lead_org to identify the actual lead for THIS project
+      const pd = projectsById[proj];
       const hub =
         projNodes.find((n) =>
-          n.partner?.crafd_connection?.some(
-            (c) =>
-              c.toLowerCase().includes("project lead") ||
-              c.toLowerCase().includes("lead project"),
-          ),
+          n.partner?.airtable_id != null &&
+          pd?.linked_lead_org?.includes(n.partner.airtable_id),
         ) ??
         (lockedSourceNode && projNodes.some((n) => n.id === lockedSourceNode.id)
           ? lockedSourceNode
@@ -370,7 +369,7 @@ export default function PartnersVizClient({
             hub.id === lockedSourceNode?.id,
         }));
     });
-  }, [lockedGroup, lockedNodes, lockedFeature, lockedSourceNode]);
+  }, [lockedGroup, lockedNodes, lockedFeature, lockedSourceNode, projectsById]);
 
   const hubIds = useMemo(() => {
     const set = new Set<string>();
@@ -434,13 +433,11 @@ export default function PartnersVizClient({
         const projNodes = lockedPartners.filter((n) =>
           parseProjects(n.partner?.relational_project).has(proj),
         );
+        const pd = projectsById[proj];
         const hub =
           projNodes.find((n) =>
-            n.partner?.crafd_connection?.some(
-              (c) =>
-                c.toLowerCase().includes("project lead") ||
-                c.toLowerCase().includes("lead project"),
-            ),
+            n.partner?.airtable_id != null &&
+            pd?.linked_lead_org?.includes(n.partner.airtable_id),
           ) ??
           (lockedSourceNode &&
           projNodes.some((n) => n.id === lockedSourceNode.id)
@@ -480,13 +477,11 @@ export default function PartnersVizClient({
         const projNodes = lockedPartners.filter((n) =>
           parseProjects(n.partner?.relational_project).has(proj),
         );
+        const pd = projectsById[proj];
         const hub =
           projNodes.find((n) =>
-            n.partner?.crafd_connection?.some(
-              (c) =>
-                c.toLowerCase().includes("project lead") ||
-                c.toLowerCase().includes("lead project"),
-            ),
+            n.partner?.airtable_id != null &&
+            pd?.linked_lead_org?.includes(n.partner.airtable_id),
           ) ??
           (lockedSourceNode &&
           projNodes.some((n) => n.id === lockedSourceNode.id)
@@ -524,6 +519,7 @@ export default function PartnersVizClient({
     lockedGroup,
     lockedFeature,
     lockedSourceNode,
+    projectsById,
   ]);
 
   // ── Render ─────────────────────────────────────────────────────────────────

@@ -479,8 +479,7 @@ export function EcosystemPanel({
                                   {otherPartners.length > 0 && (
                                     <div>
                                       <p className="m-0 mb-0.5 text-xs font-bold tracking-widest text-white/35 uppercase">
-                                        All Collaborating &amp; Implementing
-                                        Partners
+                                        Project Collaborating Partners
                                       </p>
                                       {renderPartnerList(otherPartners)}
                                     </div>
