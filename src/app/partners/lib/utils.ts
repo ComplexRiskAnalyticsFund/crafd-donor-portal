@@ -4,7 +4,7 @@ export const SQRT3 = Math.sqrt(3);
 export const HEX_SIZE = 75;
 export const GRID_LIMIT = 2400;
 export const MIN_SCALE = 0.4;
-export const MAX_SCALE = 2;
+export const MAX_SCALE = 3.5;
 
 export function clampPan(x: number, y: number, s: number) {
   const maxX = Math.max(0, GRID_LIMIT * s - 900);
