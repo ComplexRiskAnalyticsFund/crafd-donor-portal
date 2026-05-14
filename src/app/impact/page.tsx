@@ -1,5 +1,5 @@
 import { getProjects } from "@/lib/data/partners";
-import ImpactMap from "./ImpactMap";
+import ImpactMapClient from "./ImpactMapClient";
 
 export default async function ImpactPage({
   searchParams,
@@ -8,5 +8,5 @@ export default async function ImpactPage({
 }) {
   const { v } = await searchParams;
   const projects = await getProjects();
-  return <ImpactMap projects={projects} variant={v === "2" ? "density" : "flat"} />;
+  return <ImpactMapClient projects={projects} variant={v === "2" ? "density" : "flat"} />;
 }

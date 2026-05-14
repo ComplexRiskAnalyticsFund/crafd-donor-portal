@@ -5,8 +5,8 @@ import type { CrafdProject } from "@/types";
 import { coverageToRegions } from "./coverage-map";
 import styles from "./impact-map.module.css";
 
-interface HexTile { x: number; y: number; region: string }
-interface TileData { width: number; height: number; hexRadius: number; tiles: HexTile[] }
+interface HexTile { x: number; y: number }
+interface TileData { width: number; height: number; hexRadius: number; tilesByRegion: Record<string, HexTile[]> }
 interface Props { projects: CrafdProject[]; variant?: "flat" | "density" }
 
 const DENSITY_LOW: [number, number, number] = [246, 210, 133]; // #F6D285 — floor (fewest)
@@ -48,9 +48,12 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
   const activeRegion = locked ?? hovered ?? "Global";
 
   useEffect(() => {
-    fetch("/data/hex-tiles.json")
+    const ctrl = new AbortController();
+    fetch("/data/hex-tiles.json", { signal: ctrl.signal })
       .then((r) => r.json())
-      .then(setTileData);
+      .then(setTileData)
+      .catch(() => {});
+    return () => ctrl.abort();
   }, []);
 
   const filteredProjects = useMemo(
@@ -96,16 +99,12 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
 
   const regionCentroids = useMemo(() => {
     if (!tileData) return new Map<string, [number, number]>();
-    const sums = new Map<string, { x: number; y: number; n: number }>();
-    for (const t of tileData.tiles) {
-      const s = sums.get(t.region) ?? { x: 0, y: 0, n: 0 };
-      s.x += t.x;
-      s.y += t.y;
-      s.n += 1;
-      sums.set(t.region, s);
-    }
     const out = new Map<string, [number, number]>();
-    for (const [r, s] of sums) out.set(r, [s.x / s.n, s.y / s.n]);
+    for (const [region, tiles] of Object.entries(tileData.tilesByRegion)) {
+      const cx = tiles.reduce((s, t) => s + t.x, 0) / tiles.length;
+      const cy = tiles.reduce((s, t) => s + t.y, 0) / tiles.length;
+      out.set(region, [cx, cy]);
+    }
     return out;
   }, [tileData]);
 
@@ -145,11 +144,11 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
           y={-60}
           width={tileData.width + 120}
           height={tileData.height + 120}
-          fill="#F1B434"
+          fill="#fdb53c"
         />
 
         {/* Tiles */}
-        {Array.from(new Set(tileData.tiles.map((t) => t.region))).map((region) => {
+        {Object.entries(tileData.tilesByRegion).map(([region, tiles]) => {
           const hl = isHighlighted(region);
           const isLock = locked === region;
           return (
@@ -160,22 +159,20 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
               onClick={(e) => handleTileClick(e, region)}
               style={{ cursor: "pointer" }}
             >
-              {tileData.tiles
-                .filter((t) => t.region === region)
-                .map((t, i) => (
-                  <polygon
-                    key={i}
-                    points={hexPoints(t.x, t.y, drawR)}
-                    fill={hl ? "rgba(255,255,255,0.80)" : densityFill(region)}
-                    stroke={variant === "density"
-                      ? (isLock ? "rgba(68,42,10,0.5)" : hl ? "rgba(68,42,10,0.6)" : "none")
-                      : (isLock ? "rgba(68,42,10,0.7)" : hl ? "rgba(68,42,10,0.45)" : "rgba(255,255,255,0.30)")}
-                    strokeWidth={variant === "density"
-                      ? (isLock ? 2 : hl ? 1.5 : 0)
-                      : (isLock ? 2 : hl ? 1.6 : 0.8)}
-                    style={{ transition: "fill 140ms ease, stroke 140ms ease" }}
-                  />
-                ))}
+              {tiles.map((t, i) => (
+                <polygon
+                  key={i}
+                  points={hexPoints(t.x, t.y, drawR)}
+                  fill={variant === "density" ? (hl ? "rgba(255,255,255,0.80)" : densityFill(region)) : "white"}
+                  stroke={variant === "density"
+                    ? (isLock ? "rgba(68,42,10,0.5)" : hl ? "rgba(68,42,10,0.6)" : "none")
+                    : (isLock ? "rgba(0,0,0,0.75)" : hl ? "rgba(0,0,0,0.5)" : "none")}
+                  strokeWidth={variant === "density"
+                    ? (isLock ? 2 : hl ? 1.5 : 0)
+                    : (isLock ? 2 : hl ? 1.5 : 0)}
+                  style={{ transition: "fill 140ms ease, stroke 140ms ease" }}
+                />
+              ))}
             </g>
           );
         })}
@@ -223,87 +220,41 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
 
       {/* ── Modal ────────────────────────────────────────── */}
       <div className={styles.card} onClick={(e) => e.stopPropagation()}>
-        {/* Zone 1 — region identity (always present) */}
+
+        {/* Zone 1 — region identity */}
         <div className={styles.zoneLeft}>
           {isSelected ? (
             <>
               <p className={styles.zoneEyebrow}>Selected region</p>
               <h2 className={styles.zoneTitle}>{activeRegion}</h2>
-              {locked && (
-                <button
-                  className={styles.unlockBtn}
-                  onClick={() => setLocked(null)}
-                >
-                  ✕ Unlock
-                </button>
-              )}
             </>
           ) : (
             <>
               <p className={styles.zoneEyebrow}>Worldwide</p>
-              <h2 className={styles.zoneTitle}>Global view</h2>
-              <p className={styles.zoneHint}>
-                Hover or click a region to explore
-              </p>
+              <h2 className={styles.zoneTitle}>Global</h2>
+              <p className={styles.zoneHint}>Hover on regions to see<br />region specific projects</p>
             </>
           )}
         </div>
 
         <div className={styles.zoneDivider} />
 
-        {/* Zone 2 — regional projects (only when a region is selected) */}
-        {isSelected && (
-          <>
-            <div className={styles.zoneMiddle}>
-              <p className={styles.zoneLabel}>In this region</p>
-              {hasRegional ? (
-                <ul className={styles.projectList}>
-                  {regionalProjects.map((p) => (
-                    <li
-                      key={p.project_short_title}
-                      className={styles.projectBlock}
-                    >
-                      {p.project_url ? (
-                        <a
-                          href={p.project_url}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {p.project_short_title}
-                        </a>
-                      ) : (
-                        <span>{p.project_short_title}</span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className={styles.emptyState}>
-                  No targeted projects in this region
-                </p>
-              )}
-            </div>
-            <div className={styles.zoneDivider} />
-          </>
-        )}
-
-        {/* Zone 3 — global projects (always present) */}
+        {/* Zone 2 — projects: global by default, regional when region has targeted projects */}
         <div className={styles.zoneRight}>
-          <p className={styles.zoneLabel}>Global</p>
+          <p className={styles.zoneLabel}>
+            {isSelected && hasRegional ? "Targeting this region" : "Global projects"}
+          </p>
           <ul className={styles.projectList}>
-            {globalProjects.map((p) => (
+            {(isSelected && hasRegional ? regionalProjects : globalProjects).map((p) => (
               <li key={p.project_short_title} className={styles.projectBlock}>
-                {p.project_url ? (
-                  <a href={p.project_url} target="_blank" rel="noreferrer">
-                    {p.project_short_title}
-                  </a>
-                ) : (
-                  <span>{p.project_short_title}</span>
-                )}
+                {p.project_url
+                  ? <a href={p.project_url} target="_blank" rel="noreferrer">{p.project_short_title}</a>
+                  : <span>{p.project_short_title}</span>}
               </li>
             ))}
           </ul>
         </div>
+
       </div>
     </div>
   );

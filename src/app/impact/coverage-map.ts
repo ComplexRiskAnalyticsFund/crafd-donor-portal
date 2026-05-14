@@ -61,6 +61,8 @@ const COVERAGE_MAP: Record<string, UNRegion[]> = {
   "west & east africa": ["Western Africa", "Eastern Africa"],
   "clifdew-grid": ["Western Africa", "Eastern Africa"],
 
+  "east africa & mena": ["Eastern Africa", "Western Asia", "Northern Africa"],
+
   "middle east": ["Western Asia"],
   mena: ["Western Asia", "Northern Africa"],
   "middle east and north africa": ["Western Asia", "Northern Africa"],

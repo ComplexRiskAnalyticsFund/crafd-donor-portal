@@ -30,18 +30,18 @@ const hexbin = d3hexbin()
 
 function getRegion(lon, lat) {
   if (lat < -58) return null;
-  if (lon >= -170 && lon <= -50 && lat >= 15 && lat <= 85) return "Northern America";
-  if (lon >= -118 && lon <= -75 && lat >= 7 && lat < 25) return "Central America";
   if (lon >= -85 && lon <= -58 && lat >= 10 && lat <= 27) return "Caribbean";
+  if (lon >= -120 && lon <= -77 && lat >= 7 && lat < 30)  return "Central America";
   if (lon >= -82 && lon <= -34 && lat >= -56 && lat < 13) return "South America";
+  if (lon >= -170 && lon <= -50 && lat >= 24 && lat <= 85) return "Northern America";
   if (lon >= -25 && lon <= 40 && lat >= 56) return "Northern Europe";
   if (lon >= -12 && lon <= 8 && lat >= 43 && lat < 56) return "Western Europe";
   if (lon >= -10 && lon <= 35 && lat >= 35 && lat < 43) return "Southern Europe";
   if (lon >= 8 && lon <= 60 && lat >= 43 && lat < 56) return "Eastern Europe";
-  if (lon >= -17 && lon <= 35 && lat >= 20 && lat < 37) return "Northern Africa";
+  if (lon >= -17 && lon <= 40 && lat >= 20 && lat < 38) return "Northern Africa";
   if (lon >= -20 && lon <= 15 && lat >= 0 && lat < 20) return "Western Africa";
-  if (lon >= 8 && lon <= 32 && lat >= -10 && lat < 8) return "Middle Africa";
-  if (lon >= 28 && lon <= 52 && lat >= -12 && lat < 16) return "Eastern Africa";
+  if (lon >= 8 && lon <= 32 && lat >= -10 && lat < 20) return "Middle Africa"; // expanded lat (fills Chad/CAR gap)
+  if (lon >= 28 && lon <= 52 && lat >= -12 && lat < 22) return "Eastern Africa"; // expanded lat (fills Eritrea/Horn gap)
   if (lon >= 10 && lon <= 42 && lat >= -35 && lat < -10) return "Southern Africa";
   if (lon >= 30 && lon <= 60 && lat >= 20 && lat < 42) return "Western Asia";
   if (lon >= 50 && lon <= 90 && lat >= 36 && lat < 56) return "Central Asia";
@@ -77,20 +77,21 @@ console.log(`Sampled ${labeledPoints.length} land points`);
 console.log("Binning into hexagons...");
 const bins = hexbin(labeledPoints);
 
-const tiles = bins.map((bin) => {
+const tilesByRegion = {};
+for (const bin of bins) {
   const counts = {};
-  bin.forEach((pt) => {
-    const region = pt[2];
-    counts[region] = (counts[region] || 0) + 1;
-  });
+  bin.forEach((pt) => { counts[pt[2]] = (counts[pt[2]] || 0) + 1; });
   const region = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
-  return { x: Math.round(bin.x * 10) / 10, y: Math.round(bin.y * 10) / 10, region };
-});
+  if (!tilesByRegion[region]) tilesByRegion[region] = [];
+  tilesByRegion[region].push({ x: Math.round(bin.x * 10) / 10, y: Math.round(bin.y * 10) / 10 });
+}
 
-console.log(`Generated ${tiles.length} hex tiles`);
+const totalTiles = Object.values(tilesByRegion).reduce((s, arr) => s + arr.length, 0);
+console.log(`Generated ${totalTiles} hex tiles across ${Object.keys(tilesByRegion).length} regions`);
 
 const outDir = join(ROOT, "public", "data");
 mkdirSync(outDir, { recursive: true });
 const outPath = join(outDir, "hex-tiles.json");
-writeFileSync(outPath, JSON.stringify({ width: WIDTH, height: HEIGHT, hexRadius: HEX_RADIUS, tiles }, null, 0));
-console.log(`Written to ${outPath} (${(Buffer.byteLength(JSON.stringify(tiles)) / 1024).toFixed(1)} KB)`);
+const payload = { width: WIDTH, height: HEIGHT, hexRadius: HEX_RADIUS, tilesByRegion };
+writeFileSync(outPath, JSON.stringify(payload, null, 0));
+console.log(`Written to ${outPath} (${(Buffer.byteLength(JSON.stringify(payload)) / 1024).toFixed(1)} KB)`);
