@@ -26,7 +26,7 @@ export function DonorPanel({
   setSheetSnap,
   onClose,
 }: DonorPanelProps) {
-  const { sheetStyle, isDragging, handleDragStart, handleDragMove, handleDragEnd } =
+  const { motionAnimate, motionTransition, handleDragStart, handleDragMove, handleDragEnd } =
     useSheetDrag({ sheetSnap, setSheetSnap, onClose });
 
   const p = clickedNode.partner;
@@ -56,9 +56,9 @@ export function DonorPanel({
       <motion.div
         key={`donor-panel-${clickedNode.id}`}
         initial={isMobile ? { y: "100%" } : { x: "-100%" }}
-        animate={isMobile ? { y: 0 } : { x: 0 }}
+        animate={isMobile ? motionAnimate : { x: 0 }}
         exit={isMobile ? { y: "100%" } : { x: "-100%" }}
-        transition={{ type: "tween", ease: "easeInOut", duration: 0.18 }}
+        transition={isMobile ? motionTransition : { type: "tween", ease: "easeInOut", duration: 0.18 }}
         className={cn(
           "pointer-events-auto flex flex-col overflow-hidden text-white",
           isMobile ? "backdrop-blur-sm" : "backdrop-blur-md",
@@ -73,7 +73,7 @@ export function DonorPanel({
         )}
         style={{
           background: isMobile ? "rgba(8,8,8,0.96)" : "rgba(8,8,8,0.93)",
-          ...(isMobile && sheetStyle),
+          ...(isMobile && { height: "100dvh" }),
         }}
         data-modal="true"
         onClick={(e) => e.stopPropagation()}

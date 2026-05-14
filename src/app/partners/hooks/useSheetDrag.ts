@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useRef, useState } from "react";
+import type { Transition } from "framer-motion";
 
 export function useSheetDrag({
   sheetSnap,
@@ -40,20 +41,21 @@ export function useSheetDrag({
     [sheetSnap, setSheetSnap, onClose],
   );
 
-  /** Inline style to apply on the sheet's motion.div (mobile only). */
-  const sheetStyle = {
-    height: "100dvh" as const,
-    transform: `translateY(calc(${sheetSnap === "full" ? "0%" : "50%"} + ${dragOffset}px))`,
-    transition: dragging.current
-      ? "none"
-      : "transform 0.3s cubic-bezier(0.32,0.72,0,1)",
-    willChange: dragging.current ? ("transform" as const) : ("auto" as const),
-  };
+  // Framer-motion animate target — includes snap position + live drag offset.
+  // During drag, framer-motion uses duration:0 for instant tracking.
+  const snapY = sheetSnap === "full" ? "0%" : "50%";
+  const motionAnimate = dragOffset
+    ? { y: `calc(${snapY} + ${dragOffset}px)` }
+    : { y: snapY };
+  const motionTransition: Transition = dragging.current
+    ? { duration: 0 }
+    : { type: "tween", ease: [0.32, 0.72, 0, 1] as [number, number, number, number], duration: 0.3 };
 
   return {
     dragOffset,
     isDragging: dragging,
-    sheetStyle,
+    motionAnimate,
+    motionTransition,
     handleDragStart,
     handleDragMove,
     handleDragEnd,

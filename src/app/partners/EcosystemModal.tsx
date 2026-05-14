@@ -40,7 +40,7 @@ export function EcosystemPanel({
   onProjectHover,
   onOrgHover,
 }: EcosystemPanelProps) {
-  const { sheetStyle, isDragging, handleDragStart, handleDragMove, handleDragEnd } =
+  const { motionAnimate, motionTransition, handleDragStart, handleDragMove, handleDragEnd } =
     useSheetDrag({ sheetSnap, setSheetSnap, onClose });
 
   const projects = [...parseProjects(lockedFeature)].filter(
@@ -76,9 +76,9 @@ export function EcosystemPanel({
         <motion.div
           key={`cs1-panel-${lockedSourceNode?.id ?? lockedFeature}`}
           initial={isMobile ? { y: "100%" } : { x: "-100%" }}
-          animate={isMobile ? { y: 0 } : { x: 0 }}
+          animate={isMobile ? motionAnimate : { x: 0 }}
           exit={isMobile ? { y: "100%" } : { x: "-100%" }}
-          transition={{ type: "tween", ease: "easeInOut", duration: 0.18 }}
+          transition={isMobile ? motionTransition : { type: "tween", ease: "easeInOut", duration: 0.18 }}
           className={cn(
             "pointer-events-auto flex flex-col overflow-hidden text-white",
             isMobile ? "backdrop-blur-sm" : "backdrop-blur-md",
@@ -93,7 +93,7 @@ export function EcosystemPanel({
           )}
           style={{
             background: isMobile ? "rgba(8,8,8,0.96)" : "rgba(8,8,8,0.93)",
-            ...(isMobile && sheetStyle),
+            ...(isMobile && { height: "100dvh" }),
           }}
           data-modal="true"
         >
