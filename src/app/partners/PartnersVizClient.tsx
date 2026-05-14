@@ -1009,8 +1009,8 @@ export default function PartnersVizClient({
 
       {/* ── Footnote ───────────────────────────────────────────────────────── */}
       <p
-        className="pointer-events-none fixed right-5 bottom-4 z-30 m-0 font-[inherit] text-xs tracking-widest text-white uppercase opacity-65"
-        style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
+        className="pointer-events-none fixed right-4 bottom-4 z-30 m-0 rounded-md px-2.5 py-1 font-[inherit] text-xs font-semibold tracking-widest text-white uppercase"
+        style={{ background: "rgba(0,0,0,0.55)" }}
       >
         As of {asOf}
       </p>
