@@ -787,7 +787,7 @@ export default function PartnersVizClient({
                   height={boxH}
                   preserveAspectRatio="xMidYMid meet"
                   imageRendering={isMobile ? "auto" : "optimizeQuality"}
-                  filter="url(#bw)"
+                  style={{ filter: "grayscale(100%) brightness(1.1)" }}
                 />
               </>
             ) : n.name ? (
@@ -850,15 +850,6 @@ export default function PartnersVizClient({
         <defs>
           <filter id="grayscale">
             <feColorMatrix type="saturate" values="0" />
-          </filter>
-          {/* Black-and-white + slight brightness lift for partner logos */}
-          <filter id="bw" colorInterpolationFilters="sRGB">
-            <feColorMatrix type="saturate" values="0" />
-            <feComponentTransfer>
-              <feFuncR type="linear" slope="1.1" />
-              <feFuncG type="linear" slope="1.1" />
-              <feFuncB type="linear" slope="1.1" />
-            </feComponentTransfer>
           </filter>
           <filter id="to-white" colorInterpolationFilters="sRGB">
             <feColorMatrix
