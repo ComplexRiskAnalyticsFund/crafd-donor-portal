@@ -270,15 +270,61 @@ with tqdm(raster_rows, desc="WebP thumbs ", unit="img") as pbar:
             tqdm.write(f"  ✗ {slug}: {e}")
 tqdm.write(f"  {thumb_count} thumbs generated")
 
+# -- Generate grayscale thumbs for COLOR-ONLY logos (no white variant) -------
+# These orgs would otherwise need a runtime SVG grayscale filter.
+# Pre-convert to grayscale WebP so the frontend can render with zero filters.
+color_only_rows = [
+    row
+    for _, row in df_partners.iterrows()
+    if (not isinstance(row.get("white_logo_path"), str))
+    and isinstance(row.get("color_logo_path"), str)
+    and not row["color_logo_path"].endswith(".svg")
+]
+color_thumb_count = 0
+with tqdm(color_only_rows, desc="Color→BW th", unit="img") as pbar:
+    for row in pbar:
+        raw_name = row.get("org_short_name")
+        slug = to_slug(raw_name if isinstance(raw_name, str) else "")
+        if not slug:
+            continue
+        pbar.set_postfix(slug=slug[:24], refresh=False)
+        src = Path("public") / row["color_logo_path"].lstrip("/")
+        if not src.exists():
+            continue
+        thumb_path = THUMB_DIR / f"{slug}.webp"
+        web_path = f"/logos/partners/thumb/{slug}.webp"
+        if not FORCE_REDOWNLOAD and thumb_path.exists():
+            thumb_by_slug[slug] = web_path
+            color_thumb_count += 1
+            continue
+        try:
+            img = PILImage.open(src).convert("RGBA")
+            # Convert to grayscale while preserving alpha
+            r, g, b, a = img.split()
+            gray = PILImage.merge("RGB", (r, g, b)).convert("L")
+            img = PILImage.merge("RGBA", (gray, gray, gray, a))
+            img.thumbnail((300, 300), PILImage.Resampling.LANCZOS)
+            img.save(thumb_path, "webp", quality=85)
+            thumb_by_slug[slug] = web_path
+            color_thumb_count += 1
+        except Exception as e:
+            tqdm.write(f"  ✗ {slug}: {e}")
+tqdm.write(f"  {color_thumb_count} color→grayscale thumbs generated")
+
 # SVG white logos are already sharp at any size — use directly as thumb path.
 # Raster logos use the generated WebP thumb, or None if generation failed.
+# Color-only logos also get their pre-grayscaled thumb via thumb_by_slug.
 df_partners["thumb_logo_path"] = [
     p
     if isinstance(p, str) and p.endswith(".svg")
     else thumb_by_slug.get(to_slug(n))
-    if isinstance(p, str) and isinstance(n, str)
+    if isinstance(n, str) and (isinstance(p, str) or isinstance(c, str))
     else None
-    for p, n in zip(df_partners["white_logo_path"], df_partners["org_short_name"])
+    for p, c, n in zip(
+        df_partners["white_logo_path"],
+        df_partners["color_logo_path"],
+        df_partners["org_short_name"],
+    )
 ]
 
 # -- Select output columns ----------------------------------------------------

@@ -773,23 +773,27 @@ export default function PartnersVizClient({
             ) : (n.partner?.thumb_logo_path ??
               n.partner?.white_logo_path ??
               n.partner?.color_logo_path) ? (
-              <>
-                <image
-                  href={
-                    n.partner!.thumb_logo_path ??
-                    n.partner!.white_logo_path ??
-                    n.partner!.color_logo_path ??
-                    ""
-                  }
-                  x={-boxW / 2}
-                  y={-boxH / 2}
-                  width={boxW}
-                  height={boxH}
-                  preserveAspectRatio="xMidYMid meet"
-                  imageRendering={isMobile ? "auto" : "optimizeQuality"}
-                  filter="url(#grayscale)"
-                />
-              </>
+              (() => {
+                // thumb/white logos are already monochrome — skip the expensive SVG filter.
+                // Only color-only fallbacks need grayscaling at runtime.
+                const logoHref = n.partner!.thumb_logo_path
+                  ?? n.partner!.white_logo_path
+                  ?? n.partner!.color_logo_path
+                  ?? "";
+                const needsFilter = !n.partner!.thumb_logo_path && !n.partner!.white_logo_path;
+                return (
+                  <image
+                    href={logoHref}
+                    x={-boxW / 2}
+                    y={-boxH / 2}
+                    width={boxW}
+                    height={boxH}
+                    preserveAspectRatio="xMidYMid meet"
+                    imageRendering={isMobile ? "auto" : "optimizeQuality"}
+                    filter={needsFilter ? "url(#grayscale)" : undefined}
+                  />
+                );
+              })()
             ) : n.name ? (
               (() => {
                 const words = n.name.split(" ");

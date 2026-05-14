@@ -8,7 +8,7 @@
     "project_url":"https:\/\/crafd.io\/projects\/igad",
     "grant_size":500065.0,
     "project_status":"Ongoing",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"East Africa",
     "linked_lead_org":[
       "recLEtULboPmoSb1B"
@@ -20,6 +20,24 @@
     ]
   },
   {
+    "airtable_id":"recBAR3A6dEYltL1e",
+    "project_short_title":"MPTFO Admin (1%)",
+    "project_label":null,
+    "full_title":null,
+    "project_blurb":null,
+    "project_url":null,
+    "grant_size":null,
+    "project_status":null,
+    "duration_months":null,
+    "project_coverage":null,
+    "linked_lead_org":[
+
+    ],
+    "linked_supporting_org":[
+      "recLRSST0fgmhKZc6"
+    ]
+  },
+  {
     "airtable_id":"recDLaWeOg2tT9IM2",
     "project_short_title":"GEOGUARD",
     "project_label":"DPPA: GEOGUARD",
@@ -28,7 +46,7 @@
     "project_url":"https:\/\/crafd.io\/projects\/geoguard",
     "grant_size":700000.0,
     "project_status":"Operationally closed",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"Middle East, Central & West Africa",
     "linked_lead_org":[
       "recXzMOIf3S6mlmkO"
@@ -52,7 +70,7 @@
     "project_url":"https:\/\/crafd.io\/projects\/acled",
     "grant_size":14800000.0,
     "project_status":"Ongoing",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"Global",
     "linked_lead_org":[
       "reclFvEkKR7sCD7l3"
@@ -144,7 +162,7 @@
     "project_url":null,
     "grant_size":299749.0,
     "project_status":"Ongoing",
-    "duration_months":12,
+    "duration_months":12.0,
     "project_coverage":"Kenya",
     "linked_lead_org":[
       "recv0iM90I12ie7kn"
@@ -165,7 +183,7 @@
     "project_url":null,
     "grant_size":400000.0,
     "project_status":"Ongoing",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"Global",
     "linked_lead_org":[
       "recF5o67nvN5x9chH"
@@ -188,7 +206,7 @@
     "project_url":"https:\/\/crafd.io\/projects\/idmc",
     "grant_size":1500000.0,
     "project_status":"Ongoing",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"Global",
     "linked_lead_org":[
       "recPFxoMtMX2tV021"
@@ -217,7 +235,7 @@
     "project_url":null,
     "grant_size":999999.53,
     "project_status":"Ongoing",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"Global",
     "linked_lead_org":[
       "recow8fQAyzfPp706"
@@ -248,7 +266,7 @@
     "project_url":"https:\/\/crafd.io\/projects\/inform-warning",
     "grant_size":700000.0,
     "project_status":"Project closed",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"Global",
     "linked_lead_org":[
       "recliM1NwnhtY4nY8"
@@ -271,7 +289,7 @@
     "project_url":"https:\/\/crafd.io\/projects\/rccc",
     "grant_size":499986.0,
     "project_status":"Ongoing",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"East Africa & MENA",
     "linked_lead_org":[
       "recivcR2hSHFfyvT8"
@@ -296,7 +314,7 @@
     "project_url":"https:\/\/crafd.io\/projects\/iom",
     "grant_size":500000.0,
     "project_status":"Operationally closed",
-    "duration_months":18,
+    "duration_months":18.0,
     "project_coverage":"Global",
     "linked_lead_org":[
       "recHv6hZ0SCI0cjT8"
@@ -318,7 +336,7 @@
     "project_url":null,
     "grant_size":599735.0,
     "project_status":"Ongoing",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"Global",
     "linked_lead_org":[
       "recmg6BiaYlTvSxkx"
@@ -345,7 +363,7 @@
     "project_url":"https:\/\/crafd.io\/data-financing\/norcap",
     "grant_size":1000000.0,
     "project_status":"Ongoing",
-    "duration_months":51,
+    "duration_months":51.0,
     "project_coverage":"Global",
     "linked_lead_org":[
       "recjaqYpyPQLi5Ibg"
@@ -367,7 +385,7 @@
     "project_url":"https:\/\/crafd.io\/data-financing\/norcap",
     "grant_size":700000.0,
     "project_status":"Ongoing",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"All low-and middle-income countries",
     "linked_lead_org":[
       "recHKayBVNHm8QsXP"
@@ -391,7 +409,7 @@
     "project_url":null,
     "grant_size":499968.0,
     "project_status":"Ongoing",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"Global",
     "linked_lead_org":[
       "recUZaC92PmOziMtC"
@@ -413,7 +431,7 @@
     "project_url":"https:\/\/crafd.io\/projects\/eearth",
     "grant_size":700000.0,
     "project_status":"Project closed",
-    "duration_months":18,
+    "duration_months":18.0,
     "project_coverage":"Somalia, South Sudan",
     "linked_lead_org":[
       "rec8fighUv8Q9hCX6"
@@ -436,7 +454,7 @@
     "project_url":"https:\/\/crafd.io\/projects\/acled-grant-2021",
     "grant_size":14708969.0,
     "project_status":"Fully closed",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"Global",
     "linked_lead_org":[
       "reclFvEkKR7sCD7l3"
@@ -527,7 +545,7 @@
     "project_url":"https:\/\/crafd.io\/projects\/undp",
     "grant_size":500000.0,
     "project_status":"Ongoing",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"Global",
     "linked_lead_org":[
       "recRGWc0JJ4I8EBrf"
@@ -547,7 +565,7 @@
     "project_url":null,
     "grant_size":800000.0,
     "project_status":"Ongoing",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"Global",
     "linked_lead_org":[
       "recHKayBVNHm8QsXP"
@@ -567,7 +585,7 @@
     "project_url":"https:\/\/crafd.io\/projects\/clifdewgrid",
     "grant_size":500071.0,
     "project_status":"Operationally closed",
-    "duration_months":24,
+    "duration_months":24.0,
     "project_coverage":"West and East Africa",
     "linked_lead_org":[
       "recE7NdoxNUgVthSy"
