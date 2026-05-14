@@ -721,17 +721,18 @@ export default function PartnersVizClient({
                   preserveAspectRatio="xMidYMid meet"
                 />
               </>
-            ) : (n.partner?.thumb_logo_path ??
-              n.partner?.white_logo_path ??
+            ) : (n.partner?.white_logo_path ??
+              n.partner?.thumb_logo_path ??
               n.partner?.color_logo_path) ? (
               (() => {
-                // thumb/white logos are already monochrome — skip the expensive SVG filter.
-                // Only color-only fallbacks need grayscaling at runtime.
-                const logoHref = n.partner!.thumb_logo_path
-                  ?? n.partner!.white_logo_path
+                // White logos preferred in the graph — already monochrome, no filter needed.
+                // Thumb is the fallback for orgs without a white variant.
+                // Color-only fallbacks need runtime grayscaling.
+                const logoHref = n.partner!.white_logo_path
+                  ?? n.partner!.thumb_logo_path
                   ?? n.partner!.color_logo_path
                   ?? "";
-                const needsFilter = !n.partner!.thumb_logo_path && !n.partner!.white_logo_path;
+                const needsFilter = !n.partner!.white_logo_path && !n.partner!.thumb_logo_path;
                 return (
                   <image
                     href={logoHref}
