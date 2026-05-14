@@ -59,11 +59,7 @@ export default function PartnersVizClient({
   const [hoveredOrgNodeId, setHoveredOrgNodeId] = useState<string | null>(null);
   const [vizBiasX, setVizBiasX] = useState(0);
   const [sheetSnap, setSheetSnap] = useState<"half" | "full">("half");
-  const [partnerTooltip, setPartnerTooltip] = useState<{
-    text: string;
-    x: number;
-    y: number;
-  } | null>(null);
+
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -961,7 +957,6 @@ export default function PartnersVizClient({
           setSheetSnap={setSheetSnap}
           onClose={closeAll}
           onPartnerClick={enterClickState1}
-          setPartnerTooltip={setPartnerTooltip}
           onProjectHover={setHoveredProject}
           onOrgHover={setHoveredOrgNodeId}
         />
@@ -987,47 +982,7 @@ export default function PartnersVizClient({
         )}
       </AnimatePresence>
 
-      {/* ── Partner role tooltip ────────────────────────────────────────────── */}
-      {partnerTooltip && (
-        <div
-          className="pointer-events-none fixed z-200"
-          style={{
-            left: partnerTooltip.x,
-            top: partnerTooltip.y,
-            transform: "translate(-50%, calc(-100% - 2px))",
-          }}
-        >
-          <div
-            className="relative rounded-[7px] border border-white/[0.14] px-[0.7rem] py-[0.3rem] text-xs font-semibold tracking-wider whitespace-nowrap text-white/80 uppercase"
-            style={{
-              background: "rgba(15,15,15,0.95)",
-              backdropFilter: "blur(10px)",
-            }}
-          >
-            {partnerTooltip.text}
-            <span
-              className="absolute -bottom-1.5 left-1/2 -translate-x-1/2"
-              style={{
-                width: 0,
-                height: 0,
-                borderLeft: "6px solid transparent",
-                borderRight: "6px solid transparent",
-                borderTop: "6px solid rgba(15,15,15,0.95)",
-              }}
-            />
-            <span
-              className="absolute -bottom-2 left-1/2 -z-1 -translate-x-1/2"
-              style={{
-                width: 0,
-                height: 0,
-                borderLeft: "7px solid transparent",
-                borderRight: "7px solid transparent",
-                borderTop: "7px solid rgba(255,255,255,0.14)",
-              }}
-            />
-          </div>
-        </div>
-      )}
+
 
       {/* ── Search — hidden when any modal is open ─────────────────────────── */}
       <div

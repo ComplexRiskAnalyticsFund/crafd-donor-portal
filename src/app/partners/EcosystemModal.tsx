@@ -19,7 +19,7 @@ interface EcosystemPanelProps {
   setSheetSnap: (v: "half" | "full") => void;
   onClose: () => void;
   onPartnerClick: (n: HexNode) => void;
-  setPartnerTooltip: (t: { text: string; x: number; y: number } | null) => void;
+
   onProjectHover: (project: string | null) => void;
   onOrgHover: (nodeId: string | null) => void;
 }
@@ -64,7 +64,6 @@ export function EcosystemPanel({
   setSheetSnap,
   onClose,
   onPartnerClick,
-  setPartnerTooltip,
   onProjectHover,
   onOrgHover,
 }: EcosystemPanelProps) {
@@ -430,33 +429,8 @@ export function EcosystemPanel({
                                       key={pn.id}
                                       onClick={() => onPartnerClick(pn)}
                                       className="cursor-pointer rounded border border-white/12 bg-white/5 px-2 py-0.5 text-xs font-bold tracking-wide text-white/60 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-white"
-                                      onMouseEnter={(e) => {
-                                        onOrgHover(pn.id);
-                                        const pId = pn.partner?.airtable_id;
-                                        const role =
-                                          pId &&
-                                          pd?.linked_lead_org?.includes(pId)
-                                            ? "Project Lead"
-                                            : pId &&
-                                                pd?.linked_supporting_org?.includes(
-                                                  pId,
-                                                )
-                                              ? "Collaborating Partner"
-                                              : null;
-                                        if (role) {
-                                          const rect =
-                                            e.currentTarget.getBoundingClientRect();
-                                          setPartnerTooltip({
-                                            text: role,
-                                            x: rect.left + rect.width / 2,
-                                            y: rect.top - 1,
-                                          });
-                                        }
-                                      }}
-                                      onMouseLeave={() => {
-                                        onOrgHover(null);
-                                        setPartnerTooltip(null);
-                                      }}
+                                      onMouseEnter={() => onOrgHover(pn.id)}
+                                      onMouseLeave={() => onOrgHover(null)}
                                     >
                                       {pn.partner?.org_short_name ?? pn.name}
                                     </button>
