@@ -17,6 +17,7 @@ import {
   toLogoSlug,
   parseProjects,
   projectsOverlap,
+  findProjectHub,
 } from "./lib/utils";
 import { usePanZoom } from "./hooks/usePanZoom";
 import { useHexAnimation } from "./hooks/useHexAnimation";
@@ -40,8 +41,6 @@ export default function PartnersVizClient({
   const [lockedSourceNode, setLockedSourceNode] = useState<HexNode | null>(
     null,
   );
-  const [ecosystemContextNode, setEcosystemContextNode] =
-    useState<HexNode | null>(null);
   const [clickedNode, setClickedNode] = useState<HexNode | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -73,7 +72,6 @@ export default function PartnersVizClient({
     setLockedGroup(null);
     setLockedFeature(null);
     setLockedSourceNode(null);
-    setEcosystemContextNode(null);
     setClickedNode(null);
     setTappedNodeId(null);
     setHoveredPartner(null);
@@ -240,15 +238,6 @@ export default function PartnersVizClient({
     setHoveredLabel(null);
     setClickedNode(null);
     setTappedNodeId(null);
-    const isReturningToContext =
-      lockedGroup !== null && n.id === ecosystemContextNode?.id;
-    setEcosystemContextNode(
-      isReturningToContext
-        ? null
-        : lockedGroup !== null
-          ? (lockedSourceNode ?? null)
-          : null,
-    );
     setLockedGroup(new Set([n.id, ...peers]));
     setLockedFeature(rfStr);
     setLockedSourceNode(n);
@@ -344,17 +333,7 @@ export default function PartnersVizClient({
         parseProjects(n.partner?.relational_project).has(proj),
       );
       if (projNodes.length < 2) return [];
-      // Use per-project linked_lead_org to identify the actual lead for THIS project
-      const pd = projectsById[proj];
-      const hub =
-        projNodes.find((n) =>
-          n.partner?.airtable_id != null &&
-          pd?.linked_lead_org?.includes(n.partner.airtable_id),
-        ) ??
-        (lockedSourceNode && projNodes.some((n) => n.id === lockedSourceNode.id)
-          ? lockedSourceNode
-          : null) ??
-        projNodes[0];
+      const hub = findProjectHub(projNodes, projectsById[proj], lockedSourceNode);
       return projNodes
         .filter((n) => n.id !== hub.id)
         .map((spoke) => ({
@@ -429,17 +408,7 @@ export default function PartnersVizClient({
         const projNodes = lockedPartners.filter((n) =>
           parseProjects(n.partner?.relational_project).has(proj),
         );
-        const pd = projectsById[proj];
-        const hub =
-          projNodes.find((n) =>
-            n.partner?.airtable_id != null &&
-            pd?.linked_lead_org?.includes(n.partner.airtable_id),
-          ) ??
-          (lockedSourceNode &&
-          projNodes.some((n) => n.id === lockedSourceNode.id)
-            ? lockedSourceNode
-            : null) ??
-          projNodes[0];
+        const hub = findProjectHub(projNodes, projectsById[proj], lockedSourceNode);
         if (hub) hubIdSet.add(hub.id);
       }
       return [...baseOrdered].sort((a, b) => {
@@ -473,17 +442,7 @@ export default function PartnersVizClient({
         const projNodes = lockedPartners.filter((n) =>
           parseProjects(n.partner?.relational_project).has(proj),
         );
-        const pd = projectsById[proj];
-        const hub =
-          projNodes.find((n) =>
-            n.partner?.airtable_id != null &&
-            pd?.linked_lead_org?.includes(n.partner.airtable_id),
-          ) ??
-          (lockedSourceNode &&
-          projNodes.some((n) => n.id === lockedSourceNode.id)
-            ? lockedSourceNode
-            : null) ??
-          projNodes[0];
+        const hub = findProjectHub(projNodes, projectsById[proj], lockedSourceNode);
         if (hub) hubIdSet.add(hub.id);
       }
     }
@@ -846,12 +805,6 @@ export default function PartnersVizClient({
         <defs>
           <filter id="grayscale">
             <feColorMatrix type="saturate" values="0" />
-          </filter>
-          <filter id="to-white" colorInterpolationFilters="sRGB">
-            <feColorMatrix
-              type="matrix"
-              values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"
-            />
           </filter>
         </defs>
 

@@ -1,11 +1,12 @@
 "use client";
-import { useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import type { HexNode } from "@/app/partners/lib/label";
 import type { CrafdProject } from "@/types";
 import { cn } from "@/lib/utils";
 import { parseProjects, toLogoSlug, formatGrantSize } from "./lib/utils";
+import { ProjectVisitLink } from "./lib/ProjectVisitLink";
+import { useSheetDrag } from "./hooks/useSheetDrag";
 import commitmentsData from "../../../public/data/commitments.json";
 
 interface DonorPanelProps {
@@ -17,34 +18,6 @@ interface DonorPanelProps {
   onClose: () => void;
 }
 
-function ProjectVisitLink({ href }: { href: string }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group inline-flex items-center gap-2 self-start border-b border-crafd-yellow/40 pb-px text-xs font-bold tracking-widest text-crafd-yellow uppercase no-underline transition-colors hover:border-crafd-yellow"
-    >
-      Visit project page
-      <svg
-        width="10"
-        height="10"
-        viewBox="0 0 12 12"
-        fill="none"
-        className="shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-      >
-        <path
-          d="M2 10L10 2M10 2H5M10 2v5"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </a>
-  );
-}
-
 export function DonorPanel({
   clickedNode,
   projectsById,
@@ -53,33 +26,8 @@ export function DonorPanel({
   setSheetSnap,
   onClose,
 }: DonorPanelProps) {
-  const sheetTouchStartY = useRef(0);
-  const sheetDragging = useRef(false);
-  const [dragOffset, setDragOffset] = useState(0);
-
-  const handleDragStart = useCallback((e: React.TouchEvent) => {
-    sheetTouchStartY.current = e.touches[0].clientY;
-    sheetDragging.current = true;
-    setDragOffset(0);
-  }, []);
-
-  const handleDragMove = useCallback((e: React.TouchEvent) => {
-    if (!sheetDragging.current) return;
-    const dy = e.touches[0].clientY - sheetTouchStartY.current;
-    setDragOffset(dy);
-  }, []);
-
-  const handleDragEnd = useCallback((e: React.TouchEvent) => {
-    if (!sheetDragging.current) return;
-    sheetDragging.current = false;
-    const dy = e.changedTouches[0].clientY - sheetTouchStartY.current;
-    setDragOffset(0);
-    if (dy < -40) setSheetSnap("full");
-    else if (dy > 40) {
-      if (sheetSnap === "full") setSheetSnap("half");
-      else onClose();
-    }
-  }, [sheetSnap, setSheetSnap, onClose]);
+  const { sheetStyle, isDragging, handleDragStart, handleDragMove, handleDragEnd } =
+    useSheetDrag({ sheetSnap, setSheetSnap, onClose });
 
   const p = clickedNode.partner;
   const name = p?.org_short_name?.trim() ?? clickedNode.name ?? "Donor";
@@ -125,12 +73,7 @@ export function DonorPanel({
         )}
         style={{
           background: isMobile ? "rgba(8,8,8,0.96)" : "rgba(8,8,8,0.93)",
-          ...(isMobile && {
-            height: "100dvh",
-            transform: `translateY(calc(${sheetSnap === "full" ? "0%" : "50%"} + ${dragOffset}px))`,
-            transition: sheetDragging.current ? "none" : "transform 0.3s cubic-bezier(0.32,0.72,0,1)",
-            willChange: sheetDragging.current ? "transform" : "auto",
-          }),
+          ...(isMobile && sheetStyle),
         }}
         data-modal="true"
         onClick={(e) => e.stopPropagation()}

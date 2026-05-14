@@ -1,4 +1,5 @@
 import type { HexNode } from "@/app/partners/lib/label";
+import type { CrafdProject } from "@/types";
 
 export const SQRT3 = Math.sqrt(3);
 export const HEX_SIZE = 75;
@@ -97,4 +98,27 @@ export function formatGrantSize(
   if (num >= 1_000_000) return `${prefix}${(num / 1_000_000).toFixed(1)}M`;
   if (num >= 1_000) return `${prefix}${(num / 1_000).toFixed(0)}K`;
   return `${prefix}${num}`;
+}
+
+/**
+ * Find the hub (lead) node for a project within a set of candidate nodes.
+ * Uses per-project `linked_lead_org` from project data, falling back to
+ * the clicked source node, then the first node.
+ */
+export function findProjectHub(
+  projNodes: HexNode[],
+  projectData: CrafdProject | undefined,
+  lockedSourceNode: HexNode | null,
+): HexNode {
+  return (
+    projNodes.find(
+      (n) =>
+        n.partner?.airtable_id != null &&
+        projectData?.linked_lead_org?.includes(n.partner.airtable_id),
+    ) ??
+    (lockedSourceNode && projNodes.some((n) => n.id === lockedSourceNode.id)
+      ? lockedSourceNode
+      : null) ??
+    projNodes[0]
+  );
 }
