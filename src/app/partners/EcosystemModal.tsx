@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import type { CrafdProject } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState, useCallback } from "react";
 import { formatGrantSize, parseProjects } from "./lib/utils";
 
 interface EcosystemPanelProps {
@@ -69,6 +69,34 @@ export function EcosystemPanel({
   onOrgHover,
 }: EcosystemPanelProps) {
   const sheetTouchStartY = useRef(0);
+  const sheetDragging = useRef(false);
+  const [dragOffset, setDragOffset] = useState(0);
+
+  const handleDragStart = useCallback((e: React.TouchEvent) => {
+    sheetTouchStartY.current = e.touches[0].clientY;
+    sheetDragging.current = true;
+    setDragOffset(0);
+  }, []);
+
+  const handleDragMove = useCallback((e: React.TouchEvent) => {
+    if (!sheetDragging.current) return;
+    const dy = e.touches[0].clientY - sheetTouchStartY.current;
+    // Only allow dragging downward from full, or upward from half
+    setDragOffset(dy);
+  }, []);
+
+  const handleDragEnd = useCallback((e: React.TouchEvent) => {
+    if (!sheetDragging.current) return;
+    sheetDragging.current = false;
+    const dy = e.changedTouches[0].clientY - sheetTouchStartY.current;
+    setDragOffset(0);
+    if (dy < -40) setSheetSnap("full");
+    else if (dy > 40) {
+      if (sheetSnap === "full") setSheetSnap("half");
+      else onClose();
+    }
+  }, [sheetSnap, setSheetSnap, onClose]);
+
   const projects = [...parseProjects(lockedFeature)].filter(
     (proj) => proj in projectsById,
   );
@@ -120,8 +148,10 @@ export function EcosystemPanel({
           style={{
             background: isMobile ? "rgba(8,8,8,0.96)" : "rgba(8,8,8,0.93)",
             ...(isMobile && {
-              height: sheetSnap === "full" ? "100dvh" : "50dvh",
-              transition: "height 0.3s ease",
+              height: "100dvh",
+              transform: `translateY(calc(${sheetSnap === "full" ? "0%" : "50%"} + ${dragOffset}px))`,
+              transition: sheetDragging.current ? "none" : "transform 0.3s cubic-bezier(0.32,0.72,0,1)",
+              willChange: sheetDragging.current ? "transform" : "auto",
             }),
           }}
           data-modal="true"
@@ -130,18 +160,9 @@ export function EcosystemPanel({
           {isMobile && (
             <div
               className="flex shrink-0 cursor-grab touch-none justify-center pt-3 pb-1"
-              onTouchStart={(e) => {
-                sheetTouchStartY.current = e.touches[0].clientY;
-              }}
-              onTouchEnd={(e) => {
-                const dy =
-                  e.changedTouches[0].clientY - sheetTouchStartY.current;
-                if (dy < -30) setSheetSnap("full");
-                else if (dy > 30) {
-                  if (sheetSnap === "full") setSheetSnap("half");
-                  else onClose();
-                }
-              }}
+              onTouchStart={handleDragStart}
+              onTouchMove={handleDragMove}
+              onTouchEnd={handleDragEnd}
             >
               <div className="h-1 w-9 rounded-sm bg-white/30" />
             </div>
