@@ -787,7 +787,7 @@ export default function PartnersVizClient({
                   height={boxH}
                   preserveAspectRatio="xMidYMid meet"
                   imageRendering={isMobile ? "auto" : "optimizeQuality"}
-                  style={{ filter: "grayscale(100%) brightness(1.1)" }}
+                  filter="url(#grayscale)"
                 />
               </>
             ) : n.name ? (
@@ -1029,9 +1029,12 @@ export default function PartnersVizClient({
         </div>
       )}
 
-      {/* ── Search ─────────────────────────────────────────────────────────── */}
+      {/* ── Search — hidden when any modal is open ─────────────────────────── */}
       <div
-        className="fixed top-5 right-5 z-40 flex items-center gap-2"
+        className={cn(
+          "fixed top-5 right-5 z-40 flex items-center gap-2 transition-opacity duration-200",
+          lockedGroup !== null || clickedNode !== null ? "pointer-events-none opacity-0" : "opacity-100",
+        )}
         onMouseEnter={() => {
           if (!isMobile) setSearchOpen(true);
         }}
