@@ -621,8 +621,8 @@ export default function PartnersVizClient({
     }
 
     const slug = toLogoSlug(n.partner?.org_short_name ?? n.name ?? "");
-    const boxW = n.r * 0.85;
-    const boxH = n.r * 0.72;
+    const boxW = n.r * 1.1;
+    const boxH = n.r * 0.75;
     const isLocked = lockedGroup?.has(n.id) ?? false;
     const isSource = lockedGroup !== null && n.id === lockedSourceNode?.id;
 
