@@ -333,7 +333,7 @@ export function buildPartnerHexNodes(
     // logo partners first → inner positions; no-logo partners → outskirts
     group.sort((a, b) => {
       const hasLogo = (p: Partner) =>
-        !!(p.thumb_logo_path ?? p.white_logo_path ?? p.color_logo_path);
+        !!(p.thumb_logo_path ?? p.color_logo_path);
       return Number(hasLogo(b)) - Number(hasLogo(a));
     });
 

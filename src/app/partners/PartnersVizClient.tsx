@@ -620,8 +620,8 @@ export default function PartnersVizClient({
     }
 
     const slug = toLogoSlug(n.partner?.org_short_name ?? n.name ?? "");
-    const boxW = n.r * 0.72;
-    const boxH = n.r * 0.62;
+    const boxW = n.r * 0.85;
+    const boxH = n.r * 0.72;
     const isLocked = lockedGroup?.has(n.id) ?? false;
     const isSource = lockedGroup !== null && n.id === lockedSourceNode?.id;
 
@@ -721,18 +721,15 @@ export default function PartnersVizClient({
                   preserveAspectRatio="xMidYMid meet"
                 />
               </>
-            ) : (n.partner?.white_logo_path ??
-              n.partner?.thumb_logo_path ??
+            ) : (n.partner?.thumb_logo_path ??
               n.partner?.color_logo_path) ? (
               (() => {
-                // White logos preferred in the graph — already monochrome, no filter needed.
-                // Thumb is the fallback for orgs without a white variant.
-                // Color-only fallbacks need runtime grayscaling.
-                const logoHref = n.partner!.white_logo_path
-                  ?? n.partner!.thumb_logo_path
+                // Thumb logos are pre-converted grayscale WebPs — no filter needed.
+                // Color-only fallback needs runtime grayscaling.
+                const logoHref = n.partner!.thumb_logo_path
                   ?? n.partner!.color_logo_path
                   ?? "";
-                const needsFilter = !n.partner!.white_logo_path && !n.partner!.thumb_logo_path;
+                const needsFilter = !n.partner!.thumb_logo_path;
                 return (
                   <image
                     href={logoHref}

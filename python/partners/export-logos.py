@@ -3,7 +3,8 @@ Export logos from /color to /thumb and /white.
 
 Does NOT pull from Airtable. Reads existing files in public/logos/partners/color/
 and produces:
-  - /thumb  — 300px grayscale WebP thumbnails (raster only; SVGs copied as-is)
+  - /thumb  — 300px grayscale WebP thumbnails, white-point normalised so the
+              brightest opaque pixel maps to full white (raster only; SVGs copied as-is)
   - /white  — full-size grayscale PNG (raster); SVGs copied as-is
 
 Usage:
@@ -17,6 +18,7 @@ import argparse
 import shutil
 from pathlib import Path
 
+import numpy as np
 from PIL import Image as PILImage
 from tqdm import tqdm
 
@@ -31,11 +33,57 @@ THUMB_SIZE = 300  # max dimension in pixels
 
 
 def _to_grayscale_rgba(img: PILImage.Image) -> PILImage.Image:
-    """Convert image to grayscale while preserving alpha channel."""
+    """Plain grayscale conversion, preserving alpha. Used for /white exports."""
     img = img.convert("RGBA")
     r, g, b, a = img.split()
     gray = PILImage.merge("RGB", (r, g, b)).convert("L")
     return PILImage.merge("RGBA", (gray, gray, gray, a))
+
+
+# Shadow lift: how much to raise the black point before brightening (0–255).
+# Maps 0 → SHADOW_LIFT, 255 → 255 (highlights unchanged).
+SHADOW_LIFT = 22
+
+# Extra brightness boost applied after white-point normalisation.
+# Multiplies all pixel values; >1.0 pushes more pixels toward white.
+BRIGHTNESS_BOOST = 1.25
+
+
+def _process_thumb(img: PILImage.Image) -> PILImage.Image:
+    """
+    Prepare a color logo for use as a monochrome hex thumbnail:
+      1. Convert to grayscale (luminance), preserve alpha.
+      2. Lift shadows slightly to reduce contrast and soften the look.
+      3. Normalize the white point using the 99th percentile of opaque pixels.
+      4. Apply an additional brightness boost so the result reads as bright
+         white on dark backgrounds.
+    """
+    img = img.convert("RGBA")
+    r, g, b, a = img.split()
+    gray_pil = PILImage.merge("RGB", (r, g, b)).convert("L")
+    arr_a = np.array(a, dtype=np.float32)
+    arr_g = np.array(gray_pil, dtype=np.float32)  # shape (H, W)
+
+    opaque_mask = arr_a > 0
+    if not opaque_mask.any():
+        return img
+
+    # Step 1: shadow lift — compress range from [0,255] to [SHADOW_LIFT,255]
+    arr_g = arr_g * ((255.0 - SHADOW_LIFT) / 255.0) + SHADOW_LIFT
+
+    # Step 2: white-point normalisation using 99th percentile of opaque pixels.
+    # This ignores the top 1% (noise / stray bright pixels) and is scale-
+    # independent — works identically on tiny 20px icons and large logos.
+    white_point = float(np.percentile(arr_g[opaque_mask], 99))
+    if 0 < white_point < 255:
+        arr_g = arr_g * (255.0 / white_point)
+
+    # Step 3: additional brightness boost on top of normalisation.
+    arr_g = arr_g * BRIGHTNESS_BOOST
+
+    gray_out = np.clip(arr_g, 0, 255).astype(np.uint8)
+    out = np.stack([gray_out, gray_out, gray_out, arr_a.astype(np.uint8)], axis=2)
+    return PILImage.fromarray(out, mode="RGBA")
 
 
 def export_thumbs(force: bool) -> None:
@@ -68,7 +116,7 @@ def export_thumbs(force: bool) -> None:
 
             try:
                 img = PILImage.open(src)
-                img = _to_grayscale_rgba(img)
+                img = _process_thumb(img)
                 img.thumbnail((THUMB_SIZE, THUMB_SIZE), PILImage.Resampling.LANCZOS)
                 img.save(dest, "webp", quality=85)
                 ok += 1

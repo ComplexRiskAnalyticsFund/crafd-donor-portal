@@ -55,12 +55,7 @@ export function EcosystemPanel({
 
   const logoSrc =
     lockedSourceNode?.partner?.color_logo_path ??
-    lockedSourceNode?.partner?.thumb_logo_path ??
-    lockedSourceNode?.partner?.white_logo_path;
-  const logoIsWhiteOnly =
-    !lockedSourceNode?.partner?.color_logo_path &&
-    !lockedSourceNode?.partner?.thumb_logo_path &&
-    !!lockedSourceNode?.partner?.white_logo_path;
+    lockedSourceNode?.partner?.thumb_logo_path;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 flex">
@@ -130,9 +125,6 @@ export function EcosystemPanel({
                       height: isMobile ? 30 : 40,
                       width: "auto",
                       maxWidth: 110,
-                      filter: logoIsWhiteOnly
-                        ? "brightness(0) invert(1) opacity(0.7)"
-                        : undefined,
                     }}
                   />
                 )}
