@@ -230,18 +230,6 @@ with tqdm(
 df_partners["color_logo_path"] = color_paths
 
 
-THUMB_BLACK_FLOOR = 60  # minimum output brightness — no pure black in thumbs
-
-
-def lift_blacks_rgba(img):
-    """Grayscale + remap [0,255] → [THUMB_BLACK_FLOOR,255] while preserving alpha."""
-    r, g, b, a = img.split()
-    gray = PILImage.merge("RGB", (r, g, b)).convert("L")
-    scale = (255 - THUMB_BLACK_FLOOR) / 255
-    gray = gray.point(lambda v: int(THUMB_BLACK_FLOOR + v * scale))
-    return PILImage.merge("RGBA", (gray, gray, gray, a))
-
-
 # -- Generate 300px WebP thumbs for raster white logos -----------------------
 # SVGs are infinitely sharp — skip them; thumbs are only needed for PNG/JPG.
 # Thumbs live alongside white/ and color/ (not inside white/).
@@ -274,7 +262,6 @@ with tqdm(raster_rows, desc="WebP thumbs ", unit="img") as pbar:
             continue
         try:
             img = PILImage.open(src).convert("RGBA")
-            img = lift_blacks_rgba(img)
             img.thumbnail((300, 300), PILImage.Resampling.LANCZOS)
             img.save(thumb_path, "webp", quality=85)
             thumb_by_slug[slug] = web_path
@@ -312,7 +299,9 @@ with tqdm(color_only_rows, desc="Color→BW th", unit="img") as pbar:
             continue
         try:
             img = PILImage.open(src).convert("RGBA")
-            img = lift_blacks_rgba(img)
+            r, g, b, a = img.split()
+            gray = PILImage.merge("RGB", (r, g, b)).convert("L")
+            img = PILImage.merge("RGBA", (gray, gray, gray, a))
             img.thumbnail((300, 300), PILImage.Resampling.LANCZOS)
             img.save(thumb_path, "webp", quality=85)
             thumb_by_slug[slug] = web_path

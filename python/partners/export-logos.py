@@ -40,9 +40,9 @@ def _to_grayscale_rgba(img: PILImage.Image) -> PILImage.Image:
     return PILImage.merge("RGBA", (gray, gray, gray, a))
 
 
-# Shadow lift: how much to raise the black point before brightening (0–255).
-# Maps 0 → SHADOW_LIFT, 255 → 255 (highlights unchanged).
-SHADOW_LIFT = 22
+# Hard floor for the darkest pixel — no output value below this.
+# Compresses the grayscale spectrum into [BLACK_FLOOR, 255].
+BLACK_FLOOR = 140
 
 # Extra brightness boost applied after white-point normalisation.
 # Multiplies all pixel values; >1.0 pushes more pixels toward white.
@@ -53,35 +53,32 @@ def _process_thumb(img: PILImage.Image) -> PILImage.Image:
     """
     Prepare a color logo for use as a monochrome hex thumbnail:
       1. Convert to grayscale (luminance), preserve alpha.
-      2. Lift shadows slightly to reduce contrast and soften the look.
+      2. Compress range into [BLACK_FLOOR, 255] — eliminates pure black.
       3. Normalize the white point using the 99th percentile of opaque pixels.
-      4. Apply an additional brightness boost so the result reads as bright
-         white on dark backgrounds.
+      4. Apply brightness boost, then clamp back to [BLACK_FLOOR, 255].
     """
     img = img.convert("RGBA")
     r, g, b, a = img.split()
     gray_pil = PILImage.merge("RGB", (r, g, b)).convert("L")
     arr_a = np.array(a, dtype=np.float32)
-    arr_g = np.array(gray_pil, dtype=np.float32)  # shape (H, W)
+    arr_g = np.array(gray_pil, dtype=np.float32)
 
     opaque_mask = arr_a > 0
     if not opaque_mask.any():
         return img
 
-    # Step 1: shadow lift — compress range from [0,255] to [SHADOW_LIFT,255]
-    arr_g = arr_g * ((255.0 - SHADOW_LIFT) / 255.0) + SHADOW_LIFT
+    # Step 1: compress into [BLACK_FLOOR, 255]
+    arr_g = arr_g * ((255.0 - BLACK_FLOOR) / 255.0) + BLACK_FLOOR
 
-    # Step 2: white-point normalisation using 99th percentile of opaque pixels.
-    # This ignores the top 1% (noise / stray bright pixels) and is scale-
-    # independent — works identically on tiny 20px icons and large logos.
+    # Step 2: white-point normalisation (99th percentile of opaque pixels)
     white_point = float(np.percentile(arr_g[opaque_mask], 99))
     if 0 < white_point < 255:
-        arr_g = arr_g * (255.0 / white_point)
+        arr_g = BLACK_FLOOR + (arr_g - BLACK_FLOOR) * ((255.0 - BLACK_FLOOR) / (white_point - BLACK_FLOOR))
 
-    # Step 3: additional brightness boost on top of normalisation.
-    arr_g = arr_g * BRIGHTNESS_BOOST
+    # Step 3: brightness boost, then clamp to [BLACK_FLOOR, 255]
+    arr_g = BLACK_FLOOR + (arr_g - BLACK_FLOOR) * BRIGHTNESS_BOOST
 
-    gray_out = np.clip(arr_g, 0, 255).astype(np.uint8)
+    gray_out = np.clip(arr_g, BLACK_FLOOR, 255).astype(np.uint8)
     out = np.stack([gray_out, gray_out, gray_out, arr_a.astype(np.uint8)], axis=2)
     return PILImage.fromarray(out, mode="RGBA")
 
