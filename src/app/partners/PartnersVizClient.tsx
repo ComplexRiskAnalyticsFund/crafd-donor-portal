@@ -20,6 +20,36 @@ import {
   projectsOverlap,
   findProjectHub,
 } from "./lib/utils";
+
+function hexFallbackText(name: string, r: number) {
+  const words = name.split(" ");
+  const lines: string[] = [];
+  let cur = "";
+  for (const w of words) {
+    if (cur && (cur + " " + w).length > 11) {
+      lines.push(cur);
+      cur = w;
+    } else cur = cur ? cur + " " + w : w;
+  }
+  if (cur) lines.push(cur);
+  const fontSize = Math.round(r * 0.2);
+  const lineH = fontSize * 1.25;
+  const totalSpan = (lines.length - 1) * lineH;
+  return lines.map((line, i) => (
+    <text
+      key={i}
+      x={0}
+      y={-totalSpan / 2 + i * lineH + fontSize * 0.35}
+      textAnchor="middle"
+      fontSize={fontSize}
+      fill="white"
+      fontWeight={700}
+      letterSpacing="0.01em"
+    >
+      {line}
+    </text>
+  ));
+}
 import { usePanZoom } from "./hooks/usePanZoom";
 import { useHexAnimation } from "./hooks/useHexAnimation";
 import { EcosystemPanel } from "./EcosystemModal";
@@ -49,11 +79,7 @@ export default function PartnersVizClient({
   const [openProjects, setOpenProjects] = useState<Set<string>>(
     () => new Set(),
   );
-  const [isMobile, setIsMobile] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(max-width: 768px)").matches,
-  );
+  const [isMobile, setIsMobile] = useState(false);
   const [tappedNodeId, setTappedNodeId] = useState<string | null>(null);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [hoveredOrgNodeId, setHoveredOrgNodeId] = useState<string | null>(null);
@@ -91,7 +117,9 @@ export default function PartnersVizClient({
     flyBack,
   } = usePanZoom({ svgRef, closeAll });
 
-  flyBackRef.current = flyBack;
+  useEffect(() => {
+    flyBackRef.current = flyBack;
+  });
 
   const hasUrlState = !!(
     searchParams.get("projects") ||
@@ -222,7 +250,7 @@ export default function PartnersVizClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function enterClickState1(n: HexNode) {
+  const enterClickState1 = useCallback((n: HexNode) => {
     const rf = n.partner?.relational_project;
     const rfStr = rf && rf.length > 0 ? rf.join(",") : "";
     const peerNodes =
@@ -257,19 +285,16 @@ export default function PartnersVizClient({
       const panelPx = Math.min(window.innerWidth / 3, 700);
       flyToNodes([n, ...peerNodes], panelPx / 2);
     }
-  }
+  }, [renderNodes, isMobile, router, pathname, flyToNodes]);
 
   // ── Memos ──────────────────────────────────────────────────────────────────
 
   // Background hex grid — bucket by rounded opacity so we render ~10 <path>
   // elements instead of ~400 individual ones.
   const bgHexBuckets = useMemo(() => {
-    const isMobileInit =
-      typeof window !== "undefined" &&
-      window.matchMedia("(max-width: 768px)").matches;
-    const RANGE = isMobileInit ? 10 : 28;
+    const RANGE = isMobile ? 10 : 28;
     const FADE_START = 200;
-    const FADE_END = isMobileInit ? 900 : 2400;
+    const FADE_END = isMobile ? 900 : 2400;
     const BUCKET_COUNT = 10;
     const buckets: string[][] = Array.from({ length: BUCKET_COUNT + 1 }, () => []);
     for (let q = -RANGE; q <= RANGE; q++) {
@@ -290,7 +315,7 @@ export default function PartnersVizClient({
         opacity: i / BUCKET_COUNT,
       }))
       .filter((b) => b.d.length > 0);
-  }, []);
+  }, [isMobile]);
 
   const hoveredPartnerNode = useMemo(
     () =>
@@ -333,8 +358,9 @@ export default function PartnersVizClient({
       const projNodes = lockedNodes.filter((n) =>
         parseProjects(n.partner?.relational_project).has(proj),
       );
-      if (projNodes.length < 2) return [];
-      const hub = findProjectHub(projNodes, projectsById[proj], lockedSourceNode);
+      const pd = projectsById[proj];
+      if (projNodes.length < 2 || !pd) return [];
+      const hub = findProjectHub(projNodes, pd, lockedSourceNode);
       return projNodes
         .filter((n) => n.id !== hub.id)
         .map((spoke) => ({
@@ -399,23 +425,11 @@ export default function PartnersVizClient({
   // hovered/locked nodes are rendered in separate overlay passes anyway).
   const ordered = useMemo(() => {
     if (isMobile) {
-      // Only re-sort when locked state changes (tap → ecosystem panel)
       if (!lockedGroup) return baseOrdered;
-      const hubIdSet = new Set<string>();
-      const lockedPartners = baseOrdered.filter(
-        (n) => n.kind === "partner" && lockedGroup.has(n.id),
-      );
-      for (const proj of parseProjects(lockedFeature ?? "")) {
-        const projNodes = lockedPartners.filter((n) =>
-          parseProjects(n.partner?.relational_project).has(proj),
-        );
-        const hub = findProjectHub(projNodes, projectsById[proj], lockedSourceNode);
-        if (hub) hubIdSet.add(hub.id);
-      }
       return [...baseOrdered].sort((a, b) => {
         const pa =
           a.kind === "partner" && lockedGroup.has(a.id)
-            ? hubIdSet.has(a.id)
+            ? hubIds.has(a.id)
               ? 200
               : a.id === lockedSourceNode?.id
                 ? 150
@@ -423,7 +437,7 @@ export default function PartnersVizClient({
             : 0;
         const pb =
           b.kind === "partner" && lockedGroup.has(b.id)
-            ? hubIdSet.has(b.id)
+            ? hubIds.has(b.id)
               ? 200
               : b.id === lockedSourceNode?.id
                 ? 150
@@ -433,23 +447,9 @@ export default function PartnersVizClient({
       });
     }
 
-    // Desktop: full priority sort including hover
-    const hubIdSet = new Set<string>();
-    if (lockedGroup && lockedFeature) {
-      const lockedPartners = renderNodes.filter(
-        (n) => n.kind === "partner" && lockedGroup.has(n.id),
-      );
-      for (const proj of parseProjects(lockedFeature)) {
-        const projNodes = lockedPartners.filter((n) =>
-          parseProjects(n.partner?.relational_project).has(proj),
-        );
-        const hub = findProjectHub(projNodes, projectsById[proj], lockedSourceNode);
-        if (hub) hubIdSet.add(hub.id);
-      }
-    }
     function priority(n: HexNode): number {
       if (lockedGroup !== null && n.kind === "partner") {
-        if (hubIdSet.has(n.id)) return 200;
+        if (hubIds.has(n.id)) return 200;
         if (n.id === lockedSourceNode?.id) return 150;
         if (lockedGroup.has(n.id)) return 100;
       }
@@ -473,9 +473,8 @@ export default function PartnersVizClient({
     hoveredPartnerNode,
     relationalPeers,
     lockedGroup,
-    lockedFeature,
     lockedSourceNode,
-    projectsById,
+    hubIds,
   ]);
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -620,7 +619,6 @@ export default function PartnersVizClient({
       );
     }
 
-    const slug = toLogoSlug(n.partner?.org_short_name ?? n.name ?? "");
     const boxW = n.r * 1.1;
     const boxH = n.r * 0.75;
     const isLocked = lockedGroup?.has(n.id) ?? false;
@@ -712,16 +710,14 @@ export default function PartnersVizClient({
               strokeWidth={isSource ? 5 : strokeWidthFor(n)}
             />
             {n.label === "donor" ? (
-              <>
-                <image
-                  href={`/logos/countries/${slug}.svg`}
-                  x={-boxW / 2}
-                  y={-boxH / 2}
-                  width={boxW}
-                  height={boxH}
-                  preserveAspectRatio="xMidYMid meet"
-                />
-              </>
+              <image
+                href={`/logos/countries/${toLogoSlug(n.partner?.org_short_name ?? n.name ?? "")}.svg`}
+                x={-boxW / 2}
+                y={-boxH / 2}
+                width={boxW}
+                height={boxH}
+                preserveAspectRatio="xMidYMid meet"
+              />
             ) : n.partner?.logo_slug ? (
               <image
                 href={thumbLogoPath(n.partner.logo_slug)}
@@ -733,39 +729,7 @@ export default function PartnersVizClient({
                 imageRendering={isMobile ? "auto" : "optimizeQuality"}
               />
             ) : n.name ? (
-              (() => {
-                const words = n.name.split(" ");
-                const nameLines: string[] = [];
-                let cur = "";
-                for (const w of words) {
-                  if (cur && (cur + " " + w).length > 11) {
-                    nameLines.push(cur);
-                    cur = w;
-                  } else cur = cur ? cur + " " + w : w;
-                }
-                if (cur) nameLines.push(cur);
-                const fontSize = Math.round(n.r * 0.2);
-                const lineH = fontSize * 1.25;
-                const totalSpan = (nameLines.length - 1) * lineH;
-                return (
-                  <>
-                    {nameLines.map((line, i) => (
-                      <text
-                        key={i}
-                        x={0}
-                        y={-totalSpan / 2 + i * lineH + fontSize * 0.35}
-                        textAnchor="middle"
-                        fontSize={fontSize}
-                        fill="white"
-                        fontWeight={700}
-                        letterSpacing="0.01em"
-                      >
-                        {line}
-                      </text>
-                    ))}
-                  </>
-                );
-              })()
+              hexFallbackText(n.name, n.r)
             ) : null}
           </g>
         </g>
