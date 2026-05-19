@@ -3,6 +3,7 @@ import type { HexNode } from "@/app/partners/lib/label";
 import { cn } from "@/lib/utils";
 import type { CrafdProject } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
+import { colorLogoPath } from "@/lib/logos";
 import Image from "next/image";
 import { formatGrantSize, parseProjects } from "./lib/utils";
 import { ProjectVisitLink } from "./lib/ProjectVisitLink";
@@ -53,9 +54,9 @@ export function EcosystemPanel({
   const partnerFullName = lockedSourceNode?.partner?.org_full_name?.trim();
   const orgUrl = lockedSourceNode?.partner?.org_url;
 
-  const logoSrc =
-    lockedSourceNode?.partner?.color_logo_path ??
-    lockedSourceNode?.partner?.thumb_logo_path;
+  const logoSrc = lockedSourceNode?.partner?.logo_slug
+    ? colorLogoPath(lockedSourceNode.partner.logo_slug)
+    : null;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 flex">

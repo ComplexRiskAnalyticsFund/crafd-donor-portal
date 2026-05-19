@@ -6,6 +6,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import type { HexNode } from "@/app/partners/lib/label";
 import type { CrafdProject } from "@/types";
 import { cn } from "@/lib/utils";
+import { thumbLogoPath } from "@/lib/logos";
 
 import {
   SQRT3,
@@ -721,28 +722,16 @@ export default function PartnersVizClient({
                   preserveAspectRatio="xMidYMid meet"
                 />
               </>
-            ) : (n.partner?.thumb_logo_path ??
-              n.partner?.color_logo_path) ? (
-              (() => {
-                // Thumb logos are pre-converted grayscale WebPs — no filter needed.
-                // Color-only fallback needs runtime grayscaling.
-                const logoHref = n.partner!.thumb_logo_path
-                  ?? n.partner!.color_logo_path
-                  ?? "";
-                const needsFilter = !n.partner!.thumb_logo_path;
-                return (
-                  <image
-                    href={logoHref}
-                    x={-boxW / 2}
-                    y={-boxH / 2}
-                    width={boxW}
-                    height={boxH}
-                    preserveAspectRatio="xMidYMid meet"
-                    imageRendering={isMobile ? "auto" : "optimizeQuality"}
-                    filter={needsFilter ? "url(#grayscale)" : undefined}
-                  />
-                );
-              })()
+            ) : n.partner?.logo_slug ? (
+              <image
+                href={thumbLogoPath(n.partner.logo_slug)}
+                x={-boxW / 2}
+                y={-boxH / 2}
+                width={boxW}
+                height={boxH}
+                preserveAspectRatio="xMidYMid meet"
+                imageRendering={isMobile ? "auto" : "optimizeQuality"}
+              />
             ) : n.name ? (
               (() => {
                 const words = n.name.split(" ");

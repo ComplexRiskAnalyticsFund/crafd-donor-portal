@@ -311,19 +311,14 @@ with tqdm(color_only_rows, desc="Color→BW th", unit="img") as pbar:
             tqdm.write(f"  ✗ {slug}: {e}")
 tqdm.write(f"  {color_thumb_count} color→grayscale thumbs generated")
 
-# SVG white logos are already sharp at any size — use directly as thumb path.
-# Raster logos use the generated WebP thumb, or None if generation failed.
-# Color-only logos also get their pre-grayscaled thumb via thumb_by_slug.
-df_partners["thumb_logo_path"] = [
-    p
-    if isinstance(p, str) and p.endswith(".svg")
-    else thumb_by_slug.get(to_slug(n))
-    if isinstance(n, str) and (isinstance(p, str) or isinstance(c, str))
-    else None
-    for p, c, n in zip(
+# logo_slug: the slug when any logo (white or color) was downloaded, else None.
+# The frontend derives paths by convention: thumb/{slug}.webp, color/{slug}.png.
+df_partners["logo_slug"] = [
+    to_slug(n) if isinstance(n, str) and (isinstance(w, str) or isinstance(c, str)) else None
+    for n, w, c in zip(
+        df_partners["org_short_name"],
         df_partners["white_logo_path"],
         df_partners["color_logo_path"],
-        df_partners["org_short_name"],
     )
 ]
 
@@ -335,9 +330,7 @@ selected_columns = [
     "crafd_connection",
     "org_type",
     "relational_project",
-    "white_logo_path",
-    "thumb_logo_path",
-    "color_logo_path",
+    "logo_slug",
     "org_url",
     "total_grant_size",
 ]
@@ -367,10 +360,8 @@ for projects in df_out["relational_project"].dropna():
 for proj, count in sorted(proj_counts.items()):
     tqdm.write(f"  {proj!r}  ({count} partners)")
 
-white_downloaded = df_out["white_logo_path"].notna().sum()
-tqdm.write(f"\nWhite logos: {white_downloaded}/{len(df_out)}")
-color_downloaded = df_out["color_logo_path"].notna().sum()
-tqdm.write(f"Color logos: {color_downloaded}/{len(df_out)}")
+logos_found = df_out["logo_slug"].notna().sum()
+tqdm.write(f"\nLogos: {logos_found}/{len(df_out)}")
 
 # -- Fetch projects -> public/data/projects.json ------------------------------
 tqdm.write("\nFetching projects table...")

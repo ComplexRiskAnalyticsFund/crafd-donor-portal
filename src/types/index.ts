@@ -19,8 +19,7 @@ export interface Partner {
   org_full_name: string;
   crafd_connection: string[];
   org_type?: string | null;
-  thumb_logo_path?: string | null;
-  color_logo_path?: string | null;
+  logo_slug?: string | null;
   relational_project?: string[];
   org_url?: string | null;
   total_grant_size?: number | string | null;
