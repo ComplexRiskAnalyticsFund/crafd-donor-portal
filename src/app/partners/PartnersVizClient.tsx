@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import type { HexNode } from "@/app/partners/lib/label";
@@ -86,6 +86,7 @@ export default function PartnersVizClient({
   const [vizBiasX, setVizBiasX] = useState(0);
   const [sheetSnap, setSheetSnap] = useState<"half" | "full">("half");
 
+  const deferredSearch = useDeferredValue(searchQuery);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -104,6 +105,13 @@ export default function PartnersVizClient({
     setHoveredPartner(null);
     router.replace(pathname);
     flyBackRef.current?.();
+  }, [router, pathname]);
+
+  const closeDonor = useCallback(() => {
+    setClickedNode(null);
+    setTappedNodeId(null);
+    setHoveredPartner(null);
+    router.replace(pathname);
   }, [router, pathname]);
 
   const {
@@ -177,6 +185,12 @@ export default function PartnersVizClient({
   useEffect(() => {
     setRenderNodes(initialNodes);
   }, [initialNodes]);
+
+  const nodeById = useMemo(() => {
+    const m = new Map<string, HexNode>();
+    for (const n of renderNodes) m.set(n.id, n);
+    return m;
+  }, [renderNodes]);
 
   // Restore modal state from URL on mount (enables shareable links)
   useEffect(() => {
@@ -320,9 +334,9 @@ export default function PartnersVizClient({
   const hoveredPartnerNode = useMemo(
     () =>
       hoveredPartner
-        ? (renderNodes.find((n) => n.id === hoveredPartner) ?? null)
+        ? (nodeById.get(hoveredPartner) ?? null)
         : null,
-    [hoveredPartner, renderNodes],
+    [hoveredPartner, nodeById],
   );
 
   const relationalPeers = useMemo(() => {
@@ -396,7 +410,7 @@ export default function PartnersVizClient({
   const hubRingPaths = useMemo(() => {
     const m = new Map<string, { outer: string; inner: string }>();
     for (const id of hubIds) {
-      const n = renderNodes.find((nd) => nd.id === id);
+      const n = nodeById.get(id);
       if (!n) continue;
       m.set(id, {
         outer: hexPathFlat(0, 0, n.r * 1.22),
@@ -404,7 +418,7 @@ export default function PartnersVizClient({
       });
     }
     return m;
-  }, [hubIds, renderNodes]);
+  }, [hubIds, nodeById]);
 
   // Base kind ordering — stable across hover/tap, only changes when nodes change.
   // Hovered/locked/clicked nodes are rendered in separate SVG layers on top,
@@ -531,9 +545,9 @@ export default function PartnersVizClient({
           nodeOpacity = 0.35;
         }
       }
-    } else if (searchQuery.trim()) {
+    } else if (deferredSearch.trim()) {
       if (n.kind === "partner") {
-        const q = searchQuery.toLowerCase();
+        const q = deferredSearch.toLowerCase();
         const hit =
           (n.name ?? "").toLowerCase().includes(q) ||
           (n.partner?.org_full_name ?? "").toLowerCase().includes(q);
@@ -753,12 +767,6 @@ export default function PartnersVizClient({
         }}
         {...svgTouchHandlers}
       >
-        <defs>
-          <filter id="grayscale">
-            <feColorMatrix type="saturate" values="0" />
-          </filter>
-        </defs>
-
         {/* SVG backdrop — handles click-to-exit without an HTML overlay div */}
         {lockedGroup !== null && (
           <rect
@@ -876,12 +884,7 @@ export default function PartnersVizClient({
             isMobile={isMobile}
             sheetSnap={sheetSnap}
             setSheetSnap={setSheetSnap}
-            onClose={() => {
-              setClickedNode(null);
-              setTappedNodeId(null);
-              setHoveredPartner(null);
-              router.replace(pathname);
-            }}
+            onClose={closeDonor}
           />
         )}
       </AnimatePresence>

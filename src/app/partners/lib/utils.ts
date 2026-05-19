@@ -53,6 +53,7 @@ export function strokeWidthFor(n: HexNode) {
 }
 
 const _parseCache = new Map<string, Set<string>>();
+const _arrayCache = new WeakMap<readonly string[], Set<string>>();
 const _emptySet: Set<string> = new Set();
 
 export function parseProjects(
@@ -60,7 +61,13 @@ export function parseProjects(
 ): Set<string> {
   if (!rp) return _emptySet;
   if (Array.isArray(rp)) {
-    return rp.length === 0 ? _emptySet : new Set(rp);
+    if (rp.length === 0) return _emptySet;
+    let cached = _arrayCache.get(rp);
+    if (!cached) {
+      cached = new Set(rp);
+      _arrayCache.set(rp, cached);
+    }
+    return cached;
   }
   let cached = _parseCache.get(rp);
   if (!cached) {
