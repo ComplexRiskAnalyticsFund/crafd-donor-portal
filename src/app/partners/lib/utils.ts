@@ -1,4 +1,5 @@
 import type { HexNode } from "@/app/partners/lib/label";
+import type { CrafdProject } from "@/types";
 
 export const SQRT3 = Math.sqrt(3);
 export const HEX_SIZE = 75;
@@ -52,6 +53,7 @@ export function strokeWidthFor(n: HexNode) {
 }
 
 const _parseCache = new Map<string, Set<string>>();
+const _arrayCache = new WeakMap<readonly string[], Set<string>>();
 const _emptySet: Set<string> = new Set();
 
 export function parseProjects(
@@ -59,7 +61,13 @@ export function parseProjects(
 ): Set<string> {
   if (!rp) return _emptySet;
   if (Array.isArray(rp)) {
-    return rp.length === 0 ? _emptySet : new Set(rp);
+    if (rp.length === 0) return _emptySet;
+    let cached = _arrayCache.get(rp);
+    if (!cached) {
+      cached = new Set(rp);
+      _arrayCache.set(rp, cached);
+    }
+    return cached;
   }
   let cached = _parseCache.get(rp);
   if (!cached) {
@@ -97,4 +105,27 @@ export function formatGrantSize(
   if (num >= 1_000_000) return `${prefix}${(num / 1_000_000).toFixed(1)}M`;
   if (num >= 1_000) return `${prefix}${(num / 1_000).toFixed(0)}K`;
   return `${prefix}${num}`;
+}
+
+/**
+ * Find the hub (lead) node for a project within a set of candidate nodes.
+ * Uses per-project `linked_lead_org` from project data, falling back to
+ * the clicked source node, then the first node.
+ */
+export function findProjectHub(
+  projNodes: HexNode[],
+  projectData: CrafdProject | undefined,
+  lockedSourceNode: HexNode | null,
+): HexNode {
+  return (
+    projNodes.find(
+      (n) =>
+        n.partner?.airtable_id != null &&
+        projectData?.linked_lead_org?.includes(n.partner.airtable_id),
+    ) ??
+    (lockedSourceNode && projNodes.some((n) => n.id === lockedSourceNode.id)
+      ? lockedSourceNode
+      : null) ??
+    projNodes[0]
+  );
 }

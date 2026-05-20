@@ -3,9 +3,11 @@ import type { HexNode } from "@/app/partners/lib/label";
 import { cn } from "@/lib/utils";
 import type { CrafdProject } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
+import { colorLogoPath } from "@/lib/logos";
 import Image from "next/image";
-import { useRef } from "react";
 import { formatGrantSize, parseProjects } from "./lib/utils";
+import { ProjectVisitLink } from "./lib/ProjectVisitLink";
+import { useSheetDrag } from "./hooks/useSheetDrag";
 
 interface EcosystemPanelProps {
   lockedFeature: string;
@@ -19,37 +21,9 @@ interface EcosystemPanelProps {
   setSheetSnap: (v: "half" | "full") => void;
   onClose: () => void;
   onPartnerClick: (n: HexNode) => void;
-  setPartnerTooltip: (t: { text: string; x: number; y: number } | null) => void;
+
   onProjectHover: (project: string | null) => void;
   onOrgHover: (nodeId: string | null) => void;
-}
-
-function ProjectVisitLink({ href }: { href: string }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group inline-flex items-center gap-2 self-start border-b border-crafd-yellow/40 pb-px text-xs font-bold tracking-widest text-crafd-yellow uppercase no-underline transition-colors hover:border-crafd-yellow"
-    >
-      Visit project page
-      <svg
-        width="10"
-        height="10"
-        viewBox="0 0 12 12"
-        fill="none"
-        className="shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-      >
-        <path
-          d="M2 10L10 2M10 2H5M10 2v5"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </a>
-  );
 }
 
 export function EcosystemPanel({
@@ -64,11 +38,12 @@ export function EcosystemPanel({
   setSheetSnap,
   onClose,
   onPartnerClick,
-  setPartnerTooltip,
   onProjectHover,
   onOrgHover,
 }: EcosystemPanelProps) {
-  const sheetTouchStartY = useRef(0);
+  const { motionAnimate, motionTransition, handleDragStart, handleDragMove, handleDragEnd } =
+    useSheetDrag({ sheetSnap, setSheetSnap, onClose });
+
   const projects = [...parseProjects(lockedFeature)].filter(
     (proj) => proj in projectsById,
   );
@@ -79,14 +54,9 @@ export function EcosystemPanel({
   const partnerFullName = lockedSourceNode?.partner?.org_full_name?.trim();
   const orgUrl = lockedSourceNode?.partner?.org_url;
 
-  const logoSrc =
-    lockedSourceNode?.partner?.color_logo_path ??
-    lockedSourceNode?.partner?.thumb_logo_path ??
-    lockedSourceNode?.partner?.white_logo_path;
-  const logoIsWhiteOnly =
-    !lockedSourceNode?.partner?.color_logo_path &&
-    !lockedSourceNode?.partner?.thumb_logo_path &&
-    !!lockedSourceNode?.partner?.white_logo_path;
+  const logoSrc = lockedSourceNode?.partner?.logo_slug
+    ? colorLogoPath(lockedSourceNode.partner.logo_slug)
+    : null;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 flex">
@@ -102,9 +72,9 @@ export function EcosystemPanel({
         <motion.div
           key={`cs1-panel-${lockedSourceNode?.id ?? lockedFeature}`}
           initial={isMobile ? { y: "100%" } : { x: "-100%" }}
-          animate={isMobile ? { y: 0 } : { x: 0 }}
+          animate={isMobile ? motionAnimate : { x: 0 }}
           exit={isMobile ? { y: "100%" } : { x: "-100%" }}
-          transition={{ type: "tween", ease: "easeInOut", duration: 0.18 }}
+          transition={isMobile ? motionTransition : { type: "tween", ease: "easeInOut", duration: 0.18 }}
           className={cn(
             "pointer-events-auto flex flex-col overflow-hidden text-white",
             isMobile ? "backdrop-blur-sm" : "backdrop-blur-md",
@@ -119,10 +89,7 @@ export function EcosystemPanel({
           )}
           style={{
             background: isMobile ? "rgba(8,8,8,0.96)" : "rgba(8,8,8,0.93)",
-            ...(isMobile && {
-              height: sheetSnap === "full" ? "100dvh" : "50dvh",
-              transition: "height 0.3s ease",
-            }),
+            ...(isMobile && { height: "100dvh" }),
           }}
           data-modal="true"
         >
@@ -130,18 +97,9 @@ export function EcosystemPanel({
           {isMobile && (
             <div
               className="flex shrink-0 cursor-grab touch-none justify-center pt-3 pb-1"
-              onTouchStart={(e) => {
-                sheetTouchStartY.current = e.touches[0].clientY;
-              }}
-              onTouchEnd={(e) => {
-                const dy =
-                  e.changedTouches[0].clientY - sheetTouchStartY.current;
-                if (dy < -30) setSheetSnap("full");
-                else if (dy > 30) {
-                  if (sheetSnap === "full") setSheetSnap("half");
-                  else onClose();
-                }
-              }}
+              onTouchStart={handleDragStart}
+              onTouchMove={handleDragMove}
+              onTouchEnd={handleDragEnd}
             >
               <div className="h-1 w-9 rounded-sm bg-white/30" />
             </div>
@@ -168,9 +126,6 @@ export function EcosystemPanel({
                       height: isMobile ? 30 : 40,
                       width: "auto",
                       maxWidth: 110,
-                      filter: logoIsWhiteOnly
-                        ? "brightness(0) invert(1) opacity(0.7)"
-                        : undefined,
                     }}
                   />
                 )}
@@ -328,27 +283,48 @@ export function EcosystemPanel({
                       </motion.svg>
                     </button>
 
-                    {(pd?.grant_size ||
-                      pd?.duration_months ||
-                      pd?.project_coverage) && (
-                      <div className="flex flex-wrap gap-2 pb-2">
-                        {pd?.grant_size && (
-                          <span className="inline-flex items-center gap-1 rounded-md border border-white/18 bg-white/8 px-2 py-0.5 text-sm font-bold tracking-wide text-white/85">
-                            {formatGrantSize(pd.grant_size)}
-                          </span>
-                        )}
-                        {pd?.duration_months && (
-                          <span className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/6 px-2 py-0.5 text-sm font-bold tracking-wide text-white/70">
-                            {pd.duration_months} months
-                          </span>
-                        )}
-                        {pd?.project_coverage && (
-                          <span className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/6 px-2 py-0.5 text-sm font-bold tracking-wide text-white/70">
-                            {pd.project_coverage}
-                          </span>
-                        )}
-                      </div>
-                    )}
+                    {(() => {
+                      const isLeadInProj = (pn: (typeof lockedNodes)[0]) =>
+                        !!(
+                          pn.partner?.airtable_id &&
+                          pd?.linked_lead_org?.includes(pn.partner.airtable_id)
+                        );
+                      const leadPartners = lockedNodes.filter(isLeadInProj);
+
+                      return (pd?.grant_size ||
+                        pd?.duration_months ||
+                        pd?.project_coverage ||
+                        leadPartners.length > 0) ? (
+                        <div className="flex flex-wrap gap-2 pb-2">
+                          {leadPartners.map((pn) => (
+                            <button
+                              key={pn.id}
+                              onClick={() => onPartnerClick(pn)}
+                              className="inline-flex items-center gap-1 rounded-md border border-crafd-yellow/50 bg-crafd-yellow/15 px-2 py-0.5 text-sm font-bold tracking-wide text-crafd-yellow transition-colors hover:border-crafd-yellow/80 hover:bg-crafd-yellow/25 cursor-pointer"
+                              onMouseEnter={() => onOrgHover(pn.id)}
+                              onMouseLeave={() => onOrgHover(null)}
+                            >
+                              {pn.partner?.org_short_name ?? pn.name}
+                            </button>
+                          ))}
+                          {pd?.grant_size && (
+                            <span className="inline-flex items-center gap-1 rounded-md border border-white/18 bg-white/8 px-2 py-0.5 text-sm font-bold tracking-wide text-white/85">
+                              {formatGrantSize(pd.grant_size)}
+                            </span>
+                          )}
+                          {pd?.duration_months && (
+                            <span className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/6 px-2 py-0.5 text-sm font-bold tracking-wide text-white/70">
+                              {pd.duration_months} months
+                            </span>
+                          )}
+                          {pd?.project_coverage && (
+                            <span className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/6 px-2 py-0.5 text-sm font-bold tracking-wide text-white/70">
+                              {pd.project_coverage}
+                            </span>
+                          )}
+                        </div>
+                      ) : null;
+                    })()}
                   </div>
 
                   <AnimatePresence initial={false}>
@@ -409,33 +385,8 @@ export function EcosystemPanel({
                                       key={pn.id}
                                       onClick={() => onPartnerClick(pn)}
                                       className="cursor-pointer rounded border border-white/12 bg-white/5 px-2 py-0.5 text-xs font-bold tracking-wide text-white/60 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-white"
-                                      onMouseEnter={(e) => {
-                                        onOrgHover(pn.id);
-                                        const pId = pn.partner?.airtable_id;
-                                        const role =
-                                          pId &&
-                                          pd?.linked_lead_org?.includes(pId)
-                                            ? "Project Lead"
-                                            : pId &&
-                                                pd?.linked_supporting_org?.includes(
-                                                  pId,
-                                                )
-                                              ? "Collaborating Partner"
-                                              : null;
-                                        if (role) {
-                                          const rect =
-                                            e.currentTarget.getBoundingClientRect();
-                                          setPartnerTooltip({
-                                            text: role,
-                                            x: rect.left + rect.width / 2,
-                                            y: rect.top - 1,
-                                          });
-                                        }
-                                      }}
-                                      onMouseLeave={() => {
-                                        onOrgHover(null);
-                                        setPartnerTooltip(null);
-                                      }}
+                                      onMouseEnter={() => onOrgHover(pn.id)}
+                                      onMouseLeave={() => onOrgHover(null)}
                                     >
                                       {pn.partner?.org_short_name ?? pn.name}
                                     </button>
@@ -445,21 +396,10 @@ export function EcosystemPanel({
 
                               return (
                                 <div className="flex flex-col gap-2">
-                                  {leadPartners.length > 0 && (
-                                    <div>
-                                      <p className="m-0 mb-0.5 text-xs font-bold tracking-widest text-white/35 uppercase">
-                                        {leadPartners.length === 1
-                                          ? "Project Lead"
-                                          : "Project Leads"}
-                                      </p>
-                                      {renderPartnerList(leadPartners)}
-                                    </div>
-                                  )}
                                   {otherPartners.length > 0 && (
                                     <div>
                                       <p className="m-0 mb-0.5 text-xs font-bold tracking-widest text-white/35 uppercase">
-                                        All Collaborating &amp; Implementing
-                                        Partners
+                                        Project Collaborating Partners
                                       </p>
                                       {renderPartnerList(otherPartners)}
                                     </div>
