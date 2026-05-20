@@ -38,3 +38,13 @@ export async function getProjects(): Promise<CrafdProject[]> {
   const filePath = path.join(process.cwd(), "public/data/projects.json");
   return JSON.parse(await readFile(filePath, "utf8"));
 }
+
+export async function getOrgsMap(): Promise<Record<string, string>> {
+  const filePath = path.join(process.cwd(), "public/data/partners.json");
+  const data: Partner[] = JSON.parse(await readFile(filePath, "utf8"));
+  const map: Record<string, string> = {};
+  for (const o of data) {
+    if (o.airtable_id) map[o.airtable_id] = o.org_short_name;
+  }
+  return map;
+}

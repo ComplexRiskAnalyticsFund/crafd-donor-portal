@@ -1,5 +1,6 @@
 /**
- * Precomputes the geographic hex tile grid and writes public/data/hex-tiles.json.
+ * Precomputes the geographic hex tile grid (flat-top orientation) and writes
+ * public/data/hex-tiles.json.
  * Run once (or after changing resolution):
  *   node scripts/generate-hex-tiles.mjs
  */
@@ -13,20 +14,18 @@ const ROOT = join(__dirname, "..");
 
 const d3 = await import("d3");
 const topojson = await import("topojson-client");
-const { hexbin: d3hexbin } = await import("d3-hexbin");
 
 const WIDTH = 1600;
 const HEIGHT = 900;
 const HEX_RADIUS = 9.5;
-const SAMPLE_STEP = 8;
+
+// Flat-top hex grid spacing
+const dx = HEX_RADIUS * 1.5;                // horizontal distance between adjacent column centres
+const dy = HEX_RADIUS * Math.sqrt(3);       // vertical distance between row centres in same column
 
 const projection = d3.geoNaturalEarth1()
   .scale(330)
   .translate([WIDTH / 2, HEIGHT / 2 - 110]);
-
-const hexbin = d3hexbin()
-  .radius(HEX_RADIUS)
-  .extent([[0, 0], [WIDTH, HEIGHT]]);
 
 function getRegion(lon, lat) {
   if (lat < -58) return null;
@@ -40,8 +39,8 @@ function getRegion(lon, lat) {
   if (lon >= 8 && lon <= 60 && lat >= 43 && lat < 56) return "Eastern Europe";
   if (lon >= -17 && lon <= 40 && lat >= 20 && lat < 38) return "Northern Africa";
   if (lon >= -20 && lon <= 15 && lat >= 0 && lat < 20) return "Western Africa";
-  if (lon >= 8 && lon <= 32 && lat >= -10 && lat < 20) return "Middle Africa"; // expanded lat (fills Chad/CAR gap)
-  if (lon >= 28 && lon <= 52 && lat >= -12 && lat < 22) return "Eastern Africa"; // expanded lat (fills Eritrea/Horn gap)
+  if (lon >= 8 && lon <= 32 && lat >= -10 && lat < 20) return "Middle Africa";
+  if (lon >= 28 && lon <= 52 && lat >= -12 && lat < 22) return "Eastern Africa";
   if (lon >= 10 && lon <= 42 && lat >= -35 && lat < -10) return "Southern Africa";
   if (lon >= 30 && lon <= 60 && lat >= 20 && lat < 42) return "Western Asia";
   if (lon >= 50 && lon <= 90 && lat >= 36 && lat < 56) return "Central Asia";
@@ -59,35 +58,39 @@ console.log("Fetching world atlas...");
 const world = await d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json");
 const land = topojson.feature(world, world.objects.land);
 
-console.log("Sampling points...");
-const labeledPoints = [];
-for (let y = -20; y <= HEIGHT + 20; y += SAMPLE_STEP) {
-  for (let x = -20; x <= WIDTH + 20; x += SAMPLE_STEP) {
+console.log("Generating flat-top hex grid...");
+const tilesByRegion = {};
+let total = 0;
+
+// Iterate flat-top columns: even columns have yOffset = 0, odd columns yOffset = dy/2
+for (let col = -2; col * dx <= WIDTH + dx * 2; col++) {
+  const x = col * dx;
+  const yOffset = ((col % 2) + 2) % 2 === 1 ? dy / 2 : 0;
+
+  for (let row = -2; row * dy + yOffset <= HEIGHT + dy * 2; row++) {
+    const y = row * dy + yOffset;
+
     const lonLat = projection.invert([x, y]);
     if (!lonLat) continue;
     const [lon, lat] = lonLat;
+
     if (lat > -58 && d3.geoContains(land, [lon, lat])) {
       const region = getRegion(lon, lat);
-      if (region) labeledPoints.push([x, y, region]);
+      if (region) {
+        if (!tilesByRegion[region]) tilesByRegion[region] = [];
+        tilesByRegion[region].push({
+          x: Math.round(x * 10) / 10,
+          y: Math.round(y * 10) / 10,
+          col,
+          row,
+        });
+        total++;
+      }
     }
   }
 }
-console.log(`Sampled ${labeledPoints.length} land points`);
 
-console.log("Binning into hexagons...");
-const bins = hexbin(labeledPoints);
-
-const tilesByRegion = {};
-for (const bin of bins) {
-  const counts = {};
-  bin.forEach((pt) => { counts[pt[2]] = (counts[pt[2]] || 0) + 1; });
-  const region = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
-  if (!tilesByRegion[region]) tilesByRegion[region] = [];
-  tilesByRegion[region].push({ x: Math.round(bin.x * 10) / 10, y: Math.round(bin.y * 10) / 10 });
-}
-
-const totalTiles = Object.values(tilesByRegion).reduce((s, arr) => s + arr.length, 0);
-console.log(`Generated ${totalTiles} hex tiles across ${Object.keys(tilesByRegion).length} regions`);
+console.log(`Generated ${total} hex tiles across ${Object.keys(tilesByRegion).length} regions`);
 
 const outDir = join(ROOT, "public", "data");
 mkdirSync(outDir, { recursive: true });

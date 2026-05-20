@@ -1,16 +1,46 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CrafdProject } from "@/types";
 import { coverageToRegions } from "./coverage-map";
 import styles from "./impact-map.module.css";
 
-interface HexTile { x: number; y: number }
+interface HexTile { x: number; y: number; col: number; row: number }
 interface TileData { width: number; height: number; hexRadius: number; tilesByRegion: Record<string, HexTile[]> }
-interface Props { projects: CrafdProject[]; variant?: "flat" | "density" }
+interface Props { projects: CrafdProject[]; orgs: Record<string, string>; variant?: "flat" | "density" }
 
-const DENSITY_LOW: [number, number, number] = [246, 210, 133]; // #F6D285 — floor (fewest)
-const DENSITY_HIGH: [number, number, number] = [253, 247, 234]; // #FDF7EA — ceiling (most)
+const PROJECT_CATEGORIES: Record<string, string> = {
+  "Hazard Modeling":                        "Crisis Anticipation & Warning",
+  "GEOGUARD":                               "Crisis Anticipation & Warning",
+  "INFORM Warning":                         "Crisis Anticipation & Warning",
+  "eEARTH":                                 "Crisis Anticipation & Warning",
+  "CLIFDEW-GRID":                           "Crisis Anticipation & Warning",
+  "Maintaining ACLED":                      "Peace & Conflict",
+  "ACLED Data":                             "Peace & Conflict",
+  "Women's Mobilization Within Armed Groups": "Peace & Conflict",
+  "VIEWS-PIN":                              "Peace & Conflict",
+  "EMPOW":                                  "Peace & Conflict",
+  "Kente Threads":                          "Displacement",
+  "Internal Displacement Data":             "Displacement",
+  "Conflict Climate Displacement":          "Displacement",
+  "PRIMARI":                                "Displacement",
+  "Transformative Outcomes":                "Needs & Impact",
+  "GUARD":                                  "Needs & Impact",
+  "Rapid Assessment Data":                  "Needs & Impact",
+  "Risk DataHub":                           "Ecosystem Backbone",
+  "Strengthening CRAF'd Ecosystem":         "Ecosystem Backbone",
+};
+
+const CATEGORY_ORDER = [
+  "Crisis Anticipation & Warning",
+  "Peace & Conflict",
+  "Displacement",
+  "Needs & Impact",
+  "Ecosystem Backbone",
+];
+
+const DENSITY_LOW: [number, number, number] = [246, 210, 133];
+const DENSITY_HIGH: [number, number, number] = [253, 247, 234];
 
 function lerpHex(a: [number, number, number], b: [number, number, number], t: number): string {
   const r = Math.round(a[0] + (b[0] - a[0]) * t);
@@ -22,6 +52,7 @@ function lerpHex(a: [number, number, number], b: [number, number, number], t: nu
 const EXCLUDED_PROJECTS = new Set([
   "CRAF'd Direct Costs",
   "CRAF'd Sec.Direct Cost 2022",
+  "MPTFO Admin (1%)",
 ]);
 
 function splitLabel(name: string): [string, string] {
@@ -31,20 +62,29 @@ function splitLabel(name: string): [string, string] {
   return [words.slice(0, mid).join(" "), words.slice(mid).join(" ")];
 }
 
-// Pointy-top hexagon matching d3-hexbin orientation
 function hexPoints(cx: number, cy: number, r: number): string {
   return Array.from({ length: 6 }, (_, i) => {
     const a = (Math.PI / 3) * i;
-    return `${cx + Math.sin(a) * r},${cy - Math.cos(a) * r}`;
+    return `${cx + Math.cos(a) * r},${cy + Math.sin(a) * r}`;
   }).join(" ");
 }
 
-export default function ImpactMap({ projects, variant = "flat" }: Props) {
+function easeInOut(t: number): number {
+  return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+}
+
+export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
   const [tileData, setTileData] = useState<TileData | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const [locked, setLocked] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(() =>
+    typeof window !== "undefined" ? window.matchMedia("(max-width: 640px)").matches : false
+  );
+  const [animVB, setAnimVB] = useState({ x: 0, y: -30, w: 1600, h: 930 });
+  const animVBRef = useRef(animVB);
+  animVBRef.current = animVB;
+  const rafRef = useRef<number | null>(null);
 
-  // locked takes priority over hover
   const activeRegion = locked ?? hovered ?? "Global";
 
   useEffect(() => {
@@ -56,13 +96,15 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
     return () => ctrl.abort();
   }, []);
 
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)");
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   const filteredProjects = useMemo(
-    () =>
-      projects.filter(
-        (p) =>
-          p.project_short_title &&
-          !EXCLUDED_PROJECTS.has(p.project_short_title),
-      ),
+    () => projects.filter((p) => p.project_short_title && !EXCLUDED_PROJECTS.has(p.project_short_title)),
     [projects],
   );
 
@@ -108,6 +150,94 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
     return out;
   }, [tileData]);
 
+  // BFS depth from ocean: uses exact integer (col, row) arithmetic — no float rounding.
+  // depth 1 = touches ocean, depth 2 = one ring inward, depth 3+ = true interior.
+  // Flat-top neighbor rules (even/odd col differ in which row the diagonal lands on).
+  const tileDepth = useMemo(() => {
+    if (!tileData) return new Map<string, number>();
+    const ckey = (col: number, row: number) => `${col},${row}`;
+    const allTiles = new Map<string, HexTile>();
+    for (const tiles of Object.values(tileData.tilesByRegion)) {
+      for (const t of tiles) allTiles.set(ckey(t.col, t.row), t);
+    }
+    function neighbors(col: number, row: number): [number, number][] {
+      const even = col % 2 === 0;
+      return [
+        [col, row - 1], [col, row + 1],
+        [col - 1, even ? row - 1 : row], [col - 1, even ? row : row + 1],
+        [col + 1, even ? row - 1 : row], [col + 1, even ? row : row + 1],
+      ];
+    }
+    const depth = new Map<string, number>();
+    const queue: Array<[number, number]> = [];
+    // Seed: tiles with at least one missing neighbor are depth-1
+    for (const t of allTiles.values()) {
+      const missing = neighbors(t.col, t.row).some(([nc, nr]) => !allTiles.has(ckey(nc, nr)));
+      if (missing) { depth.set(ckey(t.col, t.row), 1); queue.push([t.col, t.row]); }
+    }
+    // BFS inward
+    let head = 0;
+    while (head < queue.length) {
+      const [col, row] = queue[head++];
+      const d = depth.get(ckey(col, row))!;
+      for (const [nc, nr] of neighbors(col, row)) {
+        const k = ckey(nc, nr);
+        if (allTiles.has(k) && !depth.has(k)) {
+          depth.set(k, d + 1);
+          queue.push([nc, nr]);
+        }
+      }
+    }
+    return depth;
+  }, [tileData]);
+
+  // Target viewBox for mobile: bounding box of the locked region's tiles + padding
+  const targetVB = useMemo(() => {
+    if (!isMobile || !locked || !tileData) return null;
+    const tiles = tileData.tilesByRegion[locked];
+    if (!tiles || tiles.length === 0) return null;
+    const xs = tiles.map((t) => t.x);
+    const ys = tiles.map((t) => t.y);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    const pad = 80;
+    const w = Math.max(maxX - minX + pad * 2, 260);
+    const h = Math.max(maxY - minY + pad * 2, 180);
+    const cx = (minX + maxX) / 2;
+    const cy = (minY + maxY) / 2;
+    return { x: cx - w / 2, y: cy - h / 2, w, h };
+  }, [isMobile, locked, tileData]);
+
+  // Animate viewBox: runs whenever targetVB or tileData changes
+  useEffect(() => {
+    if (!tileData) return;
+    const defaultVB = { x: 0, y: -30, w: tileData.width, h: tileData.height + 30 };
+    const target = targetVB ?? defaultVB;
+
+    if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    const start = { ...animVBRef.current };
+    const t0 = performance.now();
+    const dur = 600;
+
+    const tick = (now: number) => {
+      const p = Math.min((now - t0) / dur, 1);
+      const e = easeInOut(p);
+      setAnimVB({
+        x: start.x + (target.x - start.x) * e,
+        y: start.y + (target.y - start.y) * e,
+        w: start.w + (target.w - start.w) * e,
+        h: start.h + (target.h - start.h) * e,
+      });
+      if (p < 1) rafRef.current = requestAnimationFrame(tick);
+      else rafRef.current = null;
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); };
+  }, [targetVB, tileData]);
+
   function isHighlighted(region: string): boolean {
     if (locked) return region === locked;
     return region === hovered;
@@ -115,113 +245,173 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
 
   function handleTileClick(e: React.MouseEvent, region: string) {
     e.stopPropagation();
-    setLocked((prev) => (prev === region ? null : region));
+    if (isMobile) {
+      // On mobile, always lock the tapped region — background tap is the "back" gesture
+      setLocked(region);
+    } else {
+      setLocked((prev) => (prev === region ? null : region));
+    }
   }
 
   const globalProjects = projectsByRegion.get("Global") ?? [];
   const isSelected = locked !== null || hovered !== null;
-  const regionalProjects = isSelected
-    ? (projectsByRegion.get(activeRegion) ?? [])
-    : [];
+  const regionalProjects = isSelected ? (projectsByRegion.get(activeRegion) ?? []) : [];
   const hasRegional = regionalProjects.length > 0;
+  const drawR = tileData ? tileData.hexRadius : 9;
 
-  const drawR = tileData ? tileData.hexRadius * 0.96 : 9;
+  const groupedCategories = useMemo(() => {
+    const source = isSelected && hasRegional ? regionalProjects : globalProjects;
+    const grouped = new Map<string, Array<{ label: string; url: string | null }>>();
+    for (const p of source) {
+      if (!p.project_short_title) continue;
+      const cat = PROJECT_CATEGORIES[p.project_short_title];
+      if (!cat) continue;
+      const leadId = p.linked_lead_org?.[0];
+      const label = (leadId && orgs[leadId]) || p.project_short_title;
+      if (!grouped.has(cat)) grouped.set(cat, []);
+      grouped.get(cat)!.push({ label, url: p.project_url });
+    }
+    return CATEGORY_ORDER.filter((c) => grouped.has(c)).map((c) => ({ category: c, entries: grouped.get(c)! }));
+  }, [isSelected, hasRegional, regionalProjects, globalProjects, orgs]);
 
   if (!tileData) return <div className={styles.root} />;
 
-  return (
-    <div className={styles.root} onClick={() => setLocked(null)}>
-      <svg
-        className={styles.svg}
-        viewBox={`0 -30 ${tileData.width} ${tileData.height + 30}`}
-        preserveAspectRatio="xMidYMid meet"
-        width="100%"
-        height="100%"
-        style={{ overflow: "visible" }}
-      >
-        <rect
-          x={-60}
-          y={-60}
-          width={tileData.width + 120}
-          height={tileData.height + 120}
-          fill="#fdb53c"
-        />
+  const svgViewBox = isMobile
+    ? `${animVB.x} ${animVB.y} ${animVB.w} ${animVB.h}`
+    : `0 -30 ${tileData.width} ${tileData.height + 30}`;
 
-        {/* Tiles */}
-        {Object.entries(tileData.tilesByRegion).map(([region, tiles]) => {
-          const hl = isHighlighted(region);
-          const isLock = locked === region;
-          return (
-            <g
-              key={region}
-              onMouseEnter={() => setHovered(region)}
-              onMouseLeave={() => setHovered(null)}
-              onClick={(e) => handleTileClick(e, region)}
-              style={{ cursor: "pointer" }}
-            >
-              {tiles.map((t, i) => (
+  const mapSvg = (
+    <svg
+      className={styles.svg}
+      viewBox={svgViewBox}
+      preserveAspectRatio="xMidYMid meet"
+      width="100%"
+      height="100%"
+      style={{ overflow: "visible" }}
+    >
+      <rect x={-60} y={-60} width={tileData.width + 120} height={tileData.height + 120} fill="#fdb53c" />
+
+      {Object.entries(tileData.tilesByRegion).map(([region, regionTiles]) => {
+        const hl = isHighlighted(region);
+        const isLock = locked === region;
+        return (
+          <g
+            key={region}
+            onMouseEnter={() => { if (!isMobile) setHovered(region); }}
+            onMouseLeave={() => { if (!isMobile) setHovered(null); }}
+            onClick={(e) => handleTileClick(e, region)}
+            style={{ cursor: "pointer" }}
+          >
+            {regionTiles.map((t, i) => {
+              const depth = tileDepth.get(`${t.col},${t.row}`) ?? 3;
+              const r = depth === 1 ? drawR * 0.52 : depth === 2 ? drawR * 0.72 : drawR * 0.88;
+              return (
                 <polygon
                   key={i}
-                  points={hexPoints(t.x, t.y, drawR)}
+                  points={hexPoints(t.x, t.y, r)}
                   fill={variant === "density" ? (hl ? "rgba(255,255,255,0.80)" : densityFill(region)) : "white"}
-                  stroke={variant === "density"
-                    ? (isLock ? "rgba(68,42,10,0.5)" : hl ? "rgba(68,42,10,0.6)" : "none")
-                    : (isLock ? "rgba(0,0,0,0.75)" : hl ? "rgba(0,0,0,0.5)" : "none")}
-                  strokeWidth={variant === "density"
-                    ? (isLock ? 2 : hl ? 1.5 : 0)
-                    : (isLock ? 2 : hl ? 1.5 : 0)}
+                  stroke={isLock || hl ? "#F9E1AD" : "none"}
+                  strokeWidth={isLock ? 2 : hl ? 1.5 : 0}
                   style={{ transition: "fill 140ms ease, stroke 140ms ease" }}
                 />
-              ))}
-            </g>
-          );
-        })}
+              );
+            })}
+          </g>
+        );
+      })}
 
-        {/* Region labels with white bg on highlight */}
-        {Array.from(regionCentroids.entries()).map(([region, [cx, cy]]) => {
-          const [line1, line2] = splitLabel(region);
-          const hl = isHighlighted(region);
-          const maxLen = Math.max(line1.length, line2?.length ?? 0);
-          const bgW = maxLen * 9 + 18;
-          const bgH = line2 ? 40 : 27;
-          return (
-            <g
-              key={region}
-              style={{ pointerEvents: "none", userSelect: "none" }}
+      {Array.from(regionCentroids.entries()).map(([region, [cx, cy]]) => {
+        const [line1, line2] = splitLabel(region);
+        const hl = isHighlighted(region);
+        const maxLen = Math.max(line1.length, line2?.length ?? 0);
+        const bgW = maxLen * 9 + 18;
+        const bgH = line2 ? 40 : 27;
+        return (
+          <g key={region} style={{ pointerEvents: "none", userSelect: "none" }}>
+            <rect
+              x={cx - bgW / 2}
+              y={cy - (line2 ? 20 : 23)}
+              width={bgW}
+              height={bgH}
+              rx={Math.min(bgH / 2, 100)}
+              fill={hl ? "rgba(249,245,236,0.97)" : "rgba(249,245,236,0.80)"}
+              stroke="rgba(0,0,0,0.14)"
+              strokeWidth={1}
+            />
+            <text
+              textAnchor="middle"
+              fontFamily="Roboto, sans-serif"
+              fontWeight={500}
+              fontSize={14}
+              letterSpacing={0.5}
+              fill={variant === "density" ? "#BC840F" : (hl ? "rgba(68,42,10,0.95)" : "rgba(68,42,10,0.52)")}
+              stroke={variant === "density" ? "rgba(68,42,10,0.65)" : undefined}
+              strokeWidth={variant === "density" ? 0.5 : undefined}
+              style={variant === "density" ? { paintOrder: "stroke fill" } : undefined}
             >
-              {hl && (
-                <rect
-                  x={cx - bgW / 2}
-                  y={cy - (line2 ? 20 : 23)}
-                  width={bgW}
-                  height={bgH}
-                  rx={5}
-                  fill={variant === "density" ? "#FDF7EA" : "rgba(255,255,255,0.88)"}
-                />
-              )}
-              <text
-                textAnchor="middle"
-                fontFamily="Roboto, sans-serif"
-                fontWeight={500}
-                fontSize={14}
-                letterSpacing={0.5}
-                fill={variant === "density" ? "#BC840F" : (hl ? "rgba(68,42,10,0.95)" : "rgba(68,42,10,0.52)")}
-                stroke={variant === "density" ? "rgba(68,42,10,0.65)" : undefined}
-                strokeWidth={variant === "density" ? 0.5 : undefined}
-                style={variant === "density" ? { paintOrder: "stroke fill" } : undefined}
-              >
-                <tspan x={cx} y={cy - 5}>{line1}</tspan>
-                {line2 && <tspan x={cx} dy={16}>{line2}</tspan>}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
+              <tspan x={cx} y={cy - 5}>{line1}</tspan>
+              {line2 && <tspan x={cx} dy={16}>{line2}</tspan>}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
 
-      {/* ── Modal ────────────────────────────────────────── */}
+  const rightLabel = isSelected && hasRegional ? activeRegion.toUpperCase() : "GLOBAL COVERAGE";
+
+  const categoryColumns = groupedCategories.map(({ category, entries }) => (
+    <div key={category} className={styles.categoryBox}>
+      <p className={styles.categoryGroupHeader}>{category.toUpperCase()}</p>
+      <ul className={styles.projectList}>
+        {entries.map(({ label, url }) => (
+          <li key={label} className={styles.projectBlock}>
+            {url ? <a href={url} target="_blank" rel="noreferrer">{label}</a> : <span>{label}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  ));
+
+  // ── Mobile layout ─────────────────────────────────────────
+  if (isMobile) {
+    return (
+      <div className={styles.mobileRoot} onClick={() => setLocked(null)}>
+        <div className={styles.mobileTopCard} onClick={(e) => e.stopPropagation()}>
+          {isSelected ? (
+            <>
+              <p className={styles.zoneEyebrow}>Selected region</p>
+              <h2 className={styles.zoneTitle}>{activeRegion}</h2>
+            </>
+          ) : (
+            <>
+              <p className={styles.zoneEyebrow}>Worldwide</p>
+              <h2 className={styles.zoneTitle}>Global</h2>
+              <p className={styles.zoneHint}>Tap regions to explore</p>
+            </>
+          )}
+        </div>
+
+        <div className={styles.mobileMapWrapper}>
+          {mapSvg}
+        </div>
+
+        <div className={styles.mobileBottomCard} onClick={(e) => e.stopPropagation()}>
+          <p className={styles.zoneRightLabel}>{rightLabel}</p>
+          <div className={styles.categoryColumns}>
+            {categoryColumns}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Desktop layout ────────────────────────────────────────
+  return (
+    <div className={styles.root} onClick={() => setLocked(null)}>
+      {mapSvg}
+
       <div className={styles.card} onClick={(e) => e.stopPropagation()}>
-
-        {/* Zone 1 — region identity */}
         <div className={styles.zoneLeft}>
           {isSelected ? (
             <>
@@ -239,22 +429,12 @@ export default function ImpactMap({ projects, variant = "flat" }: Props) {
 
         <div className={styles.zoneDivider} />
 
-        {/* Zone 2 — projects: global by default, regional when region has targeted projects */}
         <div className={styles.zoneRight}>
-          <p className={styles.zoneLabel}>
-            {isSelected && hasRegional ? "Targeting this region" : "Global projects"}
-          </p>
-          <ul className={styles.projectList}>
-            {(isSelected && hasRegional ? regionalProjects : globalProjects).map((p) => (
-              <li key={p.project_short_title} className={styles.projectBlock}>
-                {p.project_url
-                  ? <a href={p.project_url} target="_blank" rel="noreferrer">{p.project_short_title}</a>
-                  : <span>{p.project_short_title}</span>}
-              </li>
-            ))}
-          </ul>
+          <p className={styles.zoneRightLabel}>{rightLabel}</p>
+          <div className={styles.categoryColumns}>
+            {categoryColumns}
+          </div>
         </div>
-
       </div>
     </div>
   );
