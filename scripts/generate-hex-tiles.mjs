@@ -45,12 +45,16 @@ function getRegion(lon, lat) {
   if (lon >= 30 && lon <= 60 && lat >= 20 && lat < 42) return "Western Asia";
   if (lon >= 50 && lon <= 90 && lat >= 36 && lat < 56) return "Central Asia";
   if (lon >= 60 && lon <= 92 && lat >= 5 && lat < 36) return "Southern Asia";
-  if (lon >= 92 && lon <= 145 && lat >= 22 && lat < 52) return "Eastern Asia";
+  if (lon >= 88 && lon <= 145 && lat >= 22 && lat < 52) return "Eastern Asia";
   if (lon >= 92 && lon <= 140 && lat >= -12 && lat < 22) return "Southeastern Asia";
   if (lon >= 110 && lon <= 180 && lat >= -48 && lat < -10) return "Australia and New Zealand";
   if (lon >= 130 && lon <= 165 && lat >= 5 && lat < 25) return "Micronesia";
   if (lon >= 140 && lon <= 180 && lat >= -15 && lat < 5) return "Melanesia";
   if ((lon >= 165 || lon <= -120) && lat >= -25 && lat < 10) return "Polynesia";
+  // Russia → Eastern Europe (UN M.49): northern Russia above Eastern Europe lat cap,
+  // and all of Siberia/Far East (lon > 60). These fire after all specific region boxes.
+  if (lon >= 40 && lon <= 60 && lat >= 56 && lat <= 82) return "Eastern Europe";
+  if (lon >= 60 && lon <= 180 && lat >= 48 && lat <= 82) return "Eastern Europe";
   return null;
 }
 

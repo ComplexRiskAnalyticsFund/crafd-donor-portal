@@ -8,5 +8,5 @@ export default async function ImpactPage({
 }) {
   const { v } = await searchParams;
   const [projects, orgs] = await Promise.all([getProjects(), getOrgsMap()]);
-  return <ImpactMapClient projects={projects} orgs={orgs} variant={v === "2" ? "density" : "flat"} />;
+  return <ImpactMapClient projects={projects} orgs={orgs} variant={v === "2" ? "dark" : v === "d" ? "density" : "flat"} />;
 }

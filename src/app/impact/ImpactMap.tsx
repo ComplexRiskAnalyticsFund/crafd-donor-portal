@@ -7,7 +7,7 @@ import styles from "./impact-map.module.css";
 
 interface HexTile { x: number; y: number; col: number; row: number }
 interface TileData { width: number; height: number; hexRadius: number; tilesByRegion: Record<string, HexTile[]> }
-interface Props { projects: CrafdProject[]; orgs: Record<string, string>; variant?: "flat" | "density" }
+interface Props { projects: CrafdProject[]; orgs: Record<string, string>; variant?: "flat" | "density" | "dark" }
 
 const PROJECT_CATEGORIES: Record<string, string> = {
   "Hazard Modeling":                        "Crisis Anticipation & Warning",
@@ -80,7 +80,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
   const [isMobile, setIsMobile] = useState<boolean>(() =>
     typeof window !== "undefined" ? window.matchMedia("(max-width: 640px)").matches : false
   );
-  const [animVB, setAnimVB] = useState({ x: 0, y: -30, w: 1600, h: 930 });
+  const [animVB, setAnimVB] = useState({ x: 0, y: -100, w: 1600, h: 1000 });
   const animVBRef = useRef(animVB);
   animVBRef.current = animVB;
   const rafRef = useRef<number | null>(null);
@@ -213,7 +213,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
   // Animate viewBox: runs whenever targetVB or tileData changes
   useEffect(() => {
     if (!tileData) return;
-    const defaultVB = { x: 0, y: -30, w: tileData.width, h: tileData.height + 30 };
+    const defaultVB = { x: 0, y: -100, w: tileData.width, h: tileData.height + 100 };
     const target = targetVB ?? defaultVB;
 
     if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
@@ -256,29 +256,34 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
   const globalProjects = projectsByRegion.get("Global") ?? [];
   const isSelected = locked !== null || hovered !== null;
   const regionalProjects = isSelected ? (projectsByRegion.get(activeRegion) ?? []) : [];
-  const hasRegional = regionalProjects.length > 0;
   const drawR = tileData ? tileData.hexRadius : 9;
 
   const groupedCategories = useMemo(() => {
-    const source = isSelected && hasRegional ? regionalProjects : globalProjects;
-    const grouped = new Map<string, Array<{ label: string; url: string | null }>>();
+    const source = isSelected ? regionalProjects : globalProjects;
+    const grouped = new Map<string, Map<string, string | null>>();
     for (const p of source) {
       if (!p.project_short_title) continue;
       const cat = PROJECT_CATEGORIES[p.project_short_title];
       if (!cat) continue;
       const leadId = p.linked_lead_org?.[0];
       const label = (leadId && orgs[leadId]) || p.project_short_title;
-      if (!grouped.has(cat)) grouped.set(cat, []);
-      grouped.get(cat)!.push({ label, url: p.project_url });
+      if (!grouped.has(cat)) grouped.set(cat, new Map());
+      const catMap = grouped.get(cat)!;
+      if (!catMap.has(label)) catMap.set(label, p.project_url ?? null);
     }
-    return CATEGORY_ORDER.filter((c) => grouped.has(c)).map((c) => ({ category: c, entries: grouped.get(c)! }));
-  }, [isSelected, hasRegional, regionalProjects, globalProjects, orgs]);
+    return CATEGORY_ORDER
+      .filter((c) => grouped.has(c))
+      .map((c) => ({
+        category: c,
+        entries: Array.from(grouped.get(c)!.entries()).map(([label, url]) => ({ label, url })),
+      }));
+  }, [isSelected, regionalProjects, globalProjects, orgs]);
 
   if (!tileData) return <div className={styles.root} />;
 
   const svgViewBox = isMobile
     ? `${animVB.x} ${animVB.y} ${animVB.w} ${animVB.h}`
-    : `0 -30 ${tileData.width} ${tileData.height + 30}`;
+    : `0 -100 ${tileData.width} ${tileData.height + 100}`;
 
   const mapSvg = (
     <svg
@@ -289,30 +294,39 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
       height="100%"
       style={{ overflow: "visible" }}
     >
-      <rect x={-60} y={-60} width={tileData.width + 120} height={tileData.height + 120} fill="#fdb53c" />
+      <rect x={-100} y={-300} width={tileData.width + 200} height={tileData.height + 600} fill="#fdb53c" />
 
       {Object.entries(tileData.tilesByRegion).map(([region, regionTiles]) => {
         const hl = isHighlighted(region);
-        const isLock = locked === region;
         return (
           <g
             key={region}
             onMouseEnter={() => { if (!isMobile) setHovered(region); }}
             onMouseLeave={() => { if (!isMobile) setHovered(null); }}
             onClick={(e) => handleTileClick(e, region)}
-            style={{ cursor: "pointer" }}
+            style={{
+              cursor: "pointer",
+              filter: hl
+                ? "drop-shadow(0 0 3px rgba(249,225,173,0.76)) drop-shadow(0 0 9px rgba(249,225,173,0.52)) drop-shadow(0 2px 5px rgba(0,0,0,0.10))"
+                : "none",
+              opacity: (hovered !== null || locked !== null) && !hl ? 0.70 : 1,
+              transition: "filter 160ms ease, opacity 160ms ease",
+            }}
           >
             {regionTiles.map((t, i) => {
               const depth = tileDepth.get(`${t.col},${t.row}`) ?? 3;
-              const r = depth === 1 ? drawR * 0.52 : depth === 2 ? drawR * 0.72 : drawR * 0.88;
+              const r = depth === 1 ? drawR * 0.65
+                      : depth === 2 ? drawR * 0.70
+                      : depth === 3 ? drawR * 0.75
+                      : depth === 4 ? drawR * 0.80
+                      : drawR * 0.85;
               return (
                 <polygon
                   key={i}
                   points={hexPoints(t.x, t.y, r)}
-                  fill={variant === "density" ? (hl ? "rgba(255,255,255,0.80)" : densityFill(region)) : "white"}
-                  stroke={isLock || hl ? "#F9E1AD" : "none"}
-                  strokeWidth={isLock ? 2 : hl ? 1.5 : 0}
-                  style={{ transition: "fill 140ms ease, stroke 140ms ease" }}
+                  fill={variant === "density" ? (hl ? "rgba(255,255,255,0.80)" : densityFill(region)) : variant === "dark" ? "rgba(18,18,18,0.88)" : "white"}
+                  stroke="none"
+                  style={{ transition: "fill 140ms ease" }}
                 />
               );
             })}
@@ -324,33 +338,33 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
         const [line1, line2] = splitLabel(region);
         const hl = isHighlighted(region);
         const maxLen = Math.max(line1.length, line2?.length ?? 0);
-        const bgW = maxLen * 9 + 18;
-        const bgH = line2 ? 40 : 27;
+        const bgW = maxLen * 9 + 28;
+        const bgH = line2 ? 44 : 30;
         return (
           <g key={region} style={{ pointerEvents: "none", userSelect: "none" }}>
             <rect
               x={cx - bgW / 2}
-              y={cy - (line2 ? 20 : 23)}
+              y={cy - (line2 ? 22 : 25)}
               width={bgW}
               height={bgH}
               rx={Math.min(bgH / 2, 100)}
-              fill={hl ? "rgba(249,245,236,0.97)" : "rgba(249,245,236,0.80)"}
-              stroke="rgba(0,0,0,0.14)"
+              fill={hl ? "rgba(249,245,236,1)" : "rgba(249,245,236,0.93)"}
+              stroke="rgba(0,0,0,0.12)"
               strokeWidth={1}
             />
             <text
               textAnchor="middle"
               fontFamily="Roboto, sans-serif"
-              fontWeight={500}
-              fontSize={14}
-              letterSpacing={0.5}
-              fill={variant === "density" ? "#BC840F" : (hl ? "rgba(68,42,10,0.95)" : "rgba(68,42,10,0.52)")}
+              fontWeight={600}
+              fontSize={11}
+              letterSpacing={1.2}
+              fill={variant === "density" ? "#BC840F" : (hl ? "rgba(70,70,70,0.95)" : "rgba(90,90,90,0.75)")}
               stroke={variant === "density" ? "rgba(68,42,10,0.65)" : undefined}
               strokeWidth={variant === "density" ? 0.5 : undefined}
               style={variant === "density" ? { paintOrder: "stroke fill" } : undefined}
             >
-              <tspan x={cx} y={cy - 5}>{line1}</tspan>
-              {line2 && <tspan x={cx} dy={16}>{line2}</tspan>}
+              <tspan x={cx} y={cy - 5}>{line1.toUpperCase()}</tspan>
+              {line2 && <tspan x={cx} dy={15}>{line2.toUpperCase()}</tspan>}
             </text>
           </g>
         );
@@ -358,7 +372,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
     </svg>
   );
 
-  const rightLabel = isSelected && hasRegional ? activeRegion.toUpperCase() : "GLOBAL COVERAGE";
+  const rightLabel = "CRAF'd-supported data to...";
 
   const categoryColumns = groupedCategories.map(({ category, entries }) => (
     <div key={category} className={styles.categoryBox}>
@@ -366,7 +380,21 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
       <ul className={styles.projectList}>
         {entries.map(({ label, url }) => (
           <li key={label} className={styles.projectBlock}>
-            {url ? <a href={url} target="_blank" rel="noreferrer">{label}</a> : <span>{label}</span>}
+            {url ? (
+              <a href={url} target="_blank" rel="noreferrer">
+                {label}
+                <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true" style={{ flexShrink: 0, opacity: 0.5 }}>
+                  <path d="M2 8L8 2M8 2H5M8 2V5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
+            ) : (
+              <span>
+                {label}
+                <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true" style={{ flexShrink: 0, opacity: 0.5 }}>
+                  <path d="M2 8L8 2M8 2H5M8 2V5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            )}
           </li>
         ))}
       </ul>
