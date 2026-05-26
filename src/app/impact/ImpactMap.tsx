@@ -22,7 +22,7 @@ const PROJECT_CATEGORIES: Record<string, string> = {
   "EMPOW":                                  "Peace & Conflict",
   "Kente Threads":                          "Displacement",
   "Internal Displacement Data":             "Displacement",
-  "Conflict Climate Displacement":          "Displacement",
+  "Conflict Climate Displacement":          "Crisis Anticipation & Warning",
   "PRIMARI":                                "Displacement",
   "Transformative Outcomes":                "Needs & Impact",
   "GUARD":                                  "Needs & Impact",
@@ -276,7 +276,8 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
       .map((c) => ({
         category: c,
         entries: Array.from(grouped.get(c)!.entries()).map(([label, url]) => ({ label, url })),
-      }));
+      }))
+      .sort((a, b) => b.entries.length - a.entries.length);
   }, [isSelected, regionalProjects, globalProjects, orgs]);
 
   if (!tileData) return <div className={styles.root} />;
@@ -306,10 +307,10 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
             onClick={(e) => handleTileClick(e, region)}
             style={{
               cursor: "pointer",
-              filter: hl
+              filter: hl && variant !== "dark"
                 ? "drop-shadow(0 0 3px rgba(249,225,173,0.76)) drop-shadow(0 0 9px rgba(249,225,173,0.52)) drop-shadow(0 2px 5px rgba(0,0,0,0.10))"
                 : "none",
-              opacity: (hovered !== null || locked !== null) && !hl ? 0.70 : 1,
+              opacity: variant !== "dark" && (hovered !== null || locked !== null) && !hl ? 0.70 : 1,
               transition: "filter 160ms ease, opacity 160ms ease",
             }}
           >
@@ -324,9 +325,10 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
                 <polygon
                   key={i}
                   points={hexPoints(t.x, t.y, r)}
-                  fill={variant === "density" ? (hl ? "rgba(255,255,255,0.80)" : densityFill(region)) : variant === "dark" ? "rgba(18,18,18,0.88)" : "white"}
-                  stroke="none"
-                  style={{ transition: "fill 140ms ease" }}
+                  fill={variant === "density" ? (hl ? "rgba(255,255,255,0.80)" : densityFill(region)) : "white"}
+                  stroke={variant === "dark" && hl ? "white" : "none"}
+                  strokeWidth={variant === "dark" && hl ? 7 : 0}
+                  style={{ transition: "fill 140ms ease, stroke-width 140ms ease" }}
                 />
               );
             })}
@@ -347,9 +349,9 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
               y={cy - (line2 ? 22 : 25)}
               width={bgW}
               height={bgH}
-              rx={Math.min(bgH / 2, 100)}
-              fill={hl ? "rgba(249,245,236,1)" : "rgba(249,245,236,0.93)"}
-              stroke="rgba(0,0,0,0.12)"
+              rx={8}
+              fill="#fef9ef"
+              stroke="rgba(51,51,51,0.3)"
               strokeWidth={1}
             />
             <text
