@@ -261,6 +261,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
     () => isSelected ? (projectsByRegion.get(activeRegion) ?? []) : [],
     [isSelected, projectsByRegion, activeRegion],
   );
+  const hasRegional = isSelected && regionalProjects.length > 0;
   const drawR = tileData ? tileData.hexRadius : 9;
 
   const groupedCategories = useMemo(() => {
@@ -411,13 +412,16 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
   const categoryColumns = groupedCategories.map(({ category, entries }) => (
     <div key={category} className={styles.categoryBox}>
       <p className={styles.categoryGroupHeader}>{category.toUpperCase()}</p>
-      <ul className={styles.projectList}>
+      <ul
+          className={styles.projectList}
+          style={entries.length > 4 ? { gridTemplateColumns: "repeat(3, auto)" } : undefined}
+        >
         {entries.map(({ label, url, isRegional }) => (
           <li
             key={label}
             className={styles.projectBlock}
-            style={variant === "dark" && isRegional
-              ? { boxShadow: "0 0 0 1.5px rgba(249,225,173,0.85), 0 0 10px rgba(249,225,173,0.55)" }
+            style={(variant === "dark" ? isRegional : isSelected)
+              ? { background: "#F3C35C", borderColor: "rgba(180,120,0,0.35)" }
               : undefined}
           >
             {url ? (
@@ -440,6 +444,20 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
             <>
               <p className={styles.zoneEyebrow}>Selected region</p>
               <h2 className={styles.zoneTitle}>{activeRegion}</h2>
+              {hasRegional && (
+                <div className={styles.legend}>
+                  <div className={styles.legendItem}>
+                    <span className={`${styles.legendSwatch} ${styles.legendSwatchRegional}`} />
+                    Regional Projects
+                  </div>
+                  {variant === "dark" && (
+                    <div className={styles.legendItem}>
+                      <span className={`${styles.legendSwatch} ${styles.legendSwatchGlobal}`} />
+                      Global Projects
+                    </div>
+                  )}
+                </div>
+              )}
             </>
           ) : (
             <>
@@ -475,6 +493,20 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
             <>
               <p className={styles.zoneEyebrow}>Selected region</p>
               <h2 className={styles.zoneTitle}>{activeRegion}</h2>
+              {hasRegional && (
+                <div className={styles.legend}>
+                  <div className={styles.legendItem}>
+                    <span className={`${styles.legendSwatch} ${styles.legendSwatchRegional}`} />
+                    Regional Projects
+                  </div>
+                  {variant === "dark" && (
+                    <div className={styles.legendItem}>
+                      <span className={`${styles.legendSwatch} ${styles.legendSwatchGlobal}`} />
+                      Global Projects
+                    </div>
+                  )}
+                </div>
+              )}
             </>
           ) : (
             <>
