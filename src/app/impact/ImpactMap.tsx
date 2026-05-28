@@ -264,8 +264,26 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
   const drawR = tileData ? tileData.hexRadius : 9;
 
   const groupedCategories = useMemo(() => {
-    const source = isSelected ? regionalProjects : globalProjects;
-    const grouped = new Map<string, Map<string, string | null>>();
+    let source: CrafdProject[];
+    let regionalLabels = new Set<string>();
+
+    if (variant === "dark") {
+      const hasRegional = isSelected && regionalProjects.length > 0;
+      if (hasRegional) {
+        for (const p of regionalProjects) {
+          if (!p.project_short_title) continue;
+          const leadId = p.linked_lead_org?.[0];
+          regionalLabels.add((leadId && orgs[leadId]) || p.project_short_title);
+        }
+        source = [...globalProjects, ...regionalProjects];
+      } else {
+        source = globalProjects;
+      }
+    } else {
+      source = isSelected ? regionalProjects : globalProjects;
+    }
+
+    const grouped = new Map<string, Map<string, { url: string | null; isRegional: boolean }>>();
     for (const p of source) {
       if (!p.project_short_title) continue;
       const cat = PROJECT_CATEGORIES[p.project_short_title];
@@ -274,16 +292,20 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
       const label = (leadId && orgs[leadId]) || p.project_short_title;
       if (!grouped.has(cat)) grouped.set(cat, new Map());
       const catMap = grouped.get(cat)!;
-      if (!catMap.has(label)) catMap.set(label, p.project_url ?? null);
+      if (!catMap.has(label)) {
+        catMap.set(label, { url: p.project_url ?? null, isRegional: regionalLabels.has(label) });
+      } else if (regionalLabels.has(label)) {
+        catMap.get(label)!.isRegional = true;
+      }
     }
     return VALID_CATEGORIES
       .filter((c) => grouped.has(c))
       .map((c) => ({
         category: c,
-        entries: Array.from(grouped.get(c)!.entries()).map(([label, url]) => ({ label, url })),
+        entries: Array.from(grouped.get(c)!.entries()).map(([label, { url, isRegional }]) => ({ label, url, isRegional })),
       }))
       .sort((a, b) => b.entries.length - a.entries.length);
-  }, [isSelected, regionalProjects, globalProjects, orgs]);
+  }, [isSelected, regionalProjects, globalProjects, orgs, variant]);
 
   if (!tileData) return <div className={styles.root} />;
 
@@ -312,10 +334,10 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
             onClick={(e) => handleTileClick(e, region)}
             style={{
               cursor: "pointer",
-              filter: hl && variant !== "dark"
+              filter: hl
                 ? "drop-shadow(0 0 3px rgba(249,225,173,0.76)) drop-shadow(0 0 9px rgba(249,225,173,0.52)) drop-shadow(0 2px 5px rgba(0,0,0,0.10))"
                 : "none",
-              opacity: variant !== "dark" && (hovered !== null || locked !== null) && !hl ? 0.70 : 1,
+              opacity: (hovered !== null || locked !== null) && !hl ? 0.70 : 1,
               transition: "filter 160ms ease, opacity 160ms ease",
             }}
           >
@@ -331,9 +353,8 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
                   key={i}
                   points={hexPoints(t.x, t.y, r)}
                   fill={variant === "density" ? (hl ? "rgba(255,255,255,0.80)" : densityFill(region)) : "white"}
-                  stroke={variant === "dark" && hl ? "white" : "none"}
-                  strokeWidth={variant === "dark" && hl ? 7 : 0}
-                  style={{ transition: "fill 140ms ease, stroke-width 140ms ease" }}
+                  stroke="none"
+                  style={{ transition: "fill 140ms ease" }}
                 />
               );
             })}
@@ -391,8 +412,14 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
     <div key={category} className={styles.categoryBox}>
       <p className={styles.categoryGroupHeader}>{category.toUpperCase()}</p>
       <ul className={styles.projectList}>
-        {entries.map(({ label, url }) => (
-          <li key={label} className={styles.projectBlock}>
+        {entries.map(({ label, url, isRegional }) => (
+          <li
+            key={label}
+            className={styles.projectBlock}
+            style={variant === "dark" && isRegional
+              ? { boxShadow: "0 0 0 1.5px rgba(249,225,173,0.85), 0 0 10px rgba(249,225,173,0.55)" }
+              : undefined}
+          >
             {url ? (
               <a href={url} target="_blank" rel="noreferrer">{label}{arrowIcon}</a>
             ) : (
