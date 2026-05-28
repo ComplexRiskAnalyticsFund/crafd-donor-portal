@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CrafdProject } from "@/types";
 import { coverageToRegions } from "./coverage-map";
 import styles from "./impact-map.module.css";
@@ -31,7 +31,7 @@ const PROJECT_CATEGORIES: Record<string, string> = {
   "Strengthening CRAF'd Ecosystem":         "Ecosystem Backbone",
 };
 
-const CATEGORY_ORDER = [
+const VALID_CATEGORIES = [
   "Crisis Anticipation & Warning",
   "Peace & Conflict",
   "Displacement",
@@ -78,7 +78,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [locked, setLocked] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(() =>
-    typeof window !== "undefined" ? window.matchMedia("(max-width: 640px)").matches : false
+    window.matchMedia("(max-width: 640px)").matches
   );
   const [animVB, setAnimVB] = useState({ x: 0, y: -100, w: 1600, h: 1000 });
   const animVBRef = useRef(animVB);
@@ -131,13 +131,13 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
     return { map, globalCount, maxDensity };
   }, [projectsByRegion, variant]);
 
-  function densityFill(region: string): string {
+  const densityFill = useCallback((region: string): string => {
     if (!regionDensity) return "rgba(255,255,255,0.28)";
     const { map, globalCount, maxDensity } = regionDensity;
     const count = map.get(region) ?? globalCount;
     const t = maxDensity === globalCount ? 0 : (count - globalCount) / (maxDensity - globalCount);
     return lerpHex(DENSITY_LOW, DENSITY_HIGH, t);
-  }
+  }, [regionDensity]);
 
   const regionCentroids = useMemo(() => {
     if (!tileData) return new Map<string, [number, number]>();
@@ -238,24 +238,29 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
     return () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); };
   }, [targetVB, tileData]);
 
-  function isHighlighted(region: string): boolean {
+  const isHighlighted = useCallback((region: string): boolean => {
     if (locked) return region === locked;
     return region === hovered;
-  }
+  }, [locked, hovered]);
 
-  function handleTileClick(e: React.MouseEvent, region: string) {
+  const handleTileClick = useCallback((e: React.MouseEvent, region: string) => {
     e.stopPropagation();
     if (isMobile) {
-      // On mobile, always lock the tapped region — background tap is the "back" gesture
       setLocked(region);
     } else {
       setLocked((prev) => (prev === region ? null : region));
     }
-  }
+  }, [isMobile]);
 
-  const globalProjects = projectsByRegion.get("Global") ?? [];
   const isSelected = locked !== null || hovered !== null;
-  const regionalProjects = isSelected ? (projectsByRegion.get(activeRegion) ?? []) : [];
+  const globalProjects = useMemo(
+    () => projectsByRegion.get("Global") ?? [],
+    [projectsByRegion],
+  );
+  const regionalProjects = useMemo(
+    () => isSelected ? (projectsByRegion.get(activeRegion) ?? []) : [],
+    [isSelected, projectsByRegion, activeRegion],
+  );
   const drawR = tileData ? tileData.hexRadius : 9;
 
   const groupedCategories = useMemo(() => {
@@ -271,7 +276,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
       const catMap = grouped.get(cat)!;
       if (!catMap.has(label)) catMap.set(label, p.project_url ?? null);
     }
-    return CATEGORY_ORDER
+    return VALID_CATEGORIES
       .filter((c) => grouped.has(c))
       .map((c) => ({
         category: c,
@@ -339,7 +344,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
       {Array.from(regionCentroids.entries()).map(([region, [cx, cy]]) => {
         const [line1, line2] = splitLabel(region);
         const hl = isHighlighted(region);
-        const maxLen = Math.max(line1.length, line2?.length ?? 0);
+        const maxLen = Math.max(line1.length, line2.length);
         const bgW = maxLen * 9 + 28;
         const bgH = line2 ? 44 : 30;
         return (
@@ -376,6 +381,12 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
 
   const rightLabel = "CRAF'd-supported data to...";
 
+  const arrowIcon = (
+    <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true" style={{ flexShrink: 0, opacity: 0.5 }}>
+      <path d="M2 8L8 2M8 2H5M8 2V5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+
   const categoryColumns = groupedCategories.map(({ category, entries }) => (
     <div key={category} className={styles.categoryBox}>
       <p className={styles.categoryGroupHeader}>{category.toUpperCase()}</p>
@@ -383,19 +394,9 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
         {entries.map(({ label, url }) => (
           <li key={label} className={styles.projectBlock}>
             {url ? (
-              <a href={url} target="_blank" rel="noreferrer">
-                {label}
-                <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true" style={{ flexShrink: 0, opacity: 0.5 }}>
-                  <path d="M2 8L8 2M8 2H5M8 2V5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
+              <a href={url} target="_blank" rel="noreferrer">{label}{arrowIcon}</a>
             ) : (
-              <span>
-                {label}
-                <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true" style={{ flexShrink: 0, opacity: 0.5 }}>
-                  <path d="M2 8L8 2M8 2H5M8 2V5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
+              <span>{label}{arrowIcon}</span>
             )}
           </li>
         ))}
