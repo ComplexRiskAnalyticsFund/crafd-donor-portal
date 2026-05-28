@@ -226,6 +226,25 @@ export function EcosystemPanel({
                   return next;
                 });
 
+              const sourceId = lockedSourceNode?.partner?.airtable_id;
+              const isLead = sourceId && pd?.linked_lead_org?.includes(sourceId);
+              const isSupporting = sourceId && pd?.linked_supporting_org?.includes(sourceId);
+              const sourceRole = isLead
+                ? "Project Lead"
+                : isSupporting
+                  ? "Collaborating Partner"
+                  : null;
+
+              const isLeadInProj = (pn: (typeof lockedNodes)[0]) =>
+                !!(
+                  pn.partner?.airtable_id &&
+                  pd?.linked_lead_org?.includes(pn.partner.airtable_id)
+                );
+              const leadPartners = lockedNodes.filter(isLeadInProj);
+              const hasMetadata =
+                pd?.grant_size || pd?.duration_months || pd?.project_coverage || leadPartners.length > 0;
+              const otherPartners = projPartners.filter((pn) => !isLeadInProj(pn));
+
               return (
                 <div
                   key={proj}
@@ -240,24 +259,12 @@ export function EcosystemPanel({
                       className="flex w-full cursor-pointer items-start justify-between gap-3 border-none bg-transparent p-0 pb-2 text-left text-white"
                     >
                       <h3 className="m-0 flex-1 text-base leading-tight font-extrabold">
-                        {(() => {
-                          const pId = lockedSourceNode?.partner?.airtable_id;
-                          const isLead =
-                            pId && pd?.linked_lead_org?.includes(pId);
-                          const isSupporting =
-                            pId && pd?.linked_supporting_org?.includes(pId);
-                          const role = isLead
-                            ? "Project Lead"
-                            : isSupporting
-                              ? "Collaborating Partner"
-                              : null;
-                          return role ? (
-                            <span className="font-bold text-crafd-yellow">
-                              {role}
-                              <span className="mx-1.5 opacity-40">|</span>
-                            </span>
-                          ) : null;
-                        })()}
+                        {sourceRole && (
+                          <span className="font-bold text-crafd-yellow">
+                            {sourceRole}
+                            <span className="mx-1.5 opacity-40">|</span>
+                          </span>
+                        )}
                         {pd?.full_title ?? pd?.project_label ?? proj}
                       </h3>
                       <motion.svg
@@ -283,48 +290,36 @@ export function EcosystemPanel({
                       </motion.svg>
                     </button>
 
-                    {(() => {
-                      const isLeadInProj = (pn: (typeof lockedNodes)[0]) =>
-                        !!(
-                          pn.partner?.airtable_id &&
-                          pd?.linked_lead_org?.includes(pn.partner.airtable_id)
-                        );
-                      const leadPartners = lockedNodes.filter(isLeadInProj);
-
-                      return (pd?.grant_size ||
-                        pd?.duration_months ||
-                        pd?.project_coverage ||
-                        leadPartners.length > 0) ? (
-                        <div className="flex flex-wrap gap-2 pb-2">
-                          {leadPartners.map((pn) => (
-                            <button
-                              key={pn.id}
-                              onClick={() => onPartnerClick(pn)}
-                              className="inline-flex items-center gap-1 rounded-md border border-crafd-yellow/50 bg-crafd-yellow/15 px-2 py-0.5 text-sm font-bold tracking-wide text-crafd-yellow transition-colors hover:border-crafd-yellow/80 hover:bg-crafd-yellow/25 cursor-pointer"
-                              onMouseEnter={() => onOrgHover(pn.id)}
-                              onMouseLeave={() => onOrgHover(null)}
-                            >
-                              {pn.partner?.org_short_name ?? pn.name}
-                            </button>
-                          ))}
-                          {pd?.grant_size && (
-                            <span className="inline-flex items-center gap-1 rounded-md border border-white/18 bg-white/8 px-2 py-0.5 text-sm font-bold tracking-wide text-white/85">
-                              {formatGrantSize(pd.grant_size)}
-                            </span>
-                          )}
-                          {pd?.duration_months && (
-                            <span className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/6 px-2 py-0.5 text-sm font-bold tracking-wide text-white/70">
-                              {pd.duration_months} months
-                            </span>
-                          )}
-                          {pd?.project_coverage && (
-                            <span className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/6 px-2 py-0.5 text-sm font-bold tracking-wide text-white/70">
-                              {pd.project_coverage}
-                            </span>
-                          )}
-                        </div>
-                      ) : null;
-                    })()}
+                    {hasMetadata && (
+                      <div className="flex flex-wrap gap-2 pb-2">
+                        {leadPartners.map((pn) => (
+                          <button
+                            key={pn.id}
+                            onClick={() => onPartnerClick(pn)}
+                            className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-crafd-yellow/50 bg-crafd-yellow/15 px-2 py-0.5 text-sm font-bold tracking-wide text-crafd-yellow transition-colors hover:border-crafd-yellow/80 hover:bg-crafd-yellow/25"
+                            onMouseEnter={() => onOrgHover(pn.id)}
+                            onMouseLeave={() => onOrgHover(null)}
+                          >
+                            {pn.partner?.org_short_name ?? pn.name}
+                          </button>
+                        ))}
+                        {pd?.grant_size && (
+                          <span className="inline-flex items-center gap-1 rounded-md border border-white/18 bg-white/8 px-2 py-0.5 text-sm font-bold tracking-wide text-white/85">
+                            {formatGrantSize(pd.grant_size)}
+                          </span>
+                        )}
+                        {pd?.duration_months && (
+                          <span className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/6 px-2 py-0.5 text-sm font-bold tracking-wide text-white/70">
+                            {pd.duration_months} months
+                          </span>
+                        )}
+                        {pd?.project_coverage && (
+                          <span className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/6 px-2 py-0.5 text-sm font-bold tracking-wide text-white/70">
+                            {pd.project_coverage}
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <AnimatePresence initial={false}>
@@ -359,28 +354,14 @@ export function EcosystemPanel({
                             </div>
                           )}
 
-                          {projPartners.length > 0 &&
-                            (() => {
-                              const isLeadInProj = (
-                                pn: (typeof projPartners)[0],
-                              ) =>
-                                !!(
-                                  pn.partner?.airtable_id &&
-                                  pd?.linked_lead_org?.includes(
-                                    pn.partner.airtable_id,
-                                  )
-                                );
-                              const leadPartners =
-                                projPartners.filter(isLeadInProj);
-                              const otherPartners = projPartners.filter(
-                                (pn) => !isLeadInProj(pn),
-                              );
-
-                              const renderPartnerList = (
-                                members: typeof projPartners,
-                              ) => (
+                          {otherPartners.length > 0 && (
+                            <div className="flex flex-col gap-2">
+                              <div>
+                                <p className="m-0 mb-0.5 text-xs font-bold tracking-widest text-white/35 uppercase">
+                                  Project Collaborating Partners
+                                </p>
                                 <div className="flex flex-wrap gap-1.5">
-                                  {members.map((pn) => (
+                                  {otherPartners.map((pn) => (
                                     <button
                                       key={pn.id}
                                       onClick={() => onPartnerClick(pn)}
@@ -392,21 +373,9 @@ export function EcosystemPanel({
                                     </button>
                                   ))}
                                 </div>
-                              );
-
-                              return (
-                                <div className="flex flex-col gap-2">
-                                  {otherPartners.length > 0 && (
-                                    <div>
-                                      <p className="m-0 mb-0.5 text-xs font-bold tracking-widest text-white/35 uppercase">
-                                        Project Collaborating Partners
-                                      </p>
-                                      {renderPartnerList(otherPartners)}
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            })()}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </motion.div>
                     )}

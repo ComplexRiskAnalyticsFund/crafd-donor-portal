@@ -1,4 +1,3 @@
-// src/app/partners/page.tsx
 export const dynamic = "force-dynamic";
 
 import {

@@ -35,12 +35,12 @@ export function DonorPanel({
   const logoSlug = toLogoSlug(name);
 
   const commitment = commitmentsData.find((c) => {
-    const cn = c["Contributor/Partner"].toLowerCase();
+    const contributor = c["Contributor/Partner"].toLowerCase();
     return (
-      cn === name.toLowerCase() ||
-      cn === fullName.toLowerCase() ||
-      name.toLowerCase().includes(cn) ||
-      cn.includes(name.toLowerCase())
+      contributor === name.toLowerCase() ||
+      contributor === fullName.toLowerCase() ||
+      name.toLowerCase().includes(contributor) ||
+      contributor.includes(name.toLowerCase())
     );
   });
 

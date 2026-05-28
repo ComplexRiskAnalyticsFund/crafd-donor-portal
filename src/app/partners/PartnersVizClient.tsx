@@ -20,6 +20,17 @@ import {
   projectsOverlap,
   findProjectHub,
 } from "./lib/utils";
+import { usePanZoom } from "./hooks/usePanZoom";
+import { useHexAnimation } from "./hooks/useHexAnimation";
+import { EcosystemPanel } from "./EcosystemModal";
+import { DonorPanel } from "./DonorModal";
+
+const KIND_ORDER: Record<HexNode["kind"], number> = {
+  outline: 0,
+  partner: 1,
+  label: 2,
+  center: 3,
+};
 
 function hexFallbackText(name: string, r: number) {
   const words = name.split(" ");
@@ -50,10 +61,6 @@ function hexFallbackText(name: string, r: number) {
     </text>
   ));
 }
-import { usePanZoom } from "./hooks/usePanZoom";
-import { useHexAnimation } from "./hooks/useHexAnimation";
-import { EcosystemPanel } from "./EcosystemModal";
-import { DonorPanel } from "./DonorModal";
 
 export default function PartnersVizClient({
   initialNodes,
@@ -136,12 +143,10 @@ export default function PartnersVizClient({
   );
   useHexAnimation({ renderNodes, svgRef, isMobileRef, skipIntro: hasUrlState });
 
-  // Keep mobile ref in sync
   useEffect(() => {
     isMobileRef.current = isMobile;
   }, [isMobile]);
 
-  // Detect mobile viewport
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px)");
     setIsMobile(mq.matches);
@@ -177,7 +182,6 @@ export default function PartnersVizClient({
     setVizBiasX(panelPx / 2);
   }, [isModalOpen, isMobile]);
 
-  // Reset bottom sheet snap when the active panel changes
   useEffect(() => {
     setSheetSnap("half");
   }, [lockedFeature, clickedNode]);
@@ -424,14 +428,8 @@ export default function PartnersVizClient({
   // Hovered/locked/clicked nodes are rendered in separate SVG layers on top,
   // so this only determines the z-order of the background mass.
   const baseOrdered = useMemo(() => {
-    const BASE: Record<HexNode["kind"], number> = {
-      outline: 0,
-      partner: 1,
-      label: 2,
-      center: 3,
-    };
     return [...renderNodes].sort(
-      (a, b) => BASE[a.kind] - BASE[b.kind],
+      (a, b) => KIND_ORDER[a.kind] - KIND_ORDER[b.kind],
     );
   }, [renderNodes]);
 
@@ -471,13 +469,7 @@ export default function PartnersVizClient({
         if (n.id === hoveredPartnerNode.id) return 100;
         if (relationalPeers.has(n.id)) return 50;
       }
-      const base: Record<HexNode["kind"], number> = {
-        outline: 0,
-        partner: 1,
-        label: 2,
-        center: 3,
-      };
-      return base[n.kind];
+      return KIND_ORDER[n.kind];
     }
     return [...renderNodes].sort((a, b) => priority(a) - priority(b));
   }, [
@@ -888,8 +880,6 @@ export default function PartnersVizClient({
           />
         )}
       </AnimatePresence>
-
-
 
       {/* ── Search — hidden when any modal is open ─────────────────────────── */}
       <div
