@@ -18,19 +18,14 @@
   bottom: clamp(12px, 2.5vh, 28px);
   left: clamp(16px, 3vw, 48px);
   right: clamp(16px, 3vw, 48px);
-  height: 200px;
+  height: 212px;
   display: flex;
   flex-direction: row;
   align-items: stretch;
   background: rgba(252, 240, 214, 0.97);
   border-radius: 14px;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
-  pointer-events: none;
   overflow: hidden;
-}
-
-.card > * {
-  pointer-events: all;
 }
 
 /* ── Zone divider ───────────────────────────────────────── */
@@ -173,7 +168,7 @@
   flex-direction: column;
   gap: 8px;
   min-width: 160px;
-  height: 120px;
+  height: 128px;
   overflow: hidden;
 }
 
