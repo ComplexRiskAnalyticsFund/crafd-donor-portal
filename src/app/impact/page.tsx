@@ -1,4 +1,4 @@
-import { getProjects } from "@/lib/data/partners";
+import { getProjects, getOrgsMap } from "@/lib/data/partners";
 import ImpactMapClient from "./ImpactMapClient";
 
 export default async function ImpactPage({
@@ -7,6 +7,6 @@ export default async function ImpactPage({
   searchParams: Promise<{ v?: string }>;
 }) {
   const { v } = await searchParams;
-  const projects = await getProjects();
-  return <ImpactMapClient projects={projects} variant={v === "2" ? "density" : "flat"} />;
+  const [projects, orgs] = await Promise.all([getProjects(), getOrgsMap()]);
+  return <ImpactMapClient projects={projects} orgs={orgs} variant={v === "2" ? "dark" : v === "d" ? "density" : "flat"} />;
 }

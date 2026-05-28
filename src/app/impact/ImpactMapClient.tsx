@@ -7,7 +7,8 @@ const ImpactMap = dynamic(() => import("./ImpactMap"), { ssr: false });
 
 interface Props {
   projects: CrafdProject[];
-  variant?: "flat" | "density";
+  orgs: Record<string, string>;
+  variant?: "flat" | "density" | "dark";
 }
 
 export default function ImpactMapClient(props: Props) {

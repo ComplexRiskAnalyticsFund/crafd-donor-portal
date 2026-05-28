@@ -91,3 +91,7 @@ rm -rf node_modules .next && npm install
 - If you are using a Proxy, ensure it is placed inside the `src` folder.
 - When using Tailwind CSS, add the `/src` prefix to the `content` array in your `tailwind.config.js` file to ensure proper scanning.
 - If you use TypeScript path aliases like `@/*`, update the `paths` object in `tsconfig.json` to include `src/`.
+
+
+Some decisions/approaches in /impact:
+1. Since the we were using UN geoscheme which didn't have a documented library of its own, we are currentt
