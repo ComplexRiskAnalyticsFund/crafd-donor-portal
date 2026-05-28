@@ -1,4 +1,3 @@
-// src/lib/partners/label.ts
 import type { Partner } from "@/types";
 
 export type PartnerLabel =
