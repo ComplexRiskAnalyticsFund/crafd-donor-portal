@@ -48,9 +48,9 @@
 
 .zoneEyebrow {
   margin: 0;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #aaa;
 }
@@ -68,9 +68,9 @@
 
 .zoneHint {
   margin: 6px 0 0;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   font-style: italic;
   color: #bbb;
@@ -91,8 +91,8 @@
   align-items: center;
   gap: 7px;
   font-family: "Roboto", Arial, sans-serif;
-  font-size: 10px;
-  font-weight: 300;
+  font-size: 11px;
+  font-weight: 400;
   color: #000000;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -129,9 +129,9 @@
 
 .zoneRightLabel {
   margin: 0;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #aaa;
   flex-shrink: 0;
@@ -142,7 +142,7 @@
 .categoryColumns {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: stretch;
   flex-wrap: wrap;
   gap: 8px;
 }
@@ -163,9 +163,9 @@
 
 .categoryGroupHeader {
   margin: 0;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #333;
   line-height: 1.4;
@@ -175,9 +175,9 @@
 
 .zoneLabel {
   margin: 0 0 10px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #aaa;
 }
@@ -198,7 +198,7 @@
   border: 1px solid rgba(51, 51, 51, 0.3);
   border-radius: 8px;
   padding: clamp(5px, 0.7vh, 8px) clamp(13px, 1.2vw, 20px);
-  font-size: clamp(11px, 1.1vh, 13px);
+  font-size: clamp(12px, 1.2vh, 14px);
   font-weight: 500;
   color: #333333;
   white-space: nowrap;
@@ -228,6 +228,56 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
+}
+
+/* ── Desktop close button ───────────────────────────────── */
+
+.closeBtn {
+  position: absolute;
+  top: clamp(10px, 1.5vh, 18px);
+  right: clamp(10px, 1.2vw, 18px);
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.06);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 15px;
+  color: #888;
+  line-height: 1;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.closeBtn:hover {
+  background: rgba(0, 0, 0, 0.12);
+  color: #333;
+}
+
+/* ── Mobile back button ─────────────────────────────────── */
+
+.mobileBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 6px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #aaa;
+  transition: color 120ms ease;
+}
+
+.mobileBack:hover {
+  color: #555;
 }
 
 /* ── Mobile layout ──────────────────────────────────────── */
@@ -286,7 +336,7 @@
 
   .projectBlock {
     white-space: normal;
-    font-size: 11px;
+    font-size: 12px;
     padding: 5px 12px;
   }
 }

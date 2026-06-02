@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CrafdProject } from "@/types";
 import { coverageToRegions } from "./coverage-map";
 import styles from "./impact-map.module.css";
@@ -307,6 +307,27 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
       .sort((a, b) => b.entries.length - a.entries.length);
   }, [isSelected, regionalProjects, globalProjects, orgs, variant]);
 
+  const globalGroupedCategories = useMemo(() => {
+    const grouped = new Map<string, Map<string, { url: string | null; isRegional: boolean }>>();
+    for (const p of globalProjects) {
+      if (!p.project_short_title) continue;
+      const cat = PROJECT_CATEGORIES[p.project_short_title];
+      if (!cat) continue;
+      const leadId = p.linked_lead_org?.[0];
+      const label = (leadId && orgs[leadId]) || p.project_short_title;
+      if (!grouped.has(cat)) grouped.set(cat, new Map());
+      const catMap = grouped.get(cat)!;
+      if (!catMap.has(label)) catMap.set(label, { url: p.project_url ?? null, isRegional: false });
+    }
+    return VALID_CATEGORIES
+      .filter((c) => grouped.has(c))
+      .map((c) => ({
+        category: c,
+        entries: Array.from(grouped.get(c)!.entries()).map(([label, { url, isRegional }]) => ({ label, url, isRegional })),
+      }))
+      .sort((a, b) => b.entries.length - a.entries.length);
+  }, [globalProjects, orgs]);
+
   if (!tileData) return <div className={styles.root} />;
 
   const svgViewBox = isMobile
@@ -321,6 +342,8 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
       width="100%"
       height="100%"
       style={{ overflow: "visible" }}
+      role="img"
+      aria-label="World map divided into UN regions. Select a region to see CRAF'd projects active there."
     >
       <rect x={-100} y={-300} width={tileData.width + 200} height={tileData.height + 600} fill="#fdb53c" />
 
@@ -329,11 +352,16 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
         return (
           <g
             key={region}
+            role="button"
+            aria-label={region}
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleTileClick(e as unknown as React.MouseEvent, region); }}
             onMouseEnter={() => { if (!isMobile) setHovered(region); }}
             onMouseLeave={() => { if (!isMobile) setHovered(null); }}
             onClick={(e) => handleTileClick(e, region)}
             style={{
               cursor: "pointer",
+              outline: "none",
               filter: hl
                 ? "drop-shadow(0 0 3px rgba(249,225,173,0.76)) drop-shadow(0 0 9px rgba(249,225,173,0.52)) drop-shadow(0 2px 5px rgba(0,0,0,0.10))"
                 : "none",
@@ -349,13 +377,16 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
                       : depth === 4 ? drawR * 0.80
                       : drawR * 0.85;
               return (
-                <polygon
-                  key={i}
-                  points={hexPoints(t.x, t.y, r)}
-                  fill={variant === "density" ? (hl ? "rgba(255,255,255,0.80)" : densityFill(region)) : "white"}
-                  stroke="none"
-                  style={{ transition: "fill 140ms ease" }}
-                />
+                <Fragment key={i}>
+                  {/* Full-radius transparent polygon fills gaps between scaled visuals */}
+                  <polygon points={hexPoints(t.x, t.y, drawR)} fill="transparent" stroke="none" />
+                  <polygon
+                    points={hexPoints(t.x, t.y, r)}
+                    fill={variant === "density" ? (hl ? "rgba(255,255,255,0.80)" : densityFill(region)) : "white"}
+                    stroke="none"
+                    style={{ transition: "fill 140ms ease" }}
+                  />
+                </Fragment>
               );
             })}
           </g>
@@ -384,7 +415,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
               textAnchor="middle"
               fontFamily="Roboto, sans-serif"
               fontWeight={600}
-              fontSize={11}
+              fontSize={12}
               letterSpacing={1.2}
               fill={variant === "density" ? "#BC840F" : (hl ? "rgba(70,70,70,0.95)" : "rgba(90,90,90,0.75)")}
               stroke={variant === "density" ? "rgba(68,42,10,0.65)" : undefined}
@@ -408,40 +439,48 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
     </svg>
   );
 
-  const categoryColumns = groupedCategories.map(({ category, entries }) => (
-    <div key={category} className={styles.categoryBox}>
-      <p className={styles.categoryGroupHeader}>{category.toUpperCase()}</p>
-      <ul
-          className={styles.projectList}
-          style={entries.length > 4 ? { gridTemplateColumns: "repeat(3, auto)" } : undefined}
-        >
-        {entries.map(({ label, url, isRegional }) => (
-          <li
-            key={label}
-            className={styles.projectBlock}
-            style={(variant === "dark" ? isRegional : isSelected)
-              ? { background: "#F3C35C", borderColor: "rgba(180,120,0,0.35)" }
-              : undefined}
+  const renderCategoryBoxes = (cats: typeof groupedCategories, highlight: boolean) =>
+    cats.map(({ category, entries }) => (
+      <div key={category} className={styles.categoryBox}>
+        <p className={styles.categoryGroupHeader}>{category.toUpperCase()}</p>
+        <ul
+            className={styles.projectList}
+            style={entries.length > 4 ? { gridTemplateColumns: "repeat(3, auto)" } : undefined}
           >
-            {url ? (
-              <a href={url} target="_blank" rel="noreferrer">{label}{arrowIcon}</a>
-            ) : (
-              <span tabIndex={0}>{label}</span>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
-  ));
+          {entries.map(({ label, url, isRegional }) => (
+            <li
+              key={label}
+              className={styles.projectBlock}
+              style={(variant === "dark" ? isRegional : highlight)
+                ? { background: "#F3C35C", borderColor: "rgba(180,120,0,0.35)" }
+                : undefined}
+            >
+              {url ? (
+                <a href={url} target="_blank" rel="noreferrer">{label}{arrowIcon}</a>
+              ) : (
+                <span tabIndex={0}>{label}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ));
+
+  const categoryColumns = renderCategoryBoxes(groupedCategories, isSelected);
+  const globalCategoryColumns = renderCategoryBoxes(globalGroupedCategories, false);
 
   // ── Mobile layout ─────────────────────────────────────────
   if (isMobile) {
+    const noRegionalData = isSelected && groupedCategories.length === 0;
     return (
-      <div className={styles.mobileRoot} onClick={() => setLocked(null)}>
-        <div className={styles.mobileTopCard} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.mobileRoot}>
+        <div className={styles.mobileTopCard}>
           {isSelected ? (
             <>
-              <h2 className={styles.zoneTitle}>{activeRegion}</h2>
+              <button className={styles.mobileBack} onClick={() => setLocked(null)}>
+                ← Global
+              </button>
+              <h1 className={styles.zoneTitle}>{activeRegion}</h1>
               {hasRegional && (
                 <div className={styles.legend}>
                   {variant === "dark" && (
@@ -459,7 +498,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
             </>
           ) : (
             <>
-              <h2 className={styles.zoneTitle}>Global</h2>
+              <h1 className={styles.zoneTitle}>Global</h1>
               <p className={styles.zoneHint}>Tap regions to explore</p>
             </>
           )}
@@ -469,11 +508,18 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
           {mapSvg}
         </div>
 
-        <div className={styles.mobileBottomCard} onClick={(e) => e.stopPropagation()}>
-          <p className={styles.zoneRightLabel}>{rightLabel}</p>
-          <div className={styles.categoryColumns}>
-            {categoryColumns}
-          </div>
+        <div className={styles.mobileBottomCard}>
+          {noRegionalData ? (
+            <>
+              <p className={styles.zoneRightLabel}>No region-specific data — showing global projects</p>
+              <div className={styles.categoryColumns}>{globalCategoryColumns}</div>
+            </>
+          ) : (
+            <>
+              <p className={styles.zoneRightLabel}>{rightLabel}</p>
+              <div className={styles.categoryColumns}>{categoryColumns}</div>
+            </>
+          )}
         </div>
       </div>
     );
@@ -484,11 +530,20 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
     <div className={styles.root} onClick={() => setLocked(null)}>
       {mapSvg}
 
-      <div className={styles.card} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.zoneLeft}>
+      <div className={styles.card} role="region" aria-label="Project details" onClick={(e) => e.stopPropagation()}>
+        <div className={styles.zoneLeft} style={{ position: "relative" }}>
+          {locked && (
+            <button
+              className={styles.closeBtn}
+              onClick={() => setLocked(null)}
+              aria-label="Deselect region"
+            >
+              ×
+            </button>
+          )}
           {isSelected ? (
             <>
-              <h2 className={styles.zoneTitle}>{activeRegion}</h2>
+              <h1 className={styles.zoneTitle}>{activeRegion}</h1>
               {hasRegional && (
                 <div className={styles.legend}>
                   {variant === "dark" && (
@@ -506,7 +561,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
             </>
           ) : (
             <>
-              <h2 className={styles.zoneTitle}>Global</h2>
+              <h1 className={styles.zoneTitle}>Global</h1>
               <p className={styles.zoneHint}>Hover on regions to see<br />region specific projects</p>
             </>
           )}
