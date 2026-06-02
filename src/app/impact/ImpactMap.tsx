@@ -15,11 +15,11 @@ const PROJECT_CATEGORIES: Record<string, string> = {
   "INFORM Warning":                         "Crisis Anticipation & Warning",
   "eEARTH":                                 "Crisis Anticipation & Warning",
   "CLIFDEW-GRID":                           "Crisis Anticipation & Warning",
-  "Maintaining ACLED":                      "Peace & Conflict",
-  "ACLED Data":                             "Peace & Conflict",
-  "Women's Mobilization Within Armed Groups": "Peace & Conflict",
-  "VIEWS-PIN":                              "Peace & Conflict",
-  "EMPOW":                                  "Peace & Conflict",
+  "Maintaining ACLED":                      "Conflict & Peace",
+  "ACLED Data":                             "Conflict & Peace",
+  "Women's Mobilization Within Armed Groups": "Conflict & Peace",
+  "VIEWS-PIN":                              "Conflict & Peace",
+  "EMPOW":                                  "Conflict & Peace",
   "Kente Threads":                          "Displacement",
   "Internal Displacement Data":             "Displacement",
   "Conflict Climate Displacement":          "Crisis Anticipation & Warning",
@@ -33,7 +33,7 @@ const PROJECT_CATEGORIES: Record<string, string> = {
 
 const VALID_CATEGORIES = [
   "Crisis Anticipation & Warning",
-  "Peace & Conflict",
+  "Conflict & Peace",
   "Displacement",
   "Needs & Impact",
   "Ecosystem Backbone",
@@ -77,9 +77,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
   const [tileData, setTileData] = useState<TileData | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const [locked, setLocked] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState<boolean>(() =>
-    window.matchMedia("(max-width: 640px)").matches
-  );
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   const [animVB, setAnimVB] = useState({ x: 0, y: -100, w: 1600, h: 1000 });
   const animVBRef = useRef(animVB);
   animVBRef.current = animVB;
@@ -98,6 +96,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 640px)");
+    setIsMobile(mq.matches);
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
@@ -401,7 +400,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
     </svg>
   );
 
-  const rightLabel = "CRAF'd-supported data to...";
+  const rightLabel = <>CRAF&apos;<span style={{ textTransform: "none" }}>d</span>-supported data &amp; insights for this region...</>;
 
   const arrowIcon = (
     <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true" style={{ flexShrink: 0, opacity: 0.5 }}>
@@ -427,7 +426,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
             {url ? (
               <a href={url} target="_blank" rel="noreferrer">{label}{arrowIcon}</a>
             ) : (
-              <span>{label}{arrowIcon}</span>
+              <span tabIndex={0}>{label}</span>
             )}
           </li>
         ))}
@@ -442,26 +441,24 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
         <div className={styles.mobileTopCard} onClick={(e) => e.stopPropagation()}>
           {isSelected ? (
             <>
-              <p className={styles.zoneEyebrow}>Selected region</p>
               <h2 className={styles.zoneTitle}>{activeRegion}</h2>
               {hasRegional && (
                 <div className={styles.legend}>
-                  <div className={styles.legendItem}>
-                    <span className={`${styles.legendSwatch} ${styles.legendSwatchRegional}`} />
-                    Regional Projects
-                  </div>
                   {variant === "dark" && (
                     <div className={styles.legendItem}>
                       <span className={`${styles.legendSwatch} ${styles.legendSwatchGlobal}`} />
-                      Global Projects
+                      Global Coverage
                     </div>
                   )}
+                  <div className={styles.legendItem}>
+                    <span className={`${styles.legendSwatch} ${styles.legendSwatchRegional}`} />
+                    Regional Coverage
+                  </div>
                 </div>
               )}
             </>
           ) : (
             <>
-              <p className={styles.zoneEyebrow}>Worldwide</p>
               <h2 className={styles.zoneTitle}>Global</h2>
               <p className={styles.zoneHint}>Tap regions to explore</p>
             </>
@@ -491,26 +488,24 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
         <div className={styles.zoneLeft}>
           {isSelected ? (
             <>
-              <p className={styles.zoneEyebrow}>Selected region</p>
               <h2 className={styles.zoneTitle}>{activeRegion}</h2>
               {hasRegional && (
                 <div className={styles.legend}>
-                  <div className={styles.legendItem}>
-                    <span className={`${styles.legendSwatch} ${styles.legendSwatchRegional}`} />
-                    Regional Projects
-                  </div>
                   {variant === "dark" && (
                     <div className={styles.legendItem}>
                       <span className={`${styles.legendSwatch} ${styles.legendSwatchGlobal}`} />
-                      Global Projects
+                      Global Coverage
                     </div>
                   )}
+                  <div className={styles.legendItem}>
+                    <span className={`${styles.legendSwatch} ${styles.legendSwatchRegional}`} />
+                    Regional Coverage
+                  </div>
                 </div>
               )}
             </>
           ) : (
             <>
-              <p className={styles.zoneEyebrow}>Worldwide</p>
               <h2 className={styles.zoneTitle}>Global</h2>
               <p className={styles.zoneHint}>Hover on regions to see<br />region specific projects</p>
             </>
