@@ -305,6 +305,8 @@
   flex: 1;
   min-height: 0;
   position: relative;
+  overflow: hidden;
+  touch-action: none;
 }
 
 .mobileBottomCard {
@@ -321,6 +323,48 @@
 
 .mobileBottomCard::-webkit-scrollbar {
   display: none;
+}
+
+/* ── Mobile accordion (bottom card groups) ──────────────── */
+
+.mobileCategoryBox {
+  width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.mobileCategoryBox:last-child {
+  border-bottom: none;
+}
+
+.mobileCategoryHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #333;
+  text-align: left;
+}
+
+.mobileCategoryHeader:active {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.mobileProjectList {
+  list-style: none;
+  padding: 4px 0 10px;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 /* ── Mobile overrides for shared classes ────────────────── */

@@ -79,9 +79,13 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
   const [locked, setLocked] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [animVB, setAnimVB] = useState({ x: 0, y: -100, w: 1600, h: 1000 });
+  const [expandedCats, setExpandedCats] = useState<Set<string>>(() => new Set(VALID_CATEGORIES));
   const animVBRef = useRef(animVB);
   animVBRef.current = animVB;
   const rafRef = useRef<number | null>(null);
+  const mapWrapperRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const hasDraggedRef = useRef(false);
 
   const activeRegion = locked ?? hovered ?? "Global";
 
@@ -237,6 +241,58 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
     return () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); };
   }, [targetVB, tileData]);
 
+  const toggleCat = useCallback((cat: string) => {
+    setExpandedCats((prev) => {
+      const next = new Set(prev);
+      if (next.has(cat)) next.delete(cat);
+      else next.add(cat);
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const maybeEl = mapWrapperRef.current;
+    if (!maybeEl) return;
+    const el: HTMLDivElement = maybeEl;
+    const THRESHOLD = 5;
+
+    function onTouchStart(e: TouchEvent) {
+      if (e.touches.length !== 1) { touchStartRef.current = null; return; }
+      if (rafRef.current !== null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
+      hasDraggedRef.current = false;
+      touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+
+    function onTouchMove(e: TouchEvent) {
+      if (!touchStartRef.current || e.touches.length !== 1) return;
+      e.preventDefault();
+      const dx = e.touches[0].clientX - touchStartRef.current.x;
+      const dy = e.touches[0].clientY - touchStartRef.current.y;
+      if (!hasDraggedRef.current) {
+        if (Math.abs(dx) < THRESHOLD && Math.abs(dy) < THRESHOLD) return;
+        hasDraggedRef.current = true;
+      }
+      const rect = el.getBoundingClientRect();
+      const scale = animVBRef.current.w / rect.width;
+      setAnimVB((prev) => ({ ...prev, x: prev.x - dx * scale, y: prev.y - dy * scale }));
+      touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+
+    function onTouchEnd() { touchStartRef.current = null; }
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+    el.addEventListener("touchcancel", onTouchEnd, { passive: true });
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, [isMobile]);
+
   const isHighlighted = useCallback((region: string): boolean => {
     if (locked) return region === locked;
     return region === hovered;
@@ -244,6 +300,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
 
   const handleTileClick = useCallback((e: React.MouseEvent, region: string) => {
     e.stopPropagation();
+    if (hasDraggedRef.current) return;
     if (isMobile) {
       setLocked(region);
     } else {
@@ -466,8 +523,43 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
       </div>
     ));
 
+  const renderMobileCategoryBoxes = (cats: typeof groupedCategories, highlight: boolean) =>
+    cats.map(({ category, entries }) => {
+      const isOpen = expandedCats.has(category);
+      return (
+        <div key={category} className={styles.mobileCategoryBox}>
+          <button
+            className={styles.mobileCategoryHeader}
+            onClick={() => toggleCat(category)}
+            aria-expanded={isOpen}
+          >
+            <span>{category.toUpperCase()}</span>
+            <span style={{ display: "inline-block", transition: "transform 180ms ease", transform: isOpen ? "rotate(180deg)" : "none", fontSize: 14, color: "#999" }}>∨</span>
+          </button>
+          {isOpen && (
+            <ul className={styles.mobileProjectList}>
+              {entries.map(({ label, url, isRegional }) => (
+                <li
+                  key={label}
+                  className={styles.projectBlock}
+                  style={(variant === "dark" ? isRegional : highlight)
+                    ? { background: "#F3C35C", borderColor: "rgba(180,120,0,0.35)" }
+                    : undefined}
+                >
+                  {url ? (
+                    <a href={url} target="_blank" rel="noreferrer">{label}{arrowIcon}</a>
+                  ) : (
+                    <span tabIndex={0}>{label}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      );
+    });
+
   const categoryColumns = renderCategoryBoxes(groupedCategories, isSelected);
-  const globalCategoryColumns = renderCategoryBoxes(globalGroupedCategories, false);
 
   // ── Mobile layout ─────────────────────────────────────────
   if (isMobile) {
@@ -504,7 +596,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
           )}
         </div>
 
-        <div className={styles.mobileMapWrapper}>
+        <div ref={mapWrapperRef} className={styles.mobileMapWrapper}>
           {mapSvg}
         </div>
 
@@ -512,12 +604,12 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
           {noRegionalData ? (
             <>
               <p className={styles.zoneRightLabel}>No region-specific data — showing global projects</p>
-              <div className={styles.categoryColumns}>{globalCategoryColumns}</div>
+              {renderMobileCategoryBoxes(globalGroupedCategories, false)}
             </>
           ) : (
             <>
               <p className={styles.zoneRightLabel}>{rightLabel}</p>
-              <div className={styles.categoryColumns}>{categoryColumns}</div>
+              {renderMobileCategoryBoxes(groupedCategories, isSelected)}
             </>
           )}
         </div>
