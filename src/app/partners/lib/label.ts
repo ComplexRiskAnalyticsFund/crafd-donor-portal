@@ -181,6 +181,7 @@ export function buildPartnerHexNodes(
 ): HexNode[] {
   // 1) filter, deduplicate, then group partners
   const excludedOrgs = getExcludedOrganizations();
+  let excludedCount = 0;
   const dedupedPartners: Partner[] = [];
   const seenNames = new Map<string, number>();
   for (const p of partners) {
@@ -192,7 +193,10 @@ export function buildPartnerHexNodes(
     )
       continue;
     if (rawConn.toLowerCase().includes("administrative agent")) continue;
-    if (excludedOrgs.has(p.org_full_name ?? "")) continue;
+    if (excludedOrgs.has(p.org_full_name ?? "")) {
+      excludedCount++;
+      continue;
+    }
 
     const key = (p.org_short_name?.trim() ?? "").toLowerCase();
     if (key && seenNames.has(key)) {
@@ -336,7 +340,9 @@ export function buildPartnerHexNodes(
       id: `label-${label}`,
       kind: "label",
       label,
-      count: partnerAbsPositions.length,
+      count:
+        partnerAbsPositions.length +
+        (label === "collaborating" ? excludedCount : 0),
       name: labelDisplay(label),
       x: anchorPx.x,
       y: anchorPx.y,
