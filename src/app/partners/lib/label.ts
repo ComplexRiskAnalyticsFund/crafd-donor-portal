@@ -7,6 +7,18 @@ export type PartnerLabel =
   | "other"
   | "donor";
 
+function getExcludedOrganizations(): Set<string> {
+  const raw = process.env.EXCLUDED_ORGANIZATIONS;
+  if (!raw) return new Set();
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (Array.isArray(parsed)) return new Set(parsed);
+  } catch {
+    // fall back to comma-separated
+  }
+  return new Set(raw.split(",").map((s) => s.trim()).filter(Boolean));
+}
+
 export function labelPartner(p: Partner): PartnerLabel {
   const conn = (p.crafd_connection ?? []).join(" ").toLowerCase();
 
@@ -168,6 +180,7 @@ export function buildPartnerHexNodes(
   size = 80,
 ): HexNode[] {
   // 1) filter, deduplicate, then group partners
+  const excludedOrgs = getExcludedOrganizations();
   const dedupedPartners: Partner[] = [];
   const seenNames = new Map<string, number>();
   for (const p of partners) {
@@ -179,6 +192,7 @@ export function buildPartnerHexNodes(
     )
       continue;
     if (rawConn.toLowerCase().includes("administrative agent")) continue;
+    if (excludedOrgs.has(p.org_full_name ?? "")) continue;
 
     const key = (p.org_short_name?.trim() ?? "").toLowerCase();
     if (key && seenNames.has(key)) {
