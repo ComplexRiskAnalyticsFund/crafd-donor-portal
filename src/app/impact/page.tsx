@@ -8,5 +8,9 @@ export default async function ImpactPage({
 }) {
   const { v } = await searchParams;
   const [projects, orgs] = await Promise.all([getProjects(), getOrgsMap()]);
-  return <ImpactMapClient projects={projects} orgs={orgs} variant={v === "2" ? "dark" : v === "d" ? "density" : "flat"} />;
+  return (
+    <main aria-label="CRAF'd Impact Map" style={{ position: "absolute", inset: 0 }}>
+      <ImpactMapClient projects={projects} orgs={orgs} variant={v === "2" ? "dark" : v === "d" ? "density" : "flat"} />
+    </main>
+  );
 }

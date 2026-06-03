@@ -3,7 +3,7 @@ export const UN_REGIONS = [
   "Northern America",
   "Central America",
   "Caribbean",
-  "South America",
+  "Southern America",
   "Northern Europe",
   "Western Europe",
   "Eastern Europe",
@@ -88,6 +88,10 @@ const COVERAGE_MAP: Record<string, UNRegion[]> = {
     "Western Africa",
     "Middle Africa",
   ],
+
+  "south america": ["Southern America"],
+  "southern america": ["Southern America"],
+  "latin america": ["Southern America", "Central America", "Caribbean"],
 
   // Country-level mappings
   kenya: ["Eastern Africa"],
