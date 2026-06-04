@@ -6,7 +6,7 @@ import type { CrafdProject } from "@/types";
 interface Props {
   projects: CrafdProject[];
   orgs: Record<string, string>;
-  variant?: "flat" | "density" | "dark";
+  variant?: "flat" | "density" | "dark" | "hidden-labels";
 }
 
 export default function ImpactMapClient(props: Props) {

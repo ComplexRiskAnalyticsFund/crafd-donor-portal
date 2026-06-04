@@ -7,7 +7,7 @@ import styles from "./impact-map.module.css";
 
 interface HexTile { x: number; y: number; col: number; row: number }
 interface TileData { width: number; height: number; hexRadius: number; tilesByRegion: Record<string, HexTile[]> }
-interface Props { projects: CrafdProject[]; orgs: Record<string, string>; variant?: "flat" | "density" | "dark" }
+interface Props { projects: CrafdProject[]; orgs: Record<string, string>; variant?: "flat" | "density" | "dark" | "hidden-labels" }
 
 const PROJECT_CATEGORIES: Record<string, string> = {
   "Hazard Modeling":                        "Crisis Anticipation & Warning",
@@ -73,7 +73,7 @@ function easeInOut(t: number): number {
   return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 }
 
-export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
+export default function ImpactMap({ projects, orgs, variant = "dark" }: Props) {
   const [tileData, setTileData] = useState<TileData | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const [locked, setLocked] = useState<string | null>(null);
@@ -319,12 +319,13 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
   );
   const hasRegional = isSelected && regionalProjects.length > 0;
   const drawR = tileData ? tileData.hexRadius : 9;
+  const isDarkVariant = variant === "dark" || variant === "hidden-labels";
 
   const groupedCategories = useMemo(() => {
     let source: CrafdProject[];
     let regionalLabels = new Set<string>();
 
-    if (variant === "dark") {
+    if (isDarkVariant) {
       const hasRegional = isSelected && regionalProjects.length > 0;
       if (hasRegional) {
         for (const p of regionalProjects) {
@@ -457,7 +458,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
         const bgW = maxLen * 9 + 28;
         const bgH = line2 ? 44 : 30;
         return (
-          <g key={region} style={{ pointerEvents: "none", userSelect: "none" }}>
+          <g key={region} style={{ pointerEvents: "none", userSelect: "none", opacity: variant === "hidden-labels" ? (hl ? 1 : 0) : 1, transition: "opacity 180ms ease" }}>
             <rect
               x={cx - bgW / 2}
               y={cy - (line2 ? 22 : 25)}
@@ -508,7 +509,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
             <li
               key={label}
               className={styles.projectBlock}
-              style={(variant === "dark" ? isRegional : highlight)
+              style={(isDarkVariant ? isRegional : highlight)
                 ? { background: "#F3C35C", borderColor: "rgba(180,120,0,0.35)" }
                 : undefined}
             >
@@ -542,7 +543,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
                 <li
                   key={label}
                   className={styles.projectBlock}
-                  style={(variant === "dark" ? isRegional : highlight)
+                  style={(isDarkVariant ? isRegional : highlight)
                     ? { background: "#F3C35C", borderColor: "rgba(180,120,0,0.35)" }
                     : undefined}
                 >
@@ -575,7 +576,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
               <h1 className={styles.zoneTitle}>{activeRegion}</h1>
               {hasRegional && (
                 <div className={styles.legend}>
-                  {variant === "dark" && (
+                  {isDarkVariant && (
                     <div className={styles.legendItem}>
                       <span className={`${styles.legendSwatch} ${styles.legendSwatchGlobal}`} />
                       Global Coverage
@@ -638,7 +639,7 @@ export default function ImpactMap({ projects, orgs, variant = "flat" }: Props) {
               <h1 className={styles.zoneTitle}>{activeRegion}</h1>
               {hasRegional && (
                 <div className={styles.legend}>
-                  {variant === "dark" && (
+                  {isDarkVariant && (
                     <div className={styles.legendItem}>
                       <span className={`${styles.legendSwatch} ${styles.legendSwatchGlobal}`} />
                       Global Coverage
