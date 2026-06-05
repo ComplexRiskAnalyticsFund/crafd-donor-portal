@@ -98,5 +98,4 @@ rm -rf node_modules .next && npm install
 Some decisions/approaches:
 1. Since the map was using UN geoscheme which didn't have a documented library of its own, it is currently defined in the code itself, once that is finalised we can bring it out into a 'dataset' in sheets/airtable and use that instead.
 2. Same ^ for the different categories for project impact
-3. "CRAF'd-supported data to..." is placeholder text, is to be finalised by Antje next week
-4. Testing 2 design versions/modal logics through "/impact/?v=2" and "/impact", when finalised, it will be consolidated to "/impact"
+3. Frontend wise we are good to go. Backend/data handling can be improved. 
