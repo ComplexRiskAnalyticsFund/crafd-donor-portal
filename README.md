@@ -98,4 +98,5 @@ rm -rf node_modules .next && npm install
 Some decisions/approaches:
 1. Since the map was using UN geoscheme which didn't have a documented library of its own, it is currently defined in the code itself, once that is finalised we can bring it out into a 'dataset' in sheets/airtable and use that instead.
 2. Same ^ for the different categories for project impact
-3. Frontend wise we are good to go. Backend/data handling can be improved. 
+3. One round of checks to see if every button takes you to the correct page is required, including a check with Ella/Antje to  confirm if all the impact stories/project pages exist, what the format of the link is, and if it exists in the airtable and can simply be replaced in the fetch
+4. Since all the data it uses is the same as the /partners page, be careful to change the variable names, or even rerunning the fecth from airtablein case any variable names have been changed there
