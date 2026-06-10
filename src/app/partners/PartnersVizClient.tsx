@@ -515,7 +515,7 @@ export default function PartnersVizClient({
       }
     } else if (clickedNode !== null) {
       if (n.kind === "label") nodeOpacity = 0.4;
-      else if (n.kind === "partner") {
+      else if (n.kind === "partner" || n.kind === "additional") {
         if (n.id === clickedNode.id) {
           nodeScale = 1.5;
           nodeOpacity = 1;
@@ -525,7 +525,7 @@ export default function PartnersVizClient({
       }
     } else if (hoveredPartner !== null && hoveredPartnerNode) {
       if (n.kind === "label") nodeOpacity = 0.4;
-      else if (n.kind === "partner") {
+      else if (n.kind === "partner" || n.kind === "additional") {
         const rf = hoveredPartnerNode.partner?.relational_project;
         if (n.id === hoveredPartnerNode.id) {
           nodeScale = 1.5;
@@ -539,7 +539,7 @@ export default function PartnersVizClient({
         }
       }
     } else if (deferredSearch.trim()) {
-      if (n.kind === "partner") {
+      if (n.kind === "partner" || n.kind === "additional") {
         const q = deferredSearch.toLowerCase();
         const hit =
           (n.name ?? "").toLowerCase().includes(q) ||
@@ -550,7 +550,7 @@ export default function PartnersVizClient({
       const isSameGroup =
         (n.kind === "label" || n.kind === "partner" || n.kind === "additional") && n.label === hoveredLabel;
       if (n.kind === "outline" || n.kind === "center") nodeOpacity = 1;
-      else if (isSameGroup) nodeOpacity = n.kind === "partner" ? 0.9 : 1;
+      else if (isSameGroup) nodeOpacity = (n.kind === "partner" || n.kind === "additional") ? 0.9 : 1;
       else nodeOpacity = 0.2;
     }
 
