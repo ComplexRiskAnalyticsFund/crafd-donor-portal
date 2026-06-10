@@ -35,7 +35,7 @@ export function labelPartner(p: Partner): PartnerLabel {
   return "other";
 }
 
-export type HexNodeKind = "partner" | "label" | "center" | "outline";
+export type HexNodeKind = "partner" | "label" | "center" | "outline" | "additional";
 
 export type HexNode = {
   id: string;
@@ -336,13 +336,18 @@ export function buildPartnerHexNodes(
     });
 
     // label hex — count = partners actually placed, not total in group
+    const rawCount =
+      partnerAbsPositions.length +
+      (label === "collaborating" ? excludedCount : 0);
+    const displayCount =
+      label === "collaborating"
+        ? Math.floor(rawCount / 10) * 10
+        : rawCount;
     nodes.push({
       id: `label-${label}`,
       kind: "label",
       label,
-      count:
-        partnerAbsPositions.length +
-        (label === "collaborating" ? excludedCount : 0),
+      count: displayCount,
       name: labelDisplay(label),
       x: anchorPx.x,
       y: anchorPx.y,
@@ -381,6 +386,30 @@ export function buildPartnerHexNodes(
         partner,
       });
     });
+
+    // For the collaborating group, add a placeholder hex for excluded orgs
+    if (label === "collaborating" && excludedCount > 0) {
+      const extraPositions = pickPositionsWithBlockFilter({
+        anchorAbs: anchor,
+        offsets: candidateOffsets,
+        blockedAbs,
+        needed: 1,
+      });
+      if (extraPositions[0]) {
+        const abs = extraPositions[0];
+        blockedAbs.add(keyAx(abs));
+        const pxy = axialToPixel(abs.q, abs.r, size);
+        nodes.push({
+          id: "additional-collaborating",
+          kind: "additional",
+          label: "collaborating",
+          name: `${excludedCount} ADDITIONAL COLLABORATING PARTNERS`,
+          x: pxy.x,
+          y: pxy.y,
+          r: size,
+        });
+      }
+    }
   }
 
   return nodes;

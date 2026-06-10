@@ -28,6 +28,7 @@ import { DonorPanel } from "./DonorModal";
 const KIND_ORDER: Record<HexNode["kind"], number> = {
   outline: 0,
   partner: 1,
+  additional: 1,
   label: 2,
   center: 3,
 };
@@ -400,7 +401,7 @@ export default function PartnersVizClient({
   const hexPaths = useMemo(() => {
     const m = new Map<string, string>();
     for (const n of renderNodes) {
-      if (n.kind === "partner") {
+      if (n.kind === "partner" || n.kind === "additional") {
         m.set(n.id, hexPathFlat(0, 0, n.r));
         // outer/inner paths only needed for hub nodes — computed lazily below
       } else {
@@ -486,7 +487,7 @@ export default function PartnersVizClient({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   function renderNode(n: HexNode): React.ReactNode {
-    let nodeOpacity = n.kind === "partner" ? 0.95 : 1;
+    let nodeOpacity = (n.kind === "partner" || n.kind === "additional") ? 0.95 : 1;
     let nodeScale = 1;
     let highlight = false;
 
@@ -547,7 +548,7 @@ export default function PartnersVizClient({
       }
     } else if (hoveredLabel !== null) {
       const isSameGroup =
-        (n.kind === "label" || n.kind === "partner") && n.label === hoveredLabel;
+        (n.kind === "label" || n.kind === "partner" || n.kind === "additional") && n.label === hoveredLabel;
       if (n.kind === "outline" || n.kind === "center") nodeOpacity = 1;
       else if (isSameGroup) nodeOpacity = n.kind === "partner" ? 0.9 : 1;
       else nodeOpacity = 0.2;
@@ -555,6 +556,31 @@ export default function PartnersVizClient({
 
     // Snap opacity to nearest CSS-defined step to avoid inline style objects
     const opacityStr = String(Math.round(nodeOpacity * 100) / 100);
+
+    if (n.kind === "additional") {
+      return (
+        <g
+          key={n.id}
+          className="hex-node"
+          data-node="true"
+          data-kind="additional"
+          data-label={n.label}
+          data-cx={n.x}
+          data-cy={n.y}
+          data-opacity={opacityStr}
+        >
+          <g transform={`translate(${n.x},${n.y})`}>
+            <path
+              d={hexPaths.get(n.id) ?? ""}
+              fill={fillFor(n, highlight)}
+              stroke={strokeFor(n)}
+              strokeWidth={strokeWidthFor(n)}
+            />
+            {n.name && hexFallbackText(n.name, n.r)}
+          </g>
+        </g>
+      );
+    }
 
     if (n.kind !== "partner") {
       return (
