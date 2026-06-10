@@ -576,7 +576,30 @@ export default function PartnersVizClient({
               stroke={strokeFor(n)}
               strokeWidth={strokeWidthFor(n)}
             />
-            {n.name && hexFallbackText(n.name, n.r)}
+            <text
+              x={0}
+              y={-4}
+              textAnchor="middle"
+              fontSize="42"
+              fill="white"
+              fontWeight={1000}
+              fontFamily="inherit"
+            >
+              {n.count}
+            </text>
+            {n.name?.split("\n").map((line, idx) => (
+              <text
+                key={idx}
+                x={0}
+                y={20 + idx * 13}
+                textAnchor="middle"
+                fontSize="12"
+                fill="white"
+                fontWeight={1000}
+              >
+                {line}
+              </text>
+            ))}
           </g>
         </g>
       );
