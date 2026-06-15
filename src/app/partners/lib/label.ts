@@ -35,6 +35,41 @@ export function labelPartner(p: Partner): PartnerLabel {
   return "other";
 }
 
+/**
+ * Whether a partner is a UN partner (MoU signatory). This is independent of the
+ * primary `labelPartner` group: a partner can be a "project" lead AND a UN
+ * partner at the same time, in which case they are placed in the project wedge
+ * but still counted/highlighted as part of the UN group.
+ */
+export function isUnPartner(p: Partner): boolean {
+  const conn = (p.crafd_connection ?? []).join(" ").toLowerCase();
+  return conn.includes("mou");
+}
+
+/**
+ * Manual placement swaps, keyed by airtable_id so they survive Airtable data
+ * refreshes. Each pair `[a, b]` exchanges the visualization positions of the two
+ * partners (they must be in the same group for the swap to take effect).
+ */
+const POSITION_SWAPS: ReadonlyArray<readonly [string, string]> = [
+  // DPPA <-> Korbel
+  ["recXzMOIf3S6mlmkO", "recF5o67nvN5x9chH"],
+  // NRC <-> IOM
+  ["recjaqYpyPQLi5Ibg", "recHv6hZ0SCI0cjT8"],
+  // OHCHR <-> RCCC
+  ["recUZaC92PmOziMtC", "recivcR2hSHFfyvT8"],
+];
+
+/** Swap the array positions of configured partner pairs (mutates in place). */
+function applyPositionSwaps(group: Partner[]): void {
+  for (const [idA, idB] of POSITION_SWAPS) {
+    const i = group.findIndex((p) => p.airtable_id === idA);
+    const j = group.findIndex((p) => p.airtable_id === idB);
+    if (i === -1 || j === -1) continue;
+    [group[i], group[j]] = [group[j], group[i]];
+  }
+}
+
 export type HexNodeKind = "partner" | "label" | "center" | "outline" | "additional";
 
 export type HexNode = {
@@ -57,6 +92,10 @@ export type HexNode = {
 
   // only for partner nodes
   partner?: Partner;
+
+  // partner is also a UN partner (MoU signatory), even if placed in another
+  // group (e.g. a project lead that also signed the MoU)
+  isUn?: boolean;
 };
 
 const SQRT3 = Math.sqrt(3);
@@ -216,6 +255,10 @@ export function buildPartnerHexNodes(
   }
 
   const groups = new Map<PartnerLabel, Partner[]>();
+  // Count UN partners (MoU signatories) that are placed in a different group
+  // (e.g. project leads who also signed the MoU). These are still UN partners
+  // and must be reflected in the UN partners count.
+  let dualUnCount = 0;
   for (const p of dedupedPartners) {
     const isActionAid =
       /action\s*aid/i.test(p.org_short_name ?? "") ||
@@ -223,6 +266,7 @@ export function buildPartnerHexNodes(
     const posLabel: PartnerLabel = isActionAid
       ? "collaborating"
       : labelPartner(p);
+    if (posLabel !== "un" && isUnPartner(p)) dualUnCount++;
     const arr = groups.get(posLabel) ?? [];
     arr.push(p);
     groups.set(posLabel, arr);
@@ -338,7 +382,10 @@ export function buildPartnerHexNodes(
     // label hex — count = partners actually placed, not total in group
     const rawCount =
       partnerAbsPositions.length +
-      (label === "collaborating" ? excludedCount : 0);
+      (label === "collaborating" ? excludedCount : 0) +
+      // UN partners placed in other groups (e.g. project leads who also signed
+      // the MoU) still count towards the UN partners total.
+      (label === "un" ? dualUnCount : 0);
     const displayCount =
       label === "collaborating"
         ? Math.floor(rawCount / 10) * 10
@@ -359,6 +406,11 @@ export function buildPartnerHexNodes(
       const hasLogo = (p: Partner) => !!p.logo_slug;
       return Number(hasLogo(b)) - Number(hasLogo(a));
     });
+
+    // Manual position swaps within a group, keyed by airtable_id so they survive
+    // Airtable data refreshes (which would revert any edits to partners.json).
+    // Each pair swaps the two partners' placement positions in the visualization.
+    applyPositionSwaps(group);
 
     // create partner nodes and block their cells for subsequent groups
     group.forEach((partner, i) => {
@@ -384,6 +436,7 @@ export function buildPartnerHexNodes(
         y: pxy.y,
         r: size,
         partner,
+        isUn: isUnPartner(partner),
       });
     });
 

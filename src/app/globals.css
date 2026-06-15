@@ -57,7 +57,7 @@
 
 /* Partners visualization — node opacity states via CSS to avoid per-node inline style objects */
 .hex-node {
-  transition: opacity 0.45s ease;
+  transition: opacity 0.45s cubic-bezier(0.22,1,0.36,1);
 }
 @media (max-width: 768px) {
   .hex-node {

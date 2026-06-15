@@ -547,8 +547,17 @@ export default function PartnersVizClient({
         nodeOpacity = hit ? 1 : 0.12;
       }
     } else if (hoveredLabel !== null) {
+      // A partner can belong to the hovered group directly, or—when hovering the
+      // UN label—be a dual UN partner placed in another group (e.g. a project
+      // lead that also signed the MoU).
+      const isDualUn =
+        hoveredLabel === "un" &&
+        (n.kind === "partner" || n.kind === "additional") &&
+        n.isUn === true;
       const isSameGroup =
-        (n.kind === "label" || n.kind === "partner" || n.kind === "additional") && n.label === hoveredLabel;
+        ((n.kind === "label" || n.kind === "partner" || n.kind === "additional") &&
+          n.label === hoveredLabel) ||
+        isDualUn;
       if (n.kind === "outline" || n.kind === "center") nodeOpacity = 1;
       else if (isSameGroup) nodeOpacity = (n.kind === "partner" || n.kind === "additional") ? 0.9 : 1;
       else nodeOpacity = 0.2;
@@ -754,8 +763,8 @@ export default function PartnersVizClient({
           <g
             style={{
               transformOrigin: "0 0",
-              transform: nodeScale !== 1 ? `scale(${nodeScale})` : undefined,
-              transition: "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
+              transform: `scale(${nodeScale})`,
+              transition: "transform 0.7s cubic-bezier(0.4,0,0.2,1)",
             }}
           >
             <path
@@ -846,9 +855,9 @@ export default function PartnersVizClient({
             ))}
           </g>
 
-          {/* Background hex nodes — excludes hovered, locked, and clicked-donor partners */}
+          {/* Background hex nodes — excludes locked and clicked-donor partners (hovered stays here for CSS transitions) */}
           {ordered.map((n) => {
-            if (n.kind === "partner" && (lockedGroup?.has(n.id) || n.id === hoveredPartner || n.id === clickedNode?.id)) return null;
+            if (n.kind === "partner" && (lockedGroup?.has(n.id) || n.id === clickedNode?.id)) return null;
             return renderNode(n);
           })}
 
@@ -883,9 +892,6 @@ export default function PartnersVizClient({
             if (!parseProjects(n.partner?.relational_project).has(hoveredProject)) return null;
             return renderNode(n);
           })}
-
-          {/* Hovered hex node — rendered last so it's always on top */}
-          {hoveredPartner && ordered.map((n) => (n.kind === "partner" && n.id === hoveredPartner) ? renderNode(n) : null)}
 
           {/* Clicked donor hex — topmost so scaled hex is never occluded */}
           {clickedNode && ordered.map((n) => (n.kind === "partner" && n.id === clickedNode.id) ? renderNode(n) : null)}
