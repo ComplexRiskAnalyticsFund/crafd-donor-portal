@@ -195,6 +195,44 @@ function generateColumnOffsets(n: number, height: number): Axial[] {
 }
 
 /**
+ * Generate axial OFFSETS (relative to the UN anchor) for the UN partners
+ * cluster as three vertical columns, each one step to the right of the last:
+ *
+ * - Column 1 (right of the UN hexagon): 4 tall. DCO sits at the top (anchor row)
+ *   with the rest running downward (the cells above are taken by donors).
+ * - Column 2: 6 tall, its top 3 rows higher than DCO.
+ * - Column 3: 7 tall, one column further right and one row higher than column 2.
+ *
+ * `topR` is the offset row of the column's top cell relative to the anchor
+ * (anchor row = 0; DCO row is 0). Cells are emitted top→bottom.
+ */
+function generateUnColumnOffsets(n: number): Axial[] {
+  const out: Axial[] = [];
+  const columns: ReadonlyArray<{ q: number; topR: number; height: number }> = [
+    { q: 1, topR: 0, height: 4 }, // DCO column
+    { q: 2, topR: -3, height: 6 }, // 3 higher than DCO
+    { q: 3, topR: -5, height: 7 }, // one right + two higher than column 2
+  ];
+
+  for (const col of columns) {
+    for (let j = 0; j < col.height && out.length < n; j++) {
+      out.push({ q: col.q, r: col.topR + j });
+    }
+  }
+
+  // Defensive: if there are ever more UN partners than the 17 these columns
+  // hold, keep extending the staircase (7-tall columns climbing up-right).
+  for (let k = 3; out.length < n; k++) {
+    const topR = -4 - (k - 2);
+    for (let j = 0; j < 7 && out.length < n; j++) {
+      out.push({ q: k + 1, r: topR + j });
+    }
+  }
+
+  return out;
+}
+
+/**
  * Take a stream of OFFSETS (wedge/spiral/etc), shift them to an anchor,
  * and filter out any ABSOLUTE cells in `blockedAbs`.
  *
@@ -392,12 +430,15 @@ export function buildPartnerHexNodes(
     // compute actual positions BEFORE pushing the label so count is honest
     const wedgeDirs = wedgeByLabel[label];
     if (!wedgeDirs) continue;
-    // Project partners use vertical columns of 3 that step up-and-right;
-    // all other groups keep the wedge/blob growth.
+    // Project partners use vertical columns of 4 that step up-and-right;
+    // UN partners use a custom column staircase (DCO column of 4, then columns
+    // of 6 starting 3 higher); all other groups keep the wedge/blob growth.
     const candidateOffsets =
       label === "project"
-        ? generateColumnOffsets(group.length * 4 + 50, 3)
-        : generateWedgeOffsets(group.length * 8 + 50, wedgeDirs);
+        ? generateColumnOffsets(group.length * 4 + 50, 4)
+        : label === "un"
+          ? generateUnColumnOffsets(group.length + 10)
+          : generateWedgeOffsets(group.length * 8 + 50, wedgeDirs);
     const partnerAbsPositions = pickPositionsWithBlockFilter({
       anchorAbs: anchor,
       offsets: candidateOffsets,
