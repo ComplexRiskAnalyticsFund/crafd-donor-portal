@@ -52,12 +52,11 @@ export function isUnPartner(p: Partner): boolean {
  * partners (they must be in the same group for the swap to take effect).
  */
 const POSITION_SWAPS: ReadonlyArray<readonly [string, string]> = [
-  // DPPA <-> Korbel
-  ["recXzMOIf3S6mlmkO", "recF5o67nvN5x9chH"],
-  // NRC <-> IOM
-  ["recjaqYpyPQLi5Ibg", "recHv6hZ0SCI0cjT8"],
-  // OHCHR <-> RCCC
-  ["recUZaC92PmOziMtC", "recivcR2hSHFfyvT8"],
+
+  // DPPA <-> PRIO
+  ["recXzMOIf3S6mlmkO", "recHKayBVNHm8QsXP"],
+  // IOM <-> RCCC
+  ["recHv6hZ0SCI0cjT8", "recivcR2hSHFfyvT8"],
 ];
 
 /** Swap the array positions of configured partner pairs (mutates in place). */
@@ -167,6 +166,31 @@ function generateWedgeOffsets(n: number, wedgeDirs: number[]): Axial[] {
     ring++;
   }
 
+  return out;
+}
+
+/**
+ * Generate axial OFFSETS as vertical columns of a fixed height, where each
+ * successive column is placed one step to the RIGHT and one step HIGHER than
+ * the previous one (a staircase of columns climbing up-right).
+ *
+ * - `height`: number of hexes per vertical column (e.g. 3).
+ * - Columns are emitted left→right; within a column, cells are emitted top→bottom.
+ *
+ * Offsets are relative to (0,0). Column index k (0-based):
+ *   q = k + 1                  (first column sits one step right of the anchor)
+ *   r = (j - k) for j in 0..height-1   (top cell climbs by one row each column)
+ */
+function generateColumnOffsets(n: number, height: number): Axial[] {
+  const out: Axial[] = [];
+  for (let k = 0; out.length < n; k++) {
+    // build each column bottom→top (larger r is lower on screen)
+    for (let j = height - 1; j >= 0; j--) {
+      // shifted one column left (q) and one row down (r) from the anchor
+      out.push({ q: k, r: j - k + 1 });
+      if (out.length >= n) return out;
+    }
+  }
   return out;
 }
 
@@ -368,10 +392,12 @@ export function buildPartnerHexNodes(
     // compute actual positions BEFORE pushing the label so count is honest
     const wedgeDirs = wedgeByLabel[label];
     if (!wedgeDirs) continue;
-    const candidateOffsets = generateWedgeOffsets(
-      group.length * 8 + 50,
-      wedgeDirs,
-    );
+    // Project partners use vertical columns of 3 that step up-and-right;
+    // all other groups keep the wedge/blob growth.
+    const candidateOffsets =
+      label === "project"
+        ? generateColumnOffsets(group.length * 4 + 50, 3)
+        : generateWedgeOffsets(group.length * 8 + 50, wedgeDirs);
     const partnerAbsPositions = pickPositionsWithBlockFilter({
       anchorAbs: anchor,
       offsets: candidateOffsets,
