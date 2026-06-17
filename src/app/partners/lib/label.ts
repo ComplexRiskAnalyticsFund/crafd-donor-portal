@@ -89,11 +89,14 @@ const GROUP_OVERRIDES: Record<string, PartnerLabel> = {
  * Applied AFTER the group is laid out: the partner keeps its slot in the group
  * order but its axial cell is shifted by {dq, dr}.
  *
+ * Use "additional-collaborating" to move the "+N additional partners" hex.
+ *
  * Example — move ACLED one step to the right and one step up:
  *   "reclFvEkKR7sCD7l3": { dq: 1, dr: -1 },
  */
 const POSITION_OFFSETS: Record<string, { dq: number; dr: number }> = {
     "recrjN0nS3ygzhIKK": { dq: -3, dr: -7 },
+      "additional-collaborating": { dq: 4, dr: -14 },
 
 };
 
@@ -573,7 +576,10 @@ export function buildPartnerHexNodes(
         needed: 1,
       });
       if (extraPositions[0]) {
-        const abs = extraPositions[0];
+        const additionalDelta = POSITION_OFFSETS["additional-collaborating"];
+        const abs = additionalDelta
+          ? { q: extraPositions[0].q + additionalDelta.dq, r: extraPositions[0].r + additionalDelta.dr }
+          : extraPositions[0];
         blockedAbs.add(keyAx(abs));
         const pxy = axialToPixel(abs.q, abs.r, size);
         nodes.push({
