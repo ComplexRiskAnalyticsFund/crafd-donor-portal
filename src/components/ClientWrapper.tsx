@@ -1,17 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+// No-op subscribe: mount state never changes after hydration.
+const emptySubscribe = () => () => {};
 
 /**
- * Client-only wrapper to prevent hydration mismatches
- * Forces component to only render on client side
+ * Client-only wrapper to prevent hydration mismatches.
+ * Renders nothing during SSR / first hydration pass, then renders children.
+ * Uses useSyncExternalStore so the server snapshot (false) and client snapshot
+ * (true) differ without a setState-in-effect.
  */
 export function ClientOnly({ children }: { children: React.ReactNode }) {
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
+  const hasMounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
 
   if (!hasMounted) {
     return null;

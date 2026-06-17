@@ -14,10 +14,14 @@ export function useSheetDrag({
   const touchStartY = useRef(0);
   const dragging = useRef(false);
   const [dragOffset, setDragOffset] = useState(0);
+  // Mirror of `dragging.current` that's safe to read during render (the ref
+  // alone can't drive the transition without an exhaustive-deps / refs lint error).
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleDragStart = useCallback((e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY;
     dragging.current = true;
+    setIsDragging(true);
     setDragOffset(0);
   }, []);
 
@@ -30,6 +34,7 @@ export function useSheetDrag({
     (e: React.TouchEvent) => {
       if (!dragging.current) return;
       dragging.current = false;
+      setIsDragging(false);
       const dy = e.changedTouches[0].clientY - touchStartY.current;
       setDragOffset(0);
       if (dy < -40) setSheetSnap("full");
@@ -47,13 +52,13 @@ export function useSheetDrag({
   const motionAnimate = dragOffset
     ? { y: `calc(${snapY} + ${dragOffset}px)` }
     : { y: snapY };
-  const motionTransition: Transition = dragging.current
+  const motionTransition: Transition = isDragging
     ? { duration: 0 }
     : { type: "tween", ease: [0.32, 0.72, 0, 1] as [number, number, number, number], duration: 0.3 };
 
   return {
     dragOffset,
-    isDragging: dragging,
+    isDragging,
     motionAnimate,
     motionTransition,
     handleDragStart,

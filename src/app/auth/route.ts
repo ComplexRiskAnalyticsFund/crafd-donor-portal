@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.redirect(new URL("/login/?error=1", req.url));
-  } catch (error) {
+  } catch {
     return NextResponse.redirect(new URL("/login/?error=1", req.url));
   }
 }

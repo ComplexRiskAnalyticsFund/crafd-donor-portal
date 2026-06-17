@@ -3,6 +3,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CrafdProject } from "@/types";
 import { coverageToRegions } from "./coverage-map";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import styles from "./impact-map.module.css";
 
 // ── Types ─────────────────────────────────────────────────
@@ -96,12 +97,17 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const [tileData, setTileData] = useState<TileData | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const [locked, setLocked] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const isMobile = useMediaQuery("(max-width: 640px)");
   const [animVB, setAnimVB] = useState({ x: 0, y: -100, w: 1600, h: 1000 });
   const [expandedCats, setExpandedCats] = useState<Set<string>>(() => new Set(VALID_CATEGORIES));
 
+  // Mirror animVB into a ref so animation frames / touch handlers can read the
+  // latest viewBox without re-subscribing. Synced in an effect (not during
+  // render) to satisfy react-hooks/refs.
   const animVBRef = useRef(animVB);
-  animVBRef.current = animVB;
+  useEffect(() => {
+    animVBRef.current = animVB;
+  }, [animVB]);
   const rafRef = useRef<number | null>(null);
   const mapWrapperRef = useRef<HTMLDivElement>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -117,14 +123,6 @@ export default function ImpactMap({ projects, orgs }: Props) {
       .then(setTileData)
       .catch(() => {});
     return () => ctrl.abort();
-  }, []);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 640px)");
-    setIsMobile(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
   }, []);
 
   // ── Derived data ────────────────────────────────────────

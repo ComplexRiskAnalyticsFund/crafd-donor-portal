@@ -119,16 +119,17 @@ export function IframeLayer() {
                 </div>
               </div>
             )}
-            {/* Iframe */}
+            {/* Iframe — fetchPriority is a valid HTML attribute but missing
+                from React's iframe typings, so pass it via a typed spread. */}
             <iframe
               src={iframe.src}
               title={iframe.title}
               className="h-full w-full border-none"
               allow="accelerometer; gyroscope"
               onLoad={() => handleIframeLoad(iframe.key)}
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error fetchPriority is a valid HTML attribute but missing from React's iframe typings
-              fetchPriority={active ? "high" : "low"}
+              {...({ fetchPriority: active ? "high" : "low" } as {
+                fetchPriority: "high" | "low";
+              })}
             />
           </div>
         );

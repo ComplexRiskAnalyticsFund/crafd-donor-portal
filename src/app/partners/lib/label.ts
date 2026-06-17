@@ -66,11 +66,19 @@ const POSITION_SWAPS: ReadonlyArray<readonly [string, string]> = [
 
 /** Swap the array positions of configured partner pairs (mutates in place). */
 function applyPositionSwaps(group: Partner[]): void {
+  // Build an id → index lookup once instead of scanning the group per swap pair.
+  const indexById = new Map<string, number>();
+  group.forEach((p, idx) => {
+    if (p.airtable_id) indexById.set(p.airtable_id, idx);
+  });
   for (const [idA, idB] of POSITION_SWAPS) {
-    const i = group.findIndex((p) => p.airtable_id === idA);
-    const j = group.findIndex((p) => p.airtable_id === idB);
-    if (i === -1 || j === -1) continue;
+    const i = indexById.get(idA);
+    const j = indexById.get(idB);
+    if (i === undefined || j === undefined) continue;
     [group[i], group[j]] = [group[j], group[i]];
+    // Keep the map consistent in case a later pair references the same ids.
+    indexById.set(idA, j);
+    indexById.set(idB, i);
   }
 }
 
@@ -95,8 +103,10 @@ const GROUP_OVERRIDES: Record<string, PartnerLabel> = {
  *   "reclFvEkKR7sCD7l3": { dq: 1, dr: -1 },
  */
 const POSITION_OFFSETS: Record<string, { dq: number; dr: number }> = {
-    //"recrjN0nS3ygzhIKK": { dq: -3, dr: -7 },
-      "additional-collaborating": { dq: 4, dr: -14, },
+
+      "additional-collaborating": { dq: 3, dr: -14, },
+      "recKZUJrah8DHb2Wu": { dq: -4, dr: -7 }, 
+
 
 };
 
@@ -331,9 +341,13 @@ function labelDisplay(label: PartnerLabel) {
   }
 }
 
+// Hex radius in px. Must stay in sync with HEX_SIZE in ./utils (kept separate
+// to avoid a circular import, since utils imports types from this module).
+const DEFAULT_HEX_SIZE = 75;
+
 export function buildPartnerHexNodes(
   partners: Partner[],
-  size = 80,
+  size = DEFAULT_HEX_SIZE,
 ): HexNode[] {
   // 1) filter, deduplicate, then group partners
   const excludedOrgs = getExcludedOrganizations();
@@ -364,7 +378,14 @@ export function buildPartnerHexNodes(
           ...(p.relational_project ?? []),
         ]),
       ];
-      dedupedPartners[idx] = { ...existing, relational_project: merged };
+      dedupedPartners[idx] = {
+        ...existing,
+        relational_project: merged,
+        // Prefer whichever duplicate actually has a logo / website so data
+        // isn't lost when the same org appears twice in Airtable.
+        logo_slug: existing.logo_slug ?? p.logo_slug,
+        org_url: existing.org_url ?? p.org_url,
+      };
     } else {
       if (key) seenNames.set(key, dedupedPartners.length);
       dedupedPartners.push(p);

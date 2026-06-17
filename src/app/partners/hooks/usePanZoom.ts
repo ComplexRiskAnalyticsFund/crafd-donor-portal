@@ -296,7 +296,7 @@ export function usePanZoom({
 
       animateTo(newX, newY, clampedScale, groupEl);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [svgRef],
   );
 
@@ -306,7 +306,7 @@ export function usePanZoom({
     if (!saved || !groupEl) return;
     savedViewRef.current = null;
     animateTo(saved.x, saved.y, saved.s, groupEl);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   return {

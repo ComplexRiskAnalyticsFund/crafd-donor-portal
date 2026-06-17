@@ -2,7 +2,21 @@
 
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { sankey as d3Sankey, sankeyLinkHorizontal } from "d3-sankey";
+import {
+  sankey as d3Sankey,
+  sankeyLinkHorizontal,
+  type SankeyNodeMinimal,
+  type SankeyLinkMinimal,
+} from "d3-sankey";
+
+type SankeyNode = SankeyNodeMinimal<
+  { name: string; level: number },
+  { value: number }
+>;
+type SankeyLink = SankeyLinkMinimal<
+  { name: string; level: number },
+  { value: number }
+>;
 
 const FLAGS: Record<string, string> = {
   Germany: "🇩🇪",
@@ -83,10 +97,10 @@ export default function FinancingSankeyPage() {
         ])
         .nodeSort(null);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       const graph = sankeyGenerator({
-        nodes: d.nodes.map((n) => ({ ...n })) as any,
-        links: d.links.map((l) => ({ ...l })) as any,
+        nodes: d.nodes.map((n) => ({ ...n })) as SankeyNode[],
+        links: d.links.map((l) => ({ ...l })) as unknown as SankeyLink[],
       });
 
       // Lock columns
