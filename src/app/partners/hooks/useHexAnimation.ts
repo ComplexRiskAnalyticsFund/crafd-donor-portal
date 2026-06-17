@@ -26,7 +26,7 @@ export function useHexAnimation({
     if (!svgEl) return;
 
     const partnerGs = Array.from(
-      svgEl.querySelectorAll<SVGGElement>('[data-kind="partner"]'),
+      svgEl.querySelectorAll<SVGGElement>('[data-kind="partner"], [data-kind="additional"]'),
     );
     if (partnerGs.length === 0) return;
 
