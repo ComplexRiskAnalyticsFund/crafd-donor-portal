@@ -59,8 +59,10 @@ const POSITION_SWAPS: ReadonlyArray<readonly [string, string]> = [
   ["recHv6hZ0SCI0cjT8", "recivcR2hSHFfyvT8"],
   // AWSD <-> Inform
   ["recliM1NwnhtY4nY8", "rec1ZtuGgRSwYb1kb"],
+  // Carter Center <-> WFP
   ["recvfKNNEYjFKp1Oh", "reciSCrJAGrkoTltl"],
-
+  // WFP <-> Ridgeway
+  ["reciSCrJAGrkoTltl", "rec8ogUa6PWpDwXM7"],
 
 ];
 
