@@ -764,7 +764,6 @@ export default function PartnersVizClient({
             style={{
               transformOrigin: "0 0",
               transform: `scale(${nodeScale})`,
-              transition: "transform 0.7s cubic-bezier(0.4,0,0.2,1)",
             }}
           >
             <path
@@ -855,7 +854,7 @@ export default function PartnersVizClient({
             ))}
           </g>
 
-          {/* Background hex nodes — excludes locked and clicked-donor partners (hovered stays here for CSS transitions) */}
+          {/* Background hex nodes — excludes locked and clicked-donor partners */}
           {ordered.map((n) => {
             if (n.kind === "partner" && (lockedGroup?.has(n.id) || n.id === clickedNode?.id)) return null;
             return renderNode(n);
@@ -898,6 +897,8 @@ export default function PartnersVizClient({
 
           {/* Org-hovered locked node — topmost */}
           {hoveredOrgNodeId && ordered.map((n) => (n.kind === "partner" && n.id === hoveredOrgNodeId) ? renderNode(n) : null)}
+
+
 
         </g>
         </g>

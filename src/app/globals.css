@@ -64,6 +64,7 @@
     transition: opacity 0.2s ease;
   }
 }
+
 .hex-node[data-opacity="1"]    { opacity: 1; }
 .hex-node[data-opacity="0.95"] { opacity: 0.95; }
 .hex-node[data-opacity="0.9"]  { opacity: 0.9; }
