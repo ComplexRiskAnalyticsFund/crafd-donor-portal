@@ -62,10 +62,9 @@ print(df_projects)
 rename_mapping = {
     "Organization name": "org_full_name",
     "Short name": "org_short_name",
-    "Organization Type": "org_type",
+    "Organization type": "org_type",
     "CRAF'd partner type": "partner_type",
-    "Projects (Lead)": "projects_lead",
-    "UN-Organization": "un_org",
+    "Is UN-organization": "un_org",
     "Projects (Support)": "projects_support",
     # adding financing columns here:
     # this is from incoming:
@@ -75,8 +74,8 @@ rename_mapping = {
     "Project title": "project_title",
     "Project short title": "project_short_title",
     "Investment type": "investment_type",
-    "Exact Grant Size": "grant_amt",
-    "Lead organization": "org_full_name",
+    "Exact grant size": "grant_amt",
+    "Organization full name": "org_full_name",
     "Organization": "org_short_name",
 }
 
@@ -108,7 +107,6 @@ selected_columns_partners = [
     "org_full_name",
     "org_short_name",
     "org_type",
-    "projects_lead",
     "un_org",
 ]
 

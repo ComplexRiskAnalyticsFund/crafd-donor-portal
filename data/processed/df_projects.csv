@@ -1,23 +1,22 @@
 project_title,project_short_title,investment_type,grant_amt,org_full_name,org_short_name
-Hazard Modeling,ICPAC: Hazard Modeling,Crisis Analytics,"$500,065",Intergovernmental Authority on Development - IGAD Climate Prediction and Applications Centre (ICPAC),ICPAC
-GEOGUARD,DPPA: GEOGUARD,Crisis Analytics,"$700,000",United Nations Department of Political and Peacebuilding Affairs (UNDPPA),DPPA
-Maintaining ACLED,ACLED: Maintaining ACLED,Data Sets,"$14,800,000",Armed Conflict Location & Event Data Project (ACLED),ACLED
-Kente Threads,FHN [AAI]: Kente Threads,Data Sets,"$299,749","Feminist Humanitarian Network (FHN), ActionAid International [FHN Secretariat]","FHN, AAI"
-Women's Mobilization Within Armed Groups,Korbel: Women's Mobilization Within Armed Groups,Data Sets,"$400,000","""Josef Korbel School, University of Denver (Korbel)""",Korbel
-Internal Displacement Data,IDMC: Internal Displacement Data,Data Sets,"$1,500,000",Internal Displacement Monitoring Centre (IDMC),IDMC
-Transformative Outcomes,UN Women: Transformative Outcomes,Data Sets,"$1,000,000",United Nations Entity for Gender Equality and the Empowerment of Women (UN WOMEN),UN-WOMEN
-INFORM Warning,UNDP: INFORM,Crisis Analytics,"$700,000",United Nations Development Programme (UNDP),UNDP
-Conflict Climate Displacement,RCCC: Conflict Climate Displacement,Data Sets,"$499,986",Red Cross Red Crescent Climate Centre (RCCC),RCCC
-PRIMARI,IOM: PRIMARI,Data Sets,"$500,000",International Organization for Migration (IOM),IOM
-GUARD,IFRC: GUARD,Data Sets,"$599,735",International Federation of Red Cross and Red Crescent Societies (IFRC),IFRC
-,,,,,
-CRAF'd Sec.Direct Cost 2022,CRAF'd Sec.Direct Cost 2022(2),Direct costs,"$1,428,022",Complex Risk Analytics Fund,CRAF'd
-Strengthening CRAF'd Ecosystem,NORCAP: Strengthening CRAF'd Ecosystem, Exchange,"$500,000",Norwegian Refugee Council (NRC)  ,NRC
-VIEWS-PIN,PRIO: VIEWS,Crisis Analytics,"$700,000",Peace Research Institute Oslo (PRIO),PRIO
-Rapid Assessment Data,OHCHR: Rapid Assessment Data,Data Sets,"$499,968",Office of the United Nations High Commissioner for Human Rights (OHCHR),OHCHR
-eEARTH,ICG: EEARTH,Crisis Analytics,"$700,000",International Crisis Group (ICG),ICG
-ACLED Data,ACLED: ACLED Data,Data Sets,"$14,708,969",Armed Conflict Location & Event Data Project (ACLED),ACLED
-Risk DataHub,UNDP: DataHub,Infrastructure,"$500,000",United Nations Development Programme (UNDP),UNDP
-EMPOW,PRIO: EMPOW,Data Sets,"$800,000",Peace Research Institute Oslo (PRIO),PRIO
-CLIFDEW-GRID,UNHCR: CLIFDEW-GRID,Crisis Analytics,"$500,071",United Nations High Commissioner for Refugees (UNHCR),UNHCR
-CRAF'd Direct Costs,CRAF'd Direct Costs,Direct costs,"$8,560",Complex Risk Analytics Fund,CRAF'd
+Hazard Modeling,ICPAC: Hazard Modeling,Crisis Analytics & Insights,500065.0,['recLEtULboPmoSb1B'],['ICPAC']
+GEOGUARD,DPPA: GEOGUARD,Crisis Analytics & Insights,700000.0,['recXzMOIf3S6mlmkO'],['DPPA']
+Maintaining ACLED,ACLED: Maintaining ACLED,Data Sets & Commons,14800000.0,['reclFvEkKR7sCD7l3'],['ACLED']
+Kente Threads,FHN: Kente Threads,Data Sets & Commons,299749.0,['recv0iM90I12ie7kn'],['FHN']
+Women's Mobilization Within Armed Groups,Korbel: Women's Mobilization Within Armed Groups,Data Sets & Commons,400000.0,['recF5o67nvN5x9chH'],['Korbel']
+Internal Displacement Data,IDMC: Internal Displacement Data,Data Sets & Commons,1500000.0,['recPFxoMtMX2tV021'],['IDMC']
+Transformative Outcomes,UN Women: Transformative Outcomes,Data Sets & Commons,999999.53,['recow8fQAyzfPp706'],['UN-WOMEN']
+INFORM Warning,INFORM Consortium: INFORM Warning,Crisis Analytics & Insights,700000.0,['recliM1NwnhtY4nY8'],['INFORM Consortium']
+Conflict Climate Displacement,RCCC: Conflict Climate Displacement,Data Sets & Commons,499986.0,['recivcR2hSHFfyvT8'],['RCCC']
+PRIMARI,IOM: PRIMARI,Data Sets & Commons,500000.0,['recHv6hZ0SCI0cjT8'],['IOM']
+GUARD,IFRC: GUARD,Data Sets & Commons,599735.0,['recmg6BiaYlTvSxkx'],['IFRC']
+CRAF'd Sec.Direct Cost 2022,CRAF'd Sec.Direct Cost 2022(2),Direct costs,1428022.0,['receDDy7TCG7FPn5i'],"[""CRAF'd""]"
+Strengthening CRAF'd Ecosystem,NORCAP: Strengthening CRAF'd Ecosystem,Learning & Exchange,1000000.0,['recjaqYpyPQLi5Ibg'],['NRC']
+VIEWS-PIN,PRIO: VIEWS,Crisis Analytics & Insights,700000.0,['recHKayBVNHm8QsXP'],['PRIO']
+Rapid Assessment Data,OHCHR: Rapid Assessment Data,Data Sets & Commons,499968.0,['recUZaC92PmOziMtC'],['OHCHR']
+eEARTH,ICG: EEARTH,Crisis Analytics & Insights,700000.0,['rec8fighUv8Q9hCX6'],['ICG']
+ACLED Data,ACLED: ACLED Data,Data Sets & Commons,14708969.0,['reclFvEkKR7sCD7l3'],['ACLED']
+Risk DataHub,UNDP: DataHub,Infrastructure & Platforms,500000.0,['recRGWc0JJ4I8EBrf'],['UNDP']
+EMPOW,PRIO: EMPOW,Data Sets & Commons,800000.0,['recHKayBVNHm8QsXP'],['PRIO']
+CLIFDEW-GRID,UNHCR: CLIFDEW-GRID,Crisis Analytics & Insights,500071.0,['recE7NdoxNUgVthSy'],['UNHCR']
+CRAF'd Direct Costs,CRAF'd Direct Costs,Direct costs,8560.0,['receDDy7TCG7FPn5i'],"[""CRAF'd""]"

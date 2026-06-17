@@ -1,66 +1,196 @@
 {
-  "nodes": [
-    {"name": "Germany", "level": 0},
-    {"name": "United States of America", "level": 0},
-    {"name": "United Kingdom", "level": 0},
-    {"name": "Netherlands", "level": 0},
-    {"name": "European Union", "level": 0},
-    {"name": "Luxembourg", "level": 0},
-    {"name": "Canada", "level": 0},
-    {"name": "Finland", "level": 0},
-
-    {"name": "Total Investment", "level": 1},
-
-    {"name": "Non-Governmental Organization", "level": 2},
-    {"name": "United Nations", "level": 2},
-    {"name": "Research", "level": 2},
-    {"name": "International Organization", "level": 2},
-    {"name": "Red Cross", "level": 2},
-    {"name": "Academia", "level": 2},
-    {"name": "Network", "level": 2},
-
-    {"name": "Data Sets & Commons", "level": 3},
-    {"name": "Crisis Analytics & Insights", "level": 3},
-    {"name": "Infrastructure & Platforms", "level": 3},
-    {"name": "Learning & Exchange", "level": 3}
-  ],
-
-  "links": [
-
-    {"source": 0, "target": 8, "value": 17016138.06},
-    {"source": 1, "target": 8, "value": 12520000},
-    {"source": 2, "target": 8, "value": 8376037.17},
-    {"source": 3, "target": 8, "value": 6176868.83},
-    {"source": 4, "target": 8, "value": 2256200},
-    {"source": 5, "target": 8, "value": 233129.8},
-    {"source": 6, "target": 8, "value": 173793.96},
-    {"source": 7, "target": 8, "value": 113404.7},
-
-    {"source": 8, "target": 9, "value": 32008969},
-    {"source": 8, "target": 10, "value": 3900039},
-    {"source": 8, "target": 11, "value": 2200000},
-    {"source": 8, "target": 12, "value": 1000065},
-    {"source": 8, "target": 13, "value": 1099721},
-    {"source": 8, "target": 14, "value": 400000},
-    {"source": 8, "target": 15, "value": 299749},
-
-    {"source": 9, "target": 16, "value": 31008969},
-    {"source": 9, "target": 19, "value": 1000000},
-
-    {"source": 10, "target": 17, "value": 1900071},
-    {"source": 10, "target": 16, "value": 2000000},
-    {"source": 10, "target": 18, "value": 500000},
-
-    {"source": 11, "target": 17, "value": 1400000},
-    {"source": 11, "target": 16, "value": 800000},
-
-    {"source": 12, "target": 17, "value": 500065},
-    {"source": 12, "target": 16, "value": 500000},
-
-    {"source": 13, "target": 16, "value": 1099721},
-
-    {"source": 14, "target": 16, "value": 400000},
-
-    {"source": 15, "target": 16, "value": 299749}
-  ]
+    "nodes": [
+        {
+            "name": "Red Cross"
+        },
+        {
+            "name": "Crisis Analytics & Insights"
+        },
+        {
+            "name": "Network"
+        },
+        {
+            "name": "Learning & Exchange"
+        },
+        {
+            "name": "Non-Governmental Organization"
+        },
+        {
+            "name": "International Organization"
+        },
+        {
+            "name": "Research Entity"
+        },
+        {
+            "name": "Data Sets & Commons"
+        },
+        {
+            "name": "United Nations"
+        },
+        {
+            "name": "Infrastructure & Platforms"
+        },
+        {
+            "name": "Germany"
+        },
+        {
+            "name": "United States of America"
+        },
+        {
+            "name": "United Kingdom"
+        },
+        {
+            "name": "Netherlands"
+        },
+        {
+            "name": "European Union"
+        },
+        {
+            "name": "Luxembourg"
+        },
+        {
+            "name": "Canada"
+        },
+        {
+            "name": "Finland"
+        },
+        {
+            "name": "Total Investment"
+        },
+        {
+            "name": "Total Allocated"
+        }
+    ],
+    "links": [
+        {
+            "source": "International Organization",
+            "target": "Crisis Analytics & Insights",
+            "value": 500065
+        },
+        {
+            "source": "Network",
+            "target": "Crisis Analytics & Insights",
+            "value": 700000
+        },
+        {
+            "source": "Research Entity",
+            "target": "Crisis Analytics & Insights",
+            "value": 1400000
+        },
+        {
+            "source": "United Nations",
+            "target": "Crisis Analytics & Insights",
+            "value": 1200071
+        },
+        {
+            "source": "Network",
+            "target": "Data Sets & Commons",
+            "value": 299749
+        },
+        {
+            "source": "Non-Governmental Organization",
+            "target": "Data Sets & Commons",
+            "value": 31008969
+        },
+        {
+            "source": "Red Cross",
+            "target": "Data Sets & Commons",
+            "value": 1099721
+        },
+        {
+            "source": "Research Entity",
+            "target": "Data Sets & Commons",
+            "value": 1200000
+        },
+        {
+            "source": "United Nations",
+            "target": "Data Sets & Commons",
+            "value": 1999967
+        },
+        {
+            "source": "United Nations",
+            "target": "Infrastructure & Platforms",
+            "value": 500000
+        },
+        {
+            "source": "Non-Governmental Organization",
+            "target": "Learning & Exchange",
+            "value": 1000000
+        },
+        {
+            "source": "Germany",
+            "target": "Total Investment",
+            "value": 17016138.06
+        },
+        {
+            "source": "United States of America",
+            "target": "Total Investment",
+            "value": 12520000.0
+        },
+        {
+            "source": "United Kingdom",
+            "target": "Total Investment",
+            "value": 8376037.17
+        },
+        {
+            "source": "Netherlands",
+            "target": "Total Investment",
+            "value": 6176868.83
+        },
+        {
+            "source": "European Union",
+            "target": "Total Investment",
+            "value": 2256200.0
+        },
+        {
+            "source": "Luxembourg",
+            "target": "Total Investment",
+            "value": 233129.8
+        },
+        {
+            "source": "Canada",
+            "target": "Total Investment",
+            "value": 173793.96
+        },
+        {
+            "source": "Finland",
+            "target": "Total Investment",
+            "value": 113404.7
+        },
+        {
+            "source": "Total Investment",
+            "target": "Total Allocated",
+            "value": 40908542
+        },
+        {
+            "source": "Total Allocated",
+            "target": "International Organization",
+            "value": 500065
+        },
+        {
+            "source": "Total Allocated",
+            "target": "Network",
+            "value": 999749
+        },
+        {
+            "source": "Total Allocated",
+            "target": "Non-Governmental Organization",
+            "value": 32008969
+        },
+        {
+            "source": "Total Allocated",
+            "target": "Red Cross",
+            "value": 1099721
+        },
+        {
+            "source": "Total Allocated",
+            "target": "Research Entity",
+            "value": 2600000
+        },
+        {
+            "source": "Total Allocated",
+            "target": "United Nations",
+            "value": 3700038
+        }
+    ]
 }

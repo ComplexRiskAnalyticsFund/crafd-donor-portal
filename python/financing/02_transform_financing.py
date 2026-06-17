@@ -94,37 +94,15 @@ sankey_df = pd.DataFrame()
 sankey_df["project_title"] = projects_df["project_title"]
 sankey_df["project_grant_amt"] = projects_df["grant_amt"]
 sankey_df["project_investment_type"] = projects_df["investment_type"]
-sankey_df["project_lead_org"] = projects_df["lead_org"]
+sankey_df["project_lead_org"] = projects_df["org_short_name"].apply(
+    lambda v: v[0] if isinstance(v, list) and v else v
+)
 
 
-# %% Looking into partners data, lets only look at the ones that are leads according to partner
-
-partners_df_leads = partners_df[partners_df["projects_lead"].notna()]
-
-
-# great, so now, match partners_df_leads['org_short_name'] to the project_lead_org in sankey_df,
-# use regex to check if partners_df_leads['org_short_name'] == what is within () in the string of project_lead_org in sankey_df,
-# and if it does, then add in un_org, and org_type from partners_df_leads into sankey_df as new columns 'org_un_or_not' and '_org_type' respectively.
-
-
-def match_org_types(row):
-    for _, lead in partners_df_leads.iterrows():
-        if re.search(
-            r"\(" + re.escape(lead["org_short_name"]) + r"\)", row["project_lead_org"]
-        ):
-            return pd.Series([lead["un_org"], lead["org_type"]])
-    return pd.Series([None, None])
-
-
-sankey_df[["org_un_or_not", "org_type"]] = sankey_df.apply(match_org_types, axis=1)
-
-
-# # un-women / un women and dppa and undppa need to be added in, bec of regex issue. I'm gonna add that in manually for now. but that means,  I think I have all my data, just need to convert it into a sankey format json. lets do that.
-# %%
-sankey_df.loc[14, "org_un_or_not"] = "YES"
-sankey_df.loc[14, "org_type"] = "Intergovernmental Organization"
-sankey_df.loc[17, "org_un_or_not"] = "YES"
-sankey_df.loc[17, "org_type"] = "Intergovernmental Organization"
+# Join org_type and un_org from partners by matching org_short_name
+org_meta = partners_df[["org_short_name", "un_org", "org_type"]].drop_duplicates("org_short_name")
+sankey_df = sankey_df.merge(org_meta, left_on="project_lead_org", right_on="org_short_name", how="left").drop(columns="org_short_name")
+sankey_df = sankey_df.rename(columns={"un_org": "org_un_or_not"})
 
 
 # %%nodes in inv types, org types, and country names.
@@ -201,7 +179,7 @@ sankey_json = {"nodes": [{"name": node} for node in nodes], "links": flows}
 
 # save the sankey_json to a file
 with open(OUTPUT_SANKEY_JSON, "w") as f:
-    json.dump(sankey_json, f, indent=4)
+    json.dump(sankey_json, f, indent=4, default=lambda o: int(o) if hasattr(o, "item") else str(o))
 
 
 # errors:
