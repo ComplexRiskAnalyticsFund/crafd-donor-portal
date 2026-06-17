@@ -57,6 +57,9 @@ const POSITION_SWAPS: ReadonlyArray<readonly [string, string]> = [
   ["recXzMOIf3S6mlmkO", "recHKayBVNHm8QsXP"],
   // IOM <-> RCCC
   ["recHv6hZ0SCI0cjT8", "recivcR2hSHFfyvT8"],
+  // AWSD <-> Inform
+  ["recliM1NwnhtY4nY8", "rec1ZtuGgRSwYb1kb"],
+
 ];
 
 /** Swap the array positions of configured partner pairs (mutates in place). */
