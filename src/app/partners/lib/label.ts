@@ -59,6 +59,8 @@ const POSITION_SWAPS: ReadonlyArray<readonly [string, string]> = [
   ["recHv6hZ0SCI0cjT8", "recivcR2hSHFfyvT8"],
   // AWSD <-> Inform
   ["recliM1NwnhtY4nY8", "rec1ZtuGgRSwYb1kb"],
+  ["recvfKNNEYjFKp1Oh", "reciSCrJAGrkoTltl"],
+
 
 ];
 
@@ -69,6 +71,53 @@ function applyPositionSwaps(group: Partner[]): void {
     const j = group.findIndex((p) => p.airtable_id === idB);
     if (i === -1 || j === -1) continue;
     [group[i], group[j]] = [group[j], group[i]];
+  }
+}
+
+/**
+ * Group placement overrides, keyed by airtable_id.
+ * Forces a partner into a specific wedge regardless of their Airtable connection type.
+ * Useful when two partners you want to swap are in different groups.
+ */
+const GROUP_OVERRIDES: Record<string, PartnerLabel> = {
+  // WFP is a MoU signatory (UN group) but placed in collaborating to allow swap with Carter Center
+  "reciSCrJAGrkoTltl": "collaborating",
+};
+
+/**
+ * Manual axial-coordinate offsets, keyed by airtable_id.
+ * Applied AFTER the group is laid out: the partner keeps its slot in the group
+ * order but its axial cell is shifted by {dq, dr}.
+ *
+ * Example — move ACLED one step to the right and one step up:
+ *   "reclFvEkKR7sCD7l3": { dq: 1, dr: -1 },
+ */
+const POSITION_OFFSETS: Record<string, { dq: number; dr: number }> = {
+    "recrjN0nS3ygzhIKK": { dq: -3, dr: -7 },
+
+};
+
+/**
+ * Apply per-partner axial offsets to placed positions (mutates positionsMap in place).
+ * positionsMap: index in group[] → Axial position.
+ */
+function applyPositionOffsets(
+  group: Partner[],
+  positions: (Axial | undefined)[],
+  blockedAbs: Set<string>,
+): void {
+  for (let i = 0; i < group.length; i++) {
+    const id = group[i].airtable_id;
+    if (!id) continue;
+    const delta = POSITION_OFFSETS[id];
+    if (!delta) continue;
+    const orig = positions[i];
+    if (!orig) continue;
+    const shifted: Axial = { q: orig.q + delta.dq, r: orig.r + delta.dr };
+    // Remove old block, add new block
+    blockedAbs.delete(keyAx(orig));
+    blockedAbs.add(keyAx(shifted));
+    positions[i] = shifted;
   }
 }
 
@@ -330,7 +379,7 @@ export function buildPartnerHexNodes(
       /action\s*aid/i.test(p.org_full_name ?? "");
     const posLabel: PartnerLabel = isActionAid
       ? "collaborating"
-      : labelPartner(p);
+      : (GROUP_OVERRIDES[p.airtable_id ?? ""] ?? labelPartner(p));
     if (posLabel !== "un" && isUnPartner(p)) dualUnCount++;
     const arr = groups.get(posLabel) ?? [];
     arr.push(p);
@@ -482,9 +531,14 @@ export function buildPartnerHexNodes(
     // Each pair swaps the two partners' placement positions in the visualization.
     applyPositionSwaps(group);
 
+    // Manual axial offsets — shift individual partners after layout.
+    // Mutable copy so offsets can move cells independently of the candidate list.
+    const placedPositions: (Axial | undefined)[] = [...partnerAbsPositions];
+    applyPositionOffsets(group, placedPositions, blockedAbs);
+
     // create partner nodes and block their cells for subsequent groups
     group.forEach((partner, i) => {
-      const abs = partnerAbsPositions[i];
+      const abs = placedPositions[i];
       if (!abs) return;
 
       blockedAbs.add(keyAx(abs));
