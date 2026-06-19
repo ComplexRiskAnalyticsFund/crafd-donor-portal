@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CrafdProject } from "@/types";
 import { coverageToRegions } from "./coverage-map";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -58,6 +58,59 @@ const ARROW_ICON = (
 const RIGHT_LABEL = (
   <>CRAF&apos;<span style={{ textTransform: "none" }}>d</span>-supported data &amp; insights for this region...</>
 );
+
+// ── Memoized region tile group ────────────────────────────
+// Renders the static hex polygons for one region. Memoized so that hovering /
+// locking a different region does not re-render the ~1500 polygons of regions
+// whose `highlighted`/`dimmed` props are unchanged.
+const RegionTiles = memo(function RegionTiles({
+  region,
+  polygons,
+  highlighted,
+  dimmed,
+  isMobile,
+  onEnter,
+  onLeave,
+  onActivate,
+}: {
+  region: string;
+  polygons: { outer: string; inner: string }[];
+  highlighted: boolean;
+  dimmed: boolean;
+  isMobile: boolean;
+  onEnter: (region: string) => void;
+  onLeave: () => void;
+  onActivate: (e: React.MouseEvent, region: string) => void;
+}) {
+  return (
+    <g
+      role="button"
+      aria-label={region}
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onActivate(e as unknown as React.MouseEvent, region); }}
+      onMouseEnter={() => { if (!isMobile) onEnter(region); }}
+      onMouseLeave={() => { if (!isMobile) onLeave(); }}
+      onClick={(e) => onActivate(e, region)}
+      style={{
+        cursor: "pointer",
+        outline: "none",
+        filter: highlighted
+          ? "drop-shadow(0 0 3px rgba(249,225,173,0.76)) drop-shadow(0 0 9px rgba(249,225,173,0.52)) drop-shadow(0 2px 5px rgba(0,0,0,0.10))"
+          : "none",
+        opacity: dimmed ? 0.70 : 1,
+        transition: "filter 160ms ease, opacity 160ms ease",
+      }}
+    >
+      {polygons.map((p, i) => (
+        <Fragment key={i}>
+          {/* Transparent full-radius polygon fills inter-hex gaps */}
+          <polygon points={p.outer} fill="transparent" stroke="none" />
+          <polygon points={p.inner} fill="white" stroke="none" style={{ transition: "fill 140ms ease" }} />
+        </Fragment>
+      ))}
+    </g>
+  );
+});
 
 // ── Shared pill component ─────────────────────────────────
 function ProjectPill({ label, url, isRegional }: { label: string; url: string | null; isRegional: boolean }) {
@@ -189,6 +242,28 @@ export default function ImpactMap({ projects, orgs }: Props) {
     return depth;
   }, [tileData]);
 
+  // Precompute the (static) hex polygon point strings per region once. Tile
+  // geometry never changes, so this avoids re-running ~3000 trig calculations
+  // on every hover/lock interaction — only highlight styling changes then.
+  const regionGeometry = useMemo(() => {
+    if (!tileData) return new Map<string, { outer: string; inner: string }[]>();
+    const drawR = tileData.hexRadius;
+    const out = new Map<string, { outer: string; inner: string }[]>();
+    for (const [region, regionTiles] of Object.entries(tileData.tilesByRegion)) {
+      const outerStr = regionTiles.map((t) => {
+        const depth = tileDepth.get(`${t.col},${t.row}`) ?? 3;
+        const r = depth === 1 ? drawR * 0.65
+                : depth === 2 ? drawR * 0.70
+                : depth === 3 ? drawR * 0.75
+                : depth === 4 ? drawR * 0.80
+                : drawR * 0.85;
+        return { outer: hexPoints(t.x, t.y, drawR), inner: hexPoints(t.x, t.y, r) };
+      });
+      out.set(region, outerStr);
+    }
+    return out;
+  }, [tileData, tileDepth]);
+
   // ── Mobile viewBox animation ─────────────────────────────
   const targetVB = useMemo(() => {
     if (!isMobile || !locked || !tileData) return null;
@@ -279,6 +354,9 @@ export default function ImpactMap({ projects, orgs }: Props) {
     else setLocked((prev) => (prev === region ? null : region));
   }, [isMobile]);
 
+  const handleEnter = useCallback((region: string) => setHovered(region), []);
+  const handleLeave = useCallback(() => setHovered(null), []);
+
   const toggleCat = useCallback((cat: string) => {
     setExpandedCats((prev) => {
       const next = new Set(prev);
@@ -338,8 +416,6 @@ export default function ImpactMap({ projects, orgs }: Props) {
   // ── Early exit ───────────────────────────────────────────
   if (!tileData) return <div className={styles.root} />;
 
-  const drawR = tileData.hexRadius;
-
   // ── SVG ──────────────────────────────────────────────────
   const svgViewBox = isMobile
     ? `${animVB.x} ${animVB.y} ${animVB.w} ${animVB.h}`
@@ -358,44 +434,20 @@ export default function ImpactMap({ projects, orgs }: Props) {
     >
       <rect x={-100} y={-300} width={tileData.width + 200} height={tileData.height + 600} fill="#fdb53c" />
 
-      {Object.entries(tileData.tilesByRegion).map(([region, regionTiles]) => {
+      {Array.from(regionGeometry.entries()).map(([region, polygons]) => {
         const hl = isHighlighted(region);
         return (
-          <g
+          <RegionTiles
             key={region}
-            role="button"
-            aria-label={region}
-            tabIndex={0}
-            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleTileClick(e as unknown as React.MouseEvent, region); }}
-            onMouseEnter={() => { if (!isMobile) setHovered(region); }}
-            onMouseLeave={() => { if (!isMobile) setHovered(null); }}
-            onClick={(e) => handleTileClick(e, region)}
-            style={{
-              cursor: "pointer",
-              outline: "none",
-              filter: hl
-                ? "drop-shadow(0 0 3px rgba(249,225,173,0.76)) drop-shadow(0 0 9px rgba(249,225,173,0.52)) drop-shadow(0 2px 5px rgba(0,0,0,0.10))"
-                : "none",
-              opacity: (hovered !== null || locked !== null) && !hl ? 0.70 : 1,
-              transition: "filter 160ms ease, opacity 160ms ease",
-            }}
-          >
-            {regionTiles.map((t, i) => {
-              const depth = tileDepth.get(`${t.col},${t.row}`) ?? 3;
-              const r = depth === 1 ? drawR * 0.65
-                      : depth === 2 ? drawR * 0.70
-                      : depth === 3 ? drawR * 0.75
-                      : depth === 4 ? drawR * 0.80
-                      : drawR * 0.85;
-              return (
-                <Fragment key={i}>
-                  {/* Transparent full-radius polygon fills inter-hex gaps */}
-                  <polygon points={hexPoints(t.x, t.y, drawR)} fill="transparent" stroke="none" />
-                  <polygon points={hexPoints(t.x, t.y, r)} fill="white" stroke="none" style={{ transition: "fill 140ms ease" }} />
-                </Fragment>
-              );
-            })}
-          </g>
+            region={region}
+            polygons={polygons}
+            highlighted={hl}
+            dimmed={(hovered !== null || locked !== null) && !hl}
+            isMobile={isMobile}
+            onEnter={handleEnter}
+            onLeave={handleLeave}
+            onActivate={handleTileClick}
+          />
         );
       })}
 
