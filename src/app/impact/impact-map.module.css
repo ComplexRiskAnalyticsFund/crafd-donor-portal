@@ -49,7 +49,7 @@
   top: clamp(140px, 22vh, 240px);
   left: clamp(20px, 3vw, 52px);
   font-family: "Qanelas", Arial, sans-serif;
-  font-size: clamp(28px, 4.5vw, 56px);
+  font-size: clamp(24px, 3.8vw, 48px);
   font-weight: 900;
   line-height: 1.1;
   color: rgba(0, 0, 0, 0.75);
@@ -58,6 +58,11 @@
   pointer-events: none;
   user-select: none;
   max-width: 20vw;
+}
+
+.overlayTitleCount {
+  font-size: 1.4em;
+  line-height: 1;
 }
 
 /* ── Desktop card ───────────────────────────────────────── */

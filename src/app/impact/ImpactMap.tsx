@@ -621,8 +621,15 @@ export default function ImpactMap({ projects, orgs }: Props) {
     <div className={styles.root} onClick={() => setLocked(null)}>
       {mapSvg}
       {!isEmbedded && (
-        <div className={styles.overlayTitle} aria-hidden="true">
-          CRAF&apos;d-supported Projects<br />cover global and local data
+        <div className={styles.overlayTitle}>
+          <span className={styles.overlayTitleCount}>
+            {isSelected
+              ? (globalProjects.length + (projectsByRegion.get(activeRegion)?.length ?? 0))
+              : globalProjects.length}
+          </span>{" "}
+          CRAF&apos;d-supported Projects<br />
+          provide Data for Crisis action{" "}
+          {isSelected ? <>in {activeRegion}</> : <>globally</>}
         </div>
       )}
       <div className={styles.card} role="region" aria-label="Project details" onClick={(e) => e.stopPropagation()}>
