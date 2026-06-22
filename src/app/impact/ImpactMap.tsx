@@ -471,7 +471,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
   // ── SVG ──────────────────────────────────────────────────
   const svgViewBox = isMobile
     ? `${animVB.x} ${animVB.y} ${animVB.w} ${animVB.h}`
-    : `0 -100 ${tileData.width} ${tileData.height + 100}`;
+    : `0 -60 ${tileData.width} ${tileData.height + 100}`;
 
   const mapSvg = (
     <svg
