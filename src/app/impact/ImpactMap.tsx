@@ -4,6 +4,7 @@ import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } fro
 import type { CrafdProject } from "@/types";
 import { coverageToRegions } from "./coverage-map";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import styles from "./impact-map.module.css";
 
 // ── Types ─────────────────────────────────────────────────
@@ -135,8 +136,8 @@ const RegionTiles = memo(function RegionTiles({
 });
 
 // ── Shared pill component ─────────────────────────────────
-function ProjectPill({ label, url, isRegional }: { label: string; url: string | null; isRegional: boolean }) {
-  return (
+function ProjectPill({ label, url, isRegional, tooltip }: { label: string; url: string | null; isRegional: boolean; tooltip?: string | null }) {
+  const pill = (
     <li
       className={styles.projectBlock}
       style={isRegional ? { background: "#F3C35C", borderColor: "rgba(180,120,0,0.35)" } : undefined}
@@ -145,6 +146,13 @@ function ProjectPill({ label, url, isRegional }: { label: string; url: string | 
         ? <a href={url} target="_blank" rel="noreferrer">{label}{ARROW_ICON}</a>
         : <span tabIndex={0}>{label}</span>}
     </li>
+  );
+  if (!tooltip || tooltip === label) return pill;
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{pill}</TooltipTrigger>
+      <TooltipContent side="top" className="max-w-xs text-center">{tooltip}</TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -444,7 +452,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
       source = globalProjects;
     }
 
-    const grouped = new Map<string, Map<string, { url: string | null; isRegional: boolean }>>();
+    const grouped = new Map<string, Map<string, { url: string | null; isRegional: boolean; tooltip: string | null }>>();
     for (const p of source) {
       if (!p.project_short_title) continue;
       const cat = PROJECT_CATEGORIES[p.project_short_title];
@@ -454,7 +462,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
       if (!grouped.has(cat)) grouped.set(cat, new Map());
       const catMap = grouped.get(cat)!;
       if (!catMap.has(label)) {
-        catMap.set(label, { url: p.project_url ?? null, isRegional: regionalLabels.has(label) });
+        catMap.set(label, { url: p.project_url ?? null, isRegional: regionalLabels.has(label), tooltip: p.full_title ?? null });
       } else if (regionalLabels.has(label)) {
         catMap.get(label)!.isRegional = true;
       }

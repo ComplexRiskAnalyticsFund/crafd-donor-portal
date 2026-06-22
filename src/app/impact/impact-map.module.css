@@ -14,27 +14,25 @@
 }
 
 /* ── Region select ripple ───────────────────────────────── */
-/* Each hexagon pops in, staggered by its distance from the clicked tile so
-   the fill radiates outward from the click origin. transform-box keeps the
-   scale centered on each polygon's own bounding box. */
+/* A wave of scale-pulses radiates outward from the clicked tile.
+   Starts and ends at the tile's natural state so tiles never disappear
+   during the delay period (animation-fill-mode: both applies the 0%
+   state while the tile waits for its turn). */
 .rippleHex {
   transform-box: fill-box;
   transform-origin: center;
-  animation: rippleHexPop 360ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: rippleHexPop 340ms ease-in-out both;
 }
 
 @keyframes rippleHexPop {
   0% {
-    transform: scale(0.1);
-    opacity: 0.2;
+    transform: scale(1);
   }
-  60% {
-    transform: scale(1.12);
-    opacity: 1;
+  45% {
+    transform: scale(1.18);
   }
   100% {
     transform: scale(1);
-    opacity: 1;
   }
 }
 
