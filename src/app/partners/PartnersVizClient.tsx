@@ -19,6 +19,8 @@ import {
   parseProjects,
   projectsOverlap,
   findProjectHub,
+  projectIdsToSlugParam,
+  projectSlugParamToIds,
 } from "./lib/utils";
 import { usePanZoom } from "./hooks/usePanZoom";
 import { useHexAnimation } from "./hooks/useHexAnimation";
@@ -208,18 +210,22 @@ export default function PartnersVizClient({
     const panelPx = isMobileNow ? 0 : Math.min(window.innerWidth / 3, 700);
 
     if (projectsParam) {
+      const projectsIds = projectSlugParamToIds(projectsParam, projectsById);
       const peerNodes = initialNodes.filter(
         (n) =>
           n.kind === "partner" &&
-          projectsOverlap(n.partner?.relational_project, projectsParam),
+          projectsOverlap(n.partner?.relational_project, projectsIds),
       );
       const peers = new Set(peerNodes.map((n) => n.id));
       if (peers.size > 0) {
         setLockedGroup(peers);
-        setLockedFeature(projectsParam);
+        setLockedFeature(projectsIds);
         if (orgParam) {
           const sourceNode = initialNodes.find(
-            (n) => n.kind === "partner" && n.partner?.airtable_id === orgParam,
+            (n) => n.kind === "partner" && (
+              (n.partner?.org_short_name && toLogoSlug(n.partner.org_short_name) === orgParam) ||
+              n.partner?.airtable_id === orgParam
+            ),
           );
           if (sourceNode) setLockedSourceNode(sourceNode);
         }
@@ -227,7 +233,10 @@ export default function PartnersVizClient({
       }
     } else if (orgParam) {
       const sourceNode = initialNodes.find(
-        (n) => n.kind === "partner" && n.partner?.airtable_id === orgParam,
+        (n) => n.kind === "partner" && (
+          (n.partner?.org_short_name && toLogoSlug(n.partner.org_short_name) === orgParam) ||
+          n.partner?.airtable_id === orgParam
+        ),
       );
       if (sourceNode) {
         setLockedGroup(new Set([sourceNode.id]));
@@ -240,7 +249,7 @@ export default function PartnersVizClient({
       const node = initialNodes.find(
         (n) =>
           n.kind === "partner" &&
-          (n.partner?.org_short_name ?? n.name) === partnerParam,
+          toLogoSlug(n.partner?.org_short_name ?? n.name ?? "") === partnerParam,
       );
       if (node) {
         if (node.label === "donor") {
@@ -291,11 +300,13 @@ export default function PartnersVizClient({
     setLockedSourceNode(n);
     setOpenProjects(new Set(rf ?? []));
     const orgId = n.partner?.airtable_id;
-    const orgParam = orgId ? `&org=${orgId}` : "";
+    const orgSlug = n.partner?.org_short_name ? toLogoSlug(n.partner.org_short_name) : orgId;
+    const orgParam = orgSlug ? `&org=${encodeURIComponent(orgSlug)}` : "";
     if (rfStr) {
-      router.replace(`${pathname}?projects=${rfStr}${orgParam}`);
-    } else if (orgId) {
-      router.replace(`${pathname}?org=${orgId}`);
+      const rfSlugStr = projectIdsToSlugParam(rf ?? [], projectsById);
+      router.replace(`${pathname}?projects=${rfSlugStr}${orgParam}`);
+    } else if (orgSlug) {
+      router.replace(`${pathname}?org=${encodeURIComponent(orgSlug)}`);
     } else {
       router.replace(pathname);
     }
@@ -721,7 +732,7 @@ export default function PartnersVizClient({
           if (n.label === "donor") {
             setClickedNode(n);
             router.replace(
-              `${pathname}?partner=${encodeURIComponent(n.partner?.org_short_name ?? n.name ?? "")}`,
+              `${pathname}?partner=${encodeURIComponent(toLogoSlug(n.partner?.org_short_name ?? n.name ?? ""))}`,
             );
             return;
           }

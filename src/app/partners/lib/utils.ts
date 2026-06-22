@@ -94,6 +94,49 @@ export function projectsOverlap(
   return false;
 }
 
+// ── URL slug helpers ─────────────────────────────────────────────────────────
+import type { CrafdProject } from "@/types";
+
+/** Converts a project's short title to a URL-safe slug. */
+export function projectSlug(project: CrafdProject): string {
+  return (project.project_short_title ?? project.airtable_id)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/**
+ * Converts an array of Airtable project IDs to a comma-separated slug string
+ * suitable for use in a URL param.
+ */
+export function projectIdsToSlugParam(
+  ids: string[],
+  projectsById: Record<string, CrafdProject>,
+): string {
+  return ids
+    .map((id) => (projectsById[id] ? projectSlug(projectsById[id]) : id))
+    .join(",");
+}
+
+/**
+ * Converts a comma-separated slug string back to a comma-separated airtable
+ * ID string. Falls back to the original token for backward-compat with old
+ * URLs that already contain record IDs.
+ */
+export function projectSlugParamToIds(
+  slugParam: string,
+  projectsById: Record<string, CrafdProject>,
+): string {
+  const slugToId = new Map<string, string>();
+  for (const [id, proj] of Object.entries(projectsById)) {
+    slugToId.set(projectSlug(proj), id);
+  }
+  return slugParam
+    .split(",")
+    .map((s) => slugToId.get(s.trim()) ?? s.trim())
+    .join(",");
+}
+
 export function formatGrantSize(
   raw: string | number | null | undefined,
 ): string {
