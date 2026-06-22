@@ -1,10 +1,34 @@
 [
-    {"Contributor/Partner":"Germany","Commitments":17000000},
-    {"Contributor/Partner":"United States of America","Commitments":12520000},
-    {"Contributor/Partner":"United Kingdom","Commitments":8376037},
-    {"Contributor/Partner":"Netherlands","Commitments":6380000},
-    {"Contributor/Partner":"European Union","Commitments":1730000},
-    {"Contributor/Partner":"Luxembourg","Commitments":233129.8},
-    {"Contributor/Partner":"Canada","Commitments":173793.96},
-    {"Contributor/Partner":"Finland","Commitments":113404.7}
-  ]
+    {
+        "Contributor/Partner": "Germany",
+        "Commitments": 17031752.0
+    },
+    {
+        "Contributor/Partner": "United States of America",
+        "Commitments": 12520000.0
+    },
+    {
+        "Contributor/Partner": "United Kingdom",
+        "Commitments": 8376037.0
+    },
+    {
+        "Contributor/Partner": "Netherlands",
+        "Commitments": 6381969.0
+    },
+    {
+        "Contributor/Partner": "European Union",
+        "Commitments": 1726738.41
+    },
+    {
+        "Contributor/Partner": "Luxembourg",
+        "Commitments": 230974.0
+    },
+    {
+        "Contributor/Partner": "Canada",
+        "Commitments": 173794.0
+    },
+    {
+        "Contributor/Partner": "Finland",
+        "Commitments": 113405.0
+    }
+]

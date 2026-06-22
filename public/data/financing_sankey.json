@@ -1,13 +1,16 @@
 {
     "nodes": [
         {
-            "name": "Network"
+            "name": "Crisis Analytics & Insights"
         },
         {
             "name": "Research Entity"
         },
         {
-            "name": "Learning & Exchange"
+            "name": "Red Cross"
+        },
+        {
+            "name": "Network"
         },
         {
             "name": "Non-Governmental Organization"
@@ -16,19 +19,16 @@
             "name": "Infrastructure & Platforms"
         },
         {
-            "name": "Red Cross"
-        },
-        {
-            "name": "Data Sets & Commons"
-        },
-        {
-            "name": "United Nations"
+            "name": "Learning & Exchange"
         },
         {
             "name": "International Organization"
         },
         {
-            "name": "Crisis Analytics & Insights"
+            "name": "United Nations"
+        },
+        {
+            "name": "Data Sets & Commons"
         },
         {
             "name": "Germany"
@@ -120,7 +120,7 @@
         {
             "source": "Germany",
             "target": "Total Investment",
-            "value": 17016138.06
+            "value": 17031752.0
         },
         {
             "source": "United States of America",
@@ -130,32 +130,32 @@
         {
             "source": "United Kingdom",
             "target": "Total Investment",
-            "value": 8376037.17
+            "value": 8376037.0
         },
         {
             "source": "Netherlands",
             "target": "Total Investment",
-            "value": 6176868.83
+            "value": 6381969.0
         },
         {
             "source": "European Union",
             "target": "Total Investment",
-            "value": 2256200.0
+            "value": 1726738.41
         },
         {
             "source": "Luxembourg",
             "target": "Total Investment",
-            "value": 233129.8
+            "value": 230974.0
         },
         {
             "source": "Canada",
             "target": "Total Investment",
-            "value": 173793.96
+            "value": 173794.0
         },
         {
             "source": "Finland",
             "target": "Total Investment",
-            "value": 113404.7
+            "value": 113405.0
         },
         {
             "source": "Total Investment",
