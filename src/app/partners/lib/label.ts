@@ -59,8 +59,11 @@ const POSITION_SWAPS: ReadonlyArray<readonly [string, string]> = [
   ["recHv6hZ0SCI0cjT8", "recivcR2hSHFfyvT8"],
   // AWSD <-> Inform
   ["recliM1NwnhtY4nY8", "rec1ZtuGgRSwYb1kb"],
-  // WFP <-> Ridgeway
-  ["reciSCrJAGrkoTltl", "rec8ogUa6PWpDwXM7"],
+  // UNHCR <-> U Denver
+  ["recF5o67nvN5x9chH", "recUZaC92PmOziMtC"],
+  // SAR <-> WFP
+  ["recZz9cnLXGUV3iNC", "reciSCrJAGrkoTltl"],
+
 
 ];
 
@@ -105,7 +108,8 @@ const GROUP_OVERRIDES: Record<string, PartnerLabel> = {
 const POSITION_OFFSETS: Record<string, { dq: number; dr: number }> = {
 
       "additional-collaborating": { dq: 3, dr: -14, },
-      "recKZUJrah8DHb2Wu": { dq: -4, dr: -7 }, 
+      "recrjN0nS3ygzhIKK": { dq: -4, dr: -7, },
+
 
 
 };
