@@ -35,6 +35,12 @@ const PROJECT_CATEGORIES: Record<string, string> = {
   "Strengthening CRAF'd Ecosystem":           "Ecosystem Backbone",
 };
 
+const ORG_NAME_MAP: Record<string, string> = {
+  "ICPAC": "IGAD",
+  "ICG": "Int. Crisis Group",
+  "RCCC": "Red Cross Climate Center",
+};
+
 const VALID_CATEGORIES = [
   "Crisis Anticipation & Warning",
   "Conflict & Peace",
@@ -181,6 +187,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [locked, setLocked] = useState<string | null>(null);
   const [ripple, setRipple] = useState<Ripple | null>(null);
+  const [displayCount, setDisplayCount] = useState(1);
   const rippleSeq = useRef(0);
   const isMobile = useMediaQuery("(max-width: 640px)");
   // Default true to avoid a flash of the title when embedded
@@ -431,6 +438,37 @@ export default function ImpactMap({ projects, orgs }: Props) {
   // ── Project grouping ─────────────────────────────────────
   const isSelected = locked !== null || hovered !== null;
   const globalProjects = useMemo(() => projectsByRegion.get("Global") ?? [], [projectsByRegion]);
+
+  // ── Count animation ─────────────────────────────────────
+  const targetCount = useMemo(
+    () => isSelected
+      ? (globalProjects.length + (projectsByRegion.get(activeRegion)?.length ?? 0))
+      : globalProjects.length,
+    [isSelected, activeRegion, globalProjects, projectsByRegion],
+  );
+
+  // Reset counter to 1 when target changes
+  useEffect(() => {
+    setDisplayCount(1);
+  }, [targetCount]);
+
+  // Count up to target
+  useEffect(() => {
+    if (displayCount === targetCount) return;
+    
+    const interval = setInterval(() => {
+      setDisplayCount((prev) => {
+        if (prev < targetCount) {
+          return prev + 1;
+        } else {
+          return targetCount;
+        }
+      });
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, [targetCount, displayCount]);
+
   const regionalProjects = useMemo(
     () => isSelected ? (projectsByRegion.get(activeRegion) ?? []) : [],
     [isSelected, projectsByRegion, activeRegion],
@@ -458,7 +496,8 @@ export default function ImpactMap({ projects, orgs }: Props) {
       const cat = PROJECT_CATEGORIES[p.project_short_title];
       if (!cat) continue;
       const leadId = p.linked_lead_org?.[0];
-      const label = (leadId && orgs[leadId]) || p.project_short_title;
+      const orgName = (leadId && orgs[leadId]) || p.project_short_title;
+      const label = ORG_NAME_MAP[orgName] || orgName;
       if (!grouped.has(cat)) grouped.set(cat, new Map());
       const catMap = grouped.get(cat)!;
       if (!catMap.has(label)) {
@@ -622,11 +661,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
       {mapSvg}
       {!isEmbedded && (
         <div className={styles.overlayTitle}>
-          <span className={styles.overlayTitleCount}>
-            {isSelected
-              ? (globalProjects.length + (projectsByRegion.get(activeRegion)?.length ?? 0))
-              : globalProjects.length}
-          </span>{" "}
+          <span className={styles.overlayTitleCount}>{displayCount}</span>{" "}
           CRAF&apos;d-supported Projects<br />
           provide Data for Crisis action{" "}
           {isSelected ? <>in {activeRegion}</> : <>globally</>}
