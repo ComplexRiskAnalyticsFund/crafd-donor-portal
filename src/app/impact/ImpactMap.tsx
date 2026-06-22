@@ -462,7 +462,13 @@ export default function ImpactMap({ projects, orgs }: Props) {
         category: c,
         entries: Array.from(grouped.get(c)!.entries()).map(([label, meta]) => ({ label, ...meta })),
       }))
-      .sort((a, b) => b.entries.length - a.entries.length);
+      .sort((a, b) => {
+        // "Ecosystem Backbone" always goes last (rightmost)
+        if (a.category === "Ecosystem Backbone") return 1;
+        if (b.category === "Ecosystem Backbone") return -1;
+        // Otherwise sort by entries length descending
+        return b.entries.length - a.entries.length;
+      });
   }, [hasRegional, regionalProjects, globalProjects, orgs]);
 
   // ── Early exit ───────────────────────────────────────────
