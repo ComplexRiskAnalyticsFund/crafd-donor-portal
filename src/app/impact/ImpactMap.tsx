@@ -56,7 +56,7 @@ const ARROW_ICON = (
 );
 
 const RIGHT_LABEL = (
-  <>CRAF&apos;<span style={{ textTransform: "none" }}>d</span>-supported data &amp; insights for this region...</>
+  <>CRAF&apos;<span style={{ textTransform: "none" }}>d</span>-supported data &amp; insights for this region</>
 );
 
 // ── Types ─────────────────────────────────────────────────
