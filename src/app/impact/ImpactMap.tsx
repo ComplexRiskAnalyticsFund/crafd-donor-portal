@@ -668,7 +668,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
         <div className={styles.overlayTitle}>
           <span className={styles.overlayTitleCount}>
             {locked !== null ? displayCount : hoveredCount}
-          </span>{" "}
+          </span>
           CRAF&apos;d-supported Projects<br />
           provide Data for Crisis action{" "}
           {locked !== null ? <>in {locked}</> : hovered !== null ? <>in {hovered}</> : <>globally</>}
