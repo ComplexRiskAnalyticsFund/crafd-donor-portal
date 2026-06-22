@@ -1249,7 +1249,7 @@
   },
   {
     "airtable_id":"recliM1NwnhtY4nY8",
-    "org_short_name":"INFORM",
+    "org_short_name":"INFORM Consortium",
     "org_full_name":"INFORM Consortium",
     "crafd_connection":[
       "Implementing partner",
@@ -1259,7 +1259,7 @@
     "relational_project":[
       "recUrUUESMc1dGaGr"
     ],
-    "logo_slug":"inform",
+    "logo_slug":"inform-consortium",
     "org_url":"https:\/\/drmkc.jrc.ec.europa.eu\/inform-index",
     "total_grant_size":null
   },
