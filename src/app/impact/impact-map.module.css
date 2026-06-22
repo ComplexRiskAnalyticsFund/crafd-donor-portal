@@ -13,11 +13,42 @@
   height: 100%;
 }
 
+/* ── Region select ripple ───────────────────────────────── */
+/* Each hexagon pops in, staggered by its distance from the clicked tile so
+   the fill radiates outward from the click origin. transform-box keeps the
+   scale centered on each polygon's own bounding box. */
+.rippleHex {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: rippleHexPop 360ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes rippleHexPop {
+  0% {
+    transform: scale(0.1);
+    opacity: 0.2;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rippleHex {
+    animation: none;
+  }
+}
+
 /* ── Desktop card ───────────────────────────────────────── */
 
 .card {
   position: absolute;
-  bottom: clamp(12px, 2.5vh, 28px);
+  bottom: clamp(42px, 2.5vh, 28px);
   left: clamp(16px, 3vw, 48px);
   right: clamp(16px, 3vw, 48px);
   display: flex;

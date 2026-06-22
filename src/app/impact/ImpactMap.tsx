@@ -59,25 +59,35 @@ const RIGHT_LABEL = (
   <>CRAF&apos;<span style={{ textTransform: "none" }}>d</span>-supported data &amp; insights for this region...</>
 );
 
+// ── Types ─────────────────────────────────────────────────
+interface HexGeom { outer: string; inner: string; cx: number; cy: number }
+interface Ripple { region: string; ox: number; oy: number; key: number }
+
+// Wave speed: ms of stagger delay added per SVG unit of distance from the
+// clicked hexagon. Lower = faster ripple.
+const RIPPLE_SPEED = 0.45;
+
 // ── Memoized region tile group ────────────────────────────
 // Renders the static hex polygons for one region. Memoized so that hovering /
 // locking a different region does not re-render the ~1500 polygons of regions
-// whose `highlighted`/`dimmed` props are unchanged.
+// whose props are unchanged.
 const RegionTiles = memo(function RegionTiles({
   region,
   polygons,
   highlighted,
   dimmed,
   isMobile,
+  ripple,
   onEnter,
   onLeave,
   onActivate,
 }: {
   region: string;
-  polygons: { outer: string; inner: string }[];
+  polygons: HexGeom[];
   highlighted: boolean;
   dimmed: boolean;
   isMobile: boolean;
+  ripple: Ripple | null;
   onEnter: (region: string) => void;
   onLeave: () => void;
   onActivate: (e: React.MouseEvent, region: string) => void;
@@ -101,13 +111,25 @@ const RegionTiles = memo(function RegionTiles({
         transition: "filter 160ms ease, opacity 160ms ease",
       }}
     >
-      {polygons.map((p, i) => (
-        <Fragment key={i}>
-          {/* Transparent full-radius polygon fills inter-hex gaps */}
-          <polygon points={p.outer} fill="transparent" stroke="none" />
-          <polygon points={p.inner} fill="white" stroke="none" style={{ transition: "fill 140ms ease" }} />
-        </Fragment>
-      ))}
+      {polygons.map((p, i) => {
+        const delay = ripple ? Math.hypot(p.cx - ripple.ox, p.cy - ripple.oy) * RIPPLE_SPEED : 0;
+        return (
+          <Fragment key={i}>
+            {/* Transparent full-radius polygon fills inter-hex gaps */}
+            <polygon points={p.outer} fill="transparent" stroke="none" />
+            <polygon
+              // Changing key when a new ripple fires remounts the polygon so
+              // the CSS pop animation replays from the start.
+              key={ripple ? `r${ripple.key}` : "s"}
+              points={p.inner}
+              fill="white"
+              stroke="none"
+              className={ripple ? styles.rippleHex : undefined}
+              style={ripple ? { animationDelay: `${delay}ms` } : { transition: "fill 140ms ease" }}
+            />
+          </Fragment>
+        );
+      })}
     </g>
   );
 });
@@ -150,6 +172,8 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const [tileData, setTileData] = useState<TileData | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const [locked, setLocked] = useState<string | null>(null);
+  const [ripple, setRipple] = useState<Ripple | null>(null);
+  const rippleSeq = useRef(0);
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [animVB, setAnimVB] = useState({ x: 0, y: -100, w: 1600, h: 1000 });
   const [expandedCats, setExpandedCats] = useState<Set<string>>(() => new Set(VALID_CATEGORIES));
@@ -246,20 +270,20 @@ export default function ImpactMap({ projects, orgs }: Props) {
   // geometry never changes, so this avoids re-running ~3000 trig calculations
   // on every hover/lock interaction — only highlight styling changes then.
   const regionGeometry = useMemo(() => {
-    if (!tileData) return new Map<string, { outer: string; inner: string }[]>();
+    if (!tileData) return new Map<string, HexGeom[]>();
     const drawR = tileData.hexRadius;
-    const out = new Map<string, { outer: string; inner: string }[]>();
+    const out = new Map<string, HexGeom[]>();
     for (const [region, regionTiles] of Object.entries(tileData.tilesByRegion)) {
-      const outerStr = regionTiles.map((t) => {
+      const geom = regionTiles.map((t) => {
         const depth = tileDepth.get(`${t.col},${t.row}`) ?? 3;
         const r = depth === 1 ? drawR * 0.65
                 : depth === 2 ? drawR * 0.70
                 : depth === 3 ? drawR * 0.75
                 : depth === 4 ? drawR * 0.80
                 : drawR * 0.85;
-        return { outer: hexPoints(t.x, t.y, drawR), inner: hexPoints(t.x, t.y, r) };
+        return { outer: hexPoints(t.x, t.y, drawR), inner: hexPoints(t.x, t.y, r), cx: t.x, cy: t.y };
       });
-      out.set(region, outerStr);
+      out.set(region, geom);
     }
     return out;
   }, [tileData, tileDepth]);
@@ -350,12 +374,40 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const handleTileClick = useCallback((e: React.MouseEvent, region: string) => {
     e.stopPropagation();
     if (hasDraggedRef.current) return;
+
+    // Convert the click point into SVG user-space so the ripple can radiate
+    // from the exact hexagon that was clicked. Keyboard activation (clientX/Y
+    // both 0) is skipped via the NaN guard below — no ripple, just selection.
+    const svg = (e.target as SVGElement).ownerSVGElement;
+    let ox = NaN, oy = NaN;
+    const isPointer = e.clientX !== 0 || e.clientY !== 0;
+    if (svg && isPointer) {
+      const ctm = svg.getScreenCTM();
+      if (ctm) {
+        const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(ctm.inverse());
+        ox = pt.x; oy = pt.y;
+      }
+    }
+
+    const willSelect = isMobile ? true : locked !== region;
+    if (willSelect && !Number.isNaN(ox) && !Number.isNaN(oy)) {
+      setRipple({ region, ox, oy, key: ++rippleSeq.current });
+    }
     if (isMobile) setLocked(region);
     else setLocked((prev) => (prev === region ? null : region));
-  }, [isMobile]);
+  }, [isMobile, locked]);
 
   const handleEnter = useCallback((region: string) => setHovered(region), []);
   const handleLeave = useCallback(() => setHovered(null), []);
+
+  // Clear the ripple once the wave has finished so polygons return to their
+  // resting (non-animated) state. Max distance across a region * speed + the
+  // single-hex animation duration covers the slowest tile.
+  useEffect(() => {
+    if (!ripple) return;
+    const t = setTimeout(() => setRipple(null), 1400);
+    return () => clearTimeout(t);
+  }, [ripple]);
 
   const toggleCat = useCallback((cat: string) => {
     setExpandedCats((prev) => {
@@ -444,6 +496,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
             highlighted={hl}
             dimmed={(hovered !== null || locked !== null) && !hl}
             isMobile={isMobile}
+            ripple={ripple && ripple.region === region ? ripple : null}
             onEnter={handleEnter}
             onLeave={handleLeave}
             onActivate={handleTileClick}
