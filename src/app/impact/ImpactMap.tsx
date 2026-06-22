@@ -175,6 +175,9 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const [ripple, setRipple] = useState<Ripple | null>(null);
   const rippleSeq = useRef(0);
   const isMobile = useMediaQuery("(max-width: 640px)");
+  // Default true to avoid a flash of the title when embedded
+  const [isEmbedded, setIsEmbedded] = useState(true);
+  useEffect(() => { setIsEmbedded(window.self !== window.top); }, []);
   const [animVB, setAnimVB] = useState({ x: 0, y: -100, w: 1600, h: 1000 });
   const [expandedCats, setExpandedCats] = useState<Set<string>>(() => new Set(VALID_CATEGORIES));
 
@@ -609,6 +612,11 @@ export default function ImpactMap({ projects, orgs }: Props) {
   return (
     <div className={styles.root} onClick={() => setLocked(null)}>
       {mapSvg}
+      {!isEmbedded && (
+        <div className={styles.overlayTitle} aria-hidden="true">
+          CRAF&apos;d-supported Projects<br />cover global and local data
+        </div>
+      )}
       <div className={styles.card} role="region" aria-label="Project details" onClick={(e) => e.stopPropagation()}>
         <div className={styles.zoneLeft} style={{ position: "relative" }}>
           {locked && (

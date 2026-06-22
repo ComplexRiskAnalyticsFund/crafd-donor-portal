@@ -44,6 +44,24 @@
   }
 }
 
+/* ── Standalone overlay title ──────────────────────────── */
+
+.overlayTitle {
+  position: absolute;
+  top: clamp(140px, 22vh, 240px);
+  left: clamp(20px, 3vw, 52px);
+  font-family: "Qanelas", Arial, sans-serif;
+  font-size: clamp(28px, 4.5vw, 56px);
+  font-weight: 900;
+  line-height: 1.1;
+  color: rgba(0, 0, 0, 0.75);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+  user-select: none;
+  max-width: 20vw;
+}
+
 /* ── Desktop card ───────────────────────────────────────── */
 
 .card {
