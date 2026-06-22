@@ -1,108 +1,108 @@
 [
   {
-    "airtable_id": "recG9gXmj4mAvsVtu",
-    "org_short_name": "3iS",
-    "org_full_name": "3iS",
-    "crafd_connection": [
+    "airtable_id":"recG9gXmj4mAvsVtu",
+    "org_short_name":"3iS",
+    "org_full_name":"3iS",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recLzUBYjCmlalnB5"
     ],
-    "logo_slug": "3is",
-    "org_url": "https://3is.org/",
-    "total_grant_size": null
+    "logo_slug":"3is",
+    "org_url":"https:\/\/3is.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recI88jmqaSSfDdcZ",
-    "org_short_name": "510",
-    "org_full_name": "The Netherlands Red Cross‘ data and digital unit 510",
-    "crafd_connection": [
+    "airtable_id":"recI88jmqaSSfDdcZ",
+    "org_short_name":"510",
+    "org_full_name":"The Netherlands Red Cross\u2018 data and digital unit 510",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Red Cross",
-    "relational_project": [
+    "org_type":"Red Cross",
+    "relational_project":[
       "recVQtT1tEPJ0Zhwv"
     ],
-    "logo_slug": "510",
-    "org_url": "https://510.global/",
-    "total_grant_size": null
+    "logo_slug":"510",
+    "org_url":"https:\/\/510.global\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recOme3wOJeYUvtue",
-    "org_short_name": "AAI",
-    "org_full_name": "ActionAid International (FHN Secretariat)",
-    "crafd_connection": [
+    "airtable_id":"recOme3wOJeYUvtue",
+    "org_short_name":"AAI",
+    "org_full_name":"ActionAid International (FHN Secretariat)",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recK7YpAfDSsOeMLa"
     ],
-    "logo_slug": "aai",
-    "org_url": "https://actionaid.org/",
-    "total_grant_size": null
+    "logo_slug":"aai",
+    "org_url":"https:\/\/actionaid.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recqcx0YaFwpyx1Ng",
-    "org_short_name": "AAN",
-    "org_full_name": "Afghanistan Analysts Network",
-    "crafd_connection": [
+    "airtable_id":"recqcx0YaFwpyx1Ng",
+    "org_short_name":"AAN",
+    "org_full_name":"Afghanistan Analysts Network",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "aan",
-    "org_url": "https://www.afghanistan-analysts.org/",
-    "total_grant_size": null
+    "logo_slug":"aan",
+    "org_url":"https:\/\/www.afghanistan-analysts.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recnlpfRuvi3EcUXx",
-    "org_short_name": "ACAPS",
-    "org_full_name": "ACAPS",
-    "crafd_connection": [
+    "airtable_id":"recnlpfRuvi3EcUXx",
+    "org_short_name":"ACAPS",
+    "org_full_name":"ACAPS",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recUrUUESMc1dGaGr",
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "acaps",
-    "org_url": "https://www.acaps.org/en/about-us/who-we-are",
-    "total_grant_size": null
+    "logo_slug":"acaps",
+    "org_url":"https:\/\/www.acaps.org\/en\/about-us\/who-we-are",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recPUtyjHFZWWnDQd",
-    "org_short_name": "ACHR",
-    "org_full_name": "Access Center for Human Rights (ACHR)",
-    "crafd_connection": [
+    "airtable_id":"recPUtyjHFZWWnDQd",
+    "org_short_name":"ACHR",
+    "org_full_name":"Access Center for Human Rights (ACHR)",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "achr",
-    "org_url": "https://achrights.org/en/",
-    "total_grant_size": null
+    "logo_slug":"achr",
+    "org_url":"https:\/\/achrights.org\/en\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reclFvEkKR7sCD7l3",
-    "org_short_name": "ACLED",
-    "org_full_name": "Armed Conflict Location & Event Data Project (ACLED)",
-    "crafd_connection": [
+    "airtable_id":"reclFvEkKR7sCD7l3",
+    "org_short_name":"ACLED",
+    "org_full_name":"Armed Conflict Location & Event Data Project (ACLED)",
+    "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs",
       "reconoiv65LoDbUFr",
@@ -110,2077 +110,2087 @@
       "recVQtT1tEPJ0Zhwv",
       "recmrtrQhRDBZVxxz"
     ],
-    "logo_slug": "acled",
-    "org_url": "https://acleddata.com/",
-    "total_grant_size": 29508969.0
+    "logo_slug":"acled",
+    "org_url":"https:\/\/acleddata.com\/",
+    "total_grant_size":29508969.0
   },
   {
-    "airtable_id": "recw6GIlhftXiELaO",
-    "org_short_name": "ACMS",
-    "org_full_name": "Xenowatch / African Centre for Migration & Society",
-    "crafd_connection": [
+    "airtable_id":"recw6GIlhftXiELaO",
+    "org_short_name":"ACMS",
+    "org_full_name":"Xenowatch \/ African Centre for Migration & Society",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "acms",
-    "org_url": "https://xenowatch.ac.za",
-    "total_grant_size": null
+    "logo_slug":"acms",
+    "org_url":"https:\/\/xenowatch.ac.za",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recA94rfL25336oit",
-    "org_short_name": "ACTED",
-    "org_full_name": "Agency for Technical Cooperation and Development",
-    "crafd_connection": [
+    "airtable_id":"recA94rfL25336oit",
+    "org_short_name":"ACTED",
+    "org_full_name":"Agency for Technical Cooperation and Development",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "acted",
-    "org_url": "https://www.acted.org",
-    "total_grant_size": null
+    "logo_slug":"acted",
+    "org_url":"https:\/\/www.acted.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec0ZpGsPKsJm96A4",
-    "org_short_name": "ADHRB",
-    "org_full_name": "Americans for Democracy & Human Rights in Bahrain",
-    "crafd_connection": [
+    "airtable_id":"rec0ZpGsPKsJm96A4",
+    "org_short_name":"ADHRB",
+    "org_full_name":"Americans for Democracy & Human Rights in Bahrain",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "adhrb",
-    "org_url": "https://www.adhrb.org/",
-    "total_grant_size": null
+    "logo_slug":"adhrb",
+    "org_url":"https:\/\/www.adhrb.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recoEozGFP6Ycs4yg",
-    "org_short_name": "AFJC",
-    "org_full_name": "Association des Femmes Juristes de Centrafrique",
-    "crafd_connection": [
+    "airtable_id":"recoEozGFP6Ycs4yg",
+    "org_short_name":"AFJC",
+    "org_full_name":"Association des Femmes Juristes de Centrafrique",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": "afjc",
-    "org_url": "https://www.peaceinsight.org/fr/organisations/afjc",
-    "total_grant_size": null
+    "logo_slug":"afjc",
+    "org_url":"https:\/\/www.peaceinsight.org\/fr\/organisations\/afjc",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec6LmfpV1yxpXe7E",
-    "org_short_name": "AFPA",
-    "org_full_name": "L'Alliance des femmes en Haiti",
-    "crafd_connection": [
+    "airtable_id":"rec6LmfpV1yxpXe7E",
+    "org_short_name":"AFPA",
+    "org_full_name":"L'Alliance des femmes en Haiti",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": null,
-    "org_url": "https://afpa-haiti.org/history.html",
-    "total_grant_size": null
+    "logo_slug":null,
+    "org_url":"https:\/\/afpa-haiti.org\/history.html",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recIkfrcHN7IIcNpa",
-    "org_short_name": "AISHA",
-    "org_full_name": "Association for Women and Child Protection",
-    "crafd_connection": [
+    "airtable_id":"recIkfrcHN7IIcNpa",
+    "org_short_name":"AISHA",
+    "org_full_name":"Association for Women and Child Protection",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": "aisha",
-    "org_url": "https://aisha.ps/en",
-    "total_grant_size": null
+    "logo_slug":"aisha",
+    "org_url":"https:\/\/aisha.ps\/en",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recK29aXD9Vj9G1T1",
-    "org_short_name": "APW",
-    "org_full_name": "Afghan Peace Watch",
-    "crafd_connection": [
+    "airtable_id":"recK29aXD9Vj9G1T1",
+    "org_short_name":"APW",
+    "org_full_name":"Afghan Peace Watch",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "apw",
-    "org_url": "https://afghanpeacewatch.org/",
-    "total_grant_size": null
+    "logo_slug":"apw",
+    "org_url":"https:\/\/afghanpeacewatch.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recdCoHVW8WoLoMiY",
-    "org_short_name": "ASSN",
-    "org_full_name": "African Security Sector Network",
-    "crafd_connection": [
+    "airtable_id":"recdCoHVW8WoLoMiY",
+    "org_short_name":"ASSN",
+    "org_full_name":"African Security Sector Network",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "assn",
-    "org_url": "https://www.africansecuritynetwork.org/",
-    "total_grant_size": null
+    "logo_slug":"assn",
+    "org_url":"https:\/\/www.africansecuritynetwork.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reczdlVQMF047v0nj",
-    "org_short_name": "AWAFY",
-    "org_full_name": "Awafy Sudanese Organization",
-    "crafd_connection": [
+    "airtable_id":"reczdlVQMF047v0nj",
+    "org_short_name":"AWAFY",
+    "org_full_name":"Awafy Sudanese Organization",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "awafy",
-    "org_url": "https://awafy.org/",
-    "total_grant_size": null
+    "logo_slug":"awafy",
+    "org_url":"https:\/\/awafy.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recNFNXY9J4vRcovQ",
-    "org_short_name": "AWLN",
-    "org_full_name": "African Women Leaders Network",
-    "crafd_connection": [
+    "airtable_id":"recNFNXY9J4vRcovQ",
+    "org_short_name":"AWLN",
+    "org_full_name":"African Women Leaders Network",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": "awln",
-    "org_url": "https://www.awlnafrica.net/",
-    "total_grant_size": null
+    "logo_slug":"awln",
+    "org_url":"https:\/\/www.awlnafrica.net\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec1ZtuGgRSwYb1kb",
-    "org_short_name": "AWSD",
-    "org_full_name": "Aid Worker Security Database",
-    "crafd_connection": [
+    "airtable_id":"rec1ZtuGgRSwYb1kb",
+    "org_short_name":"AWSD",
+    "org_full_name":"Aid Worker Security Database",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "awsd",
-    "org_url": "https://www.aidworkersecurity.org/",
-    "total_grant_size": null
+    "logo_slug":"awsd",
+    "org_url":"https:\/\/www.aidworkersecurity.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reckDjUX0npjHdheE",
-    "org_short_name": "Airwars",
-    "org_full_name": "Airwars",
-    "crafd_connection": [
+    "airtable_id":"reckDjUX0npjHdheE",
+    "org_short_name":"Airwars",
+    "org_full_name":"Airwars",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "airwars",
-    "org_url": "https://airwars.org/",
-    "total_grant_size": null
+    "logo_slug":"airwars",
+    "org_url":"https:\/\/airwars.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recXU563WiRkgyROS",
-    "org_short_name": "Anon Partner 1 Africa",
-    "org_full_name": "Anonymous Partner 1 - Africa",
-    "crafd_connection": [
+    "airtable_id":"recXU563WiRkgyROS",
+    "org_short_name":"Anon Partner 1 Africa",
+    "org_full_name":"Anonymous Partner 1 - Africa",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": null,
-    "org_url": null,
-    "total_grant_size": null
+    "logo_slug":null,
+    "org_url":null,
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recneEDP9tuSzj5ot",
-    "org_short_name": "Anon Partner 2 Europe",
-    "org_full_name": "Anonymous Partner 2 - Europe",
-    "crafd_connection": [
+    "airtable_id":"recneEDP9tuSzj5ot",
+    "org_short_name":"Anon Partner 2 Europe",
+    "org_full_name":"Anonymous Partner\u202f2 - Europe",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": null,
-    "org_url": null,
-    "total_grant_size": null
+    "logo_slug":null,
+    "org_url":null,
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recp8HVGf6R1dlhNs",
-    "org_short_name": "Armillary Services",
-    "org_full_name": "Armillary Services",
-    "crafd_connection": [
+    "airtable_id":"recp8HVGf6R1dlhNs",
+    "org_short_name":"Armillary Services",
+    "org_full_name":"Armillary Services",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Private Sector",
-    "relational_project": [
+    "org_type":"Private Sector",
+    "relational_project":[
       "recDLaWeOg2tT9IM2"
     ],
-    "logo_slug": "armillary-services",
-    "org_url": "https://www.armillaryservices.com/",
-    "total_grant_size": null
+    "logo_slug":"armillary-services",
+    "org_url":"https:\/\/www.armillaryservices.com\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recPOKEvEog864xqk",
-    "org_short_name": "BDRCS",
-    "org_full_name": "Bangladesh Red Crescent Society",
-    "crafd_connection": [
+    "airtable_id":"recPOKEvEog864xqk",
+    "org_short_name":"BDRCS",
+    "org_full_name":"Bangladesh Red Crescent Society",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Red Cross",
-    "relational_project": [
+    "org_type":"Red Cross",
+    "relational_project":[
       "recVueNQ76CpXnkZa"
     ],
-    "logo_slug": "bdrcs",
-    "org_url": "https://bdrcs.org/",
-    "total_grant_size": null
+    "logo_slug":"bdrcs",
+    "org_url":"https:\/\/bdrcs.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recftBhjPv4GNzudJ",
-    "org_short_name": "BWU",
-    "org_full_name": "Burmese Women’s Union",
-    "crafd_connection": [
+    "airtable_id":"recftBhjPv4GNzudJ",
+    "org_short_name":"BWU",
+    "org_full_name":"Burmese Women\u2019s Union",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recKB3FnVyFkRNwXZ"
     ],
-    "logo_slug": "bwu",
-    "org_url": "https://burmesewomensunion.org/",
-    "total_grant_size": null
+    "logo_slug":"bwu",
+    "org_url":"https:\/\/burmesewomensunion.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recsxCMPGJsnWEYhs",
-    "org_short_name": "CARDH",
-    "org_full_name": "Centre d’analyse et de recherche en droits de l’homme",
-    "crafd_connection": [
+    "airtable_id":"recsxCMPGJsnWEYhs",
+    "org_short_name":"CARDH",
+    "org_full_name":"Centre d\u2019analyse et de recherche en droits de l\u2019homme",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "cardh",
-    "org_url": "https://cardh.org/",
-    "total_grant_size": null
+    "logo_slug":"cardh",
+    "org_url":"https:\/\/cardh.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recEWl8VACuv0xB4P",
-    "org_short_name": "CDD",
-    "org_full_name": "Centre for Democracy and Development",
-    "crafd_connection": [
+    "airtable_id":"recEWl8VACuv0xB4P",
+    "org_short_name":"CDD",
+    "org_full_name":"Centre for Democracy and Development",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "cdd",
-    "org_url": "https://www.cddwestafrica.org/",
-    "total_grant_size": null
+    "logo_slug":"cdd",
+    "org_url":"https:\/\/www.cddwestafrica.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reclrWwtVC1Q1Q1JX",
-    "org_short_name": "CEWARN",
-    "org_full_name": "Conflict Early Warning and Response Mechanism",
-    "crafd_connection": [
+    "airtable_id":"reclrWwtVC1Q1Q1JX",
+    "org_short_name":"CEWARN",
+    "org_full_name":"Conflict Early Warning and Response Mechanism",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "cewarn",
-    "org_url": "https://cewarn.org/",
-    "total_grant_size": null
+    "logo_slug":"cewarn",
+    "org_url":"https:\/\/cewarn.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recZfAy6LiSQgVHF9",
-    "org_short_name": "CHC",
-    "org_full_name": "Climate Hazards Center UC Santa Barbara",
-    "crafd_connection": [
+    "airtable_id":"recZfAy6LiSQgVHF9",
+    "org_short_name":"CHC",
+    "org_full_name":"Climate Hazards Center UC Santa Barbara",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recmrtrQhRDBZVxxz"
     ],
-    "logo_slug": "chc",
-    "org_url": "https://chc.ucsb.edu/",
-    "total_grant_size": null
+    "logo_slug":"chc",
+    "org_url":"https:\/\/chc.ucsb.edu\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reci8nIW8FikV7QkS",
-    "org_short_name": "CIEPD",
-    "org_full_name": "Community Initiative for Enhanced Peace and Development / Conflict Watch Center",
-    "crafd_connection": [
+    "airtable_id":"reci8nIW8FikV7QkS",
+    "org_short_name":"CIEPD",
+    "org_full_name":"Community Initiative for Enhanced Peace and Development \/ Conflict Watch Center",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "ciepd",
-    "org_url": "https://cocap.org.np",
-    "total_grant_size": null
+    "logo_slug":"ciepd",
+    "org_url":"https:\/\/cocap.org.np",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec30zeOlK0uUqeBm",
-    "org_short_name": "CIESIN",
-    "org_full_name": "The Center for Integrated Earth System Information",
-    "crafd_connection": [
+    "airtable_id":"rec30zeOlK0uUqeBm",
+    "org_short_name":"CIESIN",
+    "org_full_name":"The Center for Integrated Earth System Information",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recVueNQ76CpXnkZa"
     ],
-    "logo_slug": "ciesin",
-    "org_url": "https://ciesin.climate.columbia.edu/",
-    "total_grant_size": null
+    "logo_slug":"ciesin",
+    "org_url":"https:\/\/ciesin.climate.columbia.edu\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recfrD8qipAMPcUjq",
-    "org_short_name": "CIVIC",
-    "org_full_name": "Center for Civilians in Conflict",
-    "crafd_connection": [
+    "airtable_id":"recfrD8qipAMPcUjq",
+    "org_short_name":"CIVIC",
+    "org_full_name":"Center for Civilians in Conflict",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "civic",
-    "org_url": "https://www.civiliansinconflict.org/",
-    "total_grant_size": null
+    "logo_slug":"civic",
+    "org_url":"https:\/\/www.civiliansinconflict.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recoIFcE6w3Hsae4X",
-    "org_short_name": "COCAP",
-    "org_full_name": "Collective Campaign for Peace",
-    "crafd_connection": [
+    "airtable_id":"recoIFcE6w3Hsae4X",
+    "org_short_name":"COCAP",
+    "org_full_name":"Collective Campaign for Peace",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "cocap",
-    "org_url": "https://cocap.org.np/",
-    "total_grant_size": null
+    "logo_slug":"cocap",
+    "org_url":"https:\/\/cocap.org.np\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recd2NemaGQpt3UxW",
-    "org_short_name": "COES",
-    "org_full_name": "Centre for Social Conflict and Cohesion Studies",
-    "crafd_connection": [
+    "airtable_id":"recd2NemaGQpt3UxW",
+    "org_short_name":"COES",
+    "org_full_name":"Centre for Social Conflict and Cohesion Studies",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "coes",
-    "org_url": "https://coes.cl/",
-    "total_grant_size": null
+    "logo_slug":"coes",
+    "org_url":"https:\/\/coes.cl\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recKtKaa7JrvQL2iv",
-    "org_short_name": "CONRED",
-    "org_full_name": "Coordinadora Nacional para la Reducción de Desastres",
-    "crafd_connection": [
+    "airtable_id":"recKtKaa7JrvQL2iv",
+    "org_short_name":"CONRED",
+    "org_full_name":"Coordinadora Nacional para la Reducci\u00f3n de Desastres",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Government",
-    "relational_project": [
+    "org_type":"Government",
+    "relational_project":[
       "recLzUBYjCmlalnB5"
     ],
-    "logo_slug": "conred",
-    "org_url": "https://conred.gob.gt/",
-    "total_grant_size": null
+    "logo_slug":"conred",
+    "org_url":"https:\/\/conred.gob.gt\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "receDDy7TCG7FPn5i",
-    "org_short_name": "CRAF'd",
-    "org_full_name": "Complex Risk Analytics Fund (CRAF'd)",
-    "crafd_connection": [
+    "airtable_id":"receDDy7TCG7FPn5i",
+    "org_short_name":"CRAF'd",
+    "org_full_name":"Complex Risk Analytics Fund (CRAF'd)",
+    "crafd_connection":[
       "CRAF'd"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recxxh817VHuFZWuc",
       "rechF1C4gRNWZRX3o"
     ],
-    "logo_slug": "craf'd",
-    "org_url": "https://crafd.io/",
-    "total_grant_size": null
+    "logo_slug":"craf'd",
+    "org_url":"https:\/\/crafd.io\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recfdb3RouRwhHw6f",
-    "org_short_name": "CSC",
-    "org_full_name": "Center for Social Change",
-    "crafd_connection": [
+    "airtable_id":"recfdb3RouRwhHw6f",
+    "org_short_name":"CSC",
+    "org_full_name":"Center for Social Change",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "csc",
-    "org_url": "https://centerforsocialchange.org/",
-    "total_grant_size": null
+    "logo_slug":"csc",
+    "org_url":"https:\/\/centerforsocialchange.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recwafQXwz91ijNnX",
-    "org_short_name": "Cambridge Zero",
-    "org_full_name": "Cambridge Zero",
-    "crafd_connection": [
+    "airtable_id":"recwafQXwz91ijNnX",
+    "org_short_name":"Cambridge Zero",
+    "org_full_name":"Cambridge Zero",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recDLaWeOg2tT9IM2"
     ],
-    "logo_slug": "cambridge-zero",
-    "org_url": "https://www.zero.cam.ac.uk/",
-    "total_grant_size": null
+    "logo_slug":"cambridge-zero",
+    "org_url":"https:\/\/www.zero.cam.ac.uk\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recIv7CbEShW4suGB",
-    "org_short_name": "CeSSRA",
-    "org_full_name": "Centre for Social Sciences Research and Action",
-    "crafd_connection": [
+    "airtable_id":"recIv7CbEShW4suGB",
+    "org_short_name":"CeSSRA",
+    "org_full_name":"Centre for Social Sciences Research and Action",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "cessra",
-    "org_url": "https://socialsciences-centre.org/",
-    "total_grant_size": null
+    "logo_slug":"cessra",
+    "org_url":"https:\/\/socialsciences-centre.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec3EXEhWXJLnnQeT",
-    "org_short_name": "DA",
-    "org_full_name": "Dalberg Associates",
-    "crafd_connection": [
+    "airtable_id":"rec3EXEhWXJLnnQeT",
+    "org_short_name":"DA",
+    "org_full_name":"Dalberg Associates",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Private Sector",
-    "relational_project": [
+    "org_type":"Private Sector",
+    "relational_project":[
       "rechMbv6uSC10bgdN"
     ],
-    "logo_slug": "da",
-    "org_url": "https://dalberg.com/",
-    "total_grant_size": null
+    "logo_slug":"da",
+    "org_url":"https:\/\/dalberg.com\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reciuOZHqNF9dBiqo",
-    "org_short_name": "DCO",
-    "org_full_name": "United Nations Development Coordination Office  (UNDCO)",
-    "crafd_connection": [
+    "airtable_id":"reciuOZHqNF9dBiqo",
+    "org_short_name":"DCO",
+    "org_full_name":"United Nations Development Coordination Office  (UNDCO)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [],
-    "logo_slug": "dco",
-    "org_url": "https://un-dco.org/",
-    "total_grant_size": null
+    "org_type":"United Nations",
+    "relational_project":[
+
+    ],
+    "logo_slug":"dco",
+    "org_url":"https:\/\/un-dco.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recH7mLkvz5jClYoY",
-    "org_short_name": "DFS",
-    "org_full_name": "Data Friendly Space",
-    "crafd_connection": [
+    "airtable_id":"recH7mLkvz5jClYoY",
+    "org_short_name":"DFS",
+    "org_full_name":"Data Friendly Space",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recUrUUESMc1dGaGr",
       "recVueNQ76CpXnkZa"
     ],
-    "logo_slug": "dfs",
-    "org_url": "https://www.datafriendlyspace.org/",
-    "total_grant_size": null
+    "logo_slug":"dfs",
+    "org_url":"https:\/\/www.datafriendlyspace.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recu2f5GsTa4y73wN",
-    "org_short_name": "DPO",
-    "org_full_name": "Department of Peace Operations (DPO)",
-    "crafd_connection": [
+    "airtable_id":"recu2f5GsTa4y73wN",
+    "org_short_name":"DPO",
+    "org_full_name":"Department of Peace Operations (DPO)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [],
-    "logo_slug": "dpo",
-    "org_url": "https://peacekeeping.un.org/en",
-    "total_grant_size": null
+    "org_type":"United Nations",
+    "relational_project":[
+
+    ],
+    "logo_slug":"dpo",
+    "org_url":"https:\/\/peacekeeping.un.org\/en",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recXzMOIf3S6mlmkO",
-    "org_short_name": "DPPA",
-    "org_full_name": "United Nations Department of Political and Peacebuilding Affairs (UNDPPA)",
-    "crafd_connection": [
+    "airtable_id":"recXzMOIf3S6mlmkO",
+    "org_short_name":"DPPA",
+    "org_full_name":"United Nations Department of Political and Peacebuilding Affairs (UNDPPA)",
+    "crafd_connection":[
       "MoU signatory",
       "Project lead partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recDLaWeOg2tT9IM2"
     ],
-    "logo_slug": "dppa",
-    "org_url": "https://dppa.un.org/en",
-    "total_grant_size": 700000.0
+    "logo_slug":"dppa",
+    "org_url":"https:\/\/dppa.un.org\/en",
+    "total_grant_size":700000.0
   },
   {
-    "airtable_id": "rect8hHbbrjNW36ad",
-    "org_short_name": "DSW",
-    "org_full_name": "Deep South Watch",
-    "crafd_connection": [
+    "airtable_id":"rect8hHbbrjNW36ad",
+    "org_short_name":"DSW",
+    "org_full_name":"Deep South Watch",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "dsw",
-    "org_url": "https://deepsouthwatch.org/th/english/about",
-    "total_grant_size": null
+    "logo_slug":"dsw",
+    "org_url":"https:\/\/deepsouthwatch.org\/th\/english\/about",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recCk8bKbhh8uAJku",
-    "org_short_name": "DevTransform",
-    "org_full_name": "Development Transformations",
-    "crafd_connection": [
+    "airtable_id":"recCk8bKbhh8uAJku",
+    "org_short_name":"DevTransform",
+    "org_full_name":"Development Transformations",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Private Sector",
-    "relational_project": [
+    "org_type":"Private Sector",
+    "relational_project":[
       "recK7YpAfDSsOeMLa"
     ],
-    "logo_slug": "devtransform",
-    "org_url": "https://developmenttransformations.org/",
-    "total_grant_size": null
+    "logo_slug":"devtransform",
+    "org_url":"https:\/\/developmenttransformations.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reckCsqk0PVwYy4Og",
-    "org_short_name": "Dialogos",
-    "org_full_name": "Dialogos",
-    "crafd_connection": [
+    "airtable_id":"reckCsqk0PVwYy4Og",
+    "org_short_name":"Dialogos",
+    "org_full_name":"Dialogos",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "dialogos",
-    "org_url": "https://www.dialogos.com/",
-    "total_grant_size": null
+    "logo_slug":"dialogos",
+    "org_url":"https:\/\/www.dialogos.com\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recVHWBaYiL6909wx",
-    "org_short_name": "EAI",
-    "org_full_name": "Equal Access International (EAI) | Ivory Coast",
-    "crafd_connection": [
+    "airtable_id":"recVHWBaYiL6909wx",
+    "org_short_name":"EAI",
+    "org_full_name":"Equal Access International (EAI) | Ivory Coast",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "eai",
-    "org_url": "https://www.equalaccess.org/our-work/countries/cote-divoire/",
-    "total_grant_size": null
+    "logo_slug":"eai",
+    "org_url":"https:\/\/www.equalaccess.org\/our-work\/countries\/cote-divoire\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recinExdPqGohTGK0",
-    "org_short_name": "EAI",
-    "org_full_name": "Equal Access International",
-    "crafd_connection": [
+    "airtable_id":"recinExdPqGohTGK0",
+    "org_short_name":"EAI",
+    "org_full_name":"Equal Access International",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "eai",
-    "org_url": "https://www.equalaccess.org/",
-    "total_grant_size": null
+    "logo_slug":"eai",
+    "org_url":"https:\/\/www.equalaccess.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recbkjM5Hz6h15DL6",
-    "org_short_name": "EGRISS",
-    "org_full_name": "Expert Group on Refugee, IDP and Statelessness Statistics",
-    "crafd_connection": [
+    "airtable_id":"recbkjM5Hz6h15DL6",
+    "org_short_name":"EGRISS",
+    "org_full_name":"Expert Group on Refugee, IDP and Statelessness Statistics",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recLzUBYjCmlalnB5"
     ],
-    "logo_slug": "egriss",
-    "org_url": "https://egrisstats.org/",
-    "total_grant_size": null
+    "logo_slug":"egriss",
+    "org_url":"https:\/\/egrisstats.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rechxxzOmEgDlQqca",
-    "org_short_name": "EYE on ISIS",
-    "org_full_name": "Eye on ISIS",
-    "crafd_connection": [
+    "airtable_id":"rechxxzOmEgDlQqca",
+    "org_short_name":"EYE on ISIS",
+    "org_full_name":"Eye on ISIS",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recoHPHGk3I9tXZMs",
       "recH3jdM4WmYoiku6"
     ],
-    "logo_slug": "eye-on-isis",
-    "org_url": "https://libyasecuritymonitor.com/eye-on-isis/",
-    "total_grant_size": null
+    "logo_slug":"eye-on-isis",
+    "org_url":"https:\/\/libyasecuritymonitor.com\/eye-on-isis\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recbeXeiVqOdIX7Db",
-    "org_short_name": "Element 84",
-    "org_full_name": "Element 84",
-    "crafd_connection": [
+    "airtable_id":"recbeXeiVqOdIX7Db",
+    "org_short_name":"Element 84",
+    "org_full_name":"Element 84",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Private Sector",
-    "relational_project": [
+    "org_type":"Private Sector",
+    "relational_project":[
       "recDLaWeOg2tT9IM2"
     ],
-    "logo_slug": "element-84",
-    "org_url": "https://element84.com/",
-    "total_grant_size": null
+    "logo_slug":"element-84",
+    "org_url":"https:\/\/element84.com\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recKJOTOnJMSUQ4jy",
-    "org_short_name": "Every Town for Gun Safety",
-    "org_full_name": "Every Town for Gun Safety",
-    "crafd_connection": [
+    "airtable_id":"recKJOTOnJMSUQ4jy",
+    "org_short_name":"Every Town for Gun Safety",
+    "org_full_name":"Every Town for Gun Safety",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "every-town-for-gun-safety",
-    "org_url": "https://www.everytown.org/",
-    "total_grant_size": null
+    "logo_slug":"every-town-for-gun-safety",
+    "org_url":"https:\/\/www.everytown.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recX3x2JhsQlXK4R8",
-    "org_short_name": "FAO",
-    "org_full_name": "Food and Agriculture Organization of the United Nations (FAO)",
-    "crafd_connection": [
+    "airtable_id":"recX3x2JhsQlXK4R8",
+    "org_short_name":"FAO",
+    "org_full_name":"Food and Agriculture Organization of the United Nations (FAO)",
+    "crafd_connection":[
       "MoU signatory",
       "Collaborating partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "reciI9Y9kF8R90HMa"
     ],
-    "logo_slug": "fao",
-    "org_url": "https://www.fao.org/home/en",
-    "total_grant_size": null
+    "logo_slug":"fao",
+    "org_url":"https:\/\/www.fao.org\/home\/en",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recPIWKwnlHP0OkbT",
-    "org_short_name": "FEWS NET",
-    "org_full_name": "Famine Early Warning Systems Network",
-    "crafd_connection": [
+    "airtable_id":"recPIWKwnlHP0OkbT",
+    "org_short_name":"FEWS NET",
+    "org_full_name":"Famine Early Warning Systems Network",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recVhadI6PvXyCIlZ"
     ],
-    "logo_slug": "fews-net",
-    "org_url": "https://fews.net/",
-    "total_grant_size": null
+    "logo_slug":"fews-net",
+    "org_url":"https:\/\/fews.net\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recv0iM90I12ie7kn",
-    "org_short_name": "FHN",
-    "org_full_name": "Feminist Humanitarian Network (FHN)",
-    "crafd_connection": [
+    "airtable_id":"recv0iM90I12ie7kn",
+    "org_short_name":"FHN",
+    "org_full_name":"Feminist Humanitarian Network (FHN)",
+    "crafd_connection":[
       "Project lead partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recK7YpAfDSsOeMLa"
     ],
-    "logo_slug": "fhn",
-    "org_url": "https://www.feministhumanitariannetwork.org/",
-    "total_grant_size": 299999.97
+    "logo_slug":"fhn",
+    "org_url":"https:\/\/www.feministhumanitariannetwork.org\/",
+    "total_grant_size":299999.97
   },
   {
-    "airtable_id": "recLoVJq8pDzIedXk",
-    "org_short_name": "FLD",
-    "org_full_name": "Front Line Defenders",
-    "crafd_connection": [
+    "airtable_id":"recLoVJq8pDzIedXk",
+    "org_short_name":"FLD",
+    "org_full_name":"Front Line Defenders",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "fld",
-    "org_url": "https://www.frontlinedefenders.org",
-    "total_grant_size": null
+    "logo_slug":"fld",
+    "org_url":"https:\/\/www.frontlinedefenders.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recvFZbnvfgTCF1kO",
-    "org_short_name": "FMA",
-    "org_full_name": "Foundation for Media Alternatives",
-    "crafd_connection": [
+    "airtable_id":"recvFZbnvfgTCF1kO",
+    "org_short_name":"FMA",
+    "org_full_name":"Foundation for Media Alternatives",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "fma",
-    "org_url": "https://fma.ph",
-    "total_grant_size": null
+    "logo_slug":"fma",
+    "org_url":"https:\/\/fma.ph",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recwGIekEB6Xj358I",
-    "org_short_name": "FORUM-ASIA",
-    "org_full_name": "Asian Forum for Human Rights and Development",
-    "crafd_connection": [
+    "airtable_id":"recwGIekEB6Xj358I",
+    "org_short_name":"FORUM-ASIA",
+    "org_full_name":"Asian Forum for Human Rights and Development",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "forum-asia",
-    "org_url": "https://forum-asia.org/",
-    "total_grant_size": null
+    "logo_slug":"forum-asia",
+    "org_url":"https:\/\/forum-asia.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recbgn2ZhnYFQttF3",
-    "org_short_name": "FPB",
-    "org_full_name": "Forum de Paix de Beni",
-    "crafd_connection": [
+    "airtable_id":"recbgn2ZhnYFQttF3",
+    "org_short_name":"FPB",
+    "org_full_name":"Forum de Paix de Beni",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "fpb",
-    "org_url": "https://www.peaceinsight.org/en/organisations/beni-peace-forum",
-    "total_grant_size": null
+    "logo_slug":"fpb",
+    "org_url":"https:\/\/www.peaceinsight.org\/en\/organisations\/beni-peace-forum",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recp0HAnw6EPPC3OW",
-    "org_short_name": "FPB",
-    "org_full_name": "Forum de Paix de Béni (FPB) | Democratic Republic of the Congo (DRC)",
-    "crafd_connection": [
+    "airtable_id":"recp0HAnw6EPPC3OW",
+    "org_short_name":"FPB",
+    "org_full_name":"Forum de Paix de B\u00e9ni (FPB) | Democratic Republic of the Congo (DRC)",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": null,
-    "org_url": "https://forumdelapaix.org/a-propos/",
-    "total_grant_size": null
+    "logo_slug":null,
+    "org_url":"https:\/\/forumdelapaix.org\/a-propos\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recZjny7sSSH9KFpR",
-    "org_short_name": "FWM",
-    "org_full_name": "Insights – Framework Mechanism (FWM – formerly Data for Change)",
-    "crafd_connection": [
+    "airtable_id":"recZjny7sSSH9KFpR",
+    "org_short_name":"FWM",
+    "org_full_name":"Insights \u2013 Framework Mechanism (FWM \u2013 formerly Data for Change)",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "fwm",
-    "org_url": "https://insights-sd.org/en/",
-    "total_grant_size": null
+    "logo_slug":"fwm",
+    "org_url":"https:\/\/insights-sd.org\/en\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recM8eUHUIAWzUQBk",
-    "org_short_name": "Fogo Cruzado",
-    "org_full_name": "Fogo Cruzado",
-    "crafd_connection": [
+    "airtable_id":"recM8eUHUIAWzUQBk",
+    "org_short_name":"Fogo Cruzado",
+    "org_full_name":"Fogo Cruzado",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "fogo-cruzado",
-    "org_url": "https://fogocruzado.org.br/",
-    "total_grant_size": null
+    "logo_slug":"fogo-cruzado",
+    "org_url":"https:\/\/fogocruzado.org.br\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recDxbkJHbz6xfd4K",
-    "org_short_name": "Fundaredes",
-    "org_full_name": "Fundaredes",
-    "crafd_connection": [
+    "airtable_id":"recDxbkJHbz6xfd4K",
+    "org_short_name":"Fundaredes",
+    "org_full_name":"Fundaredes",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "fundaredes",
-    "org_url": "https://www.fundaredes.org",
-    "total_grant_size": null
+    "logo_slug":"fundaredes",
+    "org_url":"https:\/\/www.fundaredes.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recVf9RzZuLP5yNpi",
-    "org_short_name": "GI-TOC",
-    "org_full_name": "Global Initiative Against Transnational Organized Crime",
-    "crafd_connection": [
+    "airtable_id":"recVf9RzZuLP5yNpi",
+    "org_short_name":"GI-TOC",
+    "org_full_name":"Global Initiative Against Transnational Organized Crime",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "gi-toc",
-    "org_url": "https://gi-toc.org",
-    "total_grant_size": null
+    "logo_slug":"gi-toc",
+    "org_url":"https:\/\/gi-toc.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec5zYCydH47medAi",
-    "org_short_name": "GTS",
-    "org_full_name": "Ground Truth Solutions",
-    "crafd_connection": [
+    "airtable_id":"rec5zYCydH47medAi",
+    "org_short_name":"GTS",
+    "org_full_name":"Ground Truth Solutions",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": "gts",
-    "org_url": "https://www.groundtruthsolutions.org/",
-    "total_grant_size": null
+    "logo_slug":"gts",
+    "org_url":"https:\/\/www.groundtruthsolutions.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec1o98za8Ade3j1L",
-    "org_short_name": "GiE",
-    "org_full_name": "Gender in Emergencies Group",
-    "crafd_connection": [
+    "airtable_id":"rec1o98za8Ade3j1L",
+    "org_short_name":"GiE",
+    "org_full_name":"Gender in Emergencies Group",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recVueNQ76CpXnkZa"
     ],
-    "logo_slug": "gie",
-    "org_url": "https://genderinemergencies.org/",
-    "total_grant_size": null
+    "logo_slug":"gie",
+    "org_url":"https:\/\/genderinemergencies.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recTIXreKHiTQGWsx",
-    "org_short_name": "Global Witness",
-    "org_full_name": "Global Witness",
-    "crafd_connection": [
+    "airtable_id":"recTIXreKHiTQGWsx",
+    "org_short_name":"Global Witness",
+    "org_full_name":"Global Witness",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "global-witness",
-    "org_url": "https://www.globalwitness.org",
-    "total_grant_size": null
+    "logo_slug":"global-witness",
+    "org_url":"https:\/\/www.globalwitness.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recFpx3eRIBWQQjl2",
-    "org_short_name": "HCT WAG",
-    "org_full_name": "HCT Women's Advisory Group",
-    "crafd_connection": [
+    "airtable_id":"recFpx3eRIBWQQjl2",
+    "org_short_name":"HCT WAG",
+    "org_full_name":"HCT Women's Advisory Group",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": "hct-wag",
-    "org_url": "https://developmentactionrefugees.org/whats-new/partner-update/women-advisory-group-sudan",
-    "total_grant_size": null
+    "logo_slug":"hct-wag",
+    "org_url":"https:\/\/developmentactionrefugees.org\/whats-new\/partner-update\/women-advisory-group-sudan",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recQy3kbk9oEdYN1X",
-    "org_short_name": "HDX",
-    "org_full_name": "Humanitarian Data Exchange (HDX)",
-    "crafd_connection": [
+    "airtable_id":"recQy3kbk9oEdYN1X",
+    "org_short_name":"HDX",
+    "org_full_name":"Humanitarian Data Exchange (HDX)",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "reciI9Y9kF8R90HMa"
     ],
-    "logo_slug": "hdx",
-    "org_url": "https://data.humdata.org/",
-    "total_grant_size": null
+    "logo_slug":"hdx",
+    "org_url":"https:\/\/data.humdata.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recMtysKzIycMKR7h",
-    "org_short_name": "HORN Institute",
-    "org_full_name": "HORN International Institute for Strategic Studies",
-    "crafd_connection": [
+    "airtable_id":"recMtysKzIycMKR7h",
+    "org_short_name":"HORN Institute",
+    "org_full_name":"HORN International Institute for Strategic Studies",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "horn-institute",
-    "org_url": "https://www.horninstitute.org",
-    "total_grant_size": null
+    "logo_slug":"horn-institute",
+    "org_url":"https:\/\/www.horninstitute.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recPunBwLpRrXHlwq",
-    "org_short_name": "HRC-UNTL",
-    "org_full_name": "Global Campus of Human Rights – Human Rights Centre of the National University of Timor-Leste",
-    "crafd_connection": [
+    "airtable_id":"recPunBwLpRrXHlwq",
+    "org_short_name":"HRC-UNTL",
+    "org_full_name":"Global Campus of Human Rights \u2013 Human Rights Centre of the National University of Timor-Leste",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "hrc-untl",
-    "org_url": "https://www.gchumanrights.org",
-    "total_grant_size": null
+    "logo_slug":"hrc-untl",
+    "org_url":"https:\/\/www.gchumanrights.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recpbZmXLEuzXryYU",
-    "org_short_name": "HRNK",
-    "org_full_name": "Committee for Human Rights in North Korea",
-    "crafd_connection": [
+    "airtable_id":"recpbZmXLEuzXryYU",
+    "org_short_name":"HRNK",
+    "org_full_name":"Committee for Human Rights in North Korea",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "hrnk",
-    "org_url": "https://socialsciences-centre.org/",
-    "total_grant_size": null
+    "logo_slug":"hrnk",
+    "org_url":"https:\/\/socialsciences-centre.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recNd6lty5CiGs93S",
-    "org_short_name": "IB",
-    "org_full_name": "Idea Bureau",
-    "crafd_connection": [
+    "airtable_id":"recNd6lty5CiGs93S",
+    "org_short_name":"IB",
+    "org_full_name":"Idea Bureau",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Private Sector",
-    "relational_project": [
+    "org_type":"Private Sector",
+    "relational_project":[
       "recDLaWeOg2tT9IM2"
     ],
-    "logo_slug": "ib",
-    "org_url": "https://theideabureau.co/",
-    "total_grant_size": null
+    "logo_slug":"ib",
+    "org_url":"https:\/\/theideabureau.co\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec8fighUv8Q9hCX6",
-    "org_short_name": "ICG",
-    "org_full_name": "International Crisis Group (ICG)",
-    "crafd_connection": [
+    "airtable_id":"rec8fighUv8Q9hCX6",
+    "org_short_name":"ICG",
+    "org_full_name":"International Crisis Group (ICG)",
+    "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recmrtrQhRDBZVxxz",
       "recvpn8u6HBffMRWu"
     ],
-    "logo_slug": "icg",
-    "org_url": "https://www.crisisgroup.org/",
-    "total_grant_size": 700000.0
+    "logo_slug":"icg",
+    "org_url":"https:\/\/www.crisisgroup.org\/",
+    "total_grant_size":700000.0
   },
   {
-    "airtable_id": "recLEtULboPmoSb1B",
-    "org_short_name": "ICPAC",
-    "org_full_name": "Intergovernmental Authority on Development - IGAD Climate Prediction and Applications Centre (ICPAC)",
-    "crafd_connection": [
+    "airtable_id":"recLEtULboPmoSb1B",
+    "org_short_name":"ICPAC",
+    "org_full_name":"Intergovernmental Authority on Development - IGAD Climate Prediction and Applications Centre (ICPAC)",
+    "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
     ],
-    "org_type": "International Organization",
-    "relational_project": [
+    "org_type":"International Organization",
+    "relational_project":[
       "rec6FcYVivJIogG0J",
       "recmrtrQhRDBZVxxz",
       "recvpn8u6HBffMRWu"
     ],
-    "logo_slug": "icpac",
-    "org_url": "https://www.icpac.net/",
-    "total_grant_size": 500065.0
+    "logo_slug":"icpac",
+    "org_url":"https:\/\/www.icpac.net\/",
+    "total_grant_size":500065.0
   },
   {
-    "airtable_id": "recEad5oVuZNEBSML",
-    "org_short_name": "ICRC",
-    "org_full_name": "International Committee of the Red Cross (ICRC)",
-    "crafd_connection": [
+    "airtable_id":"recEad5oVuZNEBSML",
+    "org_short_name":"ICRC",
+    "org_full_name":"International Committee of the Red Cross (ICRC)",
+    "crafd_connection":[
       "Complementary donor",
       "Collaborating partner"
     ],
-    "org_type": "Red Cross",
-    "relational_project": [
+    "org_type":"Red Cross",
+    "relational_project":[
       "recVQtT1tEPJ0Zhwv"
     ],
-    "logo_slug": "icrc",
-    "org_url": "https://www.icrc.org/en/we-are-international-committee-red-cross-icrc",
-    "total_grant_size": null
+    "logo_slug":null,
+    "org_url":"https:\/\/www.icrc.org\/en\/we-are-international-committee-red-cross-icrc",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recPFxoMtMX2tV021",
-    "org_short_name": "IDMC",
-    "org_full_name": "Internal Displacement Monitoring Centre (IDMC)",
-    "crafd_connection": [
+    "airtable_id":"recPFxoMtMX2tV021",
+    "org_short_name":"IDMC",
+    "org_full_name":"Internal Displacement Monitoring Centre (IDMC)",
+    "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recLzUBYjCmlalnB5",
       "recmrtrQhRDBZVxxz",
       "recvpn8u6HBffMRWu"
     ],
-    "logo_slug": "idmc",
-    "org_url": "https://www.internal-displacement.org/",
-    "total_grant_size": 1500000.0
+    "logo_slug":"idmc",
+    "org_url":"https:\/\/www.internal-displacement.org\/",
+    "total_grant_size":1500000.0
   },
   {
-    "airtable_id": "recmg6BiaYlTvSxkx",
-    "org_short_name": "IFRC",
-    "org_full_name": "International Federation of Red Cross and Red Crescent Societies (IFRC)",
-    "crafd_connection": [
+    "airtable_id":"recmg6BiaYlTvSxkx",
+    "org_short_name":"IFRC",
+    "org_full_name":"International Federation of Red Cross and Red Crescent Societies (IFRC)",
+    "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
     ],
-    "org_type": "Red Cross",
-    "relational_project": [
+    "org_type":"Red Cross",
+    "relational_project":[
       "recVueNQ76CpXnkZa"
     ],
-    "logo_slug": "ifrc",
-    "org_url": "https://www.ifrc.org/",
-    "total_grant_size": 599735.0
+    "logo_slug":"ifrc",
+    "org_url":"https:\/\/www.ifrc.org\/",
+    "total_grant_size":599735.0
   },
   {
-    "airtable_id": "recEPXUwCZaNbcPrH",
-    "org_short_name": "INDEPAZ",
-    "org_full_name": "Instituto de Estudios para el Desarrollo y la Paz",
-    "crafd_connection": [
+    "airtable_id":"recEPXUwCZaNbcPrH",
+    "org_short_name":"INDEPAZ",
+    "org_full_name":"Instituto de Estudios para el Desarrollo y la Paz",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "indepaz",
-    "org_url": "https://ipades.org/",
-    "total_grant_size": null
+    "logo_slug":"indepaz",
+    "org_url":"https:\/\/ipades.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recliM1NwnhtY4nY8",
-    "org_short_name": "INFORM Consortium",
-    "org_full_name": "INFORM Consortium",
-    "crafd_connection": [
+    "airtable_id":"recliM1NwnhtY4nY8",
+    "org_short_name":"INFORM Consortium",
+    "org_full_name":"INFORM Consortium",
+    "crafd_connection":[
       "Implementing partner",
       "Project lead partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recUrUUESMc1dGaGr"
     ],
-    "logo_slug": "inform-consortium",
-    "org_url": "https://drmkc.jrc.ec.europa.eu/inform-index",
-    "total_grant_size": null
+    "logo_slug":"inform-consortium",
+    "org_url":"https:\/\/drmkc.jrc.ec.europa.eu\/inform-index",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recHv6hZ0SCI0cjT8",
-    "org_short_name": "IOM",
-    "org_full_name": "International Organization for Migration (IOM)",
-    "crafd_connection": [
+    "airtable_id":"recHv6hZ0SCI0cjT8",
+    "org_short_name":"IOM",
+    "org_full_name":"International Organization for Migration (IOM)",
+    "crafd_connection":[
       "MoU signatory",
       "Project lead partner",
       "Collaborating partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recVQtT1tEPJ0Zhwv",
       "recLzUBYjCmlalnB5",
       "recH3jdM4WmYoiku6"
     ],
-    "logo_slug": "iom",
-    "org_url": "https://www.iom.int/",
-    "total_grant_size": 500000.0
+    "logo_slug":"iom",
+    "org_url":"https:\/\/www.iom.int\/",
+    "total_grant_size":500000.0
   },
   {
-    "airtable_id": "recmtvKDZHLoeieIn",
-    "org_short_name": "IStories",
-    "org_full_name": "IStories Media",
-    "crafd_connection": [
+    "airtable_id":"recmtvKDZHLoeieIn",
+    "org_short_name":"IStories",
+    "org_full_name":"IStories Media",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recH3jdM4WmYoiku6"
     ],
-    "logo_slug": "istories",
-    "org_url": "https://istories.media",
-    "total_grant_size": null
+    "logo_slug":"istories",
+    "org_url":"https:\/\/istories.media",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reco6OQ956EScEDxc",
-    "org_short_name": "ITU",
-    "org_full_name": "International Telecommunication Union (ITU)",
-    "crafd_connection": [
+    "airtable_id":"reco6OQ956EScEDxc",
+    "org_short_name":"ITU",
+    "org_full_name":"International Telecommunication Union (ITU)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [],
-    "logo_slug": "itu",
-    "org_url": "https://www.itu.int/en/Pages/default.aspx",
-    "total_grant_size": null
+    "org_type":"United Nations",
+    "relational_project":[
+
+    ],
+    "logo_slug":"itu",
+    "org_url":"https:\/\/www.itu.int\/en\/Pages\/default.aspx",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recC3UpUQI0CqGLaz",
-    "org_short_name": "InSight Crime",
-    "org_full_name": "InSight Crime",
-    "crafd_connection": [
+    "airtable_id":"recC3UpUQI0CqGLaz",
+    "org_short_name":"InSight Crime",
+    "org_full_name":"InSight Crime",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "insight-crime",
-    "org_url": "https://insightcrime.org/",
-    "total_grant_size": null
+    "logo_slug":"insight-crime",
+    "org_url":"https:\/\/insightcrime.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recJEhP3EKDSXjrCX",
-    "org_short_name": "Insecurity Insight",
-    "org_full_name": "Insecurity Insight",
-    "crafd_connection": [
+    "airtable_id":"recJEhP3EKDSXjrCX",
+    "org_short_name":"Insecurity Insight",
+    "org_full_name":"Insecurity Insight",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs",
       "reclh3auLZCpsMNFZ"
     ],
-    "logo_slug": "insecurity-insight",
-    "org_url": "https://insecurityinsight.org",
-    "total_grant_size": null
+    "logo_slug":"insecurity-insight",
+    "org_url":"https:\/\/insecurityinsight.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "receBSaLPYEDEBGNd",
-    "org_short_name": "Irdeto",
-    "org_full_name": "Irdeto",
-    "crafd_connection": [
+    "airtable_id":"receBSaLPYEDEBGNd",
+    "org_short_name":"Irdeto",
+    "org_full_name":"Irdeto",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Private Sector",
-    "relational_project": [
+    "org_type":"Private Sector",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "irdeto",
-    "org_url": "https://irdeto.com",
-    "total_grant_size": null
+    "logo_slug":"irdeto",
+    "org_url":"https:\/\/irdeto.com",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recbPqF2fSGA6RbZO",
-    "org_short_name": "JRC",
-    "org_full_name": "European Commission Joint Research Centre (JRC)",
-    "crafd_connection": [
+    "airtable_id":"recbPqF2fSGA6RbZO",
+    "org_short_name":"JRC",
+    "org_full_name":"European Commission Joint Research Centre (JRC)",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Government",
-    "relational_project": [
+    "org_type":"Government",
+    "relational_project":[
       "recUrUUESMc1dGaGr"
     ],
-    "logo_slug": "jrc",
-    "org_url": "https://commission.europa.eu/about/departments-and-executive-agencies/joint-research-centre_en",
-    "total_grant_size": null
+    "logo_slug":"jrc",
+    "org_url":"https:\/\/commission.europa.eu\/about\/departments-and-executive-agencies\/joint-research-centre_en",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recq38srV2SLqwZZ0",
-    "org_short_name": "KNWO",
-    "org_full_name": "Karenni National Women’s Organisation",
-    "crafd_connection": [
+    "airtable_id":"recq38srV2SLqwZZ0",
+    "org_short_name":"KNWO",
+    "org_full_name":"Karenni National Women\u2019s Organisation",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recKB3FnVyFkRNwXZ"
     ],
-    "logo_slug": "knwo",
-    "org_url": "https://knwo.org/",
-    "total_grant_size": null
+    "logo_slug":"knwo",
+    "org_url":"https:\/\/knwo.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rece6AYcCMsE52j5w",
-    "org_short_name": "KoboToolbox",
-    "org_full_name": "KoboToolbox",
-    "crafd_connection": [
+    "airtable_id":"rece6AYcCMsE52j5w",
+    "org_short_name":"KoboToolbox",
+    "org_full_name":"KoboToolbox",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": "kobotoolbox",
-    "org_url": "https://www.kobotoolbox.org/",
-    "total_grant_size": null
+    "logo_slug":"kobotoolbox",
+    "org_url":"https:\/\/www.kobotoolbox.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recF5o67nvN5x9chH",
-    "org_short_name": "Korbel",
-    "org_full_name": "Josef Korbel School, University of Denver (Korbel)",
-    "crafd_connection": [
-      "Project lead partner",
+    "airtable_id":"recA8tc5h5rCi64fE",
+    "org_short_name":"LSM",
+    "org_full_name":"The Libya Security Monitor (LSM)",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
-      "recKB3FnVyFkRNwXZ",
-      "recovFaPBY6M8k5Ow"
-    ],
-    "logo_slug": "korbel",
-    "org_url": "https://korbel.du.edu/",
-    "total_grant_size": 400000.0
-  },
-  {
-    "airtable_id": "recA8tc5h5rCi64fE",
-    "org_short_name": "LSM",
-    "org_full_name": "The Libya Security Monitor (LSM)",
-    "crafd_connection": [
-      "Implementing partner"
-    ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "lsm",
-    "org_url": "https://libyasecuritymonitor.org",
-    "total_grant_size": null
+    "logo_slug":"lsm",
+    "org_url":"https:\/\/libyasecuritymonitor.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recNGqgmLxYkLjANh",
-    "org_short_name": "Liveuamap",
-    "org_full_name": "Live Universal Awareness Map",
-    "crafd_connection": [
+    "airtable_id":"recNGqgmLxYkLjANh",
+    "org_short_name":"Liveuamap",
+    "org_full_name":"Live Universal Awareness Map",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Private Sector",
-    "relational_project": [
+    "org_type":"Private Sector",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "liveuamap",
-    "org_url": "https://liveuamap.com",
-    "total_grant_size": null
+    "logo_slug":"liveuamap",
+    "org_url":"https:\/\/liveuamap.com",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recXdnrR9AhKkHLY8",
-    "org_short_name": "MPM",
-    "org_full_name": "Myanmar Peace Monitor",
-    "crafd_connection": [
+    "airtable_id":"recXdnrR9AhKkHLY8",
+    "org_short_name":"MPM",
+    "org_full_name":"Myanmar Peace Monitor",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "mpm",
-    "org_url": "https://myanmarpeacemonitor.org",
-    "total_grant_size": null
+    "logo_slug":"mpm",
+    "org_url":"https:\/\/myanmarpeacemonitor.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recLRSST0fgmhKZc6",
-    "org_short_name": "MPTFO",
-    "org_full_name": "Multi-Partner Trust Fund Office (MPTFO)",
-    "crafd_connection": [
+    "airtable_id":"recLRSST0fgmhKZc6",
+    "org_short_name":"MPTFO",
+    "org_full_name":"Multi-Partner Trust Fund Office (MPTFO)",
+    "crafd_connection":[
       "Administrative agent"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recxxh817VHuFZWuc",
       "rechF1C4gRNWZRX3o"
     ],
-    "logo_slug": null,
-    "org_url": "https://mptf.undp.org/",
-    "total_grant_size": null
+    "logo_slug":null,
+    "org_url":"https:\/\/mptf.undp.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec00zB9pxvICkXlD",
-    "org_short_name": "Mi Convive",
-    "org_full_name": "Caracas Mi Convive & Monitor de Víctimas",
-    "crafd_connection": [
+    "airtable_id":"rec00zB9pxvICkXlD",
+    "org_short_name":"Mi Convive",
+    "org_full_name":"Caracas Mi Convive & Monitor de V\u00edctimas",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "mi-convive",
-    "org_url": "https://miconvive.org/",
-    "total_grant_size": null
+    "logo_slug":"mi-convive",
+    "org_url":"https:\/\/miconvive.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recXXW1pfMBl4S9q4",
-    "org_short_name": "Microsoft",
-    "org_full_name": "Microsoft Corporation",
-    "crafd_connection": [
+    "airtable_id":"recXXW1pfMBl4S9q4",
+    "org_short_name":"Microsoft",
+    "org_full_name":"Microsoft Corporation",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Private Sector",
-    "relational_project": [
+    "org_type":"Private Sector",
+    "relational_project":[
       "reclh3auLZCpsMNFZ"
     ],
-    "logo_slug": "microsoft",
-    "org_url": "https://www.microsoft.com/en-us",
-    "total_grant_size": null
+    "logo_slug":"microsoft",
+    "org_url":"https:\/\/www.microsoft.com\/en-us",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recniEOG9zir2PVmw",
-    "org_short_name": "MilitiaWatch",
-    "org_full_name": "MilitiaWatch",
-    "crafd_connection": [
+    "airtable_id":"recniEOG9zir2PVmw",
+    "org_short_name":"MilitiaWatch",
+    "org_full_name":"MilitiaWatch",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "militiawatch",
-    "org_url": "https://militia.watch/",
-    "total_grant_size": null
+    "logo_slug":"militiawatch",
+    "org_url":"https:\/\/militia.watch\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recUUsB0UIecRfTTW",
-    "org_short_name": "NCRI",
-    "org_full_name": "Network Contagion Research Institute",
-    "crafd_connection": [
+    "airtable_id":"recUUsB0UIecRfTTW",
+    "org_short_name":"NCRI",
+    "org_full_name":"Network Contagion Research Institute",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "ncri",
-    "org_url": "https://networkcontagion.us",
-    "total_grant_size": null
+    "logo_slug":"ncri",
+    "org_url":"https:\/\/networkcontagion.us",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recHl5sLQVNe5hjQs",
-    "org_short_name": "NDMA-SL",
-    "org_full_name": "National Disaster Management Agency Sierra Leone",
-    "crafd_connection": [
+    "airtable_id":"recHl5sLQVNe5hjQs",
+    "org_short_name":"NDMA-SL",
+    "org_full_name":"National Disaster Management Agency Sierra Leone",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Government",
-    "relational_project": [
+    "org_type":"Government",
+    "relational_project":[
       "recLzUBYjCmlalnB5"
     ],
-    "logo_slug": "ndma-sl",
-    "org_url": "https://ndma.gov.sl/",
-    "total_grant_size": null
+    "logo_slug":"ndma-sl",
+    "org_url":"https:\/\/ndma.gov.sl\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recjaqYpyPQLi5Ibg",
-    "org_short_name": "NRC",
-    "org_full_name": "Norwegian Refugee Council (NRC)",
-    "crafd_connection": [
+    "airtable_id":"recjaqYpyPQLi5Ibg",
+    "org_short_name":"NRC",
+    "org_full_name":"Norwegian Refugee Council (NRC)",
+    "crafd_connection":[
       "Project lead partner",
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recLzUBYjCmlalnB5",
       "rechMbv6uSC10bgdN",
       "recVueNQ76CpXnkZa",
       "recVQtT1tEPJ0Zhwv"
     ],
-    "logo_slug": "nrc",
-    "org_url": "https://www.nrc.no/norcap",
-    "total_grant_size": 2000000.0
+    "logo_slug":"nrc",
+    "org_url":"https:\/\/www.nrc.no\/norcap",
+    "total_grant_size":2000000.0
   },
   {
-    "airtable_id": "rec8SLRmza7VMMfXg",
-    "org_short_name": "NRCS",
-    "org_full_name": "Nepal Red Cross Society",
-    "crafd_connection": [
+    "airtable_id":"rec8SLRmza7VMMfXg",
+    "org_short_name":"NRCS",
+    "org_full_name":"Nepal Red Cross Society",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Red Cross",
-    "relational_project": [
+    "org_type":"Red Cross",
+    "relational_project":[
       "recVueNQ76CpXnkZa"
     ],
-    "logo_slug": "nrcs",
-    "org_url": "https://nrcs.org/",
-    "total_grant_size": null
+    "logo_slug":"nrcs",
+    "org_url":"https:\/\/nrcs.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recCqvat7JdX2NRpo",
-    "org_short_name": "NU",
-    "org_full_name": "Northwestern University",
-    "crafd_connection": [
+    "airtable_id":"recCqvat7JdX2NRpo",
+    "org_short_name":"NU",
+    "org_full_name":"Northwestern University",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recDLaWeOg2tT9IM2"
     ],
-    "logo_slug": "nu",
-    "org_url": "https://www.northwestern.edu/",
-    "total_grant_size": null
+    "logo_slug":"nu",
+    "org_url":"https:\/\/www.northwestern.edu\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recEnOOH6LbsiR8kd",
-    "org_short_name": "NWC",
-    "org_full_name": "New Women Connectors",
-    "crafd_connection": [
+    "airtable_id":"recEnOOH6LbsiR8kd",
+    "org_short_name":"NWC",
+    "org_full_name":"New Women Connectors",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recK7YpAfDSsOeMLa"
     ],
-    "logo_slug": "nwc",
-    "org_url": "https://newwomenconnectors.org/",
-    "total_grant_size": null
+    "logo_slug":"nwc",
+    "org_url":"https:\/\/newwomenconnectors.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec7JlmrrEu5W20ML",
-    "org_short_name": "OCHA",
-    "org_full_name": "United Nations Office for the Coordination of Humanitarian Affairs (OCHA)",
-    "crafd_connection": [
+    "airtable_id":"rec7JlmrrEu5W20ML",
+    "org_short_name":"OCHA",
+    "org_full_name":"United Nations Office for the Coordination of Humanitarian Affairs (OCHA)",
+    "crafd_connection":[
       "MoU signatory",
       "Collaborating partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recVhadI6PvXyCIlZ"
     ],
-    "logo_slug": "ocha",
-    "org_url": "https://www.unocha.org/central-emergency-response-fund-cerf-faq",
-    "total_grant_size": null
+    "logo_slug":"ocha",
+    "org_url":"https:\/\/www.unocha.org\/central-emergency-response-fund-cerf-faq",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rect2875PwCHTkNlM",
-    "org_short_name": "OCHA (Colombia)",
-    "org_full_name": "UN Office for the Coordination of Humanitarian Affairs (OCHA) / Colombia",
-    "crafd_connection": [
+    "airtable_id":"rect2875PwCHTkNlM",
+    "org_short_name":"OCHA (Colombia)",
+    "org_full_name":"UN Office for the Coordination of Humanitarian Affairs (OCHA) \/ Colombia",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "ocha-colombia",
-    "org_url": "https://www.unocha.org/colombia",
-    "total_grant_size": null
+    "logo_slug":"ocha-colombia",
+    "org_url":"https:\/\/www.unocha.org\/colombia",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recuLlbKt3it5v0yd",
-    "org_short_name": "OECD",
-    "org_full_name": "Organisation for Economic Co-operation and Development",
-    "crafd_connection": [
+    "airtable_id":"recuLlbKt3it5v0yd",
+    "org_short_name":"OECD",
+    "org_full_name":"Organisation for Economic Co-operation and Development",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Government",
-    "relational_project": [
+    "org_type":"Government",
+    "relational_project":[
       "rechMbv6uSC10bgdN"
     ],
-    "logo_slug": "oecd",
-    "org_url": "https://www.oecd.org/en.html",
-    "total_grant_size": null
+    "logo_slug":"oecd",
+    "org_url":"https:\/\/www.oecd.org\/en.html",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec2khy3Zee3pMwnt",
-    "org_short_name": "OFCA",
-    "org_full_name": "Organisation des Femmes Centrafricaine",
-    "crafd_connection": [
+    "airtable_id":"rec2khy3Zee3pMwnt",
+    "org_short_name":"OFCA",
+    "org_full_name":"Organisation des Femmes Centrafricaine",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": "ofca",
-    "org_url": "https://psccw.org/",
-    "total_grant_size": null
+    "logo_slug":"ofca",
+    "org_url":"https:\/\/psccw.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recUZaC92PmOziMtC",
-    "org_short_name": "OHCHR",
-    "org_full_name": "Office of the United Nations High Commissioner for Human Rights (OHCHR)",
-    "crafd_connection": [
+    "airtable_id":"recUZaC92PmOziMtC",
+    "org_short_name":"OHCHR",
+    "org_full_name":"Office of the United Nations High Commissioner for Human Rights (OHCHR)",
+    "crafd_connection":[
       "MoU signatory",
       "Project lead partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "reclh3auLZCpsMNFZ"
     ],
-    "logo_slug": "ohchr",
-    "org_url": "https://www.ohchr.org/en/ohchr_homepage",
-    "total_grant_size": 499968.0
+    "logo_slug":"ohchr",
+    "org_url":"https:\/\/www.ohchr.org\/en\/ohchr_homepage",
+    "total_grant_size":499968.0
   },
   {
-    "airtable_id": "recKpFnYAxX0bv1Pc",
-    "org_short_name": "ORDEDH",
-    "org_full_name": "Ordres des Défenseurs des Droits Humains",
-    "crafd_connection": [
+    "airtable_id":"recKpFnYAxX0bv1Pc",
+    "org_short_name":"ORDEDH",
+    "org_full_name":"Ordres des D\u00e9fenseurs des Droits Humains",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "ordedh",
-    "org_url": "https://orddedh.org",
-    "total_grant_size": null
+    "logo_slug":"ordedh",
+    "org_url":"https:\/\/orddedh.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recdDOgxu0SVX16nk",
-    "org_short_name": "ORF",
-    "org_full_name": "Omega Research Foundation",
-    "crafd_connection": [
+    "airtable_id":"recdDOgxu0SVX16nk",
+    "org_short_name":"ORF",
+    "org_full_name":"Omega Research Foundation",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "orf",
-    "org_url": "https://omega-research.org",
-    "total_grant_size": null
+    "logo_slug":"orf",
+    "org_url":"https:\/\/omega-research.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recbmxNonvrMWBtpg",
-    "org_short_name": "OSCAA",
-    "org_full_name": "Oxus Society for Central Asian Affairs",
-    "crafd_connection": [
+    "airtable_id":"recbmxNonvrMWBtpg",
+    "org_short_name":"OSCAA",
+    "org_full_name":"Oxus Society for Central Asian Affairs",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "oscaa",
-    "org_url": "https://oscastan.org",
-    "total_grant_size": null
+    "logo_slug":"oscaa",
+    "org_url":"https:\/\/oscastan.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec9lbmFImNrdMxkK",
-    "org_short_name": "OVPE",
-    "org_full_name": "Observatory of Political and Electoral Violence",
-    "crafd_connection": [
+    "airtable_id":"rec9lbmFImNrdMxkK",
+    "org_short_name":"OVPE",
+    "org_full_name":"Observatory of Political and Electoral Violence",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "ovpe",
-    "org_url": "https://ovpe.org",
-    "total_grant_size": null
+    "logo_slug":"ovpe",
+    "org_url":"https:\/\/ovpe.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recieSQVkjkohHOxH",
-    "org_short_name": "PAHO",
-    "org_full_name": "Pan American Health Organization (PAHO)",
-    "crafd_connection": [
+    "airtable_id":"recieSQVkjkohHOxH",
+    "org_short_name":"PAHO",
+    "org_full_name":"Pan American Health Organization (PAHO)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [],
-    "logo_slug": "paho",
-    "org_url": "https://www.paho.org/en",
-    "total_grant_size": null
+    "org_type":"United Nations",
+    "relational_project":[
+
+    ],
+    "logo_slug":"paho",
+    "org_url":"https:\/\/www.paho.org\/en",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recdQLwKq7xKRBOzY",
-    "org_short_name": "PICSS",
-    "org_full_name": "Pakistan Institute for Conflict and Security Studies",
-    "crafd_connection": [
+    "airtable_id":"recdQLwKq7xKRBOzY",
+    "org_short_name":"PICSS",
+    "org_full_name":"Pakistan Institute for Conflict and Security Studies",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "picss",
-    "org_url": "https://picss.org",
-    "total_grant_size": null
+    "logo_slug":"picss",
+    "org_url":"https:\/\/picss.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recpm6kuE19YvnZP3",
-    "org_short_name": "PJS",
-    "org_full_name": "Palestinian Journalists Syndicate",
-    "crafd_connection": [
+    "airtable_id":"recpm6kuE19YvnZP3",
+    "org_short_name":"PJS",
+    "org_full_name":"Palestinian Journalists Syndicate",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "pjs",
-    "org_url": "https://pjs.org.ps",
-    "total_grant_size": null
+    "logo_slug":"pjs",
+    "org_url":"https:\/\/pjs.org.ps",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recAxyX7GxC2cXYyE",
-    "org_short_name": "PRA",
-    "org_full_name": "Political Research Associates PRA",
-    "crafd_connection": [
+    "airtable_id":"recAxyX7GxC2cXYyE",
+    "org_short_name":"PRA",
+    "org_full_name":"Political Research Associates PRA",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "pra",
-    "org_url": "https://politicalresearch.org",
-    "total_grant_size": null
+    "logo_slug":"pra",
+    "org_url":"https:\/\/politicalresearch.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recHKayBVNHm8QsXP",
-    "org_short_name": "PRIO",
-    "org_full_name": "Peace Research Institute Oslo (PRIO)",
-    "crafd_connection": [
+    "airtable_id":"recHKayBVNHm8QsXP",
+    "org_short_name":"PRIO",
+    "org_full_name":"Peace Research Institute Oslo (PRIO)",
+    "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recovFaPBY6M8k5Ow",
       "reciI9Y9kF8R90HMa",
       "recKB3FnVyFkRNwXZ"
     ],
-    "logo_slug": "prio",
-    "org_url": "https://www.prio.org/",
-    "total_grant_size": 1500000.0
+    "logo_slug":"prio",
+    "org_url":"https:\/\/www.prio.org\/",
+    "total_grant_size":1500000.0
   },
   {
-    "airtable_id": "recrPeYq39rhXpYlw",
-    "org_short_name": "PSCCW",
-    "org_full_name": "Psychosocial Counselling Center for Women",
-    "crafd_connection": [
+    "airtable_id":"recrPeYq39rhXpYlw",
+    "org_short_name":"PSCCW",
+    "org_full_name":"Psychosocial Counselling Center for Women",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": "psccw",
-    "org_url": "https://www.psccw.org/   (Psychosocial Counselling Center for Women)",
-    "total_grant_size": null
+    "logo_slug":"psccw",
+    "org_url":"https:\/\/www.psccw.org\/   (Psychosocial Counselling Center for Women)",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec3glPJJtfcztggh",
-    "org_short_name": "Protect Defenders",
-    "org_full_name": "ProtectDefenders.eu",
-    "crafd_connection": [
+    "airtable_id":"rec3glPJJtfcztggh",
+    "org_short_name":"Protect Defenders",
+    "org_full_name":"ProtectDefenders.eu",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "protect-defenders",
-    "org_url": "https://protectdefenders.eu",
-    "total_grant_size": null
+    "logo_slug":"protect-defenders",
+    "org_url":"https:\/\/protectdefenders.eu",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recivcR2hSHFfyvT8",
-    "org_short_name": "RCCC",
-    "org_full_name": "Red Cross Red Crescent Climate Centre (RCCC)",
-    "crafd_connection": [
+    "airtable_id":"recivcR2hSHFfyvT8",
+    "org_short_name":"RCCC",
+    "org_full_name":"Red Cross Red Crescent Climate Centre (RCCC)",
+    "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
     ],
-    "org_type": "Red Cross",
-    "relational_project": [
+    "org_type":"Red Cross",
+    "relational_project":[
       "recVQtT1tEPJ0Zhwv",
       "recvpn8u6HBffMRWu"
     ],
-    "logo_slug": "rccc",
-    "org_url": "https://www.climatecentre.org/",
-    "total_grant_size": 499986.0
+    "logo_slug":"rccc",
+    "org_url":"https:\/\/www.climatecentre.org\/",
+    "total_grant_size":499986.0
   },
   {
-    "airtable_id": "recV9NGqXFt9upTiD",
-    "org_short_name": "REACH",
-    "org_full_name": "REACH",
-    "crafd_connection": [
+    "airtable_id":"recV9NGqXFt9upTiD",
+    "org_short_name":"REACH",
+    "org_full_name":"REACH",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": null,
-    "org_url": "https://www.impact-initiatives.org/what-we-do/reach/",
-    "total_grant_size": null
+    "logo_slug":null,
+    "org_url":"https:\/\/www.impact-initiatives.org\/what-we-do\/reach\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reccrXdMvRpnCJQXI",
-    "org_short_name": "REGAH",
-    "org_full_name": "Réseau pour l'Égalité du Genres dans l'Action Humanitaire en Haïti (REGAH)",
-    "crafd_connection": [
+    "airtable_id":"reccrXdMvRpnCJQXI",
+    "org_short_name":"REGAH",
+    "org_full_name":"R\u00e9seau pour l'\u00c9galit\u00e9 du Genres dans l'Action Humanitaire en Ha\u00efti (REGAH)",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": "regah",
-    "org_url": "https://response.reliefweb.int/haiti/egalite-du-genre-dans-laction-humanitaire-en-haiti",
-    "total_grant_size": null
+    "logo_slug":"regah",
+    "org_url":"https:\/\/response.reliefweb.int\/haiti\/egalite-du-genre-dans-laction-humanitaire-en-haiti",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reciSbDaT9ZALvizJ",
-    "org_short_name": "ROC",
-    "org_full_name": "Reach Out Cameroon",
-    "crafd_connection": [
+    "airtable_id":"reciSbDaT9ZALvizJ",
+    "org_short_name":"ROC",
+    "org_full_name":"Reach Out Cameroon",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "roc",
-    "org_url": "https://reachoutcameroon.org",
-    "total_grant_size": null
+    "logo_slug":"roc",
+    "org_url":"https:\/\/reachoutcameroon.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec8ogUa6PWpDwXM7",
-    "org_short_name": "Ridgeway",
-    "org_full_name": "Ridgeway Information Ltd.",
-    "crafd_connection": [
+    "airtable_id":"rec8ogUa6PWpDwXM7",
+    "org_short_name":"Ridgeway",
+    "org_full_name":"Ridgeway Information Ltd.",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Private Sector",
-    "relational_project": [
+    "org_type":"Private Sector",
+    "relational_project":[
       "recDLaWeOg2tT9IM2"
     ],
-    "logo_slug": "ridgeway",
-    "org_url": "https://www.ridgeway-information.com/",
-    "total_grant_size": null
+    "logo_slug":"ridgeway",
+    "org_url":"https:\/\/www.ridgeway-information.com\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recZz9cnLXGUV3iNC",
-    "org_short_name": "SAR",
-    "org_full_name": "Scholars At Risk SAR",
-    "crafd_connection": [
+    "airtable_id":"recZz9cnLXGUV3iNC",
+    "org_short_name":"SAR",
+    "org_full_name":"Scholars At Risk SAR",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "sar",
-    "org_url": "https://scholarsatrisk.org",
-    "total_grant_size": null
+    "logo_slug":"sar",
+    "org_url":"https:\/\/scholarsatrisk.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec4VAOW9S6UKO2dA",
-    "org_short_name": "SNHR",
-    "org_full_name": "Syrian Network for Human Rights (SNHR)",
-    "crafd_connection": [
+    "airtable_id":"rec4VAOW9S6UKO2dA",
+    "org_short_name":"SNHR",
+    "org_full_name":"Syrian Network for Human Rights (SNHR)",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "snhr",
-    "org_url": "https://snhr.org",
-    "total_grant_size": null
+    "logo_slug":"snhr",
+    "org_url":"https:\/\/snhr.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recW31L57JYruqoxN",
-    "org_short_name": "SRMO",
-    "org_full_name": "Safety and Risk Mitigation Organization",
-    "crafd_connection": [
+    "airtable_id":"recW31L57JYruqoxN",
+    "org_short_name":"SRMO",
+    "org_full_name":"Safety and Risk Mitigation Organization",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "srmo",
-    "org_url": "https://srmo.org",
-    "total_grant_size": null
+    "logo_slug":"srmo",
+    "org_url":"https:\/\/srmo.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reczAYK2VasZ2H6NL",
-    "org_short_name": "Sana’a Center",
-    "org_full_name": "Sanáa Center for Strategic Studies",
-    "crafd_connection": [
+    "airtable_id":"reczAYK2VasZ2H6NL",
+    "org_short_name":"Sana\u2019a Center",
+    "org_full_name":"San\u00e1a Center for Strategic Studies",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "sana’a-center",
-    "org_url": "https://sanacss.org",
-    "total_grant_size": null
+    "logo_slug":"sana\u2019a-center",
+    "org_url":"https:\/\/sanacss.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recBp6Ko5jW11ebgd",
-    "org_short_name": "Shahit.biz",
-    "org_full_name": "Xinjiang Victims Database",
-    "crafd_connection": [
+    "airtable_id":"recBp6Ko5jW11ebgd",
+    "org_short_name":"Shahit.biz",
+    "org_full_name":"Xinjiang Victims Database",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "shahit.biz",
-    "org_url": "https://xinjiangvictims.org",
-    "total_grant_size": null
+    "logo_slug":"shahit.biz",
+    "org_url":"https:\/\/xinjiangvictims.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recblQJ3hKNIxCwcU",
-    "org_short_name": "Sismología Social",
-    "org_full_name": "Sismología Social Nicaragua",
-    "crafd_connection": [
+    "airtable_id":"recblQJ3hKNIxCwcU",
+    "org_short_name":"Sismolog\u00eda Social",
+    "org_full_name":"Sismolog\u00eda Social Nicaragua",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "sismología-social",
-    "org_url": "https://sismologiasocial.org",
-    "total_grant_size": null
+    "logo_slug":"sismolog\u00eda-social",
+    "org_url":"https:\/\/sismologiasocial.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recgtnwMtxK1hRUX5",
-    "org_short_name": "TCHRD",
-    "org_full_name": "Tibetan Centre for Human Rights and Democracy",
-    "crafd_connection": [
+    "airtable_id":"recgtnwMtxK1hRUX5",
+    "org_short_name":"TCHRD",
+    "org_full_name":"Tibetan Centre for Human Rights and Democracy",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "tchrd",
-    "org_url": "https://tchrd.org",
-    "total_grant_size": null
+    "logo_slug":"tchrd",
+    "org_url":"https:\/\/tchrd.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recvfKNNEYjFKp1Oh",
-    "org_short_name": "The Carter Center",
-    "org_full_name": "The Carter Center",
-    "crafd_connection": [
+    "airtable_id":"recvfKNNEYjFKp1Oh",
+    "org_short_name":"The Carter Center",
+    "org_full_name":"The Carter Center",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "the-carter-center",
-    "org_url": "https://www.cartercenter.org",
-    "total_grant_size": null
+    "logo_slug":"the-carter-center",
+    "org_url":"https:\/\/www.cartercenter.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recBhDewqIus1Rszb",
-    "org_short_name": "Timor-Leste Red Cross",
-    "org_full_name": "Timor-Leste Red Cross Society",
-    "crafd_connection": [
+    "airtable_id":"recBhDewqIus1Rszb",
+    "org_short_name":"Timor-Leste Red Cross",
+    "org_full_name":"Timor-Leste Red Cross Society",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Red Cross",
-    "relational_project": [
+    "org_type":"Red Cross",
+    "relational_project":[
       "recVueNQ76CpXnkZa"
     ],
-    "logo_slug": "timor-leste-red-cross",
-    "org_url": "https://www.facebook.com/tlrcs.timorleste/   (Timor‑Leste Red Cross Society – página oficial)",
-    "total_grant_size": null
+    "logo_slug":"timor-leste-red-cross",
+    "org_url":"https:\/\/www.facebook.com\/tlrcs.timorleste\/   (Timor\u2011Leste Red Cross Society \u2013 p\u00e1gina oficial)",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec2jQWpBnNnZputz",
-    "org_short_name": "Togglecorp",
-    "org_full_name": "Togglecorp",
-    "crafd_connection": [
+    "airtable_id":"rec2jQWpBnNnZputz",
+    "org_short_name":"Togglecorp",
+    "org_full_name":"Togglecorp",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Private Sector",
-    "relational_project": [
+    "org_type":"Private Sector",
+    "relational_project":[
       "recVueNQ76CpXnkZa"
     ],
-    "logo_slug": "togglecorp",
-    "org_url": "https://togglecorp.com/",
-    "total_grant_size": null
+    "logo_slug":"togglecorp",
+    "org_url":"https:\/\/togglecorp.com\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recHC34bzY2vcigGt",
-    "org_short_name": "UARIV",
-    "org_full_name": "Unidad para la Atención y Reparación Integral a las Víctimas",
-    "crafd_connection": [
+    "airtable_id":"recF5o67nvN5x9chH",
+    "org_short_name":"U Denver",
+    "org_full_name":"Josef Korbel School, University of Denver",
+    "crafd_connection":[
+      "Project lead partner",
+      "Implementing partner"
+    ],
+    "org_type":"Research Entity",
+    "relational_project":[
+      "recKB3FnVyFkRNwXZ",
+      "recovFaPBY6M8k5Ow"
+    ],
+    "logo_slug":"u-denver",
+    "org_url":"https:\/\/korbel.du.edu\/",
+    "total_grant_size":400000.0
+  },
+  {
+    "airtable_id":"recHC34bzY2vcigGt",
+    "org_short_name":"UARIV",
+    "org_full_name":"Unidad para la Atenci\u00f3n y Reparaci\u00f3n Integral a las V\u00edctimas",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Government",
-    "relational_project": [
+    "org_type":"Government",
+    "relational_project":[
       "recLzUBYjCmlalnB5"
     ],
-    "logo_slug": "uariv",
-    "org_url": "https://www.unidadvictimas.gov.co/",
-    "total_grant_size": null
+    "logo_slug":"uariv",
+    "org_url":"https:\/\/www.unidadvictimas.gov.co\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recAauXiY8op7MeKJ",
-    "org_short_name": "UC IRVINE",
-    "org_full_name": "University of California - Irvine",
-    "crafd_connection": [
+    "airtable_id":"recAauXiY8op7MeKJ",
+    "org_short_name":"UC IRVINE",
+    "org_full_name":"University of California - Irvine",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recvpn8u6HBffMRWu"
     ],
-    "logo_slug": "uc-irvine",
-    "org_url": "https://www.uci.edu/",
-    "total_grant_size": null
+    "logo_slug":"uc-irvine",
+    "org_url":"https:\/\/www.uci.edu\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recCbYkFvc9RfeRuu",
-    "org_short_name": "UN HABITAT",
-    "org_full_name": "United Nations Human Settlements Programme (UN-Habitat)",
-    "crafd_connection": [
+    "airtable_id":"recCbYkFvc9RfeRuu",
+    "org_short_name":"UN HABITAT",
+    "org_full_name":"United Nations Human Settlements Programme (UN-Habitat)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [],
-    "logo_slug": "un-habitat",
-    "org_url": "https://unhabitat.org/",
-    "total_grant_size": null
+    "org_type":"United Nations",
+    "relational_project":[
+
+    ],
+    "logo_slug":"un-habitat",
+    "org_url":"https:\/\/unhabitat.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recow8fQAyzfPp706",
-    "org_short_name": "UN-WOMEN",
-    "org_full_name": "United Nations Entity for Gender Equality and the Empowerment of Women (UN WOMEN)",
-    "crafd_connection": [
+    "airtable_id":"recow8fQAyzfPp706",
+    "org_short_name":"UN-WOMEN",
+    "org_full_name":"United Nations Entity for Gender Equality and the Empowerment of Women (UN WOMEN)",
+    "crafd_connection":[
       "MoU signatory",
       "Project lead partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recN7H5G0nlU4k3TS",
       "reciI9Y9kF8R90HMa"
     ],
-    "logo_slug": "un-women",
-    "org_url": "https://www.unwomen.org/en/about-us/about-un-women",
-    "total_grant_size": 999999.53
+    "logo_slug":"un-women",
+    "org_url":"https:\/\/www.unwomen.org\/en\/about-us\/about-un-women",
+    "total_grant_size":999999.53
   },
   {
-    "airtable_id": "recRGWc0JJ4I8EBrf",
-    "org_short_name": "UNDP",
-    "org_full_name": "United Nations Development Programme (UNDP)",
-    "crafd_connection": [
+    "airtable_id":"recRGWc0JJ4I8EBrf",
+    "org_short_name":"UNDP",
+    "org_full_name":"United Nations Development Programme (UNDP)",
+    "crafd_connection":[
       "MoU signatory",
       "Project lead partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recUrUUESMc1dGaGr",
       "reconoiv65LoDbUFr",
       "rechF1C4gRNWZRX3o",
@@ -2189,417 +2199,431 @@
       "recLzUBYjCmlalnB5",
       "recmrtrQhRDBZVxxz"
     ],
-    "logo_slug": "undp",
-    "org_url": "https://www.undp.org/",
-    "total_grant_size": 1200000.0
+    "logo_slug":"undp",
+    "org_url":"https:\/\/www.undp.org\/",
+    "total_grant_size":1200000.0
   },
   {
-    "airtable_id": "recHiQ4t74lOvydW2",
-    "org_short_name": "UNDRR",
-    "org_full_name": "United Nations Office for Disaster Risk Reduction (UNDRR)",
-    "crafd_connection": [
+    "airtable_id":"recHiQ4t74lOvydW2",
+    "org_short_name":"UNDRR",
+    "org_full_name":"United Nations Office for Disaster Risk Reduction (UNDRR)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [],
-    "logo_slug": "undrr",
-    "org_url": "https://www.undrr.org/",
-    "total_grant_size": null
+    "org_type":"United Nations",
+    "relational_project":[
+
+    ],
+    "logo_slug":"undrr",
+    "org_url":"https:\/\/www.undrr.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recOc0igd9fvVy9bT",
-    "org_short_name": "UNDSS",
-    "org_full_name": "United Nations Department for Safety and Security (UNDSS)",
-    "crafd_connection": [
+    "airtable_id":"recOc0igd9fvVy9bT",
+    "org_short_name":"UNDSS",
+    "org_full_name":"United Nations Department for Safety and Security (UNDSS)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [],
-    "logo_slug": "undss",
-    "org_url": "https://www.un.org/safety-and-security/en",
-    "total_grant_size": null
+    "org_type":"United Nations",
+    "relational_project":[
+
+    ],
+    "logo_slug":"undss",
+    "org_url":"https:\/\/www.un.org\/safety-and-security\/en",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recBIiWXUVrR05ujB",
-    "org_short_name": "UNESCO",
-    "org_full_name": "United Nations Educational, Scientific and Cultural Organization (UNESCO)",
-    "crafd_connection": [
+    "airtable_id":"recBIiWXUVrR05ujB",
+    "org_short_name":"UNESCO",
+    "org_full_name":"United Nations Educational, Scientific and Cultural Organization (UNESCO)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [],
-    "logo_slug": "unesco",
-    "org_url": "https://www.unesco.org/en",
-    "total_grant_size": null
+    "org_type":"United Nations",
+    "relational_project":[
+
+    ],
+    "logo_slug":"unesco",
+    "org_url":"https:\/\/www.unesco.org\/en",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recPEjNyS6pP2Ipcy",
-    "org_short_name": "UNFPA",
-    "org_full_name": "United Nations Population Fund (UNFPA)",
-    "crafd_connection": [
+    "airtable_id":"recPEjNyS6pP2Ipcy",
+    "org_short_name":"UNFPA",
+    "org_full_name":"United Nations Population Fund (UNFPA)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recVhadI6PvXyCIlZ"
     ],
-    "logo_slug": "unfpa",
-    "org_url": "https://www.unfpa.org/",
-    "total_grant_size": null
+    "logo_slug":"unfpa",
+    "org_url":"https:\/\/www.unfpa.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recE7NdoxNUgVthSy",
-    "org_short_name": "UNHCR",
-    "org_full_name": "United Nations High Commissioner for Refugees (UNHCR)",
-    "crafd_connection": [
+    "airtable_id":"recE7NdoxNUgVthSy",
+    "org_short_name":"UNHCR",
+    "org_full_name":"United Nations High Commissioner for Refugees (UNHCR)",
+    "crafd_connection":[
       "MoU signatory",
       "Project lead partner",
       "Collaborating partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recvpn8u6HBffMRWu",
       "recLzUBYjCmlalnB5",
       "recVhadI6PvXyCIlZ"
     ],
-    "logo_slug": "unhcr",
-    "org_url": "https://www.unhcr.org/",
-    "total_grant_size": 500071.0
+    "logo_slug":"unhcr",
+    "org_url":"https:\/\/www.unhcr.org\/",
+    "total_grant_size":500071.0
   },
   {
-    "airtable_id": "recKc0Z0jE6Lb4Moe",
-    "org_short_name": "UNICC",
-    "org_full_name": "United Nations International Computing Centre (UNICC)",
-    "crafd_connection": [
+    "airtable_id":"recKc0Z0jE6Lb4Moe",
+    "org_short_name":"UNICC",
+    "org_full_name":"United Nations International Computing Centre (UNICC)",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "reconoiv65LoDbUFr"
     ],
-    "logo_slug": "unicc",
-    "org_url": "https://www.unicc.org/",
-    "total_grant_size": null
+    "logo_slug":"unicc",
+    "org_url":"https:\/\/www.unicc.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recHPPeg1e3HoJKda",
-    "org_short_name": "UNICEF",
-    "org_full_name": "United Nations Children's Fund (UNICEF)",
-    "crafd_connection": [
+    "airtable_id":"recHPPeg1e3HoJKda",
+    "org_short_name":"UNICEF",
+    "org_full_name":"United Nations Children's Fund (UNICEF)",
+    "crafd_connection":[
       "MoU signatory",
       "Collaborating partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recVQtT1tEPJ0Zhwv",
       "recLzUBYjCmlalnB5"
     ],
-    "logo_slug": "unicef",
-    "org_url": "https://www.unicef.org/",
-    "total_grant_size": null
+    "logo_slug":"unicef",
+    "org_url":"https:\/\/www.unicef.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recUTp7WiJei7A91P",
-    "org_short_name": "UNIDIR",
-    "org_full_name": "United Nations Institute for Disarmament Research (UNIDR)",
-    "crafd_connection": [
+    "airtable_id":"recUTp7WiJei7A91P",
+    "org_short_name":"UNIDIR",
+    "org_full_name":"United Nations Institute for Disarmament Research (UNIDR)",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "reclh3auLZCpsMNFZ"
     ],
-    "logo_slug": "unidir",
-    "org_url": "https://unidir.org/",
-    "total_grant_size": null
+    "logo_slug":"unidir",
+    "org_url":"https:\/\/unidir.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recUdvit71762ZdID",
-    "org_short_name": "UNMA",
-    "org_full_name": "Uganda National Meteorological Authority",
-    "crafd_connection": [
+    "airtable_id":"recUdvit71762ZdID",
+    "org_short_name":"UNMA",
+    "org_full_name":"Uganda National Meteorological Authority",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Government",
-    "relational_project": [
+    "org_type":"Government",
+    "relational_project":[
       "rec6FcYVivJIogG0J"
     ],
-    "logo_slug": "unma",
-    "org_url": "http://www.unma.go.ug/",
-    "total_grant_size": null
+    "logo_slug":"unma",
+    "org_url":"http:\/\/www.unma.go.ug\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reclXF1UUrRo8XVrH",
-    "org_short_name": "UNOCC",
-    "org_full_name": "United Nations Operations and Crisis Centre (UNOCC)",
-    "crafd_connection": [
+    "airtable_id":"reclXF1UUrRo8XVrH",
+    "org_short_name":"UNOCC",
+    "org_full_name":"United Nations Operations and Crisis Centre (UNOCC)",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recvpn8u6HBffMRWu"
     ],
-    "logo_slug": null,
-    "org_url": "https://unterm.un.org/unterm2/en/view/1cef1cd9-b546-4590-9709-9021d47540a8",
-    "total_grant_size": null
+    "logo_slug":null,
+    "org_url":"https:\/\/unterm.un.org\/unterm2\/en\/view\/1cef1cd9-b546-4590-9709-9021d47540a8",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recnYjsP0iIRWMJwa",
-    "org_short_name": "UNODC",
-    "org_full_name": "United Nations Office on Drugs and Crime (UNODC)",
-    "crafd_connection": [
+    "airtable_id":"recnYjsP0iIRWMJwa",
+    "org_short_name":"UNODC",
+    "org_full_name":"United Nations Office on Drugs and Crime (UNODC)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [],
-    "logo_slug": "unodc",
-    "org_url": "https://www.unodc.org/",
-    "total_grant_size": null
+    "org_type":"United Nations",
+    "relational_project":[
+
+    ],
+    "logo_slug":"unodc",
+    "org_url":"https:\/\/www.unodc.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec6PK9bmDVXGdYZf",
-    "org_short_name": "UNOPS",
-    "org_full_name": "United Nations Office for Project Services  (UNOPS)",
-    "crafd_connection": [
+    "airtable_id":"rec6PK9bmDVXGdYZf",
+    "org_short_name":"UNOPS",
+    "org_full_name":"United Nations Office for Project Services  (UNOPS)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [],
-    "logo_slug": "unops",
-    "org_url": "https://www.unops.org/",
-    "total_grant_size": null
+    "org_type":"United Nations",
+    "relational_project":[
+
+    ],
+    "logo_slug":"unops",
+    "org_url":"https:\/\/www.unops.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recMo91dxwY5yOxRn",
-    "org_short_name": "UNRISD",
-    "org_full_name": "United Nations Research Institute for Social Development (UNRISD)",
-    "crafd_connection": [
+    "airtable_id":"recMo91dxwY5yOxRn",
+    "org_short_name":"UNRISD",
+    "org_full_name":"United Nations Research Institute for Social Development (UNRISD)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [],
-    "logo_slug": "unrisd",
-    "org_url": "https://www.unrisd.org/",
-    "total_grant_size": null
+    "org_type":"United Nations",
+    "relational_project":[
+
+    ],
+    "logo_slug":"unrisd",
+    "org_url":"https:\/\/www.unrisd.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recGa8lZys2J2CsPf",
-    "org_short_name": "UNU",
-    "org_full_name": "United Nations University (UNU)",
-    "crafd_connection": [
+    "airtable_id":"recGa8lZys2J2CsPf",
+    "org_short_name":"UNU",
+    "org_full_name":"United Nations University (UNU)",
+    "crafd_connection":[
       "MoU signatory"
     ],
-    "org_type": "United Nations",
-    "relational_project": [],
-    "logo_slug": "unu",
-    "org_url": "https://unu.edu/",
-    "total_grant_size": null
+    "org_type":"United Nations",
+    "relational_project":[
+
+    ],
+    "logo_slug":"unu",
+    "org_url":"https:\/\/unu.edu\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "rec14sEumsXvivblc",
-    "org_short_name": "UPPSALA UNIVERSITY",
-    "org_full_name": "Uppsala University",
-    "crafd_connection": [
+    "airtable_id":"rec14sEumsXvivblc",
+    "org_short_name":"UPPSALA UNIVERSITY",
+    "org_full_name":"Uppsala University",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recovFaPBY6M8k5Ow",
       "reciI9Y9kF8R90HMa",
       "rechMbv6uSC10bgdN"
     ],
-    "logo_slug": "uppsala-university",
-    "org_url": "https://www.uu.se/en",
-    "total_grant_size": null
+    "logo_slug":"uppsala-university",
+    "org_url":"https:\/\/www.uu.se\/en",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recKZUJrah8DHb2Wu",
-    "org_short_name": "VIA",
-    "org_full_name": "VALERIAN IT AB (IT consultant)",
-    "crafd_connection": [
+    "airtable_id":"recKZUJrah8DHb2Wu",
+    "org_short_name":"VIA",
+    "org_full_name":"VALERIAN IT AB (IT consultant)",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Private Sector",
-    "relational_project": [
+    "org_type":"Private Sector",
+    "relational_project":[
       "reciI9Y9kF8R90HMa"
     ],
-    "logo_slug": null,
-    "org_url": null,
-    "total_grant_size": null
+    "logo_slug":null,
+    "org_url":null,
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recORQtvP59nyRDWk",
-    "org_short_name": "WANEP-SL",
-    "org_full_name": "West Africa Network for Peacebuilding Sierra Leone",
-    "crafd_connection": [
+    "airtable_id":"recORQtvP59nyRDWk",
+    "org_short_name":"WANEP-SL",
+    "org_full_name":"West Africa Network for Peacebuilding Sierra Leone",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Network",
-    "relational_project": [
+    "org_type":"Network",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "wanep-sl",
-    "org_url": "https://wanep-sl.org",
-    "total_grant_size": null
+    "logo_slug":"wanep-sl",
+    "org_url":"https:\/\/wanep-sl.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recDaH9ijqoZ6wQcg",
-    "org_short_name": "WCLAC",
-    "org_full_name": "Women’s Centre for Legal Aid and Counselling",
-    "crafd_connection": [
+    "airtable_id":"recDaH9ijqoZ6wQcg",
+    "org_short_name":"WCLAC",
+    "org_full_name":"Women\u2019s Centre for Legal Aid and Counselling",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": "wclac",
-    "org_url": "https://www.wclac.org/",
-    "total_grant_size": null
+    "logo_slug":"wclac",
+    "org_url":"https:\/\/www.wclac.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "reciSCrJAGrkoTltl",
-    "org_short_name": "WFP",
-    "org_full_name": "World Food Programme (WFP)",
-    "crafd_connection": [
+    "airtable_id":"reciSCrJAGrkoTltl",
+    "org_short_name":"WFP",
+    "org_full_name":"World Food Programme (WFP)",
+    "crafd_connection":[
       "MoU signatory",
       "Collaborating partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "rec6FcYVivJIogG0J",
       "recLzUBYjCmlalnB5",
       "reciI9Y9kF8R90HMa",
       "recvpn8u6HBffMRWu"
     ],
-    "logo_slug": "wfp",
-    "org_url": "https://www.wfp.org/",
-    "total_grant_size": null
+    "logo_slug":"wfp",
+    "org_url":"https:\/\/www.wfp.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recahMK1Tns4wXAgP",
-    "org_short_name": "WHO",
-    "org_full_name": "World Health Organization (WHO)",
-    "crafd_connection": [
+    "airtable_id":"recahMK1Tns4wXAgP",
+    "org_short_name":"WHO",
+    "org_full_name":"World Health Organization (WHO)",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "recUrUUESMc1dGaGr",
       "reclh3auLZCpsMNFZ",
       "recVhadI6PvXyCIlZ"
     ],
-    "logo_slug": "who",
-    "org_url": "https://www.who.int/",
-    "total_grant_size": null
+    "logo_slug":"who",
+    "org_url":"https:\/\/www.who.int\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recqcnvu0nSqC5L4Y",
-    "org_short_name": "WorldPop",
-    "org_full_name": "WorldPop",
-    "crafd_connection": [
+    "airtable_id":"recqcnvu0nSqC5L4Y",
+    "org_short_name":"WorldPop",
+    "org_full_name":"WorldPop",
+    "crafd_connection":[
       "Implementing partner",
       "Collaborating partner"
     ],
-    "org_type": "Research Entity",
-    "relational_project": [
+    "org_type":"Research Entity",
+    "relational_project":[
       "recVueNQ76CpXnkZa"
     ],
-    "logo_slug": "worldpop",
-    "org_url": "https://www.worldpop.org/",
-    "total_grant_size": null
+    "logo_slug":"worldpop",
+    "org_url":"https:\/\/www.worldpop.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recrjN0nS3ygzhIKK",
-    "org_short_name": "Yellow Movement",
-    "org_full_name": "Yellow Movement",
-    "crafd_connection": [
+    "airtable_id":"recrjN0nS3ygzhIKK",
+    "org_short_name":"Yellow Movement",
+    "org_full_name":"Yellow Movement",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recKB3FnVyFkRNwXZ"
     ],
-    "logo_slug": "yellow-movement",
-    "org_url": "https://www.linkedin.com/company/the-yellow-movement/",
-    "total_grant_size": null
+    "logo_slug":null,
+    "org_url":"https:\/\/www.linkedin.com\/company\/the-yellow-movement\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recNoQ8c9b3jDN6l2",
-    "org_short_name": "Yikono",
-    "org_full_name": "Yikono",
-    "crafd_connection": [
+    "airtable_id":"recNoQ8c9b3jDN6l2",
+    "org_short_name":"Yikono",
+    "org_full_name":"Yikono",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recKB3FnVyFkRNwXZ"
     ],
-    "logo_slug": "yikono",
-    "org_url": "https://en.wikipedia.org/wiki/Yikono",
-    "total_grant_size": null
+    "logo_slug":"yikono",
+    "org_url":"https:\/\/en.wikipedia.org\/wiki\/Yikono",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recqml085v174uHki",
-    "org_short_name": "ZPP",
-    "org_full_name": "Zimbabwe Peace Project",
-    "crafd_connection": [
+    "airtable_id":"recqml085v174uHki",
+    "org_short_name":"ZPP",
+    "org_full_name":"Zimbabwe Peace Project",
+    "crafd_connection":[
       "Collaborating partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "zpp",
-    "org_url": "https://zimbabwepeaceproject.org",
-    "total_grant_size": null
+    "logo_slug":"zpp",
+    "org_url":"https:\/\/zimbabwepeaceproject.org",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recYN6OSTDVZVwRsk",
-    "org_short_name": "Zitamar News",
-    "org_full_name": "Zitamar News",
-    "crafd_connection": [
+    "airtable_id":"recYN6OSTDVZVwRsk",
+    "org_short_name":"Zitamar News",
+    "org_full_name":"Zitamar News",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recH3jdM4WmYoiku6",
       "recoHPHGk3I9tXZMs"
     ],
-    "logo_slug": "zitamar-news",
-    "org_url": "https://www.zitamar.com/",
-    "total_grant_size": null
+    "logo_slug":"zitamar-news",
+    "org_url":"https:\/\/www.zitamar.com\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recSfL18Z81deq9OB",
-    "org_short_name": "centre for humdata",
-    "org_full_name": "The Centre for Humanitarian Data (CHD)",
-    "crafd_connection": [
+    "airtable_id":"recSfL18Z81deq9OB",
+    "org_short_name":"centre for humdata",
+    "org_full_name":"The Centre for Humanitarian Data (CHD)",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "United Nations",
-    "relational_project": [
+    "org_type":"United Nations",
+    "relational_project":[
       "rechMbv6uSC10bgdN"
     ],
-    "logo_slug": "centre-for-humdata",
-    "org_url": "https://centre.humdata.org/",
-    "total_grant_size": null
+    "logo_slug":"centre-for-humdata",
+    "org_url":"https:\/\/centre.humdata.org\/",
+    "total_grant_size":null
   },
   {
-    "airtable_id": "recwpsZQ44K1LzFJK",
-    "org_short_name": "iMMAP Inc.",
-    "org_full_name": "Information Management and Mine Action Programs (iMAPP)",
-    "crafd_connection": [
+    "airtable_id":"recwpsZQ44K1LzFJK",
+    "org_short_name":"iMMAP Inc.",
+    "org_full_name":"Information Management and Mine Action Programs (iMAPP)",
+    "crafd_connection":[
       "Implementing partner"
     ],
-    "org_type": "Non-Governmental Organization",
-    "relational_project": [
+    "org_type":"Non-Governmental Organization",
+    "relational_project":[
       "recN7H5G0nlU4k3TS"
     ],
-    "logo_slug": "immap-inc.",
-    "org_url": "https://immap.org/",
-    "total_grant_size": null
+    "logo_slug":"immap-inc.",
+    "org_url":"https:\/\/immap.org\/",
+    "total_grant_size":null
   }
 ]
