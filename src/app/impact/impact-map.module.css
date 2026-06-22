@@ -61,8 +61,11 @@
 }
 
 .overlayTitleCount {
+  display: inline-block;
   font-size: 1.4em;
   line-height: 1;
+  min-width: 1em;
+  text-align: left;
 }
 
 /* ── Desktop card ───────────────────────────────────────── */

@@ -440,34 +440,39 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const globalProjects = useMemo(() => projectsByRegion.get("Global") ?? [], [projectsByRegion]);
 
   // ── Count animation ─────────────────────────────────────
-  const targetCount = useMemo(
-    () => isSelected
-      ? (globalProjects.length + (projectsByRegion.get(activeRegion)?.length ?? 0))
+  // Only animate when a region is locked (clicked), not on hover
+  const lockedCount = useMemo(
+    () => locked !== null
+      ? (globalProjects.length + (projectsByRegion.get(locked)?.length ?? 0))
       : globalProjects.length,
-    [isSelected, activeRegion, globalProjects, projectsByRegion],
+    [locked, globalProjects, projectsByRegion],
   );
 
-  // Reset counter to 1 when target changes
+  const hoveredCount = useMemo(
+    () => hovered !== null
+      ? (globalProjects.length + (projectsByRegion.get(hovered)?.length ?? 0))
+      : globalProjects.length,
+    [hovered, globalProjects, projectsByRegion],
+  );
+
+  // Reset counter to 1 when locked region changes
   useEffect(() => {
     setDisplayCount(1);
-  }, [targetCount]);
+  }, [lockedCount]);
 
   // Count up to target
   useEffect(() => {
-    if (displayCount === targetCount) return;
-    
+    if (displayCount === lockedCount) return;
+
     const interval = setInterval(() => {
       setDisplayCount((prev) => {
-        if (prev < targetCount) {
-          return prev + 1;
-        } else {
-          return targetCount;
-        }
+        if (prev < lockedCount) return prev + 1;
+        return lockedCount;
       });
     }, 30);
 
     return () => clearInterval(interval);
-  }, [targetCount, displayCount]);
+  }, [lockedCount, displayCount]);
 
   const regionalProjects = useMemo(
     () => isSelected ? (projectsByRegion.get(activeRegion) ?? []) : [],
@@ -661,10 +666,12 @@ export default function ImpactMap({ projects, orgs }: Props) {
       {mapSvg}
       {!isEmbedded && (
         <div className={styles.overlayTitle}>
-          <span className={styles.overlayTitleCount}>{displayCount}</span>{" "}
+          <span className={styles.overlayTitleCount}>
+            {locked !== null ? displayCount : hoveredCount}
+          </span>{" "}
           CRAF&apos;d-supported Projects<br />
           provide Data for Crisis action{" "}
-          {isSelected ? <>in {activeRegion}</> : <>globally</>}
+          {locked !== null ? <>in {locked}</> : hovered !== null ? <>in {hovered}</> : <>globally</>}
         </div>
       )}
       <div className={styles.card} role="region" aria-label="Project details" onClick={(e) => e.stopPropagation()}>
