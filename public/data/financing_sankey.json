@@ -1,13 +1,10 @@
 {
     "nodes": [
         {
-            "name": "Red Cross"
-        },
-        {
-            "name": "Crisis Analytics & Insights"
-        },
-        {
             "name": "Network"
+        },
+        {
+            "name": "Research Entity"
         },
         {
             "name": "Learning & Exchange"
@@ -16,10 +13,10 @@
             "name": "Non-Governmental Organization"
         },
         {
-            "name": "International Organization"
+            "name": "Infrastructure & Platforms"
         },
         {
-            "name": "Research Entity"
+            "name": "Red Cross"
         },
         {
             "name": "Data Sets & Commons"
@@ -28,7 +25,10 @@
             "name": "United Nations"
         },
         {
-            "name": "Infrastructure & Platforms"
+            "name": "International Organization"
+        },
+        {
+            "name": "Crisis Analytics & Insights"
         },
         {
             "name": "Germany"
