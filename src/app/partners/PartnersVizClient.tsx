@@ -832,7 +832,7 @@ export default function PartnersVizClient({
               height: "55vw",
               zIndex: 0,
               background:
-                "radial-gradient(ellipse 50% 50% at 50% 50%, #f1b434ff 10%, #f1b434ff 20%, #f1b434cc 40%, #f1b43422 60%, transparent 100%)",
+                "radial-gradient(ellipse 50% 50% at 50% 50%, #f1b434ff 10%, #f1b434ff 30%, #f1b434cc 40%, #f1b43422 60%, transparent 100%)",
               pointerEvents: "none",
             }}
           />
