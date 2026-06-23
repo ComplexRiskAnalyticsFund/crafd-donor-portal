@@ -832,17 +832,16 @@ export default function PartnersVizClient({
               height: "55vw",
               zIndex: 0,
               background:
-                "radial-gradient(ellipse 50% 50% at 50% 50%, #f1b434ff 0%, #fdb53cee 18%, #f1b434cc 35%, #f1b43466 55%, #f1b43422 72%, transparent 100%)",
+                "radial-gradient(ellipse 50% 50% at 50% 50%, #f1b434ff 10%, #f1b434ff 20%, #f1b434cc 40%, #f1b43422 60%, transparent 100%)",
               pointerEvents: "none",
             }}
           />
           {/* Text on top */}
           <div
-            className="relative font-qanelas text-[clamp(24px,3.8vw,48px)] font-black uppercase leading-[1.1] text-black/90"
-            style={{ letterSpacing: "0.01em", maxWidth: "20vw", zIndex: 1 }}
+            className="absolute text-[clamp(24px,3.8vw,48px)] font-black uppercase leading-[1.1] text-black/90"
+            style={{ fontFamily: '"Qanelas", sans-serif', letterSpacing: "0.01em", width: "20vw", zIndex: 1 }}
           >
-            CRAF&apos;d connects<br />
-            <span className="text-[1.4em] leading-none">180+</span> partners
+            <span className="text-[1.3em]">CRAF&apos;<span className="normal-case">d</span></span> connects an ecosystem of 180+ partners
           </div>
         </div>
       )}
