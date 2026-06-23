@@ -80,7 +80,7 @@
   {
     "airtable_id":"recPUtyjHFZWWnDQd",
     "org_short_name":"ACHR",
-    "org_full_name":"Access Center for Human Rights (ACHR)",
+    "org_full_name":"Access Center for Human Rights",
     "crafd_connection":[
       "Collaborating partner"
     ],
@@ -96,7 +96,7 @@
   {
     "airtable_id":"reclFvEkKR7sCD7l3",
     "org_short_name":"ACLED",
-    "org_full_name":"Armed Conflict Location & Event Data Project (ACLED)",
+    "org_full_name":"Armed Conflict Location & Event Data Project",
     "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
@@ -539,7 +539,7 @@
   {
     "airtable_id":"receDDy7TCG7FPn5i",
     "org_short_name":"CRAF'd",
-    "org_full_name":"Complex Risk Analytics Fund (CRAF'd)",
+    "org_full_name":"Complex Risk Analytics Fund",
     "crafd_connection":[
       "CRAF'd"
     ],
@@ -617,7 +617,7 @@
   {
     "airtable_id":"reciuOZHqNF9dBiqo",
     "org_short_name":"DCO",
-    "org_full_name":"United Nations Development Coordination Office  (UNDCO)",
+    "org_full_name":"United Nations Development Coordination Office",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -648,7 +648,7 @@
   {
     "airtable_id":"recu2f5GsTa4y73wN",
     "org_short_name":"DPO",
-    "org_full_name":"Department of Peace Operations (DPO)",
+    "org_full_name":"Department of Peace Operations",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -663,7 +663,7 @@
   {
     "airtable_id":"recXzMOIf3S6mlmkO",
     "org_short_name":"DPPA",
-    "org_full_name":"United Nations Department of Political and Peacebuilding Affairs (UNDPPA)",
+    "org_full_name":"United Nations Department of Political and Peacebuilding Affairs",
     "crafd_connection":[
       "MoU signatory",
       "Project lead partner"
@@ -726,7 +726,7 @@
   {
     "airtable_id":"recVHWBaYiL6909wx",
     "org_short_name":"EAI",
-    "org_full_name":"Equal Access International (EAI) | Ivory Coast",
+    "org_full_name":"Equal Access International | Ivory Coast",
     "crafd_connection":[
       "Collaborating partner"
     ],
@@ -820,7 +820,7 @@
   {
     "airtable_id":"recX3x2JhsQlXK4R8",
     "org_short_name":"FAO",
-    "org_full_name":"Food and Agriculture Organization of the United Nations (FAO)",
+    "org_full_name":"Food and Agriculture Organization of the United Nations\n",
     "crafd_connection":[
       "MoU signatory",
       "Collaborating partner"
@@ -851,7 +851,7 @@
   {
     "airtable_id":"recv0iM90I12ie7kn",
     "org_short_name":"FHN",
-    "org_full_name":"Feminist Humanitarian Network (FHN)",
+    "org_full_name":"Feminist Humanitarian Network",
     "crafd_connection":[
       "Project lead partner"
     ],
@@ -930,7 +930,7 @@
   {
     "airtable_id":"recp0HAnw6EPPC3OW",
     "org_short_name":"FPB",
-    "org_full_name":"Forum de Paix de B\u00e9ni (FPB) | Democratic Republic of the Congo (DRC)",
+    "org_full_name":"Forum de Paix de B\u00e9ni | Democratic Republic of the Congo",
     "crafd_connection":[
       "Collaborating partner"
     ],
@@ -946,7 +946,7 @@
   {
     "airtable_id":"recZjny7sSSH9KFpR",
     "org_short_name":"FWM",
-    "org_full_name":"Insights \u2013 Framework Mechanism (FWM \u2013 formerly Data for Change)",
+    "org_full_name":"Insights \u2013 Framework Mechanism (formerly Data for Change)",
     "crafd_connection":[
       "Implementing partner"
     ],
@@ -1071,7 +1071,7 @@
   {
     "airtable_id":"recQy3kbk9oEdYN1X",
     "org_short_name":"HDX",
-    "org_full_name":"Humanitarian Data Exchange (HDX)",
+    "org_full_name":"Humanitarian Data Exchange",
     "crafd_connection":[
       "Collaborating partner"
     ],
@@ -1149,7 +1149,7 @@
   {
     "airtable_id":"rec8fighUv8Q9hCX6",
     "org_short_name":"ICG",
-    "org_full_name":"International Crisis Group (ICG)",
+    "org_full_name":"International Crisis Group",
     "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
@@ -1184,7 +1184,7 @@
   {
     "airtable_id":"recEad5oVuZNEBSML",
     "org_short_name":"ICRC",
-    "org_full_name":"International Committee of the Red Cross (ICRC)",
+    "org_full_name":"International Committee of the Red Cross",
     "crafd_connection":[
       "Complementary donor",
       "Collaborating partner"
@@ -1200,7 +1200,7 @@
   {
     "airtable_id":"recPFxoMtMX2tV021",
     "org_short_name":"IDMC",
-    "org_full_name":"Internal Displacement Monitoring Centre (IDMC)",
+    "org_full_name":"Internal Displacement Monitoring Centre",
     "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
@@ -1218,7 +1218,7 @@
   {
     "airtable_id":"recmg6BiaYlTvSxkx",
     "org_short_name":"IFRC",
-    "org_full_name":"International Federation of Red Cross and Red Crescent Societies (IFRC)",
+    "org_full_name":"International Federation of Red Cross and Red Crescent Societies",
     "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
@@ -1266,7 +1266,7 @@
   {
     "airtable_id":"recHv6hZ0SCI0cjT8",
     "org_short_name":"IOM",
-    "org_full_name":"International Organization for Migration (IOM)",
+    "org_full_name":"International Organization for Migration",
     "crafd_connection":[
       "MoU signatory",
       "Project lead partner",
@@ -1300,7 +1300,7 @@
   {
     "airtable_id":"reco6OQ956EScEDxc",
     "org_short_name":"ITU",
-    "org_full_name":"International Telecommunication Union (ITU)",
+    "org_full_name":"International Telecommunication Union ",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -1364,7 +1364,7 @@
   {
     "airtable_id":"recbPqF2fSGA6RbZO",
     "org_short_name":"JRC",
-    "org_full_name":"European Commission Joint Research Centre (JRC)",
+    "org_full_name":"European Commission Joint Research Centre",
     "crafd_connection":[
       "Collaborating partner"
     ],
@@ -1409,7 +1409,7 @@
   {
     "airtable_id":"recA8tc5h5rCi64fE",
     "org_short_name":"LSM",
-    "org_full_name":"The Libya Security Monitor (LSM)",
+    "org_full_name":"The Libya Security Monitor",
     "crafd_connection":[
       "Implementing partner"
     ],
@@ -1457,7 +1457,7 @@
   {
     "airtable_id":"recLRSST0fgmhKZc6",
     "org_short_name":"MPTFO",
-    "org_full_name":"Multi-Partner Trust Fund Office (MPTFO)",
+    "org_full_name":"Multi-Partner Trust Fund Office",
     "crafd_connection":[
       "Administrative agent"
     ],
@@ -1551,7 +1551,7 @@
   {
     "airtable_id":"recjaqYpyPQLi5Ibg",
     "org_short_name":"NRC",
-    "org_full_name":"Norwegian Refugee Council (NRC)",
+    "org_full_name":"Norwegian Refugee Council",
     "crafd_connection":[
       "Project lead partner",
       "Implementing partner"
@@ -1615,7 +1615,7 @@
   {
     "airtable_id":"rec7JlmrrEu5W20ML",
     "org_short_name":"OCHA",
-    "org_full_name":"United Nations Office for the Coordination of Humanitarian Affairs (OCHA)",
+    "org_full_name":"United Nations Office for the Coordination of Humanitarian Affairs",
     "crafd_connection":[
       "MoU signatory",
       "Collaborating partner"
@@ -1631,7 +1631,7 @@
   {
     "airtable_id":"rect2875PwCHTkNlM",
     "org_short_name":"OCHA (Colombia)",
-    "org_full_name":"UN Office for the Coordination of Humanitarian Affairs (OCHA) \/ Colombia",
+    "org_full_name":"UN Office for the Coordination of Humanitarian Affairs \/ Colombia",
     "crafd_connection":[
       "Collaborating partner"
     ],
@@ -1677,7 +1677,7 @@
   {
     "airtable_id":"recUZaC92PmOziMtC",
     "org_short_name":"OHCHR",
-    "org_full_name":"Office of the United Nations High Commissioner for Human Rights (OHCHR)",
+    "org_full_name":"Office of the United Nations High Commissioner for Human Rights",
     "crafd_connection":[
       "MoU signatory",
       "Project lead partner"
@@ -1757,7 +1757,7 @@
   {
     "airtable_id":"recieSQVkjkohHOxH",
     "org_short_name":"PAHO",
-    "org_full_name":"Pan American Health Organization (PAHO)",
+    "org_full_name":"Pan American Health Organization",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -1804,7 +1804,7 @@
   {
     "airtable_id":"recAxyX7GxC2cXYyE",
     "org_short_name":"PRA",
-    "org_full_name":"Political Research Associates PRA",
+    "org_full_name":"Political Research Associates",
     "crafd_connection":[
       "Collaborating partner"
     ],
@@ -1820,7 +1820,7 @@
   {
     "airtable_id":"recHKayBVNHm8QsXP",
     "org_short_name":"PRIO",
-    "org_full_name":"Peace Research Institute Oslo (PRIO)",
+    "org_full_name":"Peace Research Institute Oslo\n",
     "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
@@ -1869,7 +1869,7 @@
   {
     "airtable_id":"recivcR2hSHFfyvT8",
     "org_short_name":"RCCC",
-    "org_full_name":"Red Cross Red Crescent Climate Centre (RCCC)",
+    "org_full_name":"Red Cross Red Crescent Climate Centre",
     "crafd_connection":[
       "Project lead partner",
       "Collaborating partner"
@@ -1901,7 +1901,7 @@
   {
     "airtable_id":"reccrXdMvRpnCJQXI",
     "org_short_name":"REGAH",
-    "org_full_name":"R\u00e9seau pour l'\u00c9galit\u00e9 du Genres dans l'Action Humanitaire en Ha\u00efti (REGAH)",
+    "org_full_name":"R\u00e9seau pour l'\u00c9galit\u00e9 du Genres dans l'Action Humanitaire en Ha\u00efti",
     "crafd_connection":[
       "Implementing partner"
     ],
@@ -1963,7 +1963,7 @@
   {
     "airtable_id":"rec4VAOW9S6UKO2dA",
     "org_short_name":"SNHR",
-    "org_full_name":"Syrian Network for Human Rights (SNHR)",
+    "org_full_name":"Syrian Network for Human Rights",
     "crafd_connection":[
       "Collaborating partner"
     ],
@@ -2152,7 +2152,7 @@
   {
     "airtable_id":"recCbYkFvc9RfeRuu",
     "org_short_name":"UN HABITAT",
-    "org_full_name":"United Nations Human Settlements Programme (UN-Habitat)",
+    "org_full_name":"United Nations Human Settlements Programme",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -2166,8 +2166,8 @@
   },
   {
     "airtable_id":"recow8fQAyzfPp706",
-    "org_short_name":"UN-WOMEN",
-    "org_full_name":"United Nations Entity for Gender Equality and the Empowerment of Women (UN WOMEN)",
+    "org_short_name":"UN WOMEN",
+    "org_full_name":"United Nations Entity for Gender Equality and the Empowerment of Women",
     "crafd_connection":[
       "MoU signatory",
       "Project lead partner"
@@ -2184,7 +2184,7 @@
   {
     "airtable_id":"recRGWc0JJ4I8EBrf",
     "org_short_name":"UNDP",
-    "org_full_name":"United Nations Development Programme (UNDP)",
+    "org_full_name":"United Nations Development Programme",
     "crafd_connection":[
       "MoU signatory",
       "Project lead partner"
@@ -2206,7 +2206,7 @@
   {
     "airtable_id":"recHiQ4t74lOvydW2",
     "org_short_name":"UNDRR",
-    "org_full_name":"United Nations Office for Disaster Risk Reduction (UNDRR)",
+    "org_full_name":"United Nations Office for Disaster Risk Reduction",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -2221,7 +2221,7 @@
   {
     "airtable_id":"recOc0igd9fvVy9bT",
     "org_short_name":"UNDSS",
-    "org_full_name":"United Nations Department for Safety and Security (UNDSS)",
+    "org_full_name":"United Nations Department for Safety and Security",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -2236,7 +2236,7 @@
   {
     "airtable_id":"recBIiWXUVrR05ujB",
     "org_short_name":"UNESCO",
-    "org_full_name":"United Nations Educational, Scientific and Cultural Organization (UNESCO)",
+    "org_full_name":"United Nations Educational, Scientific and Cultural Organization",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -2251,7 +2251,7 @@
   {
     "airtable_id":"recPEjNyS6pP2Ipcy",
     "org_short_name":"UNFPA",
-    "org_full_name":"United Nations Population Fund (UNFPA)",
+    "org_full_name":"United Nations Population Fund",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -2266,7 +2266,7 @@
   {
     "airtable_id":"recE7NdoxNUgVthSy",
     "org_short_name":"UNHCR",
-    "org_full_name":"United Nations High Commissioner for Refugees (UNHCR)",
+    "org_full_name":"United Nations High Commissioner for Refugees",
     "crafd_connection":[
       "MoU signatory",
       "Project lead partner",
@@ -2285,7 +2285,7 @@
   {
     "airtable_id":"recKc0Z0jE6Lb4Moe",
     "org_short_name":"UNICC",
-    "org_full_name":"United Nations International Computing Centre (UNICC)",
+    "org_full_name":"United Nations International Computing Centre",
     "crafd_connection":[
       "Implementing partner"
     ],
@@ -2300,7 +2300,7 @@
   {
     "airtable_id":"recHPPeg1e3HoJKda",
     "org_short_name":"UNICEF",
-    "org_full_name":"United Nations Children's Fund (UNICEF)",
+    "org_full_name":"United Nations Children's Fund",
     "crafd_connection":[
       "MoU signatory",
       "Collaborating partner"
@@ -2317,7 +2317,7 @@
   {
     "airtable_id":"recUTp7WiJei7A91P",
     "org_short_name":"UNIDIR",
-    "org_full_name":"United Nations Institute for Disarmament Research (UNIDR)",
+    "org_full_name":"United Nations Institute for Disarmament Research",
     "crafd_connection":[
       "Collaborating partner"
     ],
@@ -2347,7 +2347,7 @@
   {
     "airtable_id":"reclXF1UUrRo8XVrH",
     "org_short_name":"UNOCC",
-    "org_full_name":"United Nations Operations and Crisis Centre (UNOCC)",
+    "org_full_name":"United Nations Operations and Crisis Centre",
     "crafd_connection":[
       "Collaborating partner"
     ],
@@ -2362,7 +2362,7 @@
   {
     "airtable_id":"recnYjsP0iIRWMJwa",
     "org_short_name":"UNODC",
-    "org_full_name":"United Nations Office on Drugs and Crime (UNODC)",
+    "org_full_name":"United Nations Office on Drugs and Crime",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -2377,7 +2377,7 @@
   {
     "airtable_id":"rec6PK9bmDVXGdYZf",
     "org_short_name":"UNOPS",
-    "org_full_name":"United Nations Office for Project Services  (UNOPS)",
+    "org_full_name":"United Nations Office for Project Services",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -2392,7 +2392,7 @@
   {
     "airtable_id":"recMo91dxwY5yOxRn",
     "org_short_name":"UNRISD",
-    "org_full_name":"United Nations Research Institute for Social Development (UNRISD)",
+    "org_full_name":"United Nations Research Institute for Social Development",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -2407,7 +2407,7 @@
   {
     "airtable_id":"recGa8lZys2J2CsPf",
     "org_short_name":"UNU",
-    "org_full_name":"United Nations University (UNU)",
+    "org_full_name":"United Nations University",
     "crafd_connection":[
       "MoU signatory"
     ],
@@ -2485,7 +2485,7 @@
   {
     "airtable_id":"reciSCrJAGrkoTltl",
     "org_short_name":"WFP",
-    "org_full_name":"World Food Programme (WFP)",
+    "org_full_name":"World Food Programme",
     "crafd_connection":[
       "MoU signatory",
       "Collaborating partner"
@@ -2504,7 +2504,7 @@
   {
     "airtable_id":"recahMK1Tns4wXAgP",
     "org_short_name":"WHO",
-    "org_full_name":"World Health Organization (WHO)",
+    "org_full_name":"World Health Organization",
     "crafd_connection":[
       "Collaborating partner"
     ],
@@ -2599,7 +2599,7 @@
   {
     "airtable_id":"recSfL18Z81deq9OB",
     "org_short_name":"centre for humdata",
-    "org_full_name":"The Centre for Humanitarian Data (CHD)",
+    "org_full_name":"The Centre for Humanitarian Data",
     "crafd_connection":[
       "Implementing partner"
     ],
@@ -2614,7 +2614,7 @@
   {
     "airtable_id":"recwpsZQ44K1LzFJK",
     "org_short_name":"iMMAP Inc.",
-    "org_full_name":"Information Management and Mine Action Programs (iMAPP)",
+    "org_full_name":"Information Management and Mine Action Programs",
     "crafd_connection":[
       "Implementing partner"
     ],
