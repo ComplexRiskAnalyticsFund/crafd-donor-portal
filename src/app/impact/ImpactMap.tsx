@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import type { CrafdProject } from "@/types";
 import { coverageToRegions } from "@/lib/coverage-map";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -38,7 +39,7 @@ const PROJECT_CATEGORIES: Record<string, string> = {
 const ORG_NAME_MAP: Record<string, string> = {
   "ICPAC": "IGAD",
   "ICG": "Int. Crisis Group",
-  "RCCC": "Red Cross Climate Center",
+  "RCCC": "RC Climate Center",
 };
 
 const VALID_CATEGORIES = [
@@ -60,10 +61,6 @@ const ARROW_ICON = (
   <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true" style={{ flexShrink: 0, opacity: 0.5 }}>
     <path d="M2 8L8 2M8 2H5M8 2V5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
-);
-
-const RIGHT_LABEL = (
-  <>CRAF&apos;<span style={{ textTransform: "none" }}>d</span>-supported data &amp; insights for this region</>
 );
 
 // ── Types ─────────────────────────────────────────────────
@@ -187,10 +184,8 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [locked, setLocked] = useState<string | null>(null);
   const [ripple, setRipple] = useState<Ripple | null>(null);
-  const [displayCount, setDisplayCount] = useState(1);
   const rippleSeq = useRef(0);
   const isMobile = useMediaQuery("(max-width: 640px)");
-  // Default true to avoid a flash of the title when embedded
   const [isEmbedded, setIsEmbedded] = useState(true);
   useEffect(() => { setIsEmbedded(window.self !== window.top); }, []);
   const [animVB, setAnimVB] = useState({ x: 0, y: -100, w: 1600, h: 1000 });
@@ -455,25 +450,6 @@ export default function ImpactMap({ projects, orgs }: Props) {
     [hovered, globalProjects, projectsByRegion],
   );
 
-  // Reset counter to 1 when locked region changes
-  useEffect(() => {
-    setDisplayCount(1);
-  }, [lockedCount]);
-
-  // Count up to target
-  useEffect(() => {
-    if (displayCount === lockedCount) return;
-
-    const interval = setInterval(() => {
-      setDisplayCount((prev) => {
-        if (prev < lockedCount) return prev + 1;
-        return lockedCount;
-      });
-    }, 30);
-
-    return () => clearInterval(interval);
-  }, [lockedCount, displayCount]);
-
   const regionalProjects = useMemo(
     () => isSelected ? (projectsByRegion.get(activeRegion) ?? []) : [],
     [isSelected, projectsByRegion, activeRegion],
@@ -652,7 +628,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
 
         <div className={styles.mobileBottomCard}>
           <p className={styles.zoneRightLabel}>
-            {noRegionalData ? "No region-specific data — showing global projects" : RIGHT_LABEL}
+            {noRegionalData ? "No region-specific data — showing global projects" : locked !== null ? <>{lockedCount} CRAF&apos;d-supported data and insights projects cover {locked}</> : <>{lockedCount} CRAF&apos;d-supported data and insights projects cover the globe</>}
           </p>
           {renderMobileCategoryBoxes(groupedCategories)}
         </div>
@@ -665,13 +641,8 @@ export default function ImpactMap({ projects, orgs }: Props) {
     <div className={styles.root} onClick={() => setLocked(null)}>
       {mapSvg}
       {!isEmbedded && (
-        <div className={styles.overlayTitle}>
-          <span className={styles.overlayTitleCount}>
-            {locked !== null ? displayCount : hoveredCount}
-          </span>
-          CRAF&apos;d-supported Projects<br />
-          provide Data for Crisis action{" "}
-          {locked !== null ? <>in {locked}</> : hovered !== null ? <>in {hovered}</> : <>globally</>}
+        <div className="pointer-events-none absolute left-[clamp(16px,2.5vw,40px)] top-[clamp(14px,2.5vh,36px)] z-50">
+          <Image src="/logos/partners/color/craf'd.png" alt="CRAF'd" width={200} height={70} style={{ height: "clamp(48px,6vh,80px)", width: "auto" }} />
         </div>
       )}
       <div className={styles.card} role="region" aria-label="Project details" onClick={(e) => e.stopPropagation()}>
@@ -693,7 +664,9 @@ export default function ImpactMap({ projects, orgs }: Props) {
         </div>
         <div className={styles.zoneDivider} />
         <div className={styles.zoneRight}>
-          <p className={styles.zoneRightLabel}>{RIGHT_LABEL}</p>
+          <p className={styles.zoneRightLabel}>
+            {locked !== null ? <>{lockedCount} CRAF&apos;d-supported data and insights projects cover {locked}</> : hovered !== null ? <>{hoveredCount} CRAF&apos;d-supported data and insights projects cover {hovered}</> : <>{lockedCount} CRAF&apos;d-supported data and insights projects cover the globe</>}
+          </p>
           <div className={styles.categoryColumns}>
             {renderCategoryBoxes(groupedCategories)}
           </div>

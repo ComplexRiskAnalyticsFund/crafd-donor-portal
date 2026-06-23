@@ -164,10 +164,13 @@
 
 .zoneRightLabel {
   margin: 0;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  color: #aaa;
+  font-family: "Qanelas", Arial, sans-serif;
+  font-size: clamp(20px, 2.4vh, 30px);
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #111;
+  line-height: 1.05;
   flex-shrink: 0;
 }
 
