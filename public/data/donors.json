@@ -6,5 +6,5 @@
   { "org_short_name": "Netherlands", "org_full_name": "Kingdom of the Netherlands", "crafd_connection": ["Donor Partner"], "org_logo_white": null, "logo_path": null },
   { "org_short_name": "Canada",     "org_full_name": "Canada", "crafd_connection": ["Donor Partner"], "org_logo_white": null, "logo_path": null },
   { "org_short_name": "United Kingdom",         "org_full_name": "United Kingdom of Great Britain and Northern Ireland", "crafd_connection": ["Donor Partner"], "org_logo_white": null, "logo_path": null },
-  { "org_short_name": "EU",         "org_full_name": "European Union", "crafd_connection": ["Donor Partner"], "org_logo_white": null, "logo_path": null }
+  { "org_short_name": "European Union",         "org_full_name": "European Union", "crafd_connection": ["Donor Partner"], "org_logo_white": null, "logo_path": null }
 ]

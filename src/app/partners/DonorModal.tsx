@@ -124,11 +124,7 @@ export function DonorPanel({
                 >
                   {name}
                 </h1>
-                {fullName && fullName !== name && (
-                  <p className="m-0 text-sm leading-snug text-white/65">
-                    {fullName}
-                  </p>
-                )}
+
               </div>
             </div>
 
