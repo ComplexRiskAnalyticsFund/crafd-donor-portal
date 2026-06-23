@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { colorLogoPath } from "@/lib/logos";
 import Image from "next/image";
 import { formatGrantSize, parseProjects } from "./lib/utils";
+import { isUnPartner } from "./lib/label";
 import { coverageToRegions } from "@/lib/coverage-map";
 import { ProjectVisitLink } from "./lib/ProjectVisitLink";
 import { useSheetDrag } from "./hooks/useSheetDrag";
@@ -205,7 +206,15 @@ export function EcosystemPanel({
             data-modal="true"
           >
             {projects.length === 0 && (
-              <p className="m-0 text-sm text-white/40">No projects listed.</p>
+              lockedSourceNode?.partner && isUnPartner(lockedSourceNode.partner)
+                ? (
+                  <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-5 py-4">
+                    <span className="text-xs font-bold tracking-widest text-white/50 uppercase">
+                      Memorandum of Understanding Signatory
+                    </span>
+                  </div>
+                )
+                : <p className="m-0 text-sm text-white/40">No projects listed.</p>
             )}
             {projects.map((proj, idx) => {
               const pd = projectsById[proj];

@@ -5,6 +5,7 @@ import type { HexNode } from "@/app/partners/lib/label";
 import type { CrafdProject } from "@/types";
 import { cn } from "@/lib/utils";
 import { parseProjects, toLogoSlug, formatGrantSize } from "./lib/utils";
+import { isUnPartner } from "./lib/label";
 import { ProjectVisitLink } from "./lib/ProjectVisitLink";
 import { useSheetDrag } from "./hooks/useSheetDrag";
 import commitmentsData from "../../../public/data/commitments.json";
@@ -163,6 +164,15 @@ export function DonorPanel({
                   commitment?.Commitments ?? p!.total_grant_size!,
                 )}
               </p>
+            </div>
+          )}
+
+          {/* MoU Signatory badge (no projects) */}
+          {p && isUnPartner(p) && parseProjects(p.relational_project).size === 0 && (
+            <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-5 py-4">
+              <span className="text-xs font-bold tracking-widest text-white/50 uppercase">
+                Memorandum of Understanding Signatory
+              </span>
             </div>
           )}
 
