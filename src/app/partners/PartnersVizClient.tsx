@@ -83,6 +83,7 @@ export default function PartnersVizClient({
     null,
   );
   const [clickedNode, setClickedNode] = useState<HexNode | null>(null);
+  const [isEmbedded, setIsEmbedded] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchLocked, setSearchLocked] = useState(false);
@@ -97,6 +98,8 @@ export default function PartnersVizClient({
   const [sheetSnap, setSheetSnap] = useState<"half" | "full">("half");
 
   const deferredSearch = useDeferredValue(searchQuery);
+
+  useEffect(() => { setIsEmbedded(window.self !== window.top); }, []);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -813,6 +816,36 @@ export default function PartnersVizClient({
 
   return (
     <div className="fixed inset-0 bg-crafd-bg">
+      {!isEmbedded && (
+        <div
+          className="pointer-events-none absolute left-[clamp(20px,3vw,52px)] top-[clamp(16px,3vh,40px)] z-50 select-none"
+          style={{ width: 0, height: 0 }}
+        >
+          {/* Radial glow background — unconstrained, centered on the text */}
+          <div
+            style={{
+              position: "absolute",
+              /* blob is 55vw×55vw; text center ≈ (10vw, 2.5vw) → shift so blob center lands there */
+              left: "-17.5vw",
+              top: "-25vw",
+              width: "55vw",
+              height: "55vw",
+              zIndex: 0,
+              background:
+                "radial-gradient(ellipse 50% 50% at 50% 50%, #f1b434ff 0%, #fdb53cee 18%, #f1b434cc 35%, #f1b43466 55%, #f1b43422 72%, transparent 100%)",
+              pointerEvents: "none",
+            }}
+          />
+          {/* Text on top */}
+          <div
+            className="relative font-qanelas text-[clamp(24px,3.8vw,48px)] font-black uppercase leading-[1.1] text-black/90"
+            style={{ letterSpacing: "0.01em", maxWidth: "20vw", zIndex: 1 }}
+          >
+            CRAF&apos;d connects<br />
+            <span className="text-[1.4em] leading-none">180+</span> partners
+          </div>
+        </div>
+      )}
       <svg
         ref={svgRef}
         viewBox="-900 -500 1800 1000"
