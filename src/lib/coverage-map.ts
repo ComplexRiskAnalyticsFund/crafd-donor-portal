@@ -82,9 +82,11 @@ const COVERAGE_MAP: Record<string, UNRegion[]> = {
     "Southeastern Asia",
   ],
 
+  // "Middle East, Central & West Africa":
+  // Middle East → Western Asia + Northern Africa; Central Africa → Middle Africa; West Africa → Western Africa
   "middle east, central & west africa": [
     "Western Asia",
-    "Central Asia",
+    "Northern Africa",
     "Western Africa",
     "Middle Africa",
   ],

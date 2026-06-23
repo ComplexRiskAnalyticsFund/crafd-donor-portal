@@ -2,7 +2,7 @@
 
 import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CrafdProject } from "@/types";
-import { coverageToRegions } from "./coverage-map";
+import { coverageToRegions } from "@/lib/coverage-map";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import styles from "./impact-map.module.css";

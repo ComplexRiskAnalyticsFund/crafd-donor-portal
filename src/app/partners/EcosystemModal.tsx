@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { colorLogoPath } from "@/lib/logos";
 import Image from "next/image";
 import { formatGrantSize, parseProjects } from "./lib/utils";
+import { coverageToRegions } from "@/lib/coverage-map";
 import { ProjectVisitLink } from "./lib/ProjectVisitLink";
 import { useSheetDrag } from "./hooks/useSheetDrag";
 
@@ -313,11 +314,11 @@ export function EcosystemPanel({
                             {pd.duration_months} months
                           </span>
                         )}
-                        {pd?.project_coverage && (
-                          <span className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/6 px-2 py-0.5 text-sm font-bold tracking-wide text-white/70">
-                            {pd.project_coverage}
+                        {pd?.project_coverage && coverageToRegions(pd.project_coverage).map((region) => (
+                          <span key={region} className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/6 px-2 py-0.5 text-sm font-bold tracking-wide text-white/70">
+                            {region}
                           </span>
-                        )}
+                        ))}
                       </div>
                     )}
                   </div>
