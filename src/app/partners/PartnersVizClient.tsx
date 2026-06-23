@@ -826,8 +826,8 @@ export default function PartnersVizClient({
             style={{
               position: "absolute",
               /* blob is 55vw×55vw; text center ≈ (10vw, 2.5vw) → shift so blob center lands there */
-              left: "-17.5vw",
-              top: "-25vw",
+              left: "-20.5vw",
+              top: "-20vw",
               width: "55vw",
               height: "55vw",
               zIndex: 0,
