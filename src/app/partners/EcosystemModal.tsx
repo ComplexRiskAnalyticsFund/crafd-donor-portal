@@ -134,9 +134,6 @@ export function EcosystemPanel({
 
                 {/* Title block */}
                 <div className="flex flex-col gap-0.5">
-                  <p className="m-0 text-xs font-bold tracking-widest text-white/50 uppercase">
-                    Ecosystem of
-                  </p>
                   <h1
                     className={cn(
                       "m-0 leading-tight font-extrabold tracking-wide text-crafd-yellow uppercase",
