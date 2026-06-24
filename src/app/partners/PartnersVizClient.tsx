@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import { AnimatePresence } from "framer-motion";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import type { HexNode } from "@/app/partners/lib/label";
@@ -84,6 +85,7 @@ export default function PartnersVizClient({
   );
   const [clickedNode, setClickedNode] = useState<HexNode | null>(null);
   const [isEmbedded, setIsEmbedded] = useState(true);
+  const [titleCollapsed, setTitleCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchLocked, setSearchLocked] = useState(false);
@@ -100,6 +102,7 @@ export default function PartnersVizClient({
   const deferredSearch = useDeferredValue(searchQuery);
 
   useEffect(() => { setIsEmbedded(window.self !== window.top); }, []);
+  useEffect(() => { if (clickedNode !== null || lockedGroup !== null) setTitleCollapsed(true); }, [clickedNode, lockedGroup]);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -817,32 +820,17 @@ export default function PartnersVizClient({
   return (
     <div className="fixed inset-0 bg-crafd-bg">
       {!isEmbedded && (
-        <div
-          className="pointer-events-none absolute left-[clamp(20px,3vw,52px)] top-[clamp(16px,3vh,40px)] z-50 select-none"
-          style={{ width: 0, height: 0 }}
-        >
-          {/* Radial glow background — unconstrained, centered on the text */}
-          <div
-            style={{
-              position: "absolute",
-              /* blob is 55vw×55vw; text center ≈ (10vw, 2.5vw) → shift so blob center lands there */
-              left: "-20.5vw",
-              top: "-20vw",
-              width: "55vw",
-              height: "55vw",
-              zIndex: 0,
-              background:
-                "radial-gradient(ellipse 50% 50% at 50% 50%, #f1b434ff 10%, #f1b434ff 30%, #f1b434cc 40%, #f1b43422 60%, transparent 100%)",
-              pointerEvents: "none",
-            }}
-          />
-          {/* Text on top */}
-          <div
-            className="absolute text-[clamp(24px,3.8vw,48px)] font-black uppercase leading-[1.1] text-black/90"
-            style={{ fontFamily: '"Qanelas", sans-serif', letterSpacing: "0.01em", width: "20vw", zIndex: 1 }}
-          >
-            <span className="text-[1.3em]">CRAF&apos;<span className="normal-case">d</span></span> connects an ecosystem of 180+ partners
+        <div className="pointer-events-none absolute left-[clamp(16px,2.5vw,40px)] top-[clamp(14px,2.5vh,36px)] z-50 flex gap-3 items-stretch">
+          <div className="rounded-lg px-4 py-3 flex items-center" style={{ background: "rgba(0,0,0,0.55)" }}>
+            <Image src="/logos/partners/color/craf'd.png" alt="CRAF'd" width={200} height={70} style={{ height: "clamp(48px,6vh,80px)", width: "auto" }} />
           </div>
+          {!titleCollapsed && (
+            <div className="rounded-lg px-4 py-3 flex items-center" style={{ background: "rgba(0,0,0,0.55)" }}>
+              <div className="text-white text-[clamp(16px,2.2vw,28px)] font-black uppercase leading-[1.15]" style={{ fontFamily: '"Qanelas", sans-serif', letterSpacing: "0.01em", maxWidth: "25vw" }}>
+                CRAF&apos;d connects an ecosystem of 180+ partners
+              </div>
+            </div>
+          )}
         </div>
       )}
       <svg
