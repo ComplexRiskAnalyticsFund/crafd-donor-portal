@@ -310,10 +310,19 @@ with tqdm(color_only_rows, desc="Color→BW th", unit="img") as pbar:
             tqdm.write(f"  ✗ {slug}: {e}")
 tqdm.write(f"  {color_thumb_count} color→grayscale thumbs generated")
 
-# logo_slug: the slug when any logo (white or color) was downloaded, else None.
+# logo_slug: the slug when any logo (white or color) was downloaded or exists on
+# disk (handles manually placed logos not attached in Airtable), else None.
 # The frontend derives paths by convention: thumb/{slug}.webp, color/{slug}.png.
+def _has_logo_on_disk(name: str) -> bool:
+    slug = to_slug(name)
+    for d in (color_dir, white_dir, THUMB_DIR):
+        for ext in (".png", ".jpg", ".jpeg", ".svg", ".webp"):
+            if (d / f"{slug}{ext}").exists():
+                return True
+    return False
+
 df_partners["logo_slug"] = [
-    to_slug(n) if isinstance(n, str) and (isinstance(w, str) or isinstance(c, str)) else None
+    to_slug(n) if isinstance(n, str) and (isinstance(w, str) or isinstance(c, str) or _has_logo_on_disk(n)) else None
     for n, w, c in zip(
         df_partners["org_short_name"],
         df_partners["white_logo_path"],

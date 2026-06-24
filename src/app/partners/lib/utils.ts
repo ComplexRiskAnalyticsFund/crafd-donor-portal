@@ -95,7 +95,6 @@ export function projectsOverlap(
 }
 
 // ── URL slug helpers ─────────────────────────────────────────────────────────
-import type { CrafdProject } from "@/types";
 
 /** Converts a project's short title to a URL-safe slug. */
 export function projectSlug(project: CrafdProject): string {

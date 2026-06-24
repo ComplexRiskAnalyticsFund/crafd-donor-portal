@@ -108,7 +108,7 @@ const GROUP_OVERRIDES: Record<string, PartnerLabel> = {
 const POSITION_OFFSETS: Record<string, { dq: number; dr: number }> = {
 
       "additional-collaborating": { dq: 3, dr: -14, },
-      "recrjN0nS3ygzhIKK": { dq: -4, dr: -7, },
+      "recKZUJrah8DHb2Wu": { dq: -4, dr: -7, },
 
 
 
