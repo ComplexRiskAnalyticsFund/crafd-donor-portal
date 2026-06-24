@@ -62,7 +62,7 @@ const POSITION_SWAPS: ReadonlyArray<readonly [string, string]> = [
   // UNHCR <-> U Denver
   ["recF5o67nvN5x9chH", "recUZaC92PmOziMtC"],
   // SAR <-> WFP
-  ["recZz9cnLXGUV3iNC", "reciSCrJAGrkoTltl"],
+  ["rec8ogUa6PWpDwXM7", "reciSCrJAGrkoTltl"],
 
 
 ];
