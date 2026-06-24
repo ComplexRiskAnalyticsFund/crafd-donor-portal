@@ -760,7 +760,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
         return (
           <g key={region} style={{ pointerEvents: "none", userSelect: "none", opacity: hl ? 1 : 0, transition: "opacity 180ms ease" }}>
             <rect x={cx - bgW / 2} y={cy - (line2 ? 22 : 25)} width={bgW} height={bgH} rx={8} fill="#fef9ef" stroke="rgba(51,51,51,0.3)" strokeWidth={1} />
-            <text textAnchor="middle" fontFamily="Qanelas, Arial, sans-serif" fontWeight={900} fontSize={12} letterSpacing={1.2} fill={hl ? "rgba(70,70,70,0.95)" : "rgba(90,90,90,0.75)"}>
+            <text textAnchor="middle" fontFamily="Roboto, sans-serif" fontWeight={700} fontSize={12} letterSpacing={1.2} fill={hl ? "rgba(70,70,70,0.95)" : "rgba(90,90,90,0.75)"}>
               <tspan x={cx} y={cy - 5}>{line1.toUpperCase()}</tspan>
               {line2 && <tspan x={cx} dy={15}>{line2.toUpperCase()}</tspan>}
             </text>
