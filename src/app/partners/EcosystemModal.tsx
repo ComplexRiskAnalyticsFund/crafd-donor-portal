@@ -56,10 +56,6 @@ export function EcosystemPanel({
   const partnerFullName = lockedSourceNode?.partner?.org_full_name?.trim();
   const orgUrl = lockedSourceNode?.partner?.org_url;
 
-  const logoSrc = lockedSourceNode?.partner?.logo_slug
-    ? colorLogoPath(lockedSourceNode.partner.logo_slug)
-    : null;
-
   return (
     <div className="pointer-events-none fixed inset-0 z-50 flex">
       {/* Mobile backdrop */}
@@ -116,22 +112,6 @@ export function EcosystemPanel({
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex min-w-0 flex-1 flex-col gap-2.5">
-                {/* Logo */}
-                {logoSrc && (
-                  <Image
-                    src={logoSrc}
-                    alt={partnerShortName}
-                    width={120}
-                    height={40}
-                    className="object-contain object-left"
-                    style={{
-                      height: isMobile ? 30 : 40,
-                      width: "auto",
-                      maxWidth: 110,
-                    }}
-                  />
-                )}
-
                 {/* Title block */}
                 <div className="flex flex-col gap-0.5">
                   <h1
