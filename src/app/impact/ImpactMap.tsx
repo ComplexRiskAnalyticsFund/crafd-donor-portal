@@ -40,6 +40,7 @@ const ORG_NAME_MAP: Record<string, string> = {
   "ICPAC": "IGAD",
   "ICG": "Int. Crisis Group",
   "RCCC": "RC Climate Center",
+  "U Denver": "Univ. Denver",
 };
 
 const VALID_CATEGORIES = [
