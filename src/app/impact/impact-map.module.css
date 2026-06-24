@@ -176,11 +176,39 @@
 
 /* ── Category columns ───────────────────────────────────── */
 
+/* Wrapper that defines the available width. The single-row child is measured
+   against this box; if it overflows, boxes pack into up to 3 button rows, and
+   only if it still overflows does this wrapper become horizontally scrollable. */
+.categoryColumnsWrap {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+
+.categoryColumnsWrapScroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+
+.categoryColumnsWrapScroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.categoryColumnsWrapScroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+}
+
 .categoryColumns {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
 }
 

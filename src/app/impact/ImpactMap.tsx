@@ -1,12 +1,11 @@
 "use client";
 
-import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import type { CrafdProject } from "@/types";
 import { coverageToRegions } from "@/lib/coverage-map";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useIsEmbedded } from "@/hooks/useIsEmbedded";
-import { useDevicePixelRatio } from "@/hooks/useDevicePixelRatio";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import styles from "./impact-map.module.css";
 
@@ -197,9 +196,12 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const rippleSeq = useRef(0);
   const isMobile = useMediaQuery("(max-width: 640px)");
   const isEmbedded = useIsEmbedded();
-  const dpr = useDevicePixelRatio();
   const [animVB, setAnimVB] = useState({ x: 0, y: -100, w: 1600, h: 1000 });
   const [expandedCats, setExpandedCats] = useState<Set<string>>(() => new Set(VALID_CATEGORIES));
+  // Bottom-bar fit stages: "default" = up to 2 button rows per box,
+  // "compact" = up to 3 button rows (narrower boxes), "scroll" = give up
+  // fitting and let the row scroll horizontally.
+  const [catFitMode, setCatFitMode] = useState<"default" | "compact" | "scroll">("default");
 
   // Mirror animVB into a ref so animation frames / touch handlers can read the
   // latest viewBox without re-subscribing. Synced in an effect (not during
@@ -220,6 +222,10 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const focusCurrentRef = useRef({ s: 1, tx: 0, ty: 0 });
   const mouseRef = useRef({ x: 0, y: 0 });
   const focusRafRef = useRef<number | null>(null);
+
+  // Bottom-bar category strip: the wrapper width is measured to decide how many
+  // button rows each box uses (and whether to fall back to horizontal scroll).
+  const catWrapRef = useRef<HTMLDivElement>(null);
 
   const activeRegion = locked ?? hovered ?? "Global";
 
@@ -607,6 +613,61 @@ export default function ImpactMap({ projects, orgs }: Props) {
       });
   }, [hasRegional, regionalProjects, globalProjects, orgs]);
 
+  // ── Fit category row across stages ───────────────────────
+  // Stage 1 (default): boxes lay out with up to 2 button rows each.
+  // Stage 2 (compact): if that overflows, allow up to 3 button rows so boxes
+  //   get narrower/taller and the total row gets shorter.
+  // Stage 3 (scroll): if 3 rows still overflow, stop fitting and let the
+  //   wrapper scroll horizontally.
+  //
+  // The decision is made synchronously in a layout effect by directly probing
+  // the grid columns on the live <ul> nodes and reading scrollWidth between
+  // mutations. Because this runs before the browser paints, the intermediate
+  // probe states are never shown — so changing the hovered/locked region can't
+  // produce a visible flicker through the stages.
+  const columnsFor = useCallback((count: number, compact: boolean) =>
+    compact ? Math.max(1, Math.ceil(count / 3)) : (count > 4 ? 3 : 2),
+  []);
+
+  useLayoutEffect(() => {
+    if (isMobile) return;
+    const wrap = catWrapRef.current;
+    if (!wrap) return;
+
+    const decide = () => {
+      const lists = Array.from(wrap.querySelectorAll<HTMLUListElement>("ul[data-cat]"));
+      const counts = lists.map((ul) => Number(ul.dataset.count) || 0);
+      const apply = (compact: boolean) => {
+        lists.forEach((ul, i) => {
+          ul.style.gridTemplateColumns = `repeat(${columnsFor(counts[i], compact)}, auto)`;
+        });
+      };
+      const fits = () => wrap.scrollWidth <= wrap.clientWidth + 1;
+
+      // Probe default; if it fits we're done.
+      apply(false);
+      if (fits()) return "default" as const;
+      // Probe compact (3 rows).
+      apply(true);
+      if (fits()) return "compact" as const;
+      // Still overflows → scroll. Leave columns at compact for the densest
+      // single-row packing before the scrollbar takes over.
+      return "scroll" as const;
+    };
+
+    setCatFitMode(decide());
+
+    // Only re-measure when the available width changes — switching button-row
+    // counts changes the wrapper's height, which must not retrigger the probe.
+    let lastWidth = wrap.clientWidth;
+    const ro = new ResizeObserver(() => {
+      const w = catWrapRef.current?.clientWidth ?? 0;
+      if (w !== lastWidth) { lastWidth = w; setCatFitMode(decide()); }
+    });
+    ro.observe(wrap);
+    return () => ro.disconnect();
+  }, [isMobile, groupedCategories, columnsFor]);
+
   // ── Early exit ───────────────────────────────────────────
   if (!tileData) return <div className={styles.root} />;
 
@@ -668,14 +729,24 @@ export default function ImpactMap({ projects, orgs }: Props) {
 
   // ── Category renderers ───────────────────────────────────
   const renderCategoryBoxes = (cats: typeof groupedCategories) =>
-    cats.map(({ category, entries }) => (
-      <div key={category} className={styles.categoryBox}>
-        <p className={styles.categoryGroupHeader}>{category.toUpperCase()}</p>
-        <ul className={styles.projectList} style={entries.length > 4 ? { gridTemplateColumns: "repeat(3, auto)" } : undefined}>
-          {entries.map((entry) => <ProjectPill key={entry.label} {...entry} />)}
-        </ul>
-      </div>
-    ));
+    cats.map(({ category, entries }) => {
+      // Initial columns reflect the committed fit mode so the first paint is
+      // already correct; the layout effect re-probes via data-cat/data-count.
+      const cols = columnsFor(entries.length, catFitMode === "compact" || catFitMode === "scroll");
+      return (
+        <div key={category} className={styles.categoryBox}>
+          <p className={styles.categoryGroupHeader}>{category.toUpperCase()}</p>
+          <ul
+            className={styles.projectList}
+            data-cat={category}
+            data-count={entries.length}
+            style={{ gridTemplateColumns: `repeat(${cols}, auto)` }}
+          >
+            {entries.map((entry) => <ProjectPill key={entry.label} {...entry} />)}
+          </ul>
+        </div>
+      );
+    });
 
   const renderMobileCategoryBoxes = (cats: typeof groupedCategories) =>
     cats.map(({ category, entries }) => {
@@ -748,22 +819,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
           <Image src="/logos/partners/color/craf'd.png" alt="CRAF'd" width={200} height={70} style={{ height: "clamp(48px,6vh,80px)", width: "auto" }} />
         </div>
       )}
-      <div
-        className={styles.card}
-        role="region"
-        aria-label="Project details"
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          // Render the bottom bar as if OS/UI scaling were 100% by counter-
-          // scaling it by 1/dpr (anchored bottom-left) and expanding its
-          // pre-scale width by dpr so it still spans the same horizontal area.
-          "--dpr": dpr,
-          transform: "scale(calc(1 / var(--dpr)))",
-          transformOrigin: "bottom left",
-          right: "auto",
-          width: "calc((100vw - 2 * clamp(16px, 3vw, 48px)) * var(--dpr))",
-        } as React.CSSProperties}
-      >
+      <div className={styles.card} role="region" aria-label="Project details" onClick={(e) => e.stopPropagation()}>
         <div className={styles.zoneLeft} style={{ position: "relative" }}>
           {locked && (
             <button className={styles.closeBtn} onClick={() => setLocked(null)} aria-label="Deselect region">×</button>
@@ -782,8 +838,13 @@ export default function ImpactMap({ projects, orgs }: Props) {
         </div>
         <div className={styles.zoneDivider} />
         <div className={styles.zoneRight}>
-          <div className={styles.categoryColumns}>
-            {renderCategoryBoxes(groupedCategories)}
+          <div
+            ref={catWrapRef}
+            className={`${styles.categoryColumnsWrap}${catFitMode === "scroll" ? ` ${styles.categoryColumnsWrapScroll}` : ""}`}
+          >
+            <div className={styles.categoryColumns}>
+              {renderCategoryBoxes(groupedCategories)}
+            </div>
           </div>
         </div>
       </div>
