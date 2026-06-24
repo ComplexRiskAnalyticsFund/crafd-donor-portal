@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence } from "framer-motion";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
@@ -104,11 +104,73 @@ export default function PartnersVizClient({
 
   useEffect(() => { if (clickedNode !== null || lockedGroup !== null) setTitleCollapsed(true); }, [clickedNode, lockedGroup]);
 
+  // Dynamically set the headline width so the text wraps to exactly two lines
+  useLayoutEffect(() => {
+    const el = headlineRef.current;
+    if (!el || titleCollapsed) return;
+
+    const adjust = () => {
+      // Measure the single-line width (no wrapping, no width cap)
+      el.style.width = "auto";
+      el.style.maxWidth = "none";
+      el.style.whiteSpace = "nowrap";
+      const singleLineWidth = el.scrollWidth;
+      el.style.whiteSpace = "normal";
+
+      const cs = getComputedStyle(el);
+      const fs = parseFloat(cs.fontSize);
+      const lhRaw = cs.lineHeight;
+      const lh =
+        lhRaw.endsWith("px") && parseFloat(lhRaw) > 0
+          ? parseFloat(lhRaw)
+          : fs * 1.15;
+      const lineCount = (w: number) => {
+        el.style.width = `${w}px`;
+        return Math.round(el.scrollHeight / lh);
+      };
+
+      // Smallest width that still yields at most `n` lines (binary search).
+      const minWidthFor = (n: number, lowSeed: number, highSeed: number) => {
+        let lo = lowSeed;
+        let hi = highSeed;
+        for (let i = 0; i < 18; i++) {
+          const mid = (lo + hi) / 2;
+          if (lineCount(mid) <= n) hi = mid;
+          else lo = mid;
+        }
+        return hi;
+      };
+
+      // The 2-line band lives between the smallest width that fits on 2 lines
+      // and the smallest width that collapses to 1 line. Aim for the middle of
+      // that band so rendering/font variations never tip it to 1 or 3 lines.
+      const lowerBound = minWidthFor(2, singleLineWidth / 2.4, singleLineWidth);
+      const upperBound = minWidthFor(1, singleLineWidth / 2.4, singleLineWidth);
+      const target = (lowerBound + upperBound) / 2;
+
+      el.style.width = `${Math.ceil(target)}px`;
+      el.style.maxWidth = "none";
+    };
+
+    adjust();
+    // Re-measure once web fonts have loaded (font swap changes line wrapping)
+    let cancelled = false;
+    document.fonts?.ready.then(() => {
+      if (!cancelled) requestAnimationFrame(adjust);
+    });
+    window.addEventListener("resize", adjust);
+    return () => {
+      cancelled = true;
+      window.removeEventListener("resize", adjust);
+    };
+  }, [titleCollapsed, isEmbedded]);
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
   const svgRef = useRef<SVGSVGElement>(null);
+  const headlineRef = useRef<HTMLDivElement>(null);
   const isMobileRef = useRef(isMobile);
   const flyBackRef = useRef<(() => void) | null>(null);
 
@@ -826,8 +888,8 @@ export default function PartnersVizClient({
           </div>
           {!titleCollapsed && (
             <div className="rounded-lg px-4 py-3 flex items-center" style={{ background: "rgba(0,0,0,0.55)" }}>
-              <div className="text-white text-[clamp(16px,2.2vw,28px)] font-black uppercase leading-[1.15]" style={{ fontFamily: '"Qanelas", sans-serif', letterSpacing: "0.01em", maxWidth: "25vw" }}>
-                CRAF&apos;d connects an ecosystem of 180+ partners
+              <div ref={headlineRef} className="text-white text-[clamp(16px,2.2vw,28px)] font-black uppercase leading-[1.15]" style={{ fontFamily: '"Qanelas", sans-serif', letterSpacing: "0.01em" }}>
+                CRAF&apos;<span className="normal-case">d</span> connects an ecosystem of 180+ partners
               </div>
             </div>
           )}

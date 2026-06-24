@@ -13,9 +13,9 @@ export function usePanZoom({
   closeAll: () => void;
 }) {
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(0.85);
   const panRef = useRef({ x: 0, y: 0 });
-  const scaleRef = useRef(1);
+  const scaleRef = useRef(0.85);
   const panGroupRef = useRef<SVGGElement>(null);
 
   useEffect(() => {
