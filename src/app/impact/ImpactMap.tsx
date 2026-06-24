@@ -435,22 +435,6 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const isSelected = locked !== null || hovered !== null;
   const globalProjects = useMemo(() => projectsByRegion.get("Global") ?? [], [projectsByRegion]);
 
-  // ── Count animation ─────────────────────────────────────
-  // Only animate when a region is locked (clicked), not on hover
-  const lockedCount = useMemo(
-    () => locked !== null
-      ? (globalProjects.length + (projectsByRegion.get(locked)?.length ?? 0))
-      : globalProjects.length,
-    [locked, globalProjects, projectsByRegion],
-  );
-
-  const hoveredCount = useMemo(
-    () => hovered !== null
-      ? (globalProjects.length + (projectsByRegion.get(hovered)?.length ?? 0))
-      : globalProjects.length,
-    [hovered, globalProjects, projectsByRegion],
-  );
-
   const regionalProjects = useMemo(
     () => isSelected ? (projectsByRegion.get(activeRegion) ?? []) : [],
     [isSelected, projectsByRegion, activeRegion],
@@ -605,7 +589,6 @@ export default function ImpactMap({ projects, orgs }: Props) {
 
   // ── Mobile layout ────────────────────────────────────────
   if (isMobile) {
-    const noRegionalData = isSelected && groupedCategories.length === 0;
     return (
       <div className={styles.mobileRoot}>
         <div className={styles.mobileTopCard}>
@@ -628,9 +611,6 @@ export default function ImpactMap({ projects, orgs }: Props) {
         </div>
 
         <div className={styles.mobileBottomCard}>
-          <p className={styles.zoneRightLabel}>
-            {noRegionalData ? "No region-specific data — showing global projects" : locked !== null ? <>{lockedCount} CRAF&apos;d-supported data and insights projects cover {locked}</> : <>{lockedCount} CRAF&apos;d-supported data and insights projects cover the globe</>}
-          </p>
           {renderMobileCategoryBoxes(groupedCategories)}
         </div>
       </div>
@@ -665,9 +645,6 @@ export default function ImpactMap({ projects, orgs }: Props) {
         </div>
         <div className={styles.zoneDivider} />
         <div className={styles.zoneRight}>
-          <p className={styles.zoneRightLabel}>
-            {locked !== null ? <>{lockedCount} CRAF&apos;d-supported data and insights projects cover {locked}</> : hovered !== null ? <>{hoveredCount} CRAF&apos;d-supported data and insights projects cover {hovered}</> : <>{lockedCount} CRAF&apos;d-supported data and insights projects cover the globe</>}
-          </p>
           <div className={styles.categoryColumns}>
             {renderCategoryBoxes(groupedCategories)}
           </div>
