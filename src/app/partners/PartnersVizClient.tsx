@@ -8,6 +8,7 @@ import type { HexNode } from "@/app/partners/lib/label";
 import type { CrafdProject } from "@/types";
 import { cn } from "@/lib/utils";
 import { thumbLogoPath } from "@/lib/logos";
+import { useIsEmbedded } from "@/hooks/useIsEmbedded";
 
 import {
   SQRT3,
@@ -84,7 +85,7 @@ export default function PartnersVizClient({
     null,
   );
   const [clickedNode, setClickedNode] = useState<HexNode | null>(null);
-  const [isEmbedded, setIsEmbedded] = useState(true);
+  const isEmbedded = useIsEmbedded();
   const [titleCollapsed, setTitleCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -101,7 +102,6 @@ export default function PartnersVizClient({
 
   const deferredSearch = useDeferredValue(searchQuery);
 
-  useEffect(() => { setIsEmbedded(window.self !== window.top); }, []);
   useEffect(() => { if (clickedNode !== null || lockedGroup !== null) setTitleCollapsed(true); }, [clickedNode, lockedGroup]);
 
   const searchParams = useSearchParams();
@@ -321,7 +321,7 @@ export default function PartnersVizClient({
       const panelPx = Math.min(window.innerWidth / 3, 700);
       flyToNodes([n, ...peerNodes], panelPx / 2);
     }
-  }, [renderNodes, isMobile, router, pathname, flyToNodes]);
+  }, [renderNodes, isMobile, router, pathname, flyToNodes, projectsById]);
 
   // ── Memos ──────────────────────────────────────────────────────────────────
 

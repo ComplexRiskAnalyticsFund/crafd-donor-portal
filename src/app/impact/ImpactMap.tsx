@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { CrafdProject } from "@/types";
 import { coverageToRegions } from "@/lib/coverage-map";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useIsEmbedded } from "@/hooks/useIsEmbedded";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import styles from "./impact-map.module.css";
 
@@ -187,8 +188,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const [ripple, setRipple] = useState<Ripple | null>(null);
   const rippleSeq = useRef(0);
   const isMobile = useMediaQuery("(max-width: 640px)");
-  const [isEmbedded, setIsEmbedded] = useState(true);
-  useEffect(() => { setIsEmbedded(window.self !== window.top); }, []);
+  const isEmbedded = useIsEmbedded();
   const [animVB, setAnimVB] = useState({ x: 0, y: -100, w: 1600, h: 1000 });
   const [expandedCats, setExpandedCats] = useState<Set<string>>(() => new Set(VALID_CATEGORIES));
 
