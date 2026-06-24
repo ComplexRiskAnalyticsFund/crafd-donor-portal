@@ -859,7 +859,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
     <div className={styles.root} onClick={() => setLocked(null)} onMouseMove={handleMapMouseMove}>
       {mapSvg}
       {!isEmbedded && (
-        <div className="pointer-events-none absolute left-[clamp(16px,2.5vw,40px)] top-[clamp(14px,2.5vh,36px)] z-50">
+        <div className="pointer-events-none absolute left-[clamp(16px,2.5vw,40px)] top-[clamp(14px,2.5vh,36px)] z-50" style={{ filter: "drop-shadow(0 0 24px #fdb53c) drop-shadow(0 0 10px #fdb53c) drop-shadow(0 0 4px rgba(253,181,60,0.8))" }}>
           <Image src="/logos/partners/color/craf'd.png" alt="CRAF'd" width={200} height={70} style={{ height: "clamp(48px,6vh,80px)", width: "auto" }} />
         </div>
       )}
