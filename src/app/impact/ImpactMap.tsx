@@ -73,6 +73,13 @@ interface Ripple { region: string; ox: number; oy: number; key: number }
 // clicked hexagon. Lower = faster ripple.
 const RIPPLE_SPEED = 0.45;
 
+// Desktop region focus: subtle zoom toward the selected region's centroid plus
+// a mouse-parallax drift (map shifts opposite to the cursor). Tuned to stay
+// gentle so the map never feels like it jumps.
+const FOCUS_ZOOM = 1.10;            // scale applied when a region is selected
+const FOCUS_PARALLAX = 0.03;        // fraction of map size the cursor can drift
+const FOCUS_EASE = 0.12;            // per-frame easing toward the target
+
 // ── Memoized region tile group ────────────────────────────
 // Renders the static hex polygons for one region. Memoized so that hovering /
 // locking a different region does not re-render the ~1500 polygons of regions
@@ -204,6 +211,14 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const hasDraggedRef = useRef(false);
 
+  // Desktop region focus: the group wrapping all tiles is transformed directly
+  // (via ref, not React state) every animation frame so we don't re-render the
+  // ~3000 polygons while zooming/parallaxing.
+  const focusGroupRef = useRef<SVGGElement>(null);
+  const focusCurrentRef = useRef({ s: 1, tx: 0, ty: 0 });
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const focusRafRef = useRef<number | null>(null);
+
   const activeRegion = locked ?? hovered ?? "Global";
 
   // ── Data loading ────────────────────────────────────────
@@ -242,6 +257,22 @@ export default function ImpactMap({ projects, orgs }: Props) {
       out.set(region, [cx, cy]);
     }
     return out;
+  }, [tileData]);
+
+  // Bounding box of all tiles in SVG user space — used to clamp the desktop
+  // focus transform so the map's top edge never drops below its resting line.
+  const mapBounds = useMemo(() => {
+    if (!tileData) return null;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const tiles of Object.values(tileData.tilesByRegion)) {
+      for (const t of tiles) {
+        if (t.x < minX) minX = t.x;
+        if (t.y < minY) minY = t.y;
+        if (t.x > maxX) maxX = t.x;
+        if (t.y > maxY) maxY = t.y;
+      }
+    }
+    return { minX, minY, maxX, maxY };
   }, [tileData]);
 
   // BFS depth from ocean: depth 1 = edge tile, higher = more interior.
@@ -380,6 +411,65 @@ export default function ImpactMap({ projects, orgs }: Props) {
     };
   }, [isMobile]);
 
+  // ── Desktop region focus (zoom + mouse parallax) ─────────
+  // While a region is locked, the tile group eases toward a subtle zoom on the
+  // region centroid and drifts opposite the cursor. The transform is written
+  // directly to the SVG group every frame (no React re-render of polygons).
+  useEffect(() => {
+    if (isMobile || !mapBounds) return;
+    const region = locked;
+    const mapW = mapBounds.maxX - mapBounds.minX;
+    const mapH = mapBounds.maxY - mapBounds.minY;
+
+    const animate = () => {
+      const cur = focusCurrentRef.current;
+      let tgtS = 1, tgtTx = 0, tgtTy = 0;
+      if (region && regionCentroids.has(region)) {
+        const [cx, cy] = regionCentroids.get(region)!;
+        const s = FOCUS_ZOOM;
+        const px = -mouseRef.current.x * FOCUS_PARALLAX * mapW;
+        const py = -mouseRef.current.y * FOCUS_PARALLAX * mapH;
+        tgtS = s;
+        tgtTx = cx * (1 - s) + px;
+        tgtTy = cy * (1 - s) + py;
+        // Clamp so the map's top edge never drops below its resting position.
+        const topMax = mapBounds.minY * (1 - s);
+        if (tgtTy > topMax) tgtTy = topMax;
+      }
+      cur.s += (tgtS - cur.s) * FOCUS_EASE;
+      cur.tx += (tgtTx - cur.tx) * FOCUS_EASE;
+      cur.ty += (tgtTy - cur.ty) * FOCUS_EASE;
+      if (focusGroupRef.current) {
+        focusGroupRef.current.setAttribute("transform", `translate(${cur.tx.toFixed(2)} ${cur.ty.toFixed(2)}) scale(${cur.s.toFixed(4)})`);
+      }
+      const settled =
+        Math.abs(tgtS - cur.s) < 0.0005 &&
+        Math.abs(tgtTx - cur.tx) < 0.05 &&
+        Math.abs(tgtTy - cur.ty) < 0.05;
+      if (region || !settled) {
+        focusRafRef.current = requestAnimationFrame(animate);
+      } else {
+        cur.s = 1; cur.tx = 0; cur.ty = 0;
+        focusGroupRef.current?.setAttribute("transform", "translate(0 0) scale(1)");
+        focusRafRef.current = null;
+      }
+    };
+
+    if (focusRafRef.current === null) focusRafRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (focusRafRef.current !== null) { cancelAnimationFrame(focusRafRef.current); focusRafRef.current = null; }
+    };
+  }, [isMobile, locked, mapBounds, regionCentroids]);
+
+  const handleMapMouseMove = useCallback((e: React.MouseEvent) => {
+    if (isMobile) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseRef.current = {
+      x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
+      y: ((e.clientY - rect.top) / rect.height) * 2 - 1,
+    };
+  }, [isMobile]);
+
   // ── Interaction ──────────────────────────────────────────
   const isHighlighted = useCallback((region: string) =>
     locked ? region === locked : region === hovered,
@@ -508,6 +598,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
     >
       <rect x={-100} y={-300} width={tileData.width + 200} height={tileData.height + 600} fill="#fdb53c" />
 
+      <g ref={focusGroupRef}>
       {Array.from(regionGeometry.entries()).map(([region, polygons]) => {
         const hl = isHighlighted(region);
         return (
@@ -541,6 +632,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
           </g>
         );
       })}
+      </g>
     </svg>
   );
 
@@ -619,7 +711,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
 
   // ── Desktop layout ───────────────────────────────────────
   return (
-    <div className={styles.root} onClick={() => setLocked(null)}>
+    <div className={styles.root} onClick={() => setLocked(null)} onMouseMove={handleMapMouseMove}>
       {mapSvg}
       {!isEmbedded && (
         <div className="pointer-events-none absolute left-[clamp(16px,2.5vw,40px)] top-[clamp(14px,2.5vh,36px)] z-50">
