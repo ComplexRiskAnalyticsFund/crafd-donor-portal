@@ -6,6 +6,7 @@ import type { CrafdProject } from "@/types";
 import { coverageToRegions } from "@/lib/coverage-map";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useIsEmbedded } from "@/hooks/useIsEmbedded";
+import { useDevicePixelRatio } from "@/hooks/useDevicePixelRatio";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import styles from "./impact-map.module.css";
 
@@ -76,7 +77,7 @@ const RIPPLE_SPEED = 0.45;
 // Desktop region focus: subtle zoom toward the selected region's centroid plus
 // a mouse-parallax drift (map shifts opposite to the cursor). Tuned to stay
 // gentle so the map never feels like it jumps.
-const FOCUS_ZOOM = 1.10;            // scale applied when a region is selected
+const FOCUS_ZOOM = 1.15;            // scale applied when a region is selected
 const FOCUS_PARALLAX = 0.03;        // fraction of map size the cursor can drift
 const FOCUS_EASE = 0.12;            // per-frame easing toward the target
 
@@ -196,6 +197,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const rippleSeq = useRef(0);
   const isMobile = useMediaQuery("(max-width: 640px)");
   const isEmbedded = useIsEmbedded();
+  const dpr = useDevicePixelRatio();
   const [animVB, setAnimVB] = useState({ x: 0, y: -100, w: 1600, h: 1000 });
   const [expandedCats, setExpandedCats] = useState<Set<string>>(() => new Set(VALID_CATEGORIES));
 
@@ -419,28 +421,34 @@ export default function ImpactMap({ projects, orgs }: Props) {
     if (isMobile || !mapBounds) return;
     const region = locked;
     const mapW = mapBounds.maxX - mapBounds.minX;
-    const mapH = mapBounds.maxY - mapBounds.minY;
+
+    // Promote the group to its own compositor layer for the duration of the
+    // interaction so the GPU can move/scale the rasterized tiles instead of the
+    // CPU repainting ~3000 vector polygons every frame.
+    const el = focusGroupRef.current;
+    if (el) el.style.willChange = "transform";
 
     const animate = () => {
       const cur = focusCurrentRef.current;
       let tgtS = 1, tgtTx = 0, tgtTy = 0;
       if (region && regionCentroids.has(region)) {
-        const [cx, cy] = regionCentroids.get(region)!;
+        const [cx] = regionCentroids.get(region)!;
         const s = FOCUS_ZOOM;
         const px = -mouseRef.current.x * FOCUS_PARALLAX * mapW;
-        const py = -mouseRef.current.y * FOCUS_PARALLAX * mapH;
         tgtS = s;
         tgtTx = cx * (1 - s) + px;
-        tgtTy = cy * (1 - s) + py;
-        // Clamp so the map's top edge never drops below its resting position.
-        const topMax = mapBounds.minY * (1 - s);
-        if (tgtTy > topMax) tgtTy = topMax;
+        // Y position is fixed: pin the vertical translate so the map's top edge
+        // stays on its resting line. No vertical zoom-centering or parallax.
+        tgtTy = mapBounds.minY * (1 - s);
       }
       cur.s += (tgtS - cur.s) * FOCUS_EASE;
       cur.tx += (tgtTx - cur.tx) * FOCUS_EASE;
       cur.ty += (tgtTy - cur.ty) * FOCUS_EASE;
+      // CSS transform (not the SVG `transform` attribute) keeps this on the
+      // compositor path; `transform-box: view-box` makes px == user units with
+      // the origin at the viewBox origin, matching the math above.
       if (focusGroupRef.current) {
-        focusGroupRef.current.setAttribute("transform", `translate(${cur.tx.toFixed(2)} ${cur.ty.toFixed(2)}) scale(${cur.s.toFixed(4)})`);
+        focusGroupRef.current.style.transform = `translate(${cur.tx.toFixed(2)}px, ${cur.ty.toFixed(2)}px) scale(${cur.s.toFixed(4)})`;
       }
       const settled =
         Math.abs(tgtS - cur.s) < 0.0005 &&
@@ -450,7 +458,10 @@ export default function ImpactMap({ projects, orgs }: Props) {
         focusRafRef.current = requestAnimationFrame(animate);
       } else {
         cur.s = 1; cur.tx = 0; cur.ty = 0;
-        focusGroupRef.current?.setAttribute("transform", "translate(0 0) scale(1)");
+        if (focusGroupRef.current) {
+          focusGroupRef.current.style.transform = "translate(0px, 0px) scale(1)";
+          focusGroupRef.current.style.willChange = "auto";
+        }
         focusRafRef.current = null;
       }
     };
@@ -461,12 +472,31 @@ export default function ImpactMap({ projects, orgs }: Props) {
     };
   }, [isMobile, locked, mapBounds, regionCentroids]);
 
+  // Cursor position is sampled in rAF (the animation loop reads mouseRef each
+  // frame), so the mousemove handler itself only writes a ref — no per-event
+  // layout work beyond a single cached rect read.
+  const mapRectRef = useRef<DOMRect | null>(null);
   const handleMapMouseMove = useCallback((e: React.MouseEvent) => {
     if (isMobile) return;
-    const rect = e.currentTarget.getBoundingClientRect();
+    let rect = mapRectRef.current;
+    if (!rect) { rect = e.currentTarget.getBoundingClientRect(); mapRectRef.current = rect; }
     mouseRef.current = {
       x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
       y: ((e.clientY - rect.top) / rect.height) * 2 - 1,
+    };
+  }, [isMobile]);
+
+  // Invalidate the cached map rect when the layout can change (resize/scroll),
+  // so parallax math stays correct without calling getBoundingClientRect on
+  // every mousemove.
+  useEffect(() => {
+    if (isMobile) return;
+    const invalidate = () => { mapRectRef.current = null; };
+    window.addEventListener("resize", invalidate);
+    window.addEventListener("scroll", invalidate, true);
+    return () => {
+      window.removeEventListener("resize", invalidate);
+      window.removeEventListener("scroll", invalidate, true);
     };
   }, [isMobile]);
 
@@ -598,7 +628,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
     >
       <rect x={-100} y={-300} width={tileData.width + 200} height={tileData.height + 600} fill="#fdb53c" />
 
-      <g ref={focusGroupRef}>
+      <g ref={focusGroupRef} style={{ transformBox: "view-box", transformOrigin: "0 0" }}>
       {Array.from(regionGeometry.entries()).map(([region, polygons]) => {
         const hl = isHighlighted(region);
         return (
@@ -718,7 +748,22 @@ export default function ImpactMap({ projects, orgs }: Props) {
           <Image src="/logos/partners/color/craf'd.png" alt="CRAF'd" width={200} height={70} style={{ height: "clamp(48px,6vh,80px)", width: "auto" }} />
         </div>
       )}
-      <div className={styles.card} role="region" aria-label="Project details" onClick={(e) => e.stopPropagation()}>
+      <div
+        className={styles.card}
+        role="region"
+        aria-label="Project details"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          // Render the bottom bar as if OS/UI scaling were 100% by counter-
+          // scaling it by 1/dpr (anchored bottom-left) and expanding its
+          // pre-scale width by dpr so it still spans the same horizontal area.
+          "--dpr": dpr,
+          transform: "scale(calc(1 / var(--dpr)))",
+          transformOrigin: "bottom left",
+          right: "auto",
+          width: "calc((100vw - 2 * clamp(16px, 3vw, 48px)) * var(--dpr))",
+        } as React.CSSProperties}
+      >
         <div className={styles.zoneLeft} style={{ position: "relative" }}>
           {locked && (
             <button className={styles.closeBtn} onClick={() => setLocked(null)} aria-label="Deselect region">×</button>
