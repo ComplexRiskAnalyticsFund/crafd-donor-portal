@@ -226,6 +226,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
   // Bottom-bar category strip: the wrapper width is measured to decide how many
   // button rows each box uses (and whether to fall back to horizontal scroll).
   const catWrapRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const activeRegion = locked ?? hovered ?? "Global";
 
@@ -655,17 +656,60 @@ export default function ImpactMap({ projects, orgs }: Props) {
       return "scroll" as const;
     };
 
-    setCatFitMode(decide());
+    // Dynamically scale the bottom-bar UI so its TOP edge never rises above the
+    // VH_LIMIT line (i.e. the bar occupies at most the bottom 30% of the
+    // window). When the natural bar is shorter than that budget we may grow it
+    // (capped, and never past the point where the content would overflow the
+    // bar's width); when it is taller we shrink everything down to fit.
+    const VH_LIMIT = 0.30;
+    const SCALE_MIN = 0.6;
+    const SCALE_MAX = 1.5;
+    const applyScale = (mode: "default" | "compact" | "scroll") => {
+      const card = cardRef.current;
+      if (!card) return;
+      // Measured at --ui-scale: 1 (reset before decide), so these are the
+      // natural, unscaled dimensions.
+      const rect = card.getBoundingClientRect();
+      const naturalHeight = rect.height;
+      const bottomOffset = window.innerHeight - rect.bottom;
+      // Height budget that keeps the top edge at/below the VH_LIMIT line.
+      const maxHeight = Math.max(0, VH_LIMIT * window.innerHeight - bottomOffset);
+      let scale = naturalHeight > 0 ? maxHeight / naturalHeight : 1;
+      // Don't grow so much that the content overflows the bar's width (except in
+      // scroll mode, which is already horizontally scrollable by design).
+      if (mode !== "scroll" && wrap.scrollWidth > 0) {
+        scale = Math.min(scale, wrap.clientWidth / wrap.scrollWidth);
+      }
+      scale = Math.min(SCALE_MAX, Math.max(SCALE_MIN, scale));
+      card.style.setProperty("--ui-scale", scale.toFixed(3));
+    };
 
-    // Only re-measure when the available width changes — switching button-row
-    // counts changes the wrapper's height, which must not retrigger the probe.
+    const run = () => {
+      // Always measure mode + natural size at base scale so the probe and the
+      // scale calculation are consistent.
+      cardRef.current?.style.setProperty("--ui-scale", "1");
+      const mode = decide();
+      setCatFitMode(mode);
+      applyScale(mode);
+    };
+
+    run();
+
+    // Re-run when the bar's available width changes (row packing) — switching
+    // button-row counts changes height, so guard on width to avoid a loop.
     let lastWidth = wrap.clientWidth;
     const ro = new ResizeObserver(() => {
       const w = catWrapRef.current?.clientWidth ?? 0;
-      if (w !== lastWidth) { lastWidth = w; setCatFitMode(decide()); }
+      if (w !== lastWidth) { lastWidth = w; run(); }
     });
     ro.observe(wrap);
-    return () => ro.disconnect();
+    // The vertical budget depends on window height, which a width-guarded
+    // observer can miss, so also re-run on any window resize.
+    window.addEventListener("resize", run);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", run);
+    };
   }, [isMobile, groupedCategories, columnsFor]);
 
   // ── Early exit ───────────────────────────────────────────
@@ -819,7 +863,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
           <Image src="/logos/partners/color/craf'd.png" alt="CRAF'd" width={200} height={70} style={{ height: "clamp(48px,6vh,80px)", width: "auto" }} />
         </div>
       )}
-      <div className={styles.card} role="region" aria-label="Project details" onClick={(e) => e.stopPropagation()}>
+      <div ref={cardRef} className={styles.card} role="region" aria-label="Project details" onClick={(e) => e.stopPropagation()}>
         <div className={styles.zoneLeft} style={{ position: "relative" }}>
           {locked && (
             <button className={styles.closeBtn} onClick={() => setLocked(null)} aria-label="Deselect region">×</button>

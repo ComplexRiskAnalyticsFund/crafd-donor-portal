@@ -75,6 +75,12 @@
   bottom: clamp(42px, 2.5vh, 28px);
   left: clamp(16px, 3vw, 48px);
   right: clamp(16px, 3vw, 48px);
+  /* Span the full available width between the side margins. Height follows the
+     content so nothing is ever clipped. */
+  /* Dynamic UI scale (1 = base). Set by JS based on how much of the bar width
+     the content uses: grows on wide/empty screens, stays 1 when the bar is
+     full. Inner sizes multiply their base value by this factor. */
+  --ui-scale: 1;
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -94,8 +100,9 @@
 /* ── Zone left: region identity ─────────────────────────── */
 
 .zoneLeft {
-  flex: 0 0 clamp(160px, 18vw, 240px);
-  padding: clamp(16px, 2vh, 28px) clamp(18px, 1.8vw, 28px);
+  flex: 0 0 clamp(170px, 18vw, 230px);
+  max-width: 230px;
+  padding: clamp(14px, 1.6vh, 20px) clamp(20px, 2vw, 32px);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -104,7 +111,7 @@
 .zoneTitle {
   margin: 0;
   font-family: "Qanelas", Arial, sans-serif;
-  font-size: clamp(20px, 2.4vh, 30px);
+  font-size: calc(clamp(19px, 2.2vh, 28px) * var(--ui-scale, 1));
   font-weight: 900;
   color: #111;
   line-height: 1.05;
@@ -114,7 +121,7 @@
 
 .zoneHint {
   margin: 6px 0 0;
-  font-size: 11px;
+  font-size: calc(13px * var(--ui-scale, 1));
   font-weight: 400;
   letter-spacing: 0.05em;
   color: #aaa;
@@ -126,15 +133,15 @@
 .legend {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-top: 10px;
+  gap: 4px;
+  margin-top: 6px;
 }
 
 .legendItem {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: 11px;
+  gap: 8px;
+  font-size: calc(13px * var(--ui-scale, 1));
   font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -142,8 +149,8 @@
 }
 
 .legendSwatch {
-  width: 14px;
-  height: 10px;
+  width: 16px;
+  height: 12px;
   border-radius: 3px;
   flex-shrink: 0;
 }
@@ -158,8 +165,9 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  padding: clamp(16px, 2vh, 28px) clamp(14px, 1.4vw, 22px);
-  gap: 10px;
+  justify-content: center;
+  padding: clamp(12px, 1.4vh, 18px) clamp(14px, 1.4vw, 22px);
+  gap: 8px;
 }
 
 .zoneRightLabel {
@@ -209,7 +217,7 @@
   flex-direction: row;
   align-items: stretch;
   flex-wrap: nowrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .categoryBox {
@@ -217,16 +225,16 @@
   border: 1px solid rgba(255, 255, 255, 0.7);
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 12px 14px;
+  padding: 9px 14px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  min-width: 160px;
+  min-width: 135px;
 }
 
 .categoryGroupHeader {
   margin: 0;
-  font-size: 11px;
+  font-size: calc(13px * var(--ui-scale, 1));
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -242,15 +250,15 @@
   margin: 0;
   display: grid;
   grid-template-columns: repeat(2, auto);
-  gap: 8px;
+  gap: 6px;
 }
 
 .projectBlock {
   background: #fef9ef;
   border: 1px solid rgba(51, 51, 51, 0.3);
   border-radius: 8px;
-  padding: clamp(5px, 0.7vh, 8px) clamp(13px, 1.2vw, 20px);
-  font-size: clamp(12px, 1.2vh, 14px);
+  padding: calc(clamp(5px, 0.65vh, 7px) * var(--ui-scale, 1)) calc(clamp(13px, 1.2vw, 19px) * var(--ui-scale, 1));
+  font-size: calc(clamp(13px, 1.25vh, 15px) * var(--ui-scale, 1));
   font-weight: 500;
   color: #333;
   white-space: nowrap;
@@ -277,6 +285,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
+  white-space: nowrap;
 }
 
 /* ── Desktop close button ───────────────────────────────── */
