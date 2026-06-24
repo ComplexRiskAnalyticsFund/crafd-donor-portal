@@ -25,25 +25,3 @@ export interface Partner {
   total_grant_size?: number | string | null;
 }
 
-export type PartnerConnectionType =
-  | "Collaborating Partner"
-  | "Implementing Partner"
-  | "Lead Project Partner"
-  | "Administrative Partner"
-  | "MoU Signatory/UN Partner"
-  | "Complementary Donor"
-  | "Donor Partner"
-  | "CRAF'd";
-
-// Utility types for data visualization
-export interface PartnerStats {
-  total: number;
-  withLogos: number;
-  withoutLogos: number;
-  byConnectionType: ConnectionTypeCount[];
-}
-
-export interface ConnectionTypeCount {
-  type: string;
-  count: number;
-}
