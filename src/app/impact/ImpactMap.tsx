@@ -1,9 +1,12 @@
 "use client";
 
-import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import type { CrafdProject } from "@/types";
 import { coverageToRegions } from "@/lib/coverage-map";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useIsEmbedded } from "@/hooks/useIsEmbedded";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import styles from "./impact-map.module.css";
 
 // ── Types ─────────────────────────────────────────────────
@@ -34,6 +37,13 @@ const PROJECT_CATEGORIES: Record<string, string> = {
   "Strengthening CRAF'd Ecosystem":           "Ecosystem Backbone",
 };
 
+const ORG_NAME_MAP: Record<string, string> = {
+  "ICPAC": "IGAD",
+  "ICG": "Int. Crisis Group",
+  "RCCC": "RC Climate Center",
+  "U Denver": "Univ. Denver",
+};
+
 const VALID_CATEGORIES = [
   "Crisis Anticipation & Warning",
   "Conflict & Peace",
@@ -55,10 +65,6 @@ const ARROW_ICON = (
   </svg>
 );
 
-const RIGHT_LABEL = (
-  <>CRAF&apos;<span style={{ textTransform: "none" }}>d</span>-supported data &amp; insights for this region...</>
-);
-
 // ── Types ─────────────────────────────────────────────────
 interface HexGeom { outer: string; inner: string; cx: number; cy: number }
 interface Ripple { region: string; ox: number; oy: number; key: number }
@@ -66,6 +72,13 @@ interface Ripple { region: string; ox: number; oy: number; key: number }
 // Wave speed: ms of stagger delay added per SVG unit of distance from the
 // clicked hexagon. Lower = faster ripple.
 const RIPPLE_SPEED = 0.45;
+
+// Desktop region focus: subtle zoom toward the selected region's centroid plus
+// a mouse-parallax drift (map shifts opposite to the cursor). Tuned to stay
+// gentle so the map never feels like it jumps.
+const FOCUS_ZOOM = 1.15;            // scale applied when a region is selected
+const FOCUS_PARALLAX = 0.03;        // fraction of map size the cursor can drift
+const FOCUS_EASE = 0.12;            // per-frame easing toward the target
 
 // ── Memoized region tile group ────────────────────────────
 // Renders the static hex polygons for one region. Memoized so that hovering /
@@ -135,8 +148,8 @@ const RegionTiles = memo(function RegionTiles({
 });
 
 // ── Shared pill component ─────────────────────────────────
-function ProjectPill({ label, url, isRegional }: { label: string; url: string | null; isRegional: boolean }) {
-  return (
+function ProjectPill({ label, url, isRegional, tooltip }: { label: string; url: string | null; isRegional: boolean; tooltip?: string | null }) {
+  const pill = (
     <li
       className={styles.projectBlock}
       style={isRegional ? { background: "#F3C35C", borderColor: "rgba(180,120,0,0.35)" } : undefined}
@@ -145,6 +158,13 @@ function ProjectPill({ label, url, isRegional }: { label: string; url: string | 
         ? <a href={url} target="_blank" rel="noreferrer">{label}{ARROW_ICON}</a>
         : <span tabIndex={0}>{label}</span>}
     </li>
+  );
+  if (!tooltip || tooltip === label) return pill;
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{pill}</TooltipTrigger>
+      <TooltipContent side="top" className="max-w-xs text-center">{tooltip}</TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -175,8 +195,13 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const [ripple, setRipple] = useState<Ripple | null>(null);
   const rippleSeq = useRef(0);
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const isEmbedded = useIsEmbedded();
   const [animVB, setAnimVB] = useState({ x: 0, y: -100, w: 1600, h: 1000 });
   const [expandedCats, setExpandedCats] = useState<Set<string>>(() => new Set(VALID_CATEGORIES));
+  // Bottom-bar fit stages: "default" = up to 2 button rows per box,
+  // "compact" = up to 3 button rows (narrower boxes), "scroll" = give up
+  // fitting and let the row scroll horizontally.
+  const [catFitMode, setCatFitMode] = useState<"default" | "compact" | "scroll">("default");
 
   // Mirror animVB into a ref so animation frames / touch handlers can read the
   // latest viewBox without re-subscribing. Synced in an effect (not during
@@ -189,6 +214,19 @@ export default function ImpactMap({ projects, orgs }: Props) {
   const mapWrapperRef = useRef<HTMLDivElement>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const hasDraggedRef = useRef(false);
+
+  // Desktop region focus: the group wrapping all tiles is transformed directly
+  // (via ref, not React state) every animation frame so we don't re-render the
+  // ~3000 polygons while zooming/parallaxing.
+  const focusGroupRef = useRef<SVGGElement>(null);
+  const focusCurrentRef = useRef({ s: 1, tx: 0, ty: 0 });
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const focusRafRef = useRef<number | null>(null);
+
+  // Bottom-bar category strip: the wrapper width is measured to decide how many
+  // button rows each box uses (and whether to fall back to horizontal scroll).
+  const catWrapRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const activeRegion = locked ?? hovered ?? "Global";
 
@@ -228,6 +266,22 @@ export default function ImpactMap({ projects, orgs }: Props) {
       out.set(region, [cx, cy]);
     }
     return out;
+  }, [tileData]);
+
+  // Bounding box of all tiles in SVG user space — used to clamp the desktop
+  // focus transform so the map's top edge never drops below its resting line.
+  const mapBounds = useMemo(() => {
+    if (!tileData) return null;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const tiles of Object.values(tileData.tilesByRegion)) {
+      for (const t of tiles) {
+        if (t.x < minX) minX = t.x;
+        if (t.y < minY) minY = t.y;
+        if (t.x > maxX) maxX = t.x;
+        if (t.y > maxY) maxY = t.y;
+      }
+    }
+    return { minX, minY, maxX, maxY };
   }, [tileData]);
 
   // BFS depth from ocean: depth 1 = edge tile, higher = more interior.
@@ -366,6 +420,93 @@ export default function ImpactMap({ projects, orgs }: Props) {
     };
   }, [isMobile]);
 
+  // ── Desktop region focus (zoom + mouse parallax) ─────────
+  // While a region is locked, the tile group eases toward a subtle zoom on the
+  // region centroid and drifts opposite the cursor. The transform is written
+  // directly to the SVG group every frame (no React re-render of polygons).
+  useEffect(() => {
+    if (isMobile || !mapBounds) return;
+    const region = locked;
+    const mapW = mapBounds.maxX - mapBounds.minX;
+
+    // Promote the group to its own compositor layer for the duration of the
+    // interaction so the GPU can move/scale the rasterized tiles instead of the
+    // CPU repainting ~3000 vector polygons every frame.
+    const el = focusGroupRef.current;
+    if (el) el.style.willChange = "transform";
+
+    const animate = () => {
+      const cur = focusCurrentRef.current;
+      let tgtS = 1, tgtTx = 0, tgtTy = 0;
+      if (region && regionCentroids.has(region)) {
+        const [cx] = regionCentroids.get(region)!;
+        const s = FOCUS_ZOOM;
+        const px = -mouseRef.current.x * FOCUS_PARALLAX * mapW;
+        tgtS = s;
+        tgtTx = cx * (1 - s) + px;
+        // Y position is fixed: pin the vertical translate so the map's top edge
+        // stays on its resting line. No vertical zoom-centering or parallax.
+        tgtTy = mapBounds.minY * (1 - s);
+      }
+      cur.s += (tgtS - cur.s) * FOCUS_EASE;
+      cur.tx += (tgtTx - cur.tx) * FOCUS_EASE;
+      cur.ty += (tgtTy - cur.ty) * FOCUS_EASE;
+      // CSS transform (not the SVG `transform` attribute) keeps this on the
+      // compositor path; `transform-box: view-box` makes px == user units with
+      // the origin at the viewBox origin, matching the math above.
+      if (focusGroupRef.current) {
+        focusGroupRef.current.style.transform = `translate(${cur.tx.toFixed(2)}px, ${cur.ty.toFixed(2)}px) scale(${cur.s.toFixed(4)})`;
+      }
+      const settled =
+        Math.abs(tgtS - cur.s) < 0.0005 &&
+        Math.abs(tgtTx - cur.tx) < 0.05 &&
+        Math.abs(tgtTy - cur.ty) < 0.05;
+      if (region || !settled) {
+        focusRafRef.current = requestAnimationFrame(animate);
+      } else {
+        cur.s = 1; cur.tx = 0; cur.ty = 0;
+        if (focusGroupRef.current) {
+          focusGroupRef.current.style.transform = "translate(0px, 0px) scale(1)";
+          focusGroupRef.current.style.willChange = "auto";
+        }
+        focusRafRef.current = null;
+      }
+    };
+
+    if (focusRafRef.current === null) focusRafRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (focusRafRef.current !== null) { cancelAnimationFrame(focusRafRef.current); focusRafRef.current = null; }
+    };
+  }, [isMobile, locked, mapBounds, regionCentroids]);
+
+  // Cursor position is sampled in rAF (the animation loop reads mouseRef each
+  // frame), so the mousemove handler itself only writes a ref — no per-event
+  // layout work beyond a single cached rect read.
+  const mapRectRef = useRef<DOMRect | null>(null);
+  const handleMapMouseMove = useCallback((e: React.MouseEvent) => {
+    if (isMobile) return;
+    let rect = mapRectRef.current;
+    if (!rect) { rect = e.currentTarget.getBoundingClientRect(); mapRectRef.current = rect; }
+    mouseRef.current = {
+      x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
+      y: ((e.clientY - rect.top) / rect.height) * 2 - 1,
+    };
+  }, [isMobile]);
+
+  // Invalidate the cached map rect when the layout can change (resize/scroll),
+  // so parallax math stays correct without calling getBoundingClientRect on
+  // every mousemove.
+  useEffect(() => {
+    if (isMobile) return;
+    const invalidate = () => { mapRectRef.current = null; };
+    window.addEventListener("resize", invalidate);
+    window.addEventListener("scroll", invalidate, true);
+    return () => {
+      window.removeEventListener("resize", invalidate);
+      window.removeEventListener("scroll", invalidate, true);
+    };
+  }, [isMobile]);
+
   // ── Interaction ──────────────────────────────────────────
   const isHighlighted = useCallback((region: string) =>
     locked ? region === locked : region === hovered,
@@ -420,6 +561,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
   // ── Project grouping ─────────────────────────────────────
   const isSelected = locked !== null || hovered !== null;
   const globalProjects = useMemo(() => projectsByRegion.get("Global") ?? [], [projectsByRegion]);
+
   const regionalProjects = useMemo(
     () => isSelected ? (projectsByRegion.get(activeRegion) ?? []) : [],
     [isSelected, projectsByRegion, activeRegion],
@@ -441,17 +583,18 @@ export default function ImpactMap({ projects, orgs }: Props) {
       source = globalProjects;
     }
 
-    const grouped = new Map<string, Map<string, { url: string | null; isRegional: boolean }>>();
+    const grouped = new Map<string, Map<string, { url: string | null; isRegional: boolean; tooltip: string | null }>>();
     for (const p of source) {
       if (!p.project_short_title) continue;
       const cat = PROJECT_CATEGORIES[p.project_short_title];
       if (!cat) continue;
       const leadId = p.linked_lead_org?.[0];
-      const label = (leadId && orgs[leadId]) || p.project_short_title;
+      const orgName = (leadId && orgs[leadId]) || p.project_short_title;
+      const label = ORG_NAME_MAP[orgName] || orgName;
       if (!grouped.has(cat)) grouped.set(cat, new Map());
       const catMap = grouped.get(cat)!;
       if (!catMap.has(label)) {
-        catMap.set(label, { url: p.project_url ?? null, isRegional: regionalLabels.has(label) });
+        catMap.set(label, { url: p.project_url ?? null, isRegional: regionalLabels.has(label), tooltip: p.full_title ?? null });
       } else if (regionalLabels.has(label)) {
         catMap.get(label)!.isRegional = true;
       }
@@ -462,8 +605,112 @@ export default function ImpactMap({ projects, orgs }: Props) {
         category: c,
         entries: Array.from(grouped.get(c)!.entries()).map(([label, meta]) => ({ label, ...meta })),
       }))
-      .sort((a, b) => b.entries.length - a.entries.length);
+      .sort((a, b) => {
+        // "Ecosystem Backbone" always goes last (rightmost)
+        if (a.category === "Ecosystem Backbone") return 1;
+        if (b.category === "Ecosystem Backbone") return -1;
+        // Otherwise sort by entries length descending
+        return b.entries.length - a.entries.length;
+      });
   }, [hasRegional, regionalProjects, globalProjects, orgs]);
+
+  // ── Fit category row across stages ───────────────────────
+  // Stage 1 (default): boxes lay out with up to 2 button rows each.
+  // Stage 2 (compact): if that overflows, allow up to 3 button rows so boxes
+  //   get narrower/taller and the total row gets shorter.
+  // Stage 3 (scroll): if 3 rows still overflow, stop fitting and let the
+  //   wrapper scroll horizontally.
+  //
+  // The decision is made synchronously in a layout effect by directly probing
+  // the grid columns on the live <ul> nodes and reading scrollWidth between
+  // mutations. Because this runs before the browser paints, the intermediate
+  // probe states are never shown — so changing the hovered/locked region can't
+  // produce a visible flicker through the stages.
+  const columnsFor = useCallback((count: number, compact: boolean) =>
+    compact ? Math.max(1, Math.ceil(count / 3)) : (count > 4 ? 3 : 2),
+  []);
+
+  useLayoutEffect(() => {
+    if (isMobile) return;
+    const wrap = catWrapRef.current;
+    if (!wrap) return;
+
+    const decide = () => {
+      const lists = Array.from(wrap.querySelectorAll<HTMLUListElement>("ul[data-cat]"));
+      const counts = lists.map((ul) => Number(ul.dataset.count) || 0);
+      const apply = (compact: boolean) => {
+        lists.forEach((ul, i) => {
+          ul.style.gridTemplateColumns = `repeat(${columnsFor(counts[i], compact)}, auto)`;
+        });
+      };
+      const fits = () => wrap.scrollWidth <= wrap.clientWidth + 1;
+
+      // Probe default; if it fits we're done.
+      apply(false);
+      if (fits()) return "default" as const;
+      // Probe compact (3 rows).
+      apply(true);
+      if (fits()) return "compact" as const;
+      // Still overflows → scroll. Leave columns at compact for the densest
+      // single-row packing before the scrollbar takes over.
+      return "scroll" as const;
+    };
+
+    // Dynamically scale the bottom-bar UI so its TOP edge never rises above the
+    // VH_LIMIT line (i.e. the bar occupies at most the bottom 30% of the
+    // window). When the natural bar is shorter than that budget we may grow it
+    // (capped, and never past the point where the content would overflow the
+    // bar's width); when it is taller we shrink everything down to fit.
+    const VH_LIMIT = 0.30;
+    const SCALE_MIN = 0.6;
+    const SCALE_MAX = 1.5;
+    const applyScale = (mode: "default" | "compact" | "scroll") => {
+      const card = cardRef.current;
+      if (!card) return;
+      // Measured at --ui-scale: 1 (reset before decide), so these are the
+      // natural, unscaled dimensions.
+      const rect = card.getBoundingClientRect();
+      const naturalHeight = rect.height;
+      const bottomOffset = window.innerHeight - rect.bottom;
+      // Height budget that keeps the top edge at/below the VH_LIMIT line.
+      const maxHeight = Math.max(0, VH_LIMIT * window.innerHeight - bottomOffset);
+      let scale = naturalHeight > 0 ? maxHeight / naturalHeight : 1;
+      // Don't grow so much that the content overflows the bar's width (except in
+      // scroll mode, which is already horizontally scrollable by design).
+      if (mode !== "scroll" && wrap.scrollWidth > 0) {
+        scale = Math.min(scale, wrap.clientWidth / wrap.scrollWidth);
+      }
+      scale = Math.min(SCALE_MAX, Math.max(SCALE_MIN, scale));
+      card.style.setProperty("--ui-scale", scale.toFixed(3));
+    };
+
+    const run = () => {
+      // Always measure mode + natural size at base scale so the probe and the
+      // scale calculation are consistent.
+      cardRef.current?.style.setProperty("--ui-scale", "1");
+      const mode = decide();
+      setCatFitMode(mode);
+      applyScale(mode);
+    };
+
+    run();
+
+    // Re-run when the bar's available width changes (row packing) — switching
+    // button-row counts changes height, so guard on width to avoid a loop.
+    let lastWidth = wrap.clientWidth;
+    const ro = new ResizeObserver(() => {
+      const w = catWrapRef.current?.clientWidth ?? 0;
+      if (w !== lastWidth) { lastWidth = w; run(); }
+    });
+    ro.observe(wrap);
+    // The vertical budget depends on window height, which a width-guarded
+    // observer can miss, so also re-run on any window resize.
+    window.addEventListener("resize", run);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", run);
+    };
+  }, [isMobile, groupedCategories, columnsFor]);
 
   // ── Early exit ───────────────────────────────────────────
   if (!tileData) return <div className={styles.root} />;
@@ -471,7 +718,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
   // ── SVG ──────────────────────────────────────────────────
   const svgViewBox = isMobile
     ? `${animVB.x} ${animVB.y} ${animVB.w} ${animVB.h}`
-    : `0 -100 ${tileData.width} ${tileData.height + 100}`;
+    : `0 -60 ${tileData.width} ${tileData.height + 100}`;
 
   const mapSvg = (
     <svg
@@ -486,6 +733,7 @@ export default function ImpactMap({ projects, orgs }: Props) {
     >
       <rect x={-100} y={-300} width={tileData.width + 200} height={tileData.height + 600} fill="#fdb53c" />
 
+      <g ref={focusGroupRef} style={{ transformBox: "view-box", transformOrigin: "0 0" }}>
       {Array.from(regionGeometry.entries()).map(([region, polygons]) => {
         const hl = isHighlighted(region);
         return (
@@ -512,26 +760,37 @@ export default function ImpactMap({ projects, orgs }: Props) {
         return (
           <g key={region} style={{ pointerEvents: "none", userSelect: "none", opacity: hl ? 1 : 0, transition: "opacity 180ms ease" }}>
             <rect x={cx - bgW / 2} y={cy - (line2 ? 22 : 25)} width={bgW} height={bgH} rx={8} fill="#fef9ef" stroke="rgba(51,51,51,0.3)" strokeWidth={1} />
-            <text textAnchor="middle" fontFamily="Roboto, sans-serif" fontWeight={600} fontSize={12} letterSpacing={1.2} fill={hl ? "rgba(70,70,70,0.95)" : "rgba(90,90,90,0.75)"}>
+            <text textAnchor="middle" fontFamily="Qanelas, Arial, sans-serif" fontWeight={900} fontSize={12} letterSpacing={1.2} fill={hl ? "rgba(70,70,70,0.95)" : "rgba(90,90,90,0.75)"}>
               <tspan x={cx} y={cy - 5}>{line1.toUpperCase()}</tspan>
               {line2 && <tspan x={cx} dy={15}>{line2.toUpperCase()}</tspan>}
             </text>
           </g>
         );
       })}
+      </g>
     </svg>
   );
 
   // ── Category renderers ───────────────────────────────────
   const renderCategoryBoxes = (cats: typeof groupedCategories) =>
-    cats.map(({ category, entries }) => (
-      <div key={category} className={styles.categoryBox}>
-        <p className={styles.categoryGroupHeader}>{category.toUpperCase()}</p>
-        <ul className={styles.projectList} style={entries.length > 4 ? { gridTemplateColumns: "repeat(3, auto)" } : undefined}>
-          {entries.map((entry) => <ProjectPill key={entry.label} {...entry} />)}
-        </ul>
-      </div>
-    ));
+    cats.map(({ category, entries }) => {
+      // Initial columns reflect the committed fit mode so the first paint is
+      // already correct; the layout effect re-probes via data-cat/data-count.
+      const cols = columnsFor(entries.length, catFitMode === "compact" || catFitMode === "scroll");
+      return (
+        <div key={category} className={styles.categoryBox}>
+          <p className={styles.categoryGroupHeader}>{category.toUpperCase()}</p>
+          <ul
+            className={styles.projectList}
+            data-cat={category}
+            data-count={entries.length}
+            style={{ gridTemplateColumns: `repeat(${cols}, auto)` }}
+          >
+            {entries.map((entry) => <ProjectPill key={entry.label} {...entry} />)}
+          </ul>
+        </div>
+      );
+    });
 
   const renderMobileCategoryBoxes = (cats: typeof groupedCategories) =>
     cats.map(({ category, entries }) => {
@@ -567,7 +826,6 @@ export default function ImpactMap({ projects, orgs }: Props) {
 
   // ── Mobile layout ────────────────────────────────────────
   if (isMobile) {
-    const noRegionalData = isSelected && groupedCategories.length === 0;
     return (
       <div className={styles.mobileRoot}>
         <div className={styles.mobileTopCard}>
@@ -590,9 +848,6 @@ export default function ImpactMap({ projects, orgs }: Props) {
         </div>
 
         <div className={styles.mobileBottomCard}>
-          <p className={styles.zoneRightLabel}>
-            {noRegionalData ? "No region-specific data — showing global projects" : RIGHT_LABEL}
-          </p>
           {renderMobileCategoryBoxes(groupedCategories)}
         </div>
       </div>
@@ -601,9 +856,14 @@ export default function ImpactMap({ projects, orgs }: Props) {
 
   // ── Desktop layout ───────────────────────────────────────
   return (
-    <div className={styles.root} onClick={() => setLocked(null)}>
+    <div className={styles.root} onClick={() => setLocked(null)} onMouseMove={handleMapMouseMove}>
       {mapSvg}
-      <div className={styles.card} role="region" aria-label="Project details" onClick={(e) => e.stopPropagation()}>
+      {!isEmbedded && (
+        <div className="pointer-events-none absolute left-[clamp(16px,2.5vw,40px)] top-[clamp(14px,2.5vh,36px)] z-50">
+          <Image src="/logos/partners/color/craf'd.png" alt="CRAF'd" width={200} height={70} style={{ height: "clamp(48px,6vh,80px)", width: "auto" }} />
+        </div>
+      )}
+      <div ref={cardRef} className={styles.card} role="region" aria-label="Project details" onClick={(e) => e.stopPropagation()}>
         <div className={styles.zoneLeft} style={{ position: "relative" }}>
           {locked && (
             <button className={styles.closeBtn} onClick={() => setLocked(null)} aria-label="Deselect region">×</button>
@@ -622,9 +882,13 @@ export default function ImpactMap({ projects, orgs }: Props) {
         </div>
         <div className={styles.zoneDivider} />
         <div className={styles.zoneRight}>
-          <p className={styles.zoneRightLabel}>{RIGHT_LABEL}</p>
-          <div className={styles.categoryColumns}>
-            {renderCategoryBoxes(groupedCategories)}
+          <div
+            ref={catWrapRef}
+            className={`${styles.categoryColumnsWrap}${catFitMode === "scroll" ? ` ${styles.categoryColumnsWrapScroll}` : ""}`}
+          >
+            <div className={styles.categoryColumns}>
+              {renderCategoryBoxes(groupedCategories)}
+            </div>
           </div>
         </div>
       </div>

@@ -14,27 +14,25 @@
 }
 
 /* ── Region select ripple ───────────────────────────────── */
-/* Each hexagon pops in, staggered by its distance from the clicked tile so
-   the fill radiates outward from the click origin. transform-box keeps the
-   scale centered on each polygon's own bounding box. */
+/* A wave of scale-pulses radiates outward from the clicked tile.
+   Starts and ends at the tile's natural state so tiles never disappear
+   during the delay period (animation-fill-mode: both applies the 0%
+   state while the tile waits for its turn). */
 .rippleHex {
   transform-box: fill-box;
   transform-origin: center;
-  animation: rippleHexPop 360ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: rippleHexPop 340ms ease-in-out both;
 }
 
 @keyframes rippleHexPop {
   0% {
-    transform: scale(0.1);
-    opacity: 0.2;
+    transform: scale(1);
   }
-  60% {
-    transform: scale(1.12);
-    opacity: 1;
+  45% {
+    transform: scale(1.18);
   }
   100% {
     transform: scale(1);
-    opacity: 1;
   }
 }
 
@@ -44,13 +42,45 @@
   }
 }
 
+/* ── Standalone overlay title ──────────────────────────── */
+
+.overlayTitle {
+  position: absolute;
+  top: clamp(140px, 22vh, 240px);
+  left: clamp(20px, 3vw, 52px);
+  font-family: "Qanelas", Arial, sans-serif;
+  font-size: clamp(24px, 3.8vw, 48px);
+  font-weight: 900;
+  line-height: 1.1;
+  color: rgba(0, 0, 0, 0.75);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+  user-select: none;
+  max-width: 20vw;
+}
+
+.overlayTitleCount {
+  display: inline-block;
+  font-size: 1.4em;
+  line-height: 1;
+  min-width: 1.15em;
+
+}
+
 /* ── Desktop card ───────────────────────────────────────── */
 
 .card {
   position: absolute;
-  bottom: clamp(12px, 2.5vh, 28px);
+  bottom: clamp(42px, 2.5vh, 28px);
   left: clamp(16px, 3vw, 48px);
   right: clamp(16px, 3vw, 48px);
+  /* Span the full available width between the side margins. Height follows the
+     content so nothing is ever clipped. */
+  /* Dynamic UI scale (1 = base). Set by JS based on how much of the bar width
+     the content uses: grows on wide/empty screens, stays 1 when the bar is
+     full. Inner sizes multiply their base value by this factor. */
+  --ui-scale: 1;
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -70,8 +100,9 @@
 /* ── Zone left: region identity ─────────────────────────── */
 
 .zoneLeft {
-  flex: 0 0 clamp(160px, 18vw, 240px);
-  padding: clamp(16px, 2vh, 28px) clamp(18px, 1.8vw, 28px);
+  flex: 0 0 clamp(170px, 18vw, 230px);
+  max-width: 230px;
+  padding: calc(clamp(14px, 1.6vh, 20px) * min(1, var(--ui-scale, 1))) clamp(20px, 2vw, 32px);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -80,7 +111,7 @@
 .zoneTitle {
   margin: 0;
   font-family: "Qanelas", Arial, sans-serif;
-  font-size: clamp(20px, 2.4vh, 30px);
+  font-size: calc(clamp(19px, 2.2vh, 28px) * (0.5 + 0.5 * var(--ui-scale, 1)));
   font-weight: 900;
   color: #111;
   line-height: 1.05;
@@ -90,12 +121,10 @@
 
 .zoneHint {
   margin: 6px 0 0;
-  font-size: 11px;
-  font-weight: 500;
+  font-size: calc(13px * var(--ui-scale, 1));
+  font-weight: 400;
   letter-spacing: 0.05em;
-  text-transform: uppercase;
-  font-style: italic;
-  color: #bbb;
+  color: #aaa;
   line-height: 1.5;
 }
 
@@ -104,15 +133,15 @@
 .legend {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-top: 10px;
+  gap: 4px;
+  margin-top: 6px;
 }
 
 .legendItem {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: 11px;
+  gap: 8px;
+  font-size: calc(11px * var(--ui-scale, 1));
   font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -120,8 +149,8 @@
 }
 
 .legendSwatch {
-  width: 14px;
-  height: 10px;
+  width: 16px;
+  height: 12px;
   border-radius: 3px;
   flex-shrink: 0;
 }
@@ -136,28 +165,60 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  padding: clamp(16px, 2vh, 28px) clamp(14px, 1.4vw, 22px);
-  gap: 10px;
+  justify-content: center;
+  padding: calc(clamp(12px, 1.4vh, 18px) * min(1, var(--ui-scale, 1))) clamp(14px, 1.4vw, 22px);
+  gap: calc(8px * min(1, var(--ui-scale, 1)));
 }
 
 .zoneRightLabel {
   margin: 0;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-family: "Qanelas", Arial, sans-serif;
+  font-size: clamp(20px, 2.4vh, 30px);
+  font-weight: 900;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
-  color: #aaa;
+  color: #111;
+  line-height: 1.05;
   flex-shrink: 0;
 }
 
 /* ── Category columns ───────────────────────────────────── */
 
+/* Wrapper that defines the available width. The single-row child is measured
+   against this box; if it overflows, boxes pack into up to 3 button rows, and
+   only if it still overflows does this wrapper become horizontally scrollable. */
+.categoryColumnsWrap {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+
+.categoryColumnsWrapScroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+
+.categoryColumnsWrapScroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.categoryColumnsWrapScroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+}
+
 .categoryColumns {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-wrap: nowrap;
+  gap: 6px;
+  row-gap: calc(6px * min(1, var(--ui-scale, 1)));
 }
 
 .categoryBox {
@@ -165,16 +226,16 @@
   border: 1px solid rgba(255, 255, 255, 0.7);
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 12px 14px;
+  padding: calc(9px * min(1, var(--ui-scale, 1))) 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  min-width: 160px;
+  gap: calc(8px * min(1, var(--ui-scale, 1)));
+  min-width: 135px;
 }
 
 .categoryGroupHeader {
   margin: 0;
-  font-size: 11px;
+  font-size: calc(13px * var(--ui-scale, 1));
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -190,15 +251,15 @@
   margin: 0;
   display: grid;
   grid-template-columns: repeat(2, auto);
-  gap: 8px;
+  gap: calc(6px * min(1, var(--ui-scale, 1)));
 }
 
 .projectBlock {
   background: #fef9ef;
   border: 1px solid rgba(51, 51, 51, 0.3);
   border-radius: 8px;
-  padding: clamp(5px, 0.7vh, 8px) clamp(13px, 1.2vw, 20px);
-  font-size: clamp(12px, 1.2vh, 14px);
+  padding: calc(clamp(5px, 0.65vh, 7px) * var(--ui-scale, 1)) calc(clamp(13px, 1.2vw, 19px) * var(--ui-scale, 1));
+  font-size: calc(clamp(13px, 1.25vh, 15px) * var(--ui-scale, 1));
   font-weight: 500;
   color: #333;
   white-space: nowrap;
@@ -225,6 +286,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
+  white-space: nowrap;
 }
 
 /* ── Desktop close button ───────────────────────────────── */
