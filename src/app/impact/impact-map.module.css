@@ -429,4 +429,12 @@
     font-size: 12px;
     padding: 5px 12px;
   }
+
+  /* Reserve space below the bottom card so the map disclaimer
+     (absolutely positioned at the bottom of the page, can wrap to several
+     lines on narrow screens) doesn't overlap it. */
+  .mobileBottomCard {
+    margin-bottom: calc(118px + env(safe-area-inset-bottom, 0px));
+    max-height: 30vh;
+  }
 }
